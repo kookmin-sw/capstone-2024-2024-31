@@ -24,8 +24,8 @@ spring:
       ddl-auto: create
 
 jwt:
-  secret: ThisIsTestKeyThisIsTestKeyThisIsTestKeyThisIsTestKeyThisIsTestKeyThisIsTestKey
-  expiration_in_ms: 604800000
+  secret: ${JWT_SECRET}
+  expiration_in_ms: ${JWT_EXPIRATION_IN_MS}
 
 logging:
   level:
