@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import km.cd.backend.oauth2.attributes.OAuth2Attributes;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "users")
 @Getter
 @Builder
@@ -39,17 +41,18 @@ public class User {
     private String avatar;
 
     @Builder.Default
-    private Integer level = 1;
+    private int level = 1;
 
     @Builder.Default
-    private Integer xp = 0;
+    private int xp = 0;
 
     @Builder.Default
-    private Integer point = 0;
+    private int point = 0;
 
     public void updateDefaultAttributes(OAuth2Attributes oAuth2Attributes) {
         this.email = oAuth2Attributes.getEmail();
         this.name = oAuth2Attributes.getName();
         this.oauth2Id = oAuth2Attributes.getOAuth2Id();
+        this.avatar = oAuth2Attributes.getAvatar();
     }
 }
