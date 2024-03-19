@@ -24,8 +24,9 @@ spring:
       ddl-auto: create
 
 jwt:
-  secret-key: ThisIsTestKeyThisIsTestKeyThisIsTestKeyThisIsTestKeyThisIsTestKeyThisIsTestKey
+  secret: ThisIsTestKeyThisIsTestKeyThisIsTestKeyThisIsTestKeyThisIsTestKeyThisIsTestKey
+  expiration_in_ms: 604800000
 
 logging:
   level:
-    org.springframework.security: trace
+    "[km.cd.backend]": debug
