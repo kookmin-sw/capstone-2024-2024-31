@@ -21,7 +21,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String password;
@@ -32,13 +32,13 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    private String avatar;
+
     @Builder.Default
     private String role = "ROLE_USER";
 
     @CreatedDate
     private LocalDateTime createdDate;
-
-    private String avatar;
 
     @Builder.Default
     private int level = 1;
