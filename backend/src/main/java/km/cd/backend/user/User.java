@@ -27,7 +27,7 @@ public class User {
     private String password;
 
     private String provider;
-    private String oauth2Id;
+    private String providerId;
 
     @Column(nullable = false)
     private String name;
@@ -49,10 +49,9 @@ public class User {
     @Builder.Default
     private int point = 0;
 
-    public void updateDefaultAttributes(OAuth2Attributes oAuth2Attributes) {
+    public void updateDefaltInfo(OAuth2Attributes oAuth2Attributes) {
         this.email = oAuth2Attributes.getEmail();
         this.name = oAuth2Attributes.getName();
-        this.oauth2Id = oAuth2Attributes.getOAuth2Id();
         this.avatar = oAuth2Attributes.getAvatar();
     }
 }

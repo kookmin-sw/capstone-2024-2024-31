@@ -1,17 +1,12 @@
 package km.cd.backend.jwt;
 
-import km.cd.backend.oauth2.attributes.OAuth2Attributes;
-import km.cd.backend.user.User;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -21,43 +16,37 @@ import java.util.Map;
  * @see org.springframework.security.oauth2.core.user.OAuth2User
  */
 @Getter
+@AllArgsConstructor
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
-    private final User user;
-    private OAuth2Attributes oAuth2Attributes;
+    private String email;
+    private String name;
 
-    public PrincipalDetails(User user) {
-        this.user = user;
-    }
-
-    public PrincipalDetails(User user, OAuth2Attributes oAuth2Attributes) {
-        this.user = user;
-        this.oAuth2Attributes = oAuth2Attributes;
-    }
+    private Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public Map<String, Object> getAttributes() {
-        return oAuth2Attributes.getAttributes();
+        return null;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
+        return authorities;
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return this.email;
     }
 
     @Override
     public String getName() {
-        return user.getName();
+        return this.name;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return null;
     }
 
     @Override
