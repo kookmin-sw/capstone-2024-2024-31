@@ -1,4 +1,4 @@
-package km.cd.backend.user;
+package km.cd.backend.user.dto;
 
 public record UserResponse(
         String email,

@@ -29,7 +29,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         // TODO: save refresh token
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        String accessToken = jwtTokenProvider.generateAccessToken(principalDetails);
+        String accessToken = jwtTokenProvider.generateAccessToken(principalDetails.getEmail(), principalDetails.getName(), principalDetails.getAuthorities());
 
         String redirectUrlWithToken = UriComponentsBuilder.fromUriString(REDIRECT_URL)
                 .queryParam(PARAM_AC_TOKEN, accessToken)
