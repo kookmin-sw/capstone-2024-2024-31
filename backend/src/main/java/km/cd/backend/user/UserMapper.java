@@ -1,5 +1,6 @@
 package km.cd.backend.user;
 
+import km.cd.backend.user.dto.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

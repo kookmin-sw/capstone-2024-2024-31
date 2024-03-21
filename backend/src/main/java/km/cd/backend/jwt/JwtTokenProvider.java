@@ -40,28 +40,28 @@ public class JwtTokenProvider {
         this.refreshTokenExpirationInMs = refreshTokenExpirationInMs;
     }
 
-    public String generateAccessToken(PrincipalDetails principalDetails) {
-        String authorities = principalDetails.getAuthorities().stream()
+    public String generateAccessToken(String email, String name, Collection<? extends GrantedAuthority> authorities) {
+        String authoritiesStr = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(DELIMITER));
 
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
-                .claim(CLAIM_EMAIL, principalDetails.getEmail())
-                .claim(CLAIM_NAME, principalDetails.getName())
-                .claim(CLAIM_AUTHORITIES, authorities)
+                .claim(CLAIM_EMAIL, email)
+                .claim(CLAIM_NAME, name)
+                .claim(CLAIM_AUTHORITIES, authoritiesStr)
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + accessTokenExpirationInMs))
                 .signWith(jwtSecret, SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public String generateRefreshToken(PrincipalDetails principalDetails) {
+    public String generateRefreshToken(String email) {
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
-                .claim(CLAIM_EMAIL, principalDetails.getEmail())
+                .claim(CLAIM_EMAIL, email)
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + refreshTokenExpirationInMs))
                 .signWith(jwtSecret, SignatureAlgorithm.HS512)
