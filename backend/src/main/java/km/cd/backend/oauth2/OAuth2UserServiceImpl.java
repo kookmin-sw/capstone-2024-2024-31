@@ -6,6 +6,7 @@ import km.cd.backend.oauth2.attributes.OAuth2AttributesFactory;
 import km.cd.backend.user.User;
 import km.cd.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -13,7 +14,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,32 +34,36 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        OAuth2Attributes oAuth2Attributes = OAuth2AttributesFactory.getOauth2Attributes(registrationId, attributes, userNameAttributeName);
+        OAuth2Attributes oAuth2Attributes = OAuth2AttributesFactory.getOauth2Attributes(registrationId, userNameAttributeName, attributes);
 
-        User user = userRepository.findByEmail(oAuth2Attributes.getEmail()).orElse(null);
-        if (user != null) {
-            user = updateUser(user, oAuth2Attributes);
+        Optional<User> _user = userRepository.findByEmail(oAuth2Attributes.getEmail());
+        if (_user.isPresent()) {
+            updateUser(_user.get(), oAuth2Attributes);
         } else {
-            user = registerUser(registrationId, oAuth2Attributes);
+            registerUser(oAuth2Attributes);
         }
 
-        return new PrincipalDetails(user, oAuth2Attributes);
+        return new PrincipalDetails(
+                oAuth2Attributes.getEmail(),
+                oAuth2Attributes.getName(),
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
+        );
     }
 
-    private User registerUser(String registrationId, OAuth2Attributes oAuth2Attributes) {
+    private void registerUser(OAuth2Attributes oAuth2Attributes) {
         User user = User.builder()
                 .email(oAuth2Attributes.getEmail())
                 .name(oAuth2Attributes.getName())
                 .avatar(oAuth2Attributes.getAvatar())
-                .provider(registrationId)
-                .oauth2Id(oAuth2Attributes.getOAuth2Id())
+                .provider(oAuth2Attributes.getProvider())
+                .providerId(oAuth2Attributes.getProviderId())
                 .build();
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
-    private User updateUser(User user, OAuth2Attributes oAuth2Attributes) {
-        user.updateDefaultAttributes(oAuth2Attributes);
-        return userRepository.save(user);
+    private void updateUser(User user, OAuth2Attributes OAuth2Attributes) {
+        user.updateDefaltInfo(OAuth2Attributes);
+        userRepository.save(user);
     }
 
 }

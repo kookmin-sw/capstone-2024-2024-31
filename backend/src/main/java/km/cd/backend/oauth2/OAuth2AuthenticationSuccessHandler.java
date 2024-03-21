@@ -3,6 +3,7 @@ package km.cd.backend.oauth2;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import km.cd.backend.jwt.JwtTokenProvider;
+import km.cd.backend.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -21,15 +22,20 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     // TODO: Flutter App Redirect 주소로 변경
     public static final String REDIRECT_URL = "http://localhost:3000/oauth2/success";
+    public static final String PARAM_AC_TOKEN = "access_token";
+    public static final String PARAM_RF_TOKEN = "refresh_token";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        String token = jwtTokenProvider.generateToken(authentication);
+        // TODO: save refresh token
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        String accessToken = jwtTokenProvider.generateAccessToken(principalDetails);
+
         String redirectUrlWithToken = UriComponentsBuilder.fromUriString(REDIRECT_URL)
-                .queryParam("token", token)
+                .queryParam(PARAM_AC_TOKEN, accessToken)
                 .build().toUriString();
 
-        log.debug("token: {}", token);
+        log.debug("access_token: {}", accessToken);
         log.debug("redirect_url: {}", redirectUrlWithToken);
 
         getRedirectStrategy().sendRedirect(request, response, redirectUrlWithToken);

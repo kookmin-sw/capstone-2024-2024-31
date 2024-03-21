@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
+    private final UserService userService;
+
     @GetMapping("/me")
-    public ResponseEntity<User> me(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        User user = principalDetails.getUser();
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        String email = principalDetails.getEmail();
+        User user = userService.findByEmail(email);
+        UserResponse userResponse = UserMapper.INSTANCE.userToUserResponse(user);
+        return ResponseEntity.ok(userResponse);
     }
 
 }
