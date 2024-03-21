@@ -30,11 +30,10 @@ public class AuthService {
     }
 
     @Transactional
-    public void register(final UserRegister userRequest) {
+    public User register(final UserRegister userRequest) {
         if (emailExists(userRequest.getEmail()) != null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "This email has already been signed up.");
+            throw new CustomException(400, "This email is already signed up.");
         }
-
         String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
 
         User user = User.builder()
@@ -42,7 +41,7 @@ public class AuthService {
                 .password(encodedPassword)
                 .name(userRequest.getName())
                 .build();
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public JwtTokenResponse login(UserLogin userLogin) {
