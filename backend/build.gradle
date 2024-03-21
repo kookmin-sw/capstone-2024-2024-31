@@ -31,6 +31,12 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // template engine
+    compileOnly 'org.springframework.boot:spring-boot-starter-mustache'
+
+    // h2 database
+    runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
