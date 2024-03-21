@@ -1,5 +1,6 @@
 package km.cd.backend.user;
 
+import km.cd.backend.global.error.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+        return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(500, "User not found."));
     }
 }

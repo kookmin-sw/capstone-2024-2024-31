@@ -20,6 +20,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    public static final String ATTRIBUTE_JWT_TOKEN_ERROR = "jwt_token_error";
+
     private final JwtTokenProvider tokenProvider;
 
     @Override
@@ -28,9 +30,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = extractToken(request);
         log.debug("token: {}", token);
 
-        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-            Authentication authentication = tokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
+                Authentication authentication = tokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (JwtTokenInvalidException jwtTokenInvalidException) {
+            request.setAttribute(ATTRIBUTE_JWT_TOKEN_ERROR, jwtTokenInvalidException);
         }
 
         filterChain.doFilter(request, response);
