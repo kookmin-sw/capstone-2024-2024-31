@@ -2,15 +2,13 @@ package km.cd.backend.challenge.dto;
 
 import km.cd.backend.challenge.domain.Challenge;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Data
-public class ChallengeDTO {
+public class ChallengeDto {
     private String challenge_name;
     private String  start_date;
     private String end_date;
