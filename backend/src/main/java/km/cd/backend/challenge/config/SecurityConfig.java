@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize
 //                                .requestMatchers("/h2-console/**").authenticated() // h2 데이터베이스 콘솔 접근 허용
-//                                .requestMatchers("/**").authenticated()
+                                .requestMatchers("/**").permitAll()
 //                                .requestMatchers("/admin/**").hasRole("ADMIN") // admin으로 시작하는 uri는 관릴자 계정만 접근 가능
                                 .anyRequest().permitAll()); //나머지 uri는 모든 접근 허용
 
