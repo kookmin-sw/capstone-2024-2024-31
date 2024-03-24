@@ -1,4 +1,4 @@
-package km.cd.backend.jwt;
+package km.cd.backend.common.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,7 +1,7 @@
-package km.cd.backend.global.error;
+package km.cd.backend.common.error;
 
-import km.cd.backend.jwt.JwtTokenInvalidException;
-import km.cd.backend.jwt.JwtTokenProvider;
+import km.cd.backend.common.jwt.JwtTokenInvalidException;
+import km.cd.backend.common.jwt.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

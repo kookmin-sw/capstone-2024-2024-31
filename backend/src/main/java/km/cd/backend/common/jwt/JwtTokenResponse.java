@@ -1,4 +1,4 @@
-package km.cd.backend.jwt;
+package km.cd.backend.common.jwt;
 
 import lombok.Builder;
 import lombok.Getter;

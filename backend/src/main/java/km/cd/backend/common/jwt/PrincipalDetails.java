@@ -1,4 +1,4 @@
-package km.cd.backend.jwt;
+package km.cd.backend.common.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

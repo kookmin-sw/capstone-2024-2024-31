@@ -1,6 +1,6 @@
-package km.cd.backend.auth;
+package km.cd.backend.common.auth;
 
-import km.cd.backend.jwt.JwtTokenResponse;
+import km.cd.backend.common.jwt.JwtTokenResponse;
 import km.cd.backend.user.dto.UserLogin;
 import km.cd.backend.user.dto.UserRegister;
 import lombok.RequiredArgsConstructor;
