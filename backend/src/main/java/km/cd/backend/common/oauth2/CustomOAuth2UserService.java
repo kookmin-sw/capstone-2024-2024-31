@@ -1,8 +1,8 @@
-package km.cd.backend.oauth2;
+package km.cd.backend.common.oauth2;
 
-import km.cd.backend.jwt.PrincipalDetails;
-import km.cd.backend.oauth2.attributes.OAuth2Attributes;
-import km.cd.backend.oauth2.attributes.OAuth2AttributesFactory;
+import km.cd.backend.common.jwt.PrincipalDetails;
+import km.cd.backend.common.oauth2.attributes.OAuth2Attributes;
+import km.cd.backend.common.oauth2.attributes.OAuth2AttributesFactory;
 import km.cd.backend.user.User;
 import km.cd.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,9 @@
-package km.cd.backend.oauth2;
+package km.cd.backend.common.oauth2;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import km.cd.backend.jwt.JwtTokenProvider;
-import km.cd.backend.jwt.PrincipalDetails;
+import km.cd.backend.common.jwt.JwtTokenProvider;
+import km.cd.backend.common.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

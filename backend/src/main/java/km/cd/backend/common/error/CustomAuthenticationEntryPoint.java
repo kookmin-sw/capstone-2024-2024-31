@@ -1,8 +1,8 @@
-package km.cd.backend.global.error;
+package km.cd.backend.common.error;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import km.cd.backend.jwt.JwtTokenInvalidException;
+import km.cd.backend.common.jwt.JwtTokenInvalidException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.AuthenticationException;
@@ -10,7 +10,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import static km.cd.backend.jwt.JwtAuthenticationFilter.ATTRIBUTE_JWT_TOKEN_ERROR;
+import static km.cd.backend.common.jwt.JwtAuthenticationFilter.ATTRIBUTE_JWT_TOKEN_ERROR;
 
 @Slf4j
 @Component

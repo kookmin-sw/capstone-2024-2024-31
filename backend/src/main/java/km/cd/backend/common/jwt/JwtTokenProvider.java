@@ -1,4 +1,4 @@
-package km.cd.backend.jwt;
+package km.cd.backend.common.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

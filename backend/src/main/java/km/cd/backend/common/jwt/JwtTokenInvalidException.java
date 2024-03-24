@@ -1,6 +1,6 @@
-package km.cd.backend.jwt;
+package km.cd.backend.common.jwt;
 
-import km.cd.backend.global.error.CustomException;
+import km.cd.backend.common.error.CustomException;
 
 /**
  * 토큰이 유효하지 않을때 발생하는 Exception

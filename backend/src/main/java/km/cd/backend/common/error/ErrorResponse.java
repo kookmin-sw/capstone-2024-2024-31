@@ -1,4 +1,4 @@
-package km.cd.backend.global.error;
+package km.cd.backend.common.error;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package km.cd.backend.global.error;
+package km.cd.backend.common.error;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

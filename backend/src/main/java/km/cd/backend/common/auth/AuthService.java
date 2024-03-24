@@ -1,8 +1,8 @@
-package km.cd.backend.auth;
+package km.cd.backend.common.auth;
 
-import km.cd.backend.global.error.CustomException;
-import km.cd.backend.jwt.JwtTokenProvider;
-import km.cd.backend.jwt.JwtTokenResponse;
+import km.cd.backend.common.error.CustomException;
+import km.cd.backend.common.jwt.JwtTokenProvider;
+import km.cd.backend.common.jwt.JwtTokenResponse;
 import km.cd.backend.user.User;
 import km.cd.backend.user.UserRepository;
 import km.cd.backend.user.dto.UserLogin;
