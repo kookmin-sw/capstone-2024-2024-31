@@ -1,0 +1,50 @@
+<form class="container" action="/challenge/create_form" method="post">
+<div class="mb-3">
+        <label class="form-label" for="challenge_name">challenge_name</label>
+        <input type="text" class="form-control" name="challenge_name" id="challenge_name">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="start_date">start_date</label>
+        <input type="date" class="form-control" name="start_date" id="start_date">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="end_date">end_date</label>
+        <input type="date" class="form-control" name="end_date" id="end_date">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="certification_frequency">certification_frequency</label>
+        <input type="number" class="form-control" name="certification_frequency" id="certification_frequency">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="certification_explanation">certification_explanation</label>
+        <input type="text" class="form-control" name="certification_explanation" id="certification_explanation">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="certification_count">certification_count</label>
+        <input type="number" class="form-control" name="certification_count" id="certification_count">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="certification_method">certification_method</label>
+        <input type="text" class="form-control" name="certification_method" id="certification_method">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="challenge_explanation">challenge_explanation</label>
+        <textarea class="form-control" rows="3" name="challenge_explanation" id="challenge_explanation"></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="maximum_people">maximum_people</label>
+        <input type="number" class="form-control" name="maximum_people" id="maximum_people">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="is_private">is_private</label>
+        <select class="form-select" name="is_private" id="is_private">
+            <option value="true">private</option>
+            <option value="false">public</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="private_code">private_code</label>
+        <input type="text" class="form-control" name="private_code" id="private_code">
+    </div>
+    <button type="submit" class="btn btn-primary">submit</button>
+</form>
