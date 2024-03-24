@@ -1,6 +1,6 @@
 package km.cd.backend.user;
 
-import km.cd.backend.global.error.CustomException;
+import km.cd.backend.common.error.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

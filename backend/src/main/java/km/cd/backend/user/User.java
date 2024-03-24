@@ -1,7 +1,7 @@
 package km.cd.backend.user;
 
 import jakarta.persistence.*;
-import km.cd.backend.oauth2.attributes.OAuth2Attributes;
+import km.cd.backend.common.oauth2.attributes.OAuth2Attributes;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

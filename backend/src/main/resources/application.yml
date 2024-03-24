@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
 
   profiles:
@@ -22,6 +25,10 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create
+
+  output:
+    ansi:
+      enabled: always
 
 jwt:
   secret: ${JWT_SECRET}
