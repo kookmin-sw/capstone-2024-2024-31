@@ -40,4 +40,6 @@ out/
 
 src/main/generated
 
-.env
+# env
+!**/src/main/resources/properties/env.properties
+!**/src/test/java/km/cd/backend/auth/EnvPropertiesTest.java
