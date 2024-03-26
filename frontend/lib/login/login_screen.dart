@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Palette.mainPurple,
             body: Container(
               width: double.infinity,
-                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
                 child:  Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -62,10 +62,27 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Container(
         alignment: Alignment.center,
-        width: 200,
-        child: Image.asset(
-          'assets/images/google_login_btn.png',
-          height: 50,
+        width: double.infinity,
+        height: 45,
+        decoration: BoxDecoration(
+            color: const Color(0XFFFFFFFF),
+            borderRadius: BorderRadius.circular(15)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/login_btn/google_symbol.png',
+              height: 30,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(
+              '구글 로그인 ',
+              style: TextStyle(
+                  fontSize: 17, color: Colors.black.withOpacity(0.85)),
+            )
+          ],
         ),
       ),
     );
@@ -81,10 +98,27 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Container(
         alignment: Alignment.center,
-        width: 200,
-        child:  Image.asset(
-          'assets/images/naver_login_btn.png',
-          height: 50,
+        width: double.infinity,
+        height: 45,
+        decoration: BoxDecoration(
+            color: const Color(0XFFFFFFFF),
+            borderRadius: BorderRadius.circular(15)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/login_btn/naver_symbol.png',
+              height: 30,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(
+              '네이버 로그인 ',
+              style: TextStyle(
+                  fontSize: 17, color: Colors.black.withOpacity(0.85)),
+            )
+          ],
         ),
       ),
     );
