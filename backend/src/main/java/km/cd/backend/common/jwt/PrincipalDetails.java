@@ -19,6 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
+    private Long userId;
     private String email;
     private String name;
 
