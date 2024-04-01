@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/main/components/home_appBar.dart';
 import 'package:frontend/model/config/palette.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,17 +13,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-      preferredSize: Size.fromHeight(70), // 이미지의 높이에 맞춰서 설정
-      child: AppBar(
-        backgroundColor: Palette.mainPurple,
-        foregroundColor: Colors.white,
-        leading: Image.asset(
-          'assets/images/logo/logo_white.png',
-          fit: BoxFit.cover,
-        ),
-        leadingWidth: 100,
-      ),
-    ));
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(80), // 이미지의 높이에 맞춰서 설정
+          child: home_appBar,)
+    );
   }
 }
