@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
               '구글 로그인 ',
               style: TextStyle(
                   fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   fontSize: 17,
                   color: Colors.black.withOpacity(0.85)),
             )
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
               '네이버 로그인 ',
               style: TextStyle(
                   fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   fontSize: 17,
                   color: Colors.black.withOpacity(0.85)),
             )

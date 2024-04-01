@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/login/login_screen.dart';
+import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
+import 'package:frontend/main/main_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,10 +28,11 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               // navigatorObservers: <NavigatorObserver>[observer],
-              initialRoute: 'home',
+              initialRoute: 'main',
               routes: {
                 // SplashScreen.routeName: (context) => SplashScreen(),
-                'home': (context) => const LoginScreen(),
+                'login': (context) => const LoginScreen(),
+                'main' : (context) => const MainScreen()
 
               });
         });
