@@ -101,7 +101,7 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
         ));
   }
 
-
+//todo : 여기할차례임 . 인증 더미데이터 만들어서 가로스크롤 카드뷰 ㄱ
   Widget AuthList() {
 
     return Card();
