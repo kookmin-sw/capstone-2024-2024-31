@@ -72,4 +72,38 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
       ),
     );
   }
+
+  Widget AuthBox() {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          color: Palette.white,
+          child: Column(
+            children: [
+              Text(
+                "내 챌린지 현황 >",
+                style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 21),
+              ),
+              Text(
+                "챌린지를 진행하고 인증을 완료해 주세요!",
+                style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w100,
+                    fontSize: 12),
+              )
+            ],
+          ),
+        ));
+  }
+
+
+  Widget AuthList() {
+
+    return Card();
+  }
 }
