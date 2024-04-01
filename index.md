@@ -25,7 +25,7 @@ AI technology recognizes various hand shapes and checks whether the image is val
 
 ## 📱 앱 구성 | app Configuration
 |Main|Cases|
-|:-:|:-:|
+| - | - |
 |<img width="268" alt="모바일" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/0638b62a-0e46-4afb-a14e-f1fceb8115c7" />|<img src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/12248dae-4cd0-4007-9a10-783a75119ab3" />|
 <br/>
 
