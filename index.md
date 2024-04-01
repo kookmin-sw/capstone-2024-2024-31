@@ -2,7 +2,7 @@
 ### 항상 향상된 하루 - 루틴업으로 갓생살기
     
 <div align="center">
-  <img width=79% src="https://github.com/kookmin-sw/capstone-2024-31/blob/master/media/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202024-04-01%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.08.00.png"/>
+  <img width=79% src="./media/스크린샷 2024-04-01 오후 10.08.00.png/>
 </div>  
 
 <br/><br/>
