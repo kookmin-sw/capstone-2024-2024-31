@@ -50,12 +50,13 @@ jobs:
 
       # gradle build
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./backend/gradlew build -x test
 
       # docker build & push to production (main branch)
       - name: Docker build & push to prod
         if: contains(github.ref, 'main')
         run: |
+          cd ./backend
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/docker-test-prod .
           docker push ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
@@ -64,6 +65,7 @@ jobs:
       - name: Docker build & push to dev
         if: contains(github.ref, 'develop')
         run: |
+          cd ./backend
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/docker-test-dev .
           docker push ${{ secrets.DOCKER_USERNAME }}/docker-test-dev
