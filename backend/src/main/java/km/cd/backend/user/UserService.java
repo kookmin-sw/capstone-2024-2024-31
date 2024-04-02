@@ -13,6 +13,10 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(500, "User not found."));
+        return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(400, "User not found."));
+    }
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new CustomException(400, "User not found."));
     }
 }

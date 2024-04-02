@@ -18,8 +18,8 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserResponse> me(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        String email = principalDetails.getEmail();
-        User user = userService.findByEmail(email);
+        Long userId = principalDetails.getUserId();
+        User user = userService.findById(userId);
         UserResponse userResponse = UserMapper.INSTANCE.userToUserResponse(user);
         return ResponseEntity.ok(userResponse);
     }

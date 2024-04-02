@@ -37,20 +37,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2Attributes oAuth2Attributes = OAuth2AttributesFactory.getOauth2Attributes(registrationId, userNameAttributeName, attributes);
 
         Optional<User> _user = userRepository.findByEmail(oAuth2Attributes.getEmail());
+        User user;
         if (_user.isPresent()) {
-            updateUser(_user.get(), oAuth2Attributes);
+            user = updateUser(_user.get(), oAuth2Attributes);
         } else {
-            registerUser(oAuth2Attributes);
+            user = registerUser(oAuth2Attributes);
         }
 
         return new PrincipalDetails(
-                oAuth2Attributes.getEmail(),
-                oAuth2Attributes.getName(),
+                user.getId(),
+                user.getEmail(),
+                user.getName(),
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
         );
     }
 
-    private void registerUser(OAuth2Attributes oAuth2Attributes) {
+    private User registerUser(OAuth2Attributes oAuth2Attributes) {
         User user = User.builder()
                 .email(oAuth2Attributes.getEmail())
                 .name(oAuth2Attributes.getName())
@@ -58,12 +60,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .provider(oAuth2Attributes.getProvider())
                 .providerId(oAuth2Attributes.getProviderId())
                 .build();
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
-    private void updateUser(User user, OAuth2Attributes OAuth2Attributes) {
+    private User updateUser(User user, OAuth2Attributes OAuth2Attributes) {
         user.updateDefaltInfo(OAuth2Attributes);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
 }

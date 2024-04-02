@@ -57,6 +57,7 @@ public class AuthService {
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(
+                user.getId(),
                 user.getEmail(),
                 user.getName(),
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole()))
