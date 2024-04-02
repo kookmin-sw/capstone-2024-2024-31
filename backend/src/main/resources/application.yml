@@ -30,6 +30,10 @@ spring:
     ansi:
       enabled: always
 
+  web:
+    resources:
+      add-mappings: false
+
 jwt:
   secret: ${JWT_SECRET}
   ac_expiration_in_ms: ${JWT_AC_EXPIRATION_IN_MS}
