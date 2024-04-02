@@ -21,7 +21,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtTokenProvider jwtTokenProvider;
 
     // TODO: Flutter App Redirect 주소로 변경
-    public static final String REDIRECT_URL = "http://localhost:3000/oauth2/success";
+    public static final String REDIRECT_URL = "web-auth-callback://";
     public static final String PARAM_AC_TOKEN = "access_token";
     public static final String PARAM_RF_TOKEN = "refresh_token";
 
