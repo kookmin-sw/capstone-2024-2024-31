@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -77,7 +78,8 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    backgroundColor: MaterialStateProperty.all<Color>(Palette.white),
+                    backgroundColor:
+                    MaterialStateProperty.all<Color>(Palette.white),
                   ),
                   child: Text(
                     "챌린지 보러가기",
@@ -127,23 +129,25 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
               Text(
                 "챌린지를 진행하고 인증을 완료해 주세요!",
                 style: TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                  color: Colors.grey
-                ),
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                    color: Colors.grey),
               ),
               SizedBox(height: 10),
               Container(
                 width: double.infinity,
-                height: 75,
-                child: PageView(
-                  controller: _scrollController,
-                  pageSnapping: true,
-                  scrollDirection: Axis.horizontal,
-                  children: AuthList(),
-                ),
-              )
+                  height: 70,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Swiper(
+                    itemBuilder: (BuildContext context, int index) {
+                      return AuthList()[index];
+                    },
+                    pagination: SwiperPagination(
+                      margin: EdgeInsets.all(1)
+                    ),
+                    itemCount: AuthList().length,
+                  ))
             ],
           ),
         ),
@@ -159,60 +163,59 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
     ];
 
     return challengeList.map((challenge) {
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        width: 300,
-        height: 100,
-        child: Card(
-          color: Color(0xFFF1F1F1),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  challenge['image'], // 이미지 경로
-                  width: 40, // 이미지 너비
-                  height: 40, // 이미지 높이
+      return Card(
+        color: Color(0xFFF1F1F1),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(width: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                challenge['image'], // 이미지 경로
+                width: 40, // 이미지 너비
+                height: 40, // 이미지 높이
+              ),
+            ),
+            SizedBox(width: 8),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          challenge['name'], // 챌린지 이름
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          '${challenge['percent']}%', // 진행 상태
+                        )
+                      ]),
+                )
+              ],
+            ),
+
+            GestureDetector(
+              onTap: () {
+                // 버튼을 눌렀을 때 실행할 동작
+                print('Button pressed');
+              },
+              child: Container(
+                width: 50, // 버튼의 너비
+                height: 50, // 버튼의 높이
+                child: SvgPicture.asset(
+                  'assets/buttons/auth_mini_btn.svg', // SVG 파일의 경로
+                  width: 50, // SVG 이미지의 너비
+                  height: 50, // SVG 이미지의 높이
                 ),
               ),
-              SizedBox(width: 8),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(children: [
-                    Text(
-                      challenge['name'], // 챌린지 이름
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '${challenge['percent']}%', // 진행 상태
-                    )
-                  ]),
-                ],
-              ),
-              Image.asset(
-                'assets/images/Rectangle177.png',
-                height: 40,
-                width: 5,
-              ),
-              IconButton(
-                onPressed: () {
-                  print("인증버튼");
-                  // 버튼을 눌렀을 때 실행할 작업
-                },
-                icon: Image.asset(
-                  'assets/buttons/auth_small_active.png', // 이미지 경로
-                  width: 40, // 이미지 너비
-                  height: 40, // 이미지 높이
-                ),
-              ),
-            ],
-          ),
+            )
+          ],
         ),
+
       );
     }).toList();
   }
 }
-

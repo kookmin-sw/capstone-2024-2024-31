@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/chal_ingBox.dart';
+import 'package:frontend/main/bottom_tabs/home/home_components/challenge_category_component.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_appBar.dart';
 import 'package:frontend/model/config/palette.dart';
 
@@ -20,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body:
           Column(children: [
             ChallengeIngBox(),
-            SizedBox(height: 10,)
+            SizedBox(height: 140),
+            Home_Category()
           ],)
 
     );
