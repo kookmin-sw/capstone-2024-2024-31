@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/challenge/create/challenge_create_screen.dart';
 import 'package:frontend/login/login_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
 import 'package:frontend/main/main_screen.dart';
@@ -28,11 +29,12 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               // navigatorObservers: <NavigatorObserver>[observer],
-              initialRoute: 'main',
+              initialRoute: 'create_challenge',
               routes: {
                 // SplashScreen.routeName: (context) => SplashScreen(),
                 'login': (context) => const LoginScreen(),
-                'main' : (context) => const MainScreen()
+                'main' : (context) => const MainScreen(),
+                'create_challenge' :  (context) => CreateChallenge(),
 
               });
         });

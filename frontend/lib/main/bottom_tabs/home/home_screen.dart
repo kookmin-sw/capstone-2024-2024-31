@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/main/bottom_tabs/home/home_components/chal_ingBox.dart';
-import 'package:frontend/main/bottom_tabs/home/home_components/challenge_category_component.dart';
+import 'package:frontend/main/bottom_tabs/home/home_components/home_top_ChalBox.dart';
+import 'package:frontend/main/bottom_tabs/home/home_components/home_category_component.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_appBar.dart';
 import 'package:frontend/model/config/palette.dart';
 
