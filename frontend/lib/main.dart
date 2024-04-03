@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/challenge/create/challenge_create_screen.dart';
+import 'package:frontend/challenge/create/create_challenge_screen(1).dart';
 import 'package:frontend/login/login_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
 import 'package:frontend/main/main_screen.dart';

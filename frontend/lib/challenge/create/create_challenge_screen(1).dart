@@ -11,6 +11,7 @@ class CreateChallenge extends StatefulWidget {
 
 class _CreateChallengeState extends State<CreateChallenge> {
   bool? isPublicSelected; // Changed to nullable bool
+  bool showAdditionalWidgets = false; // Added state to control the visibility of additional widgets
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,8 @@ class _CreateChallengeState extends State<CreateChallenge> {
                   // height: 30,
 
               ))),
-      body: Column(
+      body: SingleChildScrollView(
+    child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,9 +62,39 @@ class _CreateChallengeState extends State<CreateChallenge> {
             "암호를 아는 사람만 참여할 수 있어요.",
             Icons.lock_outline_rounded,
           ),
+
+          if (showAdditionalWidgets) ...[
+            // Show additional widgets when '비공개' button is selected
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: '암호를 입력하세요',
+                        labelText: '암호',
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10), // Add spacing between text field and button
+                  ElevatedButton(
+                    onPressed: () {
+                      // Perform action on confirmation button press
+                    },
+                    child: Text('확인', style: TextStyle(
+                      fontWeight: FontWeight.bold
+                    ),),
+                  ),
+                ],
+              ),
+            ),
+
+          ],
+
         ],
       ),
-    );
+      ));
   }
 
   Widget disclosureButton(
@@ -79,6 +111,7 @@ class _CreateChallengeState extends State<CreateChallenge> {
         onPressed: () {
           setState(() {
             isPublicSelected = isOpened == "public";
+            showAdditionalWidgets = isOpened == "private"; // Show additional widgets only when '비공개' button is clicked
           });
         },
         icon: Icon(
