@@ -15,16 +15,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
+        appBar: PreferredSize(
           preferredSize: Size.fromHeight(80), // 이미지의 높이에 맞춰서 설정
-          child: home_appBar,),
-      body:
-          Column(children: [
-            ChallengeIngBox(),
-            SizedBox(height: 140),
-            Home_Category()
-          ],)
-
-    );
+          child: home_appBar,
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+          children: [ChallengeIngBox(), SizedBox(height: 140), Home_Category()],
+        )));
   }
 }
