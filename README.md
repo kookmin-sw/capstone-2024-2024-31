@@ -78,6 +78,14 @@ The project is to develop an app service that allows users to make good habits.
     <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white">
 </div>
 
+### AI
+
+<div style="display: flex; gap: 6px;">
+    <img src="https://img.shields.io/badge/python-F05032?style=for-the-badge&logo=git&logoColor=white">
+    <img src="https://img.shields.io/badge/pytorch-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"/>
+
+</div>
+
 ### Tools
 
 <div style="display: flex; gap: 6px;">
