@@ -49,9 +49,10 @@ public class SecurityConfig {
                 // url 접근 설정
                 .authorizeHttpRequests(auth ->
                     auth.requestMatchers("/auth/**").permitAll()
-                            .requestMatchers("/users/**").authenticated()
-                            .requestMatchers("/challenge/**").authenticated()
-                            .anyRequest().permitAll()
+                        .requestMatchers("/users/me").authenticated()
+                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/challenge/**").authenticated()
+                        .anyRequest().permitAll()
                 )
                 // oauth 설정
                 .oauth2Login(oauth2 ->
