@@ -327,8 +327,8 @@ class _BodyPart2State extends State<BodyPart2> {
                   children: List.generate(
                     8,
                     (index) => Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 3),
-                        child: ElevatedButton(
+                            padding: EdgeInsets.symmetric(horizontal: 4),
+                            child: ElevatedButton(
                           onPressed: () {
                             setState(() {
                               if (selectedIndex == index) {
@@ -340,6 +340,8 @@ class _BodyPart2State extends State<BodyPart2> {
                             });
                           },
                           style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all<Size>(Size(10, 35)), // Adjust the button's size
+
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
@@ -355,9 +357,10 @@ class _BodyPart2State extends State<BodyPart2> {
                                   color: selectedIndex == index
                                       ? Colors.white
                                       : Palette.grey200,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.w500)),
-                        )),
-                  )))
+                        ))),
+                  ))
         ]));
   }
 // Widget selectStartDay(){}
