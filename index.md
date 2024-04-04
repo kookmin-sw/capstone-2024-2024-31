@@ -80,7 +80,7 @@ YET
   </a>
 </div>
 <div align="center">
-  <a href="">
+  <a href="https://drive.google.com/file/d/1BjyOB5nw1K9DP4lKLAnxkNY2IdfBuueJ/view?usp=sharing">
     중간 발표
   </a>
 </div>
