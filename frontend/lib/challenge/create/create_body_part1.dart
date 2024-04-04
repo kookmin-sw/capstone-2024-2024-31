@@ -130,7 +130,12 @@ class _BodyPart1State extends State<BodyPart1> {
             setState(() {
               showCodeInput = true; // 코드 입력 창 표시
             });
-        }},
+        }else{
+            setState(() {
+              showCodeInput = false; // 코드 입력 창 표시
+            });
+          }
+          },
         icon: Icon(
           iconData,
           size: 40,

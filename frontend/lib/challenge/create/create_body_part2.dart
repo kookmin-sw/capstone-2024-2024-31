@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -23,7 +24,6 @@ class _BodyPart2State extends State<BodyPart2> {
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
   List<XFile?> multiImage = []; // 갤러리에서 여러 장의 사진을 선택해서 저장할 변수
   List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,122 +155,147 @@ class _BodyPart2State extends State<BodyPart2> {
   }
 
   Widget addPicture() {
-    return
-      Padding(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-        "챌린지 사진",
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
-            fontFamily: 'Pretendard',
-            color: Palette.grey300),
-      ),
-      Container(
-        height: 100, // 이미지가 표시될 높이
-        width: double.infinity,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal, // 수평 스크롤
-          child: Row(
-            children: [
-              Container(
-                // 갤러리에서 가져오기 버튼
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Palette.grey200,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 0.5,
-                      blurRadius: 5,
-                    )
-                  ],
-                ),
-                child: IconButton(
-                  onPressed: () async {
-                    multiImage = await picker.pickMultiImage();
-                    setState(() {
-                      images.addAll(multiImage);
-                    });
-                  },
-                  icon: Icon(
-                    Icons.add_photo_alternate_outlined,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              // 선택한 이미지들을 나타내는 그리드 뷰
-              Container(
-                padding: EdgeInsets.all(5),
-                height: 80,
-                // 그리드 뷰의 높이
-                width: images.length * 100.0,
-                // 그리드 뷰의 너비 (이미지 너비 * 이미지 개수)
-                child: GridView.builder(
-                  scrollDirection: Axis.horizontal,
-                  // 수평 스크롤
-                  padding: EdgeInsets.all(5),
-                  shrinkWrap: true,
-                  itemCount: images.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1, // 수평으로 한 번에 보여질 이미지 수
-                    childAspectRatio: 1, // 이미지의 가로 세로 비율
-                    mainAxisSpacing: 10, // 그리드 뷰의 아이템들 간의 수평 간격 조정
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    // 이미지와 삭제 버튼을 포함한 스택
-                    return Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: FileImage(
-                                File(images[index]!.path),
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "챌린지 소개 사진",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                fontFamily: 'Pretendard',
+                color: Palette.grey300),
+          ),
+          Container(
+            height: 100, // 이미지가 표시될 높이
+            width: double.infinity,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal, // 수평 스크롤
+              child: Row(
+                children: [
+                  Container(
+                      padding: EdgeInsets.zero,
+                      // 갤러리에서 가져오기 버튼
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: Palette.greySoft,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 0.5,
+                            blurRadius: 5,
+                          )
+                        ],
+                      ),
+                      child: Stack(alignment: Alignment.center, children: [
+                        IconButton( //todo : 이미지 5장만 추가할 수 있게 block
+                          padding: EdgeInsets.zero,
+                          alignment: Alignment.topCenter, // 아이콘을 중앙에 배치
+                          onPressed:() async {
+                            if (images.length < 5) { // 이미지가 5장 미만일 때만 이미지 추가 동작 수행
+                              multiImage = await picker.pickMultiImage();
+                              setState(() {
+                                images.addAll(multiImage);
+                              });
+                            } else{
+                              Fluttertoast.showToast(
+                                msg: "이미지는 최대 5장까지 선택할 수 있습니다.",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.grey,
+                                textColor: Colors.white,
+                                fontSize: 10.0,
+                              );
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.add_photo_alternate_outlined,
+                            size: 24,
+                            color: Palette.grey200,
+                          ),
+                        ),
+                        Positioned(
+                            bottom: 6,
+                            child: Text(
+                              "${images.length}/5",
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w300,
+                                color: images.length < 5? Palette.grey200 : Colors.red[20], // 텍스트 색상 설정
+                              ),
+                            ))
+                      ])),
+                  // 선택한 이미지들을 나타내는 그리드 뷰
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    height: 80,
+                    // 그리드 뷰의 높이
+                    width: images.length * 100.0,
+                    // 그리드 뷰의 너비 (이미지 너비 * 이미지 개수)
+                    child: GridView.builder(
+                      scrollDirection: Axis.horizontal,
+                      // 수평 스크롤
+                      padding: EdgeInsets.all(5),
+                      shrinkWrap: true,
+                      itemCount: images.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1, // 수평으로 한 번에 보여질 이미지 수
+                        childAspectRatio: 1, // 이미지의 가로 세로 비율
+                        mainAxisSpacing: 10, // 그리드 뷰의 아이템들 간의 수평 간격 조정
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        // 이미지와 삭제 버튼을 포함한 스택
+                        return Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: FileImage(
+                                    File(images[index]!.path),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        // 삭제 버튼
-                        Container(
-                          height: 25,
-                          width: 25,
-                          decoration: BoxDecoration(
-                            color: Palette.grey300,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
-                            icon: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 15,
+                            // 삭제 버튼
+                            Container(
+                              height: 20,
+                              width: 20,
+                              decoration: BoxDecoration(
+                                color: Palette.grey300,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                                icon: Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 13,
+                                ),
+                                onPressed: () {
+                                  // 이미지 삭제
+                                  setState(() {
+                                    images.remove(images[index]);
+                                  });
+                                },
+                              ),
                             ),
-                            onPressed: () {
-                              // 이미지 삭제
-                              setState(() {
-                                images.remove(images[index]);
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      )
-    ]));
+            ),
+          )
+        ]));
   }
 
 // Widget selectWeekend(){}
