@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/create/create_body_part1.dart';
 import 'package:frontend/challenge/create/create_body_part2.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/data/challenge.dart';
 
 class CreateChallenge extends StatefulWidget {
   const CreateChallenge({Key? key});
@@ -12,13 +13,22 @@ class CreateChallenge extends StatefulWidget {
 }
 
 class _CreateChallengeState extends State<CreateChallenge> {
-  bool? isPublicSelected; // Changed to nullable bool
+  late Challenge newChallenge = Challenge();
+
+  bool? isPrivateSelected;
+
   bool showAdditionalWidgets =
       false; // Added state to control the visibility of additional widgets
 
   bool showPart1 = true;
   bool showPart2 = false;
   bool showPart3 = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +57,10 @@ class _CreateChallengeState extends State<CreateChallenge> {
                 if (showPart1) {
                   showPart1 = false;
                   showPart2 = true;
+                  print(isPrivateSelected);
+                  print("```````````${newChallenge.privateCode}");
+                  // if()
+                  // newChallenge.isPrivate
                 } else if (showPart2) {
                   showPart2 = false;
                   showPart3 = true;
@@ -62,12 +76,16 @@ class _CreateChallengeState extends State<CreateChallenge> {
         ),
         body: (showPart1)
             ? BodyPart1(
-                isPublicSelected: isPublicSelected,
-                showAdditionalWidgets: showAdditionalWidgets,
-                onDisclosureButtonPressed: (bool isPublic, bool showWidgets) {
+                isPrivateSelected: isPrivateSelected,
+                onPrivateButtonPressed: (bool isPrivate, String _privateCode) {
                   setState(() {
-                    isPublicSelected = isPublic;
-                    showAdditionalWidgets = showWidgets;
+                    isPrivateSelected = isPrivate;
+                    newChallenge.isPrivate = isPrivate;
+                    if (isPrivate) {
+                      newChallenge.privateCode = _privateCode;
+                    }else {
+                      newChallenge.privateCode = "";
+                    }
                   });
                 },
               )

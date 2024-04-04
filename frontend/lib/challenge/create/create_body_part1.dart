@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/model/config/palette.dart';
+
 class BodyPart1 extends StatefulWidget {
-  final bool? isPublicSelected;
-  final bool showAdditionalWidgets;
-  final Function(bool, bool) onDisclosureButtonPressed;
+  final bool? isPrivateSelected;
+  final Function(bool, String) onPrivateButtonPressed;
 
   const BodyPart1({
-    required this.isPublicSelected,
-    required this.showAdditionalWidgets,
-    required this.onDisclosureButtonPressed,
+    required this.isPrivateSelected,
+    required this.onPrivateButtonPressed,
   });
 
   @override
@@ -17,6 +16,22 @@ class BodyPart1 extends StatefulWidget {
 }
 
 class _BodyPart1State extends State<BodyPart1> {
+  late String privateCode = '';
+  bool showCodeInput = false; // 코드 입력 창 보여주기 여부
+  late FocusNode _focusNode; // 텍스트 필드의 포커스를 제어하기 위한 FocusNode
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode(); // FocusNode 초기화
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose(); // FocusNode 해제
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -40,26 +55,30 @@ class _BodyPart1State extends State<BodyPart1> {
             "암호를 아는 사람만 참여할 수 있어요.",
             Icons.lock_outline_rounded,
           ),
-          if (widget.showAdditionalWidgets) ...[
+          if (showCodeInput) ...[
             // Show additional widgets when '비공개' button is selected
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: TextField(
+                      focusNode: _focusNode,
+                      onChanged: (value) {
+                        privateCode =
+                            value; // TextField에 입력된 값을 privateCode 변수에 저장
+                      },
                       decoration: InputDecoration(
-                          labelText: '암호',
-                          labelStyle: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Pretendard'
-                          ),
-                          hintText: '루티너 간 공유할 암호를 입력하세요',
-                          hintStyle: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w200,
-                          )
+                        labelText: '암호',
+                        labelStyle: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Pretendard'),
+                        hintText: '루티너 간 공유할 암호를 입력하세요',
+                        hintStyle: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w200,
+                        ),
                       ),
                     ),
                   ),
@@ -67,16 +86,20 @@ class _BodyPart1State extends State<BodyPart1> {
                   // Add spacing between text field and button
                   ElevatedButton(
                     onPressed: () {
-                      // Perform action on confirmation button press
+                      setState(() {
+                        print('입력된 암호: $privateCode');
+                        widget.onPrivateButtonPressed(true, privateCode);
+                        FocusScope.of(context).unfocus(); // 포커스 해제
+
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)
-                        )
-                    ),
+                            borderRadius: BorderRadius.circular(15))),
                     child: const Text(
                       '확인',
-                      style: TextStyle(fontWeight: FontWeight.bold,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           color: Palette.mainPurple),
                     ),
                   ),
@@ -90,24 +113,28 @@ class _BodyPart1State extends State<BodyPart1> {
   }
 
   Widget disclosureButton(
-      String isOpened,
-      String title,
-      String memo,
-      IconData iconData,
-      ) {
+    String isOpened,
+    String title,
+    String memo,
+    IconData iconData,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       height: 120,
       child: ElevatedButton.icon(
         onPressed: () {
-          bool isPublic = isOpened == "public";
+          bool isPrivate = isOpened == "private";
           bool showWidgets = isOpened == "private";
-          widget.onDisclosureButtonPressed(isPublic, showWidgets);
-        },
+          widget.onPrivateButtonPressed(isPrivate, privateCode);
+          if (showWidgets) {
+            setState(() {
+              showCodeInput = true; // 코드 입력 창 표시
+            });
+        }},
         icon: Icon(
           iconData,
           size: 40,
-          color: widget.isPublicSelected == (isOpened == "public")
+          color: widget.isPrivateSelected == (isOpened == "private")
               ? Palette.mainPurple
               : Colors.black,
         ),
@@ -123,7 +150,7 @@ class _BodyPart1State extends State<BodyPart1> {
                   Text(
                     "$title 챌린지",
                     style: TextStyle(
-                      color: widget.isPublicSelected == (isOpened == "public")
+                      color: widget.isPrivateSelected == (isOpened == "private")
                           ? Palette.mainPurple
                           : Colors.black,
                       fontFamily: 'Pretendard',
