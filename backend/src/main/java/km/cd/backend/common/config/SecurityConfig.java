@@ -3,15 +3,17 @@ package km.cd.backend.common.config;
 import km.cd.backend.common.error.CustomAccessDeniedHandler;
 import km.cd.backend.common.error.CustomAuthenticationEntryPoint;
 import km.cd.backend.common.jwt.JwtAuthenticationFilter;
-import km.cd.backend.common.oauth2.CustomOAuth2UserService;
 import km.cd.backend.common.oauth2.OAuth2AuthenticationSuccessHandler;
+import km.cd.backend.common.oauth2.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,6 +39,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .httpBasic(HttpBasicConfigurer::disable)
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 // 세션 설정
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -44,10 +48,8 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 // url 접근 설정
                 .authorizeHttpRequests(auth ->
-                    auth
-                            .requestMatchers("/auth/**").permitAll()
-                            .requestMatchers("/users/me").authenticated()
-                            .requestMatchers("/users/**").permitAll()
+                    auth.requestMatchers("/auth/**").permitAll()
+                            .requestMatchers("/users/**").authenticated()
                             .requestMatchers("/challenge/**").permitAll()
                             .anyRequest().permitAll()
                 )
@@ -55,7 +57,6 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 ->
                         oauth2.userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
-                                .permitAll()
                 )
                 // jwt 토큰 설정
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
