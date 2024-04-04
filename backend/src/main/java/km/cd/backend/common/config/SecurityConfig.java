@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                     auth.requestMatchers("/auth/**").permitAll()
                             .requestMatchers("/users/**").authenticated()
-                            .requestMatchers("/challenge/**").permitAll()
+                            .requestMatchers("/challenge/**").authenticated()
                             .anyRequest().permitAll()
                 )
                 // oauth 설정
