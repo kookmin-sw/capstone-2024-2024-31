@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -23,7 +24,10 @@ class _BodyPart2State extends State<BodyPart2> {
   final picker = ImagePicker();
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
   List<XFile?> multiImage = []; // 갤러리에서 여러 장의 사진을 선택해서 저장할 변수
-  List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수
+  List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수\
+
+  int selectedIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +42,8 @@ class _BodyPart2State extends State<BodyPart2> {
           ),
           inputName(),
           inputIntro(),
-          addPicture()
+          addPicture(),
+          selectWeekend()
         ])));
   }
 
@@ -190,16 +195,18 @@ class _BodyPart2State extends State<BodyPart2> {
                         ],
                       ),
                       child: Stack(alignment: Alignment.center, children: [
-                        IconButton( //todo : 이미지 5장만 추가할 수 있게 block
+                        IconButton(
+                          //todo : 이미지 5장만 추가할 수 있게 block
                           padding: EdgeInsets.zero,
                           alignment: Alignment.topCenter, // 아이콘을 중앙에 배치
-                          onPressed:() async {
-                            if (images.length < 5) { // 이미지가 5장 미만일 때만 이미지 추가 동작 수행
+                          onPressed: () async {
+                            if (images.length < 5) {
+                              // 이미지가 5장 미만일 때만 이미지 추가 동작 수행
                               multiImage = await picker.pickMultiImage();
                               setState(() {
                                 images.addAll(multiImage);
                               });
-                            } else{
+                            } else {
                               Fluttertoast.showToast(
                                 msg: "이미지는 최대 5장까지 선택할 수 있습니다.",
                                 toastLength: Toast.LENGTH_SHORT,
@@ -224,7 +231,9 @@ class _BodyPart2State extends State<BodyPart2> {
                                 fontSize: 9,
                                 fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w300,
-                                color: images.length < 5? Palette.grey200 : Colors.red[20], // 텍스트 색상 설정
+                                color: images.length < 5
+                                    ? Palette.grey200
+                                    : Colors.red[20], // 텍스트 색상 설정
                               ),
                             ))
                       ])),
@@ -298,6 +307,58 @@ class _BodyPart2State extends State<BodyPart2> {
         ]));
   }
 
-// Widget selectWeekend(){}
+  Widget selectWeekend() {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "챌린지 기간",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                fontFamily: 'Pretendard',
+                color: Palette.grey300),
+          ),
+          SizedBox(height: 10),
+          SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(
+                    8,
+                    (index) => Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 3),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              if (selectedIndex == index) {
+                                selectedIndex =
+                                    -1; // Deselect if already selected
+                              } else {
+                                selectedIndex = index; // Select otherwise
+                              }
+                            });
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<OutlinedBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            backgroundColor: selectedIndex == index
+                                ? MaterialStateProperty.all<Color>(
+                                    Palette.mainPurple)
+                                : null,
+                          ),
+                          child: Text("${(index + 1).toString()}주",
+                              style: TextStyle(
+                                  color: selectedIndex == index
+                                      ? Colors.white
+                                      : Palette.grey200,
+                                  fontWeight: FontWeight.w500)),
+                        )),
+                  )))
+        ]));
+  }
 // Widget selectStartDay(){}
 }
