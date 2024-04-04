@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:weekly_date_picker/weekly_date_picker.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class BodyPart2 extends StatefulWidget {
   // final Function(bool, String) onPrivateButtonPressed;
@@ -27,6 +29,14 @@ class _BodyPart2State extends State<BodyPart2> {
   List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수\
 
   int selectedIndex = -1;
+  DateTime _selectedDay = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting('ko_KR', null);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +47,14 @@ class _BodyPart2State extends State<BodyPart2> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: SvgPicture.asset('assets/svgs/create_challenge_level2.svg'),
           ),
           inputName(),
           inputIntro(),
           addPicture(),
-          selectWeekend()
+          selectWeekend(),
+          selectStartDay()
         ])));
   }
 
@@ -309,7 +320,7 @@ class _BodyPart2State extends State<BodyPart2> {
 
   Widget selectWeekend() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             "챌린지 기간",
@@ -323,12 +334,12 @@ class _BodyPart2State extends State<BodyPart2> {
           SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
                     8,
                     (index) => Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4),
-                            child: ElevatedButton(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        child: ElevatedButton(
                           onPressed: () {
                             setState(() {
                               if (selectedIndex == index) {
@@ -340,7 +351,8 @@ class _BodyPart2State extends State<BodyPart2> {
                             });
                           },
                           style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all<Size>(Size(10, 35)), // Adjust the button's size
+                            minimumSize: MaterialStateProperty.all<Size>(
+                                Size(10, 35)), // Adjust the button's size
 
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
@@ -360,8 +372,42 @@ class _BodyPart2State extends State<BodyPart2> {
                                   fontSize: 11,
                                   fontWeight: FontWeight.w500)),
                         ))),
-                  ))
+              ))
         ]));
   }
-// Widget selectStartDay(){}
+
+  Widget selectStartDay() {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children : [Text(
+            "챌린지 시작일",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                fontFamily: 'Pretendard',
+                color: Palette.grey300),
+          ),
+          Text("${DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDay)}   ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, fontFamily: 'Pretendard', color: Palette.mainPurple),)]),
+          SizedBox(height: 15),
+          WeeklyDatePicker(
+            selectedDay: _selectedDay,
+            changeDay: (value) => setState(() {
+              _selectedDay = value;
+              print(_selectedDay);
+            }),
+            enableWeeknumberText: false,
+            weeknumberColor: Palette.grey200,
+            weeknumberTextColor: Palette.grey200,
+            backgroundColor: Palette.greySoft,
+            weekdayTextColor: Palette.grey200,
+            digitsColor: Colors.grey,
+            selectedDigitBackgroundColor: Palette.mainPurple,
+            weekdays: const ["월", "화", "수", "목", "금", "토", "일"],
+            daysInWeek: 7,
+          ),
+        ]));
+  }
 }

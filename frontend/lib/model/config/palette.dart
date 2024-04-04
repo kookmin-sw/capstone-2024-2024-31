@@ -8,5 +8,6 @@ class Palette {
   static const Color grey300 = Color(0xFF66676D);
   static const Color greySoft = Color(0xFFF5F5F5);
   static const Color softPurPle = Color(0xFFEEE9FD);
-  static const Color jiBang = Color(0xFFFA7D84);
+  static const Color purPle200 = Color(0xFFB39AF7);
+
 }
