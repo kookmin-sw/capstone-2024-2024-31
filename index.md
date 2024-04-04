@@ -70,6 +70,43 @@ YET
 <br/>
 <br/>
 
+## 5. 기술스택 | Tech Stack
+
+### Frontend
+
+<div style="display: flex; gap: 6px;">
+    <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white"/>
+</div>
+
+### Backend
+
+<div style="display: flex; gap: 6px;">
+    <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+    <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white">
+</div>
+
+### AI
+
+<div style="display: flex; gap: 6px;">
+    <img src="https://img.shields.io/badge/python-F05032?style=for-the-badge&logo=python&logoColor=white">
+    <img src="https://img.shields.io/badge/pytorch-232F3E?style=for-the-badge&logo=pytorch&logoColor=white"/>
+
+</div>
+
+### Tools
+
+<div style="display: flex; gap: 6px;">
+    <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+    <img src="https://img.shields.io/badge/AMAZON AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"/>
+    <img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
+    <img src="https://img.shields.io/badge/Confluence-FF6C37?style=for-the-badge&logo=confluence&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Jira-000000?style=for-the-badge&logo=Jira&logoColor=white"/>
+</div>
+
+
+<br>
+
+
 ## 🗂 문서 | Document
 <div align="center">
   <a href="https://kookmin-sw.github.io/capstone-2024-31/">
