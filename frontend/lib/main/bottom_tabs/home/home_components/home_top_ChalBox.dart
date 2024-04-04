@@ -32,26 +32,24 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          PupleBox(),
-          Positioned(
-            top: 135, // 위젯이 겹치는 위치 설정
-            left: 0,
-            right: 0,
-            child: AuthBox(),
-          ),
-        ],
-      ),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        PupleBox(),
+        Positioned(
+          top: 135, // 위젯이 겹치는 위치 설정
+          left: 0,
+          right: 0,
+          child: AuthBox(),
+        ),
+      ],
     );
   }
 
   Widget PupleBox() {
     return Container(
       color: Palette.mainPurple,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -62,14 +60,14 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
               children: [
                 Text(
                   "$name 님 오늘은 $category 관련 \n챌린지를 도전해 볼까요?",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 17,
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: () {},
                   style: ButtonStyle(
@@ -79,9 +77,9 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                       ),
                     ),
                     backgroundColor:
-                    MaterialStateProperty.all<Color>(Palette.white),
+                        MaterialStateProperty.all<Color>(Palette.white),
                   ),
-                  child: Text(
+                  child: const Text(
                     "챌린지 보러가기",
                     style: TextStyle(
                       color: Palette.mainPurple,
@@ -91,11 +89,11 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                     ),
                   ),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
               ],
             ),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           SvgPicture.asset(
             'assets/icons/category_icons/exercise.svg',
             width: 90, // 조절할 아이콘의 너비
@@ -109,16 +107,16 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
 
   Widget AuthBox() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         color: Palette.white,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "내 챌린지 현황 >",
                 style: TextStyle(
                   fontFamily: 'Pretendard',
@@ -126,7 +124,7 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                   fontSize: 21,
                 ),
               ),
-              Text(
+              const Text(
                 "챌린지를 진행하고 인증을 완료해 주세요!",
                 style: TextStyle(
                     fontFamily: 'Pretendard',
@@ -134,18 +132,17 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                     fontSize: 12,
                     color: Colors.grey),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
-                width: double.infinity,
+                  width: double.infinity,
                   height: 70,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Swiper(
                     itemBuilder: (BuildContext context, int index) {
                       return AuthList()[index];
                     },
-                    pagination: SwiperPagination(
-                      margin: EdgeInsets.all(1)
-                    ),
+                    pagination:
+                        const SwiperPagination(margin: EdgeInsets.all(1)),
                     itemCount: AuthList().length,
                   ))
             ],
@@ -164,11 +161,11 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
 
     return challengeList.map((challenge) {
       return Card(
-        color: Color(0xFFF1F1F1),
+        color: const Color(0xFFF1F1F1),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.asset(
@@ -177,7 +174,7 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                 height: 40, // 이미지 높이
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -187,7 +184,7 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                       children: [
                         Text(
                           challenge['name'], // 챌린지 이름
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
                           '${challenge['percent']}%', // 진행 상태
@@ -196,13 +193,12 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                 )
               ],
             ),
-
             GestureDetector(
               onTap: () {
                 // 버튼을 눌렀을 때 실행할 동작
                 print('Button pressed');
               },
-              child: Container(
+              child: SizedBox(
                 width: 50, // 버튼의 너비
                 height: 50, // 버튼의 높이
                 child: SvgPicture.asset(
@@ -214,7 +210,6 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
             )
           ],
         ),
-
       );
     }).toList();
   }

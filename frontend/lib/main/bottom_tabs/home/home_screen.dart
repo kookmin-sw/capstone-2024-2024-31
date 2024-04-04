@@ -16,12 +16,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(80), // 이미지의 높이에 맞춰서 설정
+          preferredSize: const Size.fromHeight(80), // 이미지의 높이에 맞춰서 설정
           child: home_appBar,
         ),
         body: SingleChildScrollView(
             child: Column(
-          children: [ChallengeIngBox(), SizedBox(height: 140), Home_Category()],
+          children: [const ChallengeIngBox(), const SizedBox(height: 140), Home_Category()],
         )));
   }
 }

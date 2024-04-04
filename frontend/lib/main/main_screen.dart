@@ -15,9 +15,9 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    MainAuthScreen(),
-    MyPageScreen(),
+    const HomeScreen(),
+    const MainAuthScreen(),
+    const MyPageScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -34,9 +34,9 @@ class _MainScreenState extends State<MainScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
-          BottomNavigationBarItem(icon: Icon(Icons.camera_enhance), label: "인증"),
-          BottomNavigationBarItem(icon: Icon(Icons.supervised_user_circle_rounded), label: "마이페이지")
+          const BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
+          const BottomNavigationBarItem(icon: Icon(Icons.camera_enhance), label: "인증"),
+          const BottomNavigationBarItem(icon: Icon(Icons.supervised_user_circle_rounded), label: "마이페이지")
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Palette.mainPurple,

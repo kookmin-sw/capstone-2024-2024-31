@@ -9,50 +9,50 @@ class Home_Category extends StatelessWidget {
       "name": "운동",
       "memo": "튼튼한 몸을 위하여!",
       "icons": "assets/icons/category_icons/exercise.svg",
-      "color": Color(0xffEEE9FD),
+      "color": const Color(0xffEEE9FD),
     },
     {
       "name": "식습관",
       "memo": "골고루 건강하게!",
       "icons": "assets/icons/category_icons/eating.svg",
-      "color": Color(0xffFFDFDF),
+      "color": const Color(0xffFFDFDF),
     },
     {
       "name": "취미",
       "memo": "더 즐거운 삶을 위해!",
       "icons": "assets/icons/category_icons/hobby.svg",
-      "color": Color(0xffFFD0A3),
+      "color": const Color(0xffFFD0A3),
     },
     {
       "name": "환경",
       "memo": "깨끗한 환경에서!",
       "icons": "assets/icons/category_icons/nature.svg",
-      "color": Color(0xffDAF2CB),
+      "color": const Color(0xffDAF2CB),
     },
     {
       "name": "공부",
       "memo": "지적인 나를 위해!",
       "icons": "assets/icons/category_icons/study.svg",
-      "color": Color(0xffD4E0FF),
+      "color": const Color(0xffD4E0FF),
     }
   ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "챌린지 카테고리 >",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Pretendard',
                     fontSize: 22),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               SizedBox(
                   height: 160,
                   child: ListView(
@@ -86,10 +86,10 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         width: 120, // Set the width of the card
         child: Card(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
           color: color,
@@ -97,7 +97,7 @@ class CategoryCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   child: SvgPicture.asset(
                     iconPath,
                     width: 45,
@@ -106,7 +106,7 @@ class CategoryCard extends StatelessWidget {
               Container(
                 width: 128,
                 height: 77,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(8), // Rounded bottom-left corner
@@ -116,19 +116,19 @@ class CategoryCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
                       memo,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xFF96979B),
                         fontSize: 12,
                         fontWeight: FontWeight.w100,
