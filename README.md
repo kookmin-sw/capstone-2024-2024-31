@@ -1,5 +1,5 @@
-# 루틴업 - 커뮤니티 기반 습관 형성 챌린지 앱
-### 항상 향상된 하루 - 루틴업으로 갓생살기
+# 성장을 위한 좋은 습관, 루틴업
+### 커뮤니티 기반 습관 형성 어플리케이션
 <div align="center">
   <img src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/8bbd948e-6e6b-4ff8-81b2-1d6a584f2f7b" />
 </div>
@@ -34,16 +34,37 @@
 <br/>
 
 ## 📘 주요 기능 | Key Features
-### 🔹 AI로 손모양 인식을 통한 챌린지 인증 | certification through hand shape recognition with AI
-AI technology recognizes various hand shapes and checks whether the image is valid.
+
+<table>
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">챌린지 생성(Create Challenge)</td>
+    <td><img width="600" alt="스크린샷 2024-04-05 오후 1 40 56" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/59e49d85-0bcb-490a-9ffb-eb1352f9dece"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">커뮤니티(Community)</td>
+    <td><img width="600" alt="스크린샷 2024-04-05 오후 1 41 06" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/8b02a1a2-f05b-4da6-b7fc-859e8d0bf67c"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">참여 인증(Certification)</td>
+    <td><img width="600" alt="스크린샷 2024-04-05 오후 1 41 16" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/c07435b9-2cb9-48bd-acb4-77f9b7f73b94"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">챌린지 추천 시스템(Recommendation)</td>
+    <td><img width="600" alt="스크린샷 2024-04-05 오후 1 41 32" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/7f87b38b-69c7-44b2-9482-633585bf02fd"></td>
+  </tr>
+</table>
+
 <br/>
 <br/>
 
-## 📱 앱 구성 | app Configuration
 
-| Main | Cases |
-| :---: | :---: |
-|<img width="120" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/0638b62a-0e46-4afb-a14e-f1fceb8115c7" /> | <img width="400" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/12248dae-4cd0-4007-9a10-783a75119ab3" /> |
+## 〰️ 서비스 흐름도 | Flowchart
+
+<img src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/f75214e7-9f02-4668-a0e5-919640cc5515" />
+
+
+## 📱 앱 화면 | app Configuration
+YET
 
 
 ## 📃 결과 | Result
@@ -86,7 +107,7 @@ YET
 <br/>
 <br/>
 
-## 5. 기술스택 | Tech Stack
+## ⚙️ 기술스택 | Tech Stack
 
 ### Frontend
 
