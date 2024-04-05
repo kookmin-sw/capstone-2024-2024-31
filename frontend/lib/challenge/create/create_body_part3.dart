@@ -46,7 +46,7 @@ class _BodyPart3State extends State<BodyPart3> {
                 children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: SvgPicture.asset('assets/svgs/create_challenge_level2.svg'),
+            child: SvgPicture.asset('assets/svgs/create_challenge_level3.svg'),
           ),
           inputAuthIntro(),
           pickAuthMethod(),
@@ -125,6 +125,7 @@ class _BodyPart3State extends State<BodyPart3> {
           ),
           SizedBox(height: 15),
           ToggleButtons(
+            focusColor: Palette.mainPurple,
             borderRadius: BorderRadius.circular(30.0),
             isSelected: isAuthMethodSelected,
             onPressed: (int index) {
@@ -144,44 +145,44 @@ class _BodyPart3State extends State<BodyPart3> {
             children: [
               // 첫 번째 버튼 (카메라)
               Container(
-                  height: 70,
-                  width: 120,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.camera_alt),
-                      Text(
-                        '카메라',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13,
-                            fontFamily: 'Pretendard',
-                            color: Palette.grey300),
-                      ),
-                    ],
-                  )),
+                padding: EdgeInsets.symmetric(vertical: 12),
+                height: 50,
+                width: 130,
+                child: Text(
+                  '카메라',
+                  style: TextStyle(
+                    fontWeight: isAuthMethodSelected[0]
+                        ? FontWeight.bold // 선택된 버튼의 텍스트 색상
+                        : FontWeight.w400,
+                    fontSize: 13,
+                    fontFamily: 'Pretendard',
+                    color: isAuthMethodSelected[0]
+                        ? Palette.mainPurple // 선택된 버튼의 텍스트 색상
+                        : Palette.grey300,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
               // 두 번째 버튼 (갤러리)
               Container(
-                height: 70,
-                width: 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Icon(Icons.camera_alt),
-                      Icon(Icons.photo_library),
-                    ]),
-                    Text(
-                      '카메라+갤러리',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 13,
-                          fontFamily: 'Pretendard',
-                          color: Palette.grey300),
-                    ),
-                  ],
+                padding: EdgeInsets.symmetric(vertical: 12),
+                height: 50,
+                width: 130,
+                child: Text(
+                  '카메라+갤러리',
+                  style: TextStyle(
+                    fontWeight: isAuthMethodSelected[1]
+                        ? FontWeight.bold // 선택된 버튼의 텍스트 색상
+                        : FontWeight.w400,
+                    fontSize: 13,
+                    fontFamily: 'Pretendard',
+                    color: isAuthMethodSelected[1]
+                        ? Palette.mainPurple // 선택된 버튼의 텍스트 색상
+                        : Palette.grey300,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              )
+              ),
             ],
           ),
         ]));
@@ -192,7 +193,7 @@ class _BodyPart3State extends State<BodyPart3> {
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            "챌린지 소개 사진",
+            "인증 성공 / 실패 예시",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
