@@ -1,5 +1,8 @@
 # 성장을 위한 좋은 습관, 루틴업
 ### 커뮤니티 기반 습관 형성 어플리케이션
+
+### Good Habits for Growth, RoutineUp - Community-Based Habit Formation Challenge App
+
 <div align="center">
   <img src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/8bbd948e-6e6b-4ff8-81b2-1d6a584f2f7b" />
 </div>
@@ -29,7 +32,12 @@
 <br/>
 
 ## 루틴업 - 커뮤니티 기반 습관 형성 챌린지 앱
+
 이 앱은 커뮤니티 기반의 습관 형성 챌린지를 통해 일상 속에서 습관을 개선하거나 새로운 습관을 만들고자 하는 사람들을 지원합니다. 사용자는 자신의 목표에 부합하는 챌린지를 선택하여 참여함으로써 동기부여를 받고, 생활 패턴을 긍정적으로 변화시킬 수 있습니다. 예치금 제도를 도입하여 챌린지 참여에 대한 추가적인 동기를 부여하며, 신뢰성 있는 인증 방식으로 사용자들이 챌린지 참여에 대한 망설임 없이 도전할 수 있는 환경을 제공합니다. 또한, 이 앱은 커뮤니티 기능을 통해 경쟁이 아닌 상호 지지와 격려의 분위기 속에서 모두가 함께 성장할 수 있는 환경을 조성합니다. 서로의 진전을 공유하며, 응원하고 동기를 부여하여 개인의 목표 달성뿐만 아니라 서로의 발전에도 긍정적인 영향을 줍니다.
+
+### RoutineUp - Community-Based Habit Formation Challenge App
+
+This application supports individuals aiming to refine or establish new habits through a community-based challenge mechanism, enabling positive lifestyle modifications. Participants choose challenges that resonate with their objectives, receiving motivation to effectuate positive behavioral changes. The implementation of a deposit scheme offers additional motivation for engaging in challenges, complemented by a reliable verification process that facilitates uninhibited participation. Moreover, the application cultivates a nurturing environment of collective encouragement and support through its community functionalities. By sharing progress and fostering motivation, it significantly contributes to the achievement of personal objectives and promotes a positive impact on mutual advancement.
 <br/>
 <br/>
 
