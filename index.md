@@ -34,8 +34,6 @@
 <br/>
 
 ## 📘 주요 기능 | Key Features
-### 🔹 AI로 손모양 인식을 통한 챌린지 인증 | certification through hand shape recognition with AI
-AI technology recognizes various hand shapes and checks whether the image is valid.
 
 <table>
   <tr>
