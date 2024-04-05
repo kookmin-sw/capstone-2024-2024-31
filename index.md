@@ -5,6 +5,22 @@
 </div>
 <br/>
 
+## 🗂 자료 | Document
+<div align="center">
+  <a href="https://kookmin-sw.github.io/capstone-2024-31/">
+    <img src="https://user-images.githubusercontent.com/54926467/229354423-0f9ee204-2541-4bb9-bbd2-bd308b0876d7.png" width="150" height="150"/>
+   </a>
+  <a href="https://kcp2024.atlassian.net/wiki/spaces/K/overview?homepageId=229580">
+    <img src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/12a9b66e-559e-4b66-b390-4c42773e15ad" width="150" height="150"/>
+  </a>
+</div>
+<div align="center">
+  <a href="https://drive.google.com/file/d/1BjyOB5nw1K9DP4lKLAnxkNY2IdfBuueJ/view?usp=sharing">
+    중간 발표
+  </a>
+</div>
+
+
 ## 프로젝트 개요 | Project Abstract
 ### Raising the question
 <div align="center">
@@ -109,17 +125,3 @@ YET
 <br>
 
 
-## 🗂 문서 | Document
-<div align="center">
-  <a href="https://kookmin-sw.github.io/capstone-2024-31/">
-    <img src="https://user-images.githubusercontent.com/54926467/229354423-0f9ee204-2541-4bb9-bbd2-bd308b0876d7.png" width="150" height="150"/>
-   </a>
-  <a href="https://kcp2024.atlassian.net/wiki/spaces/K/overview?homepageId=229580">
-    <img src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/12a9b66e-559e-4b66-b390-4c42773e15ad" width="150" height="150"/>
-  </a>
-</div>
-<div align="center">
-  <a href="https://drive.google.com/file/d/1BjyOB5nw1K9DP4lKLAnxkNY2IdfBuueJ/view?usp=sharing">
-    중간 발표
-  </a>
-</div>
