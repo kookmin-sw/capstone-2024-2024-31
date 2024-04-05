@@ -31,12 +31,27 @@ class _BodyPart2State extends State<BodyPart2> {
   int selectedIndex = -1;
   DateTime _selectedDay = DateTime.now();
 
+  List<String> frequencyList = <String>[
+    '매일',
+    '평일 매일',
+    '주말 매일',
+    '주 1회',
+    '주 2회',
+    '주 3회',
+    '주 4회',
+    '주 5회',
+    '주 6회'
+  ];
+  String dropdownValue = '매일';
+  int? selectedHourStart = 0;
+  int? selectedHourEnd = 24;
+
+
   @override
   void initState() {
     super.initState();
     initializeDateFormatting('ko_KR', null);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +69,9 @@ class _BodyPart2State extends State<BodyPart2> {
           inputIntro(),
           addPicture(),
           selectWeekend(),
-          selectStartDay()
+          selectStartDay(),
+          selectFrequency(),
+          selectAuthTime()
         ])));
   }
 
@@ -380,17 +397,24 @@ class _BodyPart2State extends State<BodyPart2> {
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children : [Text(
-            "챌린지 시작일",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-                fontFamily: 'Pretendard',
-                color: Palette.grey300),
-          ),
-          Text("${DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDay)}   ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, fontFamily: 'Pretendard', color: Palette.mainPurple),)]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(
+              "챌린지 시작일",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  fontFamily: 'Pretendard',
+                  color: Palette.grey300),
+            ),
+            Text(
+              "${DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDay)}   ",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  fontFamily: 'Pretendard',
+                  color: Palette.mainPurple),
+            )
+          ]),
           SizedBox(height: 15),
           WeeklyDatePicker(
             selectedDay: _selectedDay,
@@ -407,6 +431,127 @@ class _BodyPart2State extends State<BodyPart2> {
             selectedDigitBackgroundColor: Palette.mainPurple,
             weekdays: const ["월", "화", "수", "목", "금", "토", "일"],
             daysInWeek: 7,
+          ),
+        ]));
+  }
+
+  Widget selectFrequency() {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "챌린지 인증 빈도",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                fontFamily: 'Pretendard',
+                color: Palette.grey300),
+          ),
+          SizedBox(height: 10),
+          DropdownButton<String>(
+            value: dropdownValue,
+            icon: const Icon(Icons.expand_more),
+            elevation: 16,
+            style: const TextStyle(
+              color: Palette.mainPurple,
+            ),
+            underline: Container(
+              height: 2,
+              color: Palette.mainPurple,
+            ),
+            onChanged: (String? value) {
+              // This is called when the user selects an item.
+              setState(() {
+                dropdownValue = value!;
+                print(dropdownValue);
+              });
+            },
+            items: frequencyList.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight:  value == dropdownValue
+                        ? FontWeight.bold
+                        : FontWeight.w300,
+                    color: value == dropdownValue
+                        ? Palette.mainPurple
+                        : Palette.grey300,
+                  ),
+                ),
+              );
+            }).toList(),
+          )
+        ]));
+  }
+
+
+  Widget buildDropdownButton(int? selectedValue, ValueChanged<int?> onChanged) {
+    return DropdownButton<int>(
+      value: selectedValue,
+      icon: const Icon(Icons.expand_more),
+      elevation: 16,
+      style: const TextStyle(color: Palette.mainPurple),
+      underline: Container(
+        height: 2,
+        color: Palette.mainPurple,
+      ),
+      onChanged: onChanged,
+      items: List.generate(25, (index) => index).map<DropdownMenuItem<int>>((int value) {
+        return DropdownMenuItem<int>(
+          value: value,
+          child: Text(
+            value == 24 ? '24 (0시)' : '${value.toString()}시',
+            style: TextStyle(
+              fontWeight: value == selectedValue
+                  ? FontWeight.bold
+                  : FontWeight.w300,
+              fontSize: 12,
+              fontFamily: 'Pretendard',
+              color: value == selectedValue
+                  ? Palette.mainPurple
+                  : Palette.grey300,
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+
+  Widget selectAuthTime() {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "챌린지 인증 가능 시간",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                fontFamily: 'Pretendard',
+                color: Palette.grey300),
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              buildDropdownButton(selectedHourStart, (int? value) {
+                setState(() {
+                  selectedHourStart = value;
+                });
+              }),
+              const SizedBox(width: 10,),
+              const Icon(Icons.remove), // expand_more 아이콘 사용
+              const SizedBox(width: 10,), // '-' 아이콘
+              buildDropdownButton(selectedHourEnd, (int? value) {
+                setState(() {
+                  selectedHourEnd = value;
+                });
+              }),
+            ],
           ),
         ]));
   }
