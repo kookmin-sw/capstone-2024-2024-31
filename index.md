@@ -83,22 +83,23 @@ YET
 <div style="display: flex; gap: 6px;">
     <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
     <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white">
+    <img src = "https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka"/>
+    <img src = "https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"/>
 </div>
 
 ### AI
 
 <div style="display: flex; gap: 6px;">
-    <img src="https://img.shields.io/badge/python-2F9FD7?style=for-the-badge&logo=python&logoColor=white">
+    <img src="https://img.shields.io/badge/python-2F9FD7?style=for-the-badge&logo=python&logoColor=white"/>
     <img src="https://img.shields.io/badge/pytorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"/>
     <img src="https://img.shields.io/badge/fastapi-005571?style=for-the-badge&logo=fastapi&logoColor=white"/>
-
 </div>
 
 ### Tools
 
 <div style="display: flex; gap: 6px;">
     <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
-    <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=aws&logoColor=white"/>
+    <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"/>
     <img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
     <img src="https://img.shields.io/badge/Confluence-FF6C37?style=for-the-badge&logo=confluence&logoColor=white"/>
     <img src="https://img.shields.io/badge/Jira-000000?style=for-the-badge&logo=Jira&logoColor=white"/>
