@@ -65,12 +65,6 @@ YET
 > - 다짐: 열심히 하겠습니다!
 <br/>
 
-## 🎯 팀 컨벤션
-- [팀 공통 컨벤션](https://github.com/kookmin-sw/capstone-2024-31/wiki/%EA%B3%B5%ED%86%B5-%EC%BB%A8%EB%B2%A4%EC%85%98-&-%EA%B0%9C%EB%B0%9C-%EC%A7%84%ED%96%89%EB%B0%A9%EC%8B%9D)  
-- [BE 코드 컨벤션]()  
-- [Git Branch 전략](https://github.com/kookmin-sw/capstone-2024-31/wiki/Git-Branch-%EC%A0%84%EB%9E%B5)  
-
-
 ## 🔎 실행 방법 | Execution method
 YET
 <br/>
@@ -89,22 +83,23 @@ YET
 <div style="display: flex; gap: 6px;">
     <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
     <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white">
+    <img src = "https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka"/>
+    <img src = "https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"/>
 </div>
 
 ### AI
 
 <div style="display: flex; gap: 6px;">
-    <img src="https://img.shields.io/badge/python-2F9FD7?style=for-the-badge&logo=python&logoColor=white">
+    <img src="https://img.shields.io/badge/python-2F9FD7?style=for-the-badge&logo=python&logoColor=white"/>
     <img src="https://img.shields.io/badge/pytorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"/>
     <img src="https://img.shields.io/badge/fastapi-005571?style=for-the-badge&logo=fastapi&logoColor=white"/>
-
 </div>
 
 ### Tools
 
 <div style="display: flex; gap: 6px;">
     <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
-    <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=aws&logoColor=white"/>
+    <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"/>
     <img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
     <img src="https://img.shields.io/badge/Confluence-FF6C37?style=for-the-badge&logo=confluence&logoColor=white"/>
     <img src="https://img.shields.io/badge/Jira-000000?style=for-the-badge&logo=Jira&logoColor=white"/>
