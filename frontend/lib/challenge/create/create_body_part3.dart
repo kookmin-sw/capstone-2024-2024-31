@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,13 +39,7 @@ class _BodyPart3State extends State<BodyPart3> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Text(
-                '인증 방법 및 예시',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
+              child: SvgPicture.asset('assets/svgs/create_challenge_level3.svg'),
             ),
             inputAuthIntro(),
             pickAuthMethod(),
