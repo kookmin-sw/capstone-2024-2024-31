@@ -38,19 +38,19 @@
 <table>
   <tr>
     <td style="text-align: center; vertical-align: middle;">챌린지 생성(Create Challenge)</td>
-    <td><img width="400" alt="스크린샷 2024-04-05 오후 1 40 56" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/59e49d85-0bcb-490a-9ffb-eb1352f9dece"></td>
+    <td><img width="600" alt="스크린샷 2024-04-05 오후 1 40 56" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/59e49d85-0bcb-490a-9ffb-eb1352f9dece"></td>
   </tr>
   <tr>
     <td style="text-align: center; vertical-align: middle;">커뮤니티(Community)</td>
-    <td><img width="400" alt="스크린샷 2024-04-05 오후 1 41 06" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/8b02a1a2-f05b-4da6-b7fc-859e8d0bf67c"></td>
+    <td><img width="600" alt="스크린샷 2024-04-05 오후 1 41 06" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/8b02a1a2-f05b-4da6-b7fc-859e8d0bf67c"></td>
   </tr>
   <tr>
     <td style="text-align: center; vertical-align: middle;">참여 인증(Certification)</td>
-    <td><img width="400" alt="스크린샷 2024-04-05 오후 1 41 16" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/c07435b9-2cb9-48bd-acb4-77f9b7f73b94"></td>
+    <td><img width="600" alt="스크린샷 2024-04-05 오후 1 41 16" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/c07435b9-2cb9-48bd-acb4-77f9b7f73b94"></td>
   </tr>
   <tr>
     <td style="text-align: center; vertical-align: middle;">챌린지 추천 시스템(Recommendation)</td>
-    <td><img width="400" alt="스크린샷 2024-04-05 오후 1 41 32" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/7f87b38b-69c7-44b2-9482-633585bf02fd"></td>
+    <td><img width="600" alt="스크린샷 2024-04-05 오후 1 41 32" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/7f87b38b-69c7-44b2-9482-633585bf02fd"></td>
   </tr>
 </table>
 
