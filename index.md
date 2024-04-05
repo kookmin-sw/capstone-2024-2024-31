@@ -1,5 +1,5 @@
-# 루틴업 - 커뮤니티 기반 습관 형성 챌린지 앱
-### 항상 향상된 하루 - 루틴업으로 갓생살기
+# 성장을 위한 좋은 습관, 루틴업
+### 커뮤니티 기반 습관 형성 어플리케이션
 <div align="center">
   <img src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/8bbd948e-6e6b-4ff8-81b2-1d6a584f2f7b" />
 </div>
