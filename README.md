@@ -1,8 +1,3 @@
-## 🎯 팀 컨벤션
-- [팀 공통 컨벤션](https://github.com/kookmin-sw/capstone-2024-31/wiki/%EA%B3%B5%ED%86%B5-%EC%BB%A8%EB%B2%A4%EC%85%98-&-%EA%B0%9C%EB%B0%9C-%EC%A7%84%ED%96%89%EB%B0%A9%EC%8B%9D)  
-- [BE 코드 컨벤션]()  
-- [Git Branch 전략](https://github.com/kookmin-sw/capstone-2024-31/wiki/Git-Branch-%EC%A0%84%EB%9E%B5)  
-
 # 루틴업 - 커뮤니티 기반 습관 형성 챌린지 앱
 ### 항상 향상된 하루 - 루틴업으로 갓생살기
 <div align="center">
@@ -69,6 +64,12 @@ YET
 > - phone number: 010-9894-4758
 > - 다짐: 열심히 하겠습니다!
 <br/>
+
+## 🎯 팀 컨벤션
+- [팀 공통 컨벤션](https://github.com/kookmin-sw/capstone-2024-31/wiki/%EA%B3%B5%ED%86%B5-%EC%BB%A8%EB%B2%A4%EC%85%98-&-%EA%B0%9C%EB%B0%9C-%EC%A7%84%ED%96%89%EB%B0%A9%EC%8B%9D)  
+- [BE 코드 컨벤션]()  
+- [Git Branch 전략](https://github.com/kookmin-sw/capstone-2024-31/wiki/Git-Branch-%EC%A0%84%EB%9E%B5)  
+
 
 ## 🔎 실행 방법 | Execution method
 YET
