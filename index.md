@@ -1,4 +1,4 @@
-# 성장을 위한 좋은 습관, 루틴업
+## 성장을 위한 좋은 습관, 루틴업
 ### 커뮤니티 기반 습관 형성 어플리케이션
 <div align="center">
   <img src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/8bbd948e-6e6b-4ff8-81b2-1d6a584f2f7b" />
@@ -48,7 +48,7 @@ AI technology recognizes various hand shapes and checks whether the image is val
 
 | Splash | Main |
 | :---: | :---: |
-|<img width="120" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/0638b62a-0e46-4afb-a14e-f1fceb8115c7" /> | <img width="400" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/12248dae-4cd0-4007-9a10-783a75119ab3" /> |
+|<img width="240" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/0638b62a-0e46-4afb-a14e-f1fceb8115c7" /> | <img width="800" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/12248dae-4cd0-4007-9a10-783a75119ab3" /> |
 
 
 ## 📃 결과 | Result
