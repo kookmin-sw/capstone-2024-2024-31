@@ -64,10 +64,7 @@
 
 
 ## 📱 앱 화면 | app Configuration
-
-| Splash | Main |
-| :---: | :---: |
-|<img width="400" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/0638b62a-0e46-4afb-a14e-f1fceb8115c7" /> | <img width="400" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/12248dae-4cd0-4007-9a10-783a75119ab3" /> |
+YET
 
 
 ## 📃 결과 | Result
