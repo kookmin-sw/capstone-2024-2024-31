@@ -37,13 +37,6 @@
 ### 🔹 AI로 손모양 인식을 통한 챌린지 인증 | certification through hand shape recognition with AI
 AI technology recognizes various hand shapes and checks whether the image is valid.
 
-| Title | Image |
-| :---: | :---: |
-| 챌린지 생성(Create Challenge) | <img width="4000" alt="스크린샷 2024-04-05 오후 1 40 56" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/59e49d85-0bcb-490a-9ffb-eb1352f9dece"> |
-| 커뮤니티(Community) | <img width="4000" alt="스크린샷 2024-04-05 오후 1 41 06" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/8b02a1a2-f05b-4da6-b7fc-859e8d0bf67c"> |
-| 참여 인증(Certification) | <img width="4000" alt="스크린샷 2024-04-05 오후 1 41 16" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/c07435b9-2cb9-48bd-acb4-77f9b7f73b94"> |
-| 챌린지 추천 시스템(Recommendation) | <img width="4000" alt="스크린샷 2024-04-05 오후 1 41 32" src="https://github.com/kookmin-sw/capstone-2024-31/assets/51479663/7f87b38b-69c7-44b2-9482-633585bf02fd"> |
-<br/>
 <table>
   <tr>
     <td style="text-align: center; vertical-align: middle;">챌린지 생성(Create Challenge)</td>
