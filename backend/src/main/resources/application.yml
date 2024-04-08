@@ -6,20 +6,19 @@ spring:
   profiles:
     include: oauth
 
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2-console
-
+  # pr 올릴 때 무조건 아래 설정 적용해서 올리기
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_ENDPOINT}:${MYSQL_PORT}/${MYSQL_DB_NAME}?autoReconnect=true
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:routine-up;MODE=MySQL;DATABASE_TO_LOWER=TRUE
-#    username: sa
-#    password:
+
+  # local test
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/routineUp?&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=UTC
+#    username: root
+#    password: ${LOCAL_PASSWORD}
 
   jpa:
     properties:
