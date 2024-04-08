@@ -50,7 +50,7 @@ class Home_Category extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Pretendard',
-                    fontSize: 22),
+                    fontSize: 15),
               ),
               const SizedBox(height: 10),
               SizedBox(
@@ -121,7 +121,7 @@ class CategoryCard extends StatelessWidget {
                       name,
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 16,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -130,8 +130,8 @@ class CategoryCard extends StatelessWidget {
                       memo,
                       style: const TextStyle(
                         color: Color(0xFF96979B),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w100,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ],

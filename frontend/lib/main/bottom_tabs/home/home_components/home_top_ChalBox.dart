@@ -59,10 +59,10 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "$name 님 오늘은 $category 관련 \n챌린지를 도전해 볼까요?",
+                  "$name 님 오늘은 $category 관련 챌린지를 도전해 볼까요?",
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 17,
+                    fontSize: 15,
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.bold,
                   ),
@@ -83,7 +83,7 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                     "챌린지 보러가기",
                     style: TextStyle(
                       color: Palette.mainPurple,
-                      fontSize: 16,
+                      fontSize: 13,
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.bold,
                     ),
@@ -121,7 +121,7 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.bold,
-                  fontSize: 21,
+                  fontSize: 15,
                 ),
               ),
               const Text(
@@ -129,7 +129,7 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                 style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w500,
-                    fontSize: 12,
+                    fontSize: 11,
                     color: Colors.grey),
               ),
               const SizedBox(height: 10),
@@ -184,10 +184,14 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                       children: [
                         Text(
                           challenge['name'], // 챌린지 이름
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                          fontSize:10),
+
                         ),
                         Text(
-                          '${challenge['percent']}%', // 진행 상태
+                          '${challenge['percent']}%',
+                          style: TextStyle(fontSize :12)// 진행 상태
                         )
                       ]),
                 )
