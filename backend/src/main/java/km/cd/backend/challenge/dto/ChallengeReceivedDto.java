@@ -23,18 +23,18 @@ public class ChallengeReceivedDto {
 
     public Challenge toEntity() {
         return Challenge.builder()
-                .challenge_name(challenge_name)
-                .start_date(parseDateString(start_date))
-                .end_date(parseDateString(end_date))
-                .certification_frequency(certification_frequency)
-                .certification_explanation(certification_explanation)
-                .certification_count(certification_count)
-                .certification_method(certification_method)
-                .challenge_explanation(challenge_explanation)
-                .maximum_people(maximum_people)
-                .is_private(is_private)
-                .private_code(private_code)
-                .build();
+            .challenge_name(challenge_name)
+            .start_date(parseDateString(start_date))
+            .end_date(parseDateString(end_date))
+            .certification_frequency(certification_frequency)
+            .certification_explanation(certification_explanation)
+            .certification_count(certification_count)
+            .certification_method(certification_method)
+            .challenge_explanation(challenge_explanation)
+            .maximum_people(maximum_people)
+            .is_private(is_private)
+            .private_code(private_code)
+            .build();
     }
 
     private Date parseDateString(String dateString) {

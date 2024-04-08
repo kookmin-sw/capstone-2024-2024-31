@@ -95,6 +95,7 @@ class AuthServiceTest {
         when(userRepository.findByEmail(anyString()))
                 .thenReturn(Optional.of(fakeUser));
         when(jwtTokenProvider.generateAccessToken(
+                eq(fakeUser.getId()),
                 eq(fakeUser.getEmail()),
                 eq(fakeUser.getName()),
                 anyCollection()
