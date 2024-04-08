@@ -18,7 +18,7 @@ public class ChallengeService {
     }
 
     @Transactional
-    public ChallengeResponseDto createChallenge(ChallengeReceivedDto challengeReceivedDTO, User user) {
+    public Challenge createChallenge(ChallengeReceivedDto challengeReceivedDTO, User user) {
         // 프론트로부터 넘겨받은 챌린지 데이터
         Challenge challenge = challengeReceivedDTO.toEntity();
 
@@ -34,13 +34,12 @@ public class ChallengeService {
         // 챌린지 저장
         challengeRepository.save(challenge);
 
-        return ChallengeResponseDto.toDto(challenge);
+        return challenge;
     }
 
     @Transactional(readOnly = true)
-    public ChallengeResponseDto getChallenge(int id) {
-        Challenge challenge = challengeRepository.findById(id).orElseThrow();
-        return ChallengeResponseDto.toDto(challenge);
+    public Challenge getChallenge(int id) {
+        return challengeRepository.findById(id).orElseThrow();
     }
 
     @Transactional
