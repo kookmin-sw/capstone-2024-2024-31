@@ -2,8 +2,8 @@ package km.cd.backend.challenge;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import km.cd.backend.challenge.controller.ChallengeController;
+import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.dto.ChallengeReceivedDto;
-import km.cd.backend.challenge.dto.ChallengeResponseDto;
 import km.cd.backend.challenge.service.ChallengeService;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import km.cd.backend.user.User;
@@ -15,14 +15,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -59,11 +58,12 @@ public class ChallengeControllerTest {
         ChallengeReceivedDto challengeReceivedDto = new ChallengeReceivedDto();
         challengeReceivedDto.setChallenge_name("Test");
 
-        ChallengeResponseDto challengeResponseDto = new ChallengeResponseDto();
-        challengeResponseDto.setChallengeId(1L);
+        Challenge challenge = new Challenge();
+        challenge.setChallenge_id(1L);
 
-        when(challengeService.createChallenge(any(ChallengeReceivedDto.class), any(User.class)))
-            .thenReturn(challengeResponseDto);
+        doReturn(challenge)
+            .when(challengeService)
+            .createChallenge(any(ChallengeReceivedDto.class), any(User.class));
 
         //when, then
         mockMvc.perform(post("/challenge/create")
