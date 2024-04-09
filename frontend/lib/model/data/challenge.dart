@@ -1,89 +1,104 @@
+import 'dart:convert';
+import 'dart:io';
 
 class Challenge {
-
-  late int challengeId;
-
+  late bool isPrivate;
+  late String privateCode;
   late String challengeName;
-  late DateTime? startDate;
-  late DateTime? endDate;
-  late int? certificationFrequency;
-  late String? certificationExplanation;
-  late int? certificationCount;
-  late String? certificationMethod;
-  late String? challengeExplanation;
-  late int? maximumPeople;
-  late bool? isPrivate;
-  late String? privateCode;
-
+  late String challengeExplanation;
+  late File? challengeImage1;
+  late File? challengeImage2;
+  late File? challengeImage3;
+  late File? challengeImage4;
+  late File? challengeImage5;
+  late String challengePeriod;
+  late String startDate;
+  late String certificationFrequency;
+  late int certificationStartTime;
+  late String certificationEndTime;
+  late String certificationExplanation;
+  late bool isGalleryPossible;
+  late File? failedVerificationImage;
+  late File? successfulVerificationImage;
+  late int maximumPeople;
   late List<Participant> participants;
 
-  Challenge();
-
-  Challenge.builder({
-    required this.challengeName,
-    required this.startDate,
-    required this.endDate,
-    required this.certificationFrequency,
-    required this.certificationExplanation,
-    required this.certificationCount,
-    required this.certificationMethod,
-    required this.challengeExplanation,
-    required this.maximumPeople,
+  Challenge({
     required this.isPrivate,
     required this.privateCode,
+    required this.challengeName,
+    required this.challengeExplanation,
+    this.challengeImage1,
+    this.challengeImage2,
+    this.challengeImage3,
+    this.challengeImage4,
+    this.challengeImage5,
+    required this.challengePeriod,
+    required this.startDate,
+    required this.certificationFrequency,
+    required this.certificationStartTime,
+    required this.certificationEndTime,
+    required this.certificationExplanation,
+    required this.isGalleryPossible,
+    this.failedVerificationImage,
+    this.successfulVerificationImage,
+    required this.maximumPeople,
     required this.participants,
   });
 
   factory Challenge.fromJson(Map<String, dynamic> json) {
-    return Challenge.builder(
-      challengeName: json['challenge_name'],
-      startDate: json['start_date'] != null ? DateTime.parse(json['start_date']) : null,
-      endDate: json['end_date'] != null ? DateTime.parse(json['end_date']) : null,
-      certificationFrequency: json['certification_frequency'],
-      certificationExplanation: json['certification_explanation'],
-      certificationCount: json['certification_count'],
-      certificationMethod: json['certification_method'],
-      challengeExplanation: json['challenge_explanation'],
-      maximumPeople: json['maximum_people'],
+    return Challenge(
       isPrivate: json['is_private'],
       privateCode: json['private_code'],
-      participants: (json['participants'] as List<dynamic>?)
-          ?.map((e) => Participant.fromJson(e))
-          .toList() ??
-          [],
+      challengeName: json['challenge_name'],
+      challengeExplanation: json['challenge_explanation'],
+      challengePeriod: json['challenge_period'],
+      startDate: json['start_date'],
+      certificationFrequency: json['certification_frequency'],
+      certificationStartTime: json['certification_start_time'],
+      certificationEndTime: json['certification_end_time'],
+      certificationExplanation: json['certification_explanation'],
+      isGalleryPossible: json['is_gallery_possible'],
+      maximumPeople: json['maximum_people'],
+      participants: (json['participants'] as List<dynamic>)
+          .map((e) => Participant.fromJson(e))
+          .toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'challenge_name': challengeName,
-      'start_date': startDate?.toIso8601String(),
-      'end_date': endDate?.toIso8601String(),
-      'certification_frequency': certificationFrequency,
-      'certification_explanation': certificationExplanation,
-      'certification_count': certificationCount,
-      'certification_method': certificationMethod,
-      'challenge_explanation': challengeExplanation,
-      'maximum_people': maximumPeople,
       'is_private': isPrivate,
       'private_code': privateCode,
+      'challenge_name': challengeName,
+      'challenge_explanation': challengeExplanation,
+      'challenge_period': challengePeriod,
+      'start_date': startDate,
+      'certification_frequency': certificationFrequency,
+      'certification_start_time': certificationStartTime,
+      'certification_end_time': certificationEndTime,
+      'certification_explanation': certificationExplanation,
+      'is_gallery_possible': isGalleryPossible,
+      'maximum_people': maximumPeople,
       'participants': participants.map((e) => e.toJson()).toList(),
     };
   }
-
-
 }
 
 class Participant {
   late int participantId;
   late Challenge challenge;
 
-  Participant();
+  Participant({
+    required this.participantId,
+    required this.challenge,
+  });
 
   factory Participant.fromJson(Map<String, dynamic> json) {
-    return Participant()
-      ..participantId = json['participant_id']
-      ..challenge = Challenge.fromJson(json['challenge']);
+    return Participant(
+      participantId: json['participant_id'],
+      challenge: Challenge.fromJson(json['challenge']),
+    );
   }
 
   Map<String, dynamic> toJson() {

@@ -14,7 +14,17 @@ class CreateChallenge extends StatefulWidget {
 }
 
 class _CreateChallengeState extends State<CreateChallenge> {
-  late Challenge newChallenge = Challenge();
+  late Challenge newChallenge = Challenge(isPrivate: false,
+      privateCode: '',
+      challengeName: '',
+      challengeExplanation: '',
+      challengePeriod: '',
+      startDate: '',
+      certificationFrequency: '',
+      certificationStartTime: 88,
+      certificationEndTime: '',
+      certificationExplanation: '',
+      isGalleryPossible: false, maximumPeople: 0, participants: []);
 
   bool? isPrivateSelected;
 
