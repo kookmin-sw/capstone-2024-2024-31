@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
@@ -330,9 +333,72 @@ class ChallengeDetailScreen extends StatelessWidget {
               style: TextStyle(
                   fontSize: 10,
                   fontFamily: "Pretendard",
-                  fontWeight: FontWeight.w500))
+                  fontWeight: FontWeight.w500)),
+          // Row(
+          //   children: [
+          //     buildImageContainer(challenge.successfulVerificationImage, Palette.green, true),
+          //     SizedBox(width: 20),
+          //     buildImageContainer(challenge.failedVerificationImage, Palette.red, false),
+          //   ],
+          // ),
+
         ],
       ),
     );
+  }
+
+
+  Widget buildImageContainer(XFile? file, Color color, bool isSuccess) {
+    return Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                isSuccess
+                    ? 'assets/icons/check_green.png'
+                    : 'assets/icons/check_red.png',
+                color: color,
+              ),
+              SizedBox(width: 5),
+              Text(
+                isSuccess ? "성공 예시" : "실패 예시",
+                style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: Palette.grey200),
+              ),
+            ],
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Palette.greySoft,
+              borderRadius: BorderRadius.circular(33.0),
+              border: Border.all(
+                color: file != null ? color : Palette.greySoft,
+                width: 2.0,
+              ),
+            ),
+            height: 120,
+            width: 120,
+            child: file != null
+                ? ClipRRect(
+              borderRadius: BorderRadius.circular(30.0),
+              child: Image.file(
+                File(file.path),
+                fit: BoxFit.cover,
+              ),
+            )
+                : Icon(
+              Icons.image,
+              size: 35,
+              color: Palette.grey300,
+            ),
+          ),
+          SizedBox(height: 5),
+
+        ],
+      );
   }
 }
