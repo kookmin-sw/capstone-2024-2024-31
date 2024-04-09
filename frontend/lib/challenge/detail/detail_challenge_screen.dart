@@ -108,13 +108,13 @@ class ChallengeDetailScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             children: [
               Container(
                 width: 20,
                 height: 20,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.blue, // 동그라미의 배경색
                 ),
@@ -123,8 +123,8 @@ class ChallengeDetailScreen extends StatelessWidget {
                   fit: BoxFit.cover, // 이미지가 동그라미 안에 맞도록 설정
                 ),
               ),
-              SizedBox(width: 5),
-              Text(
+              const SizedBox(width: 5),
+              const Text(
                 "루틴업",
                 style: TextStyle(
                     fontSize: 13,
@@ -134,19 +134,19 @@ class ChallengeDetailScreen extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: 3),
+          const SizedBox(height: 3),
           Text(challenge.challengeName,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   fontFamily: "Pretendard",
                   fontWeight: FontWeight.w700,
                   color: Palette.grey500)),
-          SizedBox(height: 3),
+          const SizedBox(height: 3),
           Row(children: [
             Container(
               width: 20,
               height: 20,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
               ),
               child: SvgPicture.asset(
@@ -155,15 +155,15 @@ class ChallengeDetailScreen extends StatelessWidget {
                 // 이미지가 동그라미 안에 맞도록 설정
               ),
             ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
             Text("${challenge.participants.length}명의 루티너가 참여중",
-                style: TextStyle(
+                style: const TextStyle(
                     color: Palette.purPle200,
                     fontSize: 10,
                     fontFamily: "Pretendard",
                     fontWeight: FontWeight.w500))
           ]),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               decoration: BoxDecoration(
@@ -175,7 +175,7 @@ class ChallengeDetailScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("기간",
+                        const Text("기간",
                             style: TextStyle(
                                 color: Palette.grey200,
                                 fontSize: 10,
@@ -183,18 +183,18 @@ class ChallengeDetailScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500)),
                         Text(
                             "${DateFormat("M월 d일 (E)", "ko_KR").format(DateTime.parse(challenge.startDate))}-*월 *일 ${challenge.challengePeriod}",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w700))
                       ],
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("시작일",
+                        const Text("시작일",
                             style: TextStyle(
                                 color: Palette.grey200,
                                 fontSize: 10,
@@ -202,25 +202,25 @@ class ChallengeDetailScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500)),
                         Text(
                             "${DateFormat("YYYY년 M월 d일 (E)", "ko_KR").format(DateTime.parse(challenge.startDate))}",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w700))
                       ],
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("인증 빈도",
+                        const Text("인증 빈도",
                             style: TextStyle(
                                 color: Palette.grey200,
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text("${challenge.certificationFrequency}",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
@@ -233,18 +233,18 @@ class ChallengeDetailScreen extends StatelessWidget {
 
   Widget ChallengeExplanation() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("챌린지 소개",
+          const Text("챌린지 소개",
               style: TextStyle(
                   fontSize: 15,
                   fontFamily: "Pretendard",
                   fontWeight: FontWeight.w600)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(challenge.challengeExplanation,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 10,
                   fontFamily: "Pretendard",
                   fontWeight: FontWeight.w500))
@@ -255,19 +255,19 @@ class ChallengeDetailScreen extends StatelessWidget {
 
   Widget certificationMethod() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("인증 방식",
+          const Text("인증 방식",
               style: TextStyle(
                   fontSize: 15,
                   fontFamily: "Pretendard",
                   fontWeight: FontWeight.w600)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               decoration: BoxDecoration(
                   color: Color(0xFFF5F5F5), // 배경색 설정
                   borderRadius: BorderRadius.circular(10)), // 컨테이너를 둥글게 만듭니다.
@@ -277,7 +277,7 @@ class ChallengeDetailScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("인증 가능 시간",
+                        const Text("인증 가능 시간",
                             style: TextStyle(
                                 color: Palette.grey200,
                                 fontSize: 10,
@@ -285,43 +285,43 @@ class ChallengeDetailScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500)),
                         Text(
                             "${challenge.certificationStartTime}시 - ${challenge.certificationEndTime}",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w700))
                       ],
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("인증 횟수",
+                        const Text("인증 횟수",
                             style: TextStyle(
                                 color: Palette.grey200,
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text(challenge.certificationFrequency,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w700))
                       ],
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("수단",
+                        const Text("수단",
                             style: TextStyle(
                                 color: Palette.grey200,
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text(challenge.isGalleryPossible ? "카메라+갤러리" : "카메라",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
@@ -329,9 +329,9 @@ class ChallengeDetailScreen extends StatelessWidget {
                       ],
                     )
                   ])),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(challenge.certificationExplanation,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 10,
                   fontFamily: "Pretendard",
                   fontWeight: FontWeight.w500)),
@@ -359,10 +359,10 @@ class ChallengeDetailScreen extends StatelessWidget {
                   : 'assets/icons/check_red.png',
               color: color,
             ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
             Text(
               isSuccess ? "성공 예시" : "실패 예시",
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
@@ -389,13 +389,13 @@ class ChallengeDetailScreen extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 )
-              : Icon(
+              : const Icon(
                   Icons.image,
                   size: 35,
                   color: Palette.grey300,
                 ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
       ],
     );
   }
