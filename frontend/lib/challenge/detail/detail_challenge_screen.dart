@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/challenge/detail/detail_imageDetail_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
@@ -18,13 +19,17 @@ class ChallengeDetailScreen extends StatelessWidget {
       challengeName: '조깅 3KM 하기',
       challengeExplanation:
           '챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라',
-      challengePeriod: '8주',
+      challengePeriod: '8',
       startDate: '2024-04-08',
       certificationFrequency: '평일 매일',
       certificationStartTime: 1,
       certificationEndTime: '24시',
       certificationExplanation:
           '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
+      successfulVerificationImage: File("C:\Users\82103\Pictures\Screenshots\image.png"),
+      failedVerificationImage: File("C:\Users\82103\Pictures\Screenshots\image.png"),
+      challengeImage1: File("C:\Users\82103\Pictures\Screenshots\image.png"),
+      challengeImage2: File("C:\Users\82103\Pictures\Screenshots\image.png"),
       isGalleryPossible: true,
       maximumPeople: 100,
       participants: []);
@@ -32,6 +37,11 @@ class ChallengeDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final DateTime startDate = DateTime.parse(challenge.startDate);
+    final int challengePeriod = int.parse(challenge.challengePeriod); // Challenge 기간, ex: 주 단위
+    final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
+
     initializeDateFormatting('ko_KR', 'en_US');
 
     return Scaffold(
@@ -62,17 +72,18 @@ class ChallengeDetailScreen extends StatelessWidget {
             photoes(screenHeight),
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: information_challenge()),
+                child: information_challenge(startDate, endDate)),
             SvgPicture.asset(
               'assets/svgs/divider.svg',
               fit: BoxFit.contain,
             ),
             ChallengeExplanation(),
+            ImageGridView(screenHeight),
             SvgPicture.asset(
               'assets/svgs/divider.svg',
               fit: BoxFit.contain,
             ),
-            certificationMethod()
+            certificationMethod(screenWidth)
           ],
         ),
       ),
@@ -104,7 +115,7 @@ class ChallengeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget information_challenge() {
+  Widget information_challenge(DateTime startDate, DateTime endDate) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -128,10 +139,10 @@ class ChallengeDetailScreen extends StatelessWidget {
               const Text(
                 "루틴업",
                 style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 12,
                     fontFamily: "Pretendard",
-                    color: Palette.grey500,
-                    fontWeight: FontWeight.w500),
+                    color: Palette.grey300,
+                    fontWeight: FontWeight.w600),
               )
             ],
           ),
@@ -183,7 +194,7 @@ class ChallengeDetailScreen extends StatelessWidget {
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text(
-                            "${DateFormat("M월 d일 (E)", "ko_KR").format(DateTime.parse(challenge.startDate))}-*월 *일 ${challenge.challengePeriod}",
+                            "${DateFormat("M월 d일 (E)", "ko_KR").format(startDate)}-${DateFormat("M월 d일 (E)", "ko_KR").format(endDate)} ${challenge.challengePeriod}",
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
@@ -202,7 +213,7 @@ class ChallengeDetailScreen extends StatelessWidget {
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text(
-                            "${DateFormat("YYYY년 M월 d일 (E)", "ko_KR").format(DateTime.parse(challenge.startDate))}",
+                            "${DateFormat("yyyy년 M월 d일 (E)", "ko_KR").format(startDate)}",
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
@@ -231,7 +242,46 @@ class ChallengeDetailScreen extends StatelessWidget {
                   ]))
         ]);
   }
+  Widget ImageGridView(double screenHeight){
+    final List<String> imagePaths = [
+      'assets/images/image.png',
+      'assets/images/image.png',
+      'assets/images/image.png',
+      'assets/images/image.png',
+    ];
 
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      height: screenHeight * 0.5,
+        child: GridView.builder(
+          physics: NeverScrollableScrollPhysics(), // 스크롤 불가능하게 설정
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 4.0,
+        mainAxisSpacing: 4.0,
+      ),
+      itemCount: imagePaths.length,
+      itemBuilder: (BuildContext context, int index) {
+        return  GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ImageDetailPage(imagePath: imagePaths[index]),
+              ),
+            );
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: Image.asset(
+              imagePaths[index],
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
+    ));
+  }
   Widget ChallengeExplanation() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -257,7 +307,7 @@ class ChallengeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget certificationMethod() {
+  Widget certificationMethod(double screenWidth) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       child: Column(
@@ -341,41 +391,46 @@ class ChallengeDetailScreen extends StatelessWidget {
                   fontSize: 10,
                   fontFamily: "Pretendard",
                   fontWeight: FontWeight.w500))),
-          // Row(
-          //   children: [
-          //     buildImageContainer(challenge.successfulVerificationImage, Palette.green, true),
-          //     SizedBox(width: 20),
-          //     buildImageContainer(challenge.failedVerificationImage, Palette.red, false),
-          //   ],
-          // ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildImageContainer(challenge.successfulVerificationImage, Palette.green, true, screenWidth),
+              SizedBox(width: 10),
+              buildImageContainer(challenge.failedVerificationImage, Palette.red, false, screenWidth),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget buildImageContainer(XFile? file, Color color, bool isSuccess) {
+  Widget buildImageContainer(File? file, Color color, bool isSuccess, double screenWidth) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
+            SvgPicture.asset(
               isSuccess
-                  ? 'assets/icons/check_green.png'
-                  : 'assets/icons/check_red.png',
-              color: color,
+                  ? 'assets/svgs/check_green.svg'
+                  : 'assets/svgs/check_red.svg',
             ),
-            const SizedBox(width: 5),
+            const SizedBox(width: 3),
             Text(
               isSuccess ? "성공 예시" : "실패 예시",
               style: const TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: Palette.grey200),
+                  fontWeight: FontWeight.w600,
+                  color: Palette.grey500),
             ),
+
           ],
         ),
+        const SizedBox(height: 5),
         Container(
           decoration: BoxDecoration(
             color: Palette.greySoft,
@@ -386,7 +441,7 @@ class ChallengeDetailScreen extends StatelessWidget {
             ),
           ),
           height: 120,
-          width: 120,
+          width: screenWidth * 0.4,
           child: file != null
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(30.0),

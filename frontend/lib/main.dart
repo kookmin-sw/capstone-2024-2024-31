@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               // navigatorObservers: <NavigatorObserver>[observer],
-              initialRoute: 'create_challenge',
+              initialRoute: 'detail_challenge',
               routes: {
                 // SplashScreen.routeName: (context) => SplashScreen(),
                 'login': (context) => const LoginScreen(),

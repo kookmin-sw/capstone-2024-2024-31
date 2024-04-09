@@ -77,7 +77,7 @@ class _BodyPart2State extends State<BodyPart2> {
 
   Widget inputName() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
         child: Form(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
