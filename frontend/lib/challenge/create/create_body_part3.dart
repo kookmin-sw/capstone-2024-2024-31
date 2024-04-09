@@ -27,9 +27,14 @@ class _BodyPart3State extends State<BodyPart3> {
       setState(() {
         if (isSuccess) {
           successFile = XFile(pickedImage.path);
+          print('successFile${successFile!.path}');
+
         } else {
           failFile = XFile(pickedImage.path);
+          print('failFile${failFile!.path}');
+
         }
+
       });
     }
   }
@@ -39,13 +44,13 @@ class _BodyPart3State extends State<BodyPart3> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: EdgeInsets.symmetric( horizontal: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child:
                   SvgPicture.asset('assets/svgs/create_challenge_level3.svg'),
             ),

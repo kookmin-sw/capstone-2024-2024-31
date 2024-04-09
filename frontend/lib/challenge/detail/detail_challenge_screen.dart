@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -233,7 +234,7 @@ class ChallengeDetailScreen extends StatelessWidget {
 
   Widget ChallengeExplanation() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -242,12 +243,15 @@ class ChallengeDetailScreen extends StatelessWidget {
                   fontSize: 15,
                   fontFamily: "Pretendard",
                   fontWeight: FontWeight.w600)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           Text(challenge.challengeExplanation,
               style: const TextStyle(
                   fontSize: 10,
                   fontFamily: "Pretendard",
-                  fontWeight: FontWeight.w500))
+                  fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 5),
+
         ],
       ),
     );
@@ -265,9 +269,9 @@ class ChallengeDetailScreen extends StatelessWidget {
                   fontSize: 15,
                   fontFamily: "Pretendard",
                   fontWeight: FontWeight.w600)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                   color: Color(0xFFF5F5F5), // 배경색 설정
                   borderRadius: BorderRadius.circular(10)), // 컨테이너를 둥글게 만듭니다.
@@ -330,11 +334,13 @@ class ChallengeDetailScreen extends StatelessWidget {
                     )
                   ])),
           const SizedBox(height: 10),
-          Text(challenge.certificationExplanation,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Text(challenge.certificationExplanation,
               style: const TextStyle(
                   fontSize: 10,
                   fontFamily: "Pretendard",
-                  fontWeight: FontWeight.w500)),
+                  fontWeight: FontWeight.w500))),
           // Row(
           //   children: [
           //     buildImageContainer(challenge.successfulVerificationImage, Palette.green, true),
