@@ -12,13 +12,14 @@ class ChallengeDetailScreen extends StatelessWidget {
       isPrivate: false,
       privateCode: 'privateCode',
       challengeName: '조깅 3KM 하기',
-      challengeExplanation: '챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라',
+      challengeExplanation:
+          '챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라',
       challengePeriod: '8주',
       startDate: '2024-04-08',
       certificationFrequency: '평일 매일',
       certificationStartTime: 1,
       certificationEndTime: '24시',
-      certificationExplanation: '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
+      certificationExplanation: '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
       isGalleryPossible: true,
       maximumPeople: 100,
       participants: []);
@@ -56,7 +57,17 @@ class ChallengeDetailScreen extends StatelessWidget {
             photoes(screenHeight),
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: information_challenge())
+                child: information_challenge()),
+            SvgPicture.asset(
+              'assets/svgs/divider.svg',
+              fit: BoxFit.contain,
+            ),
+            ChallengeExplanation(),
+            SvgPicture.asset(
+              'assets/svgs/divider.svg',
+              fit: BoxFit.contain,
+            ),
+            certificationMethod()
           ],
         ),
       ),
@@ -115,16 +126,18 @@ class ChallengeDetailScreen extends StatelessWidget {
                     fontSize: 13,
                     fontFamily: "Pretendard",
                     color: Palette.grey500,
-                    fontWeight: FontWeight.w600),
+                    fontWeight: FontWeight.w500),
               )
             ],
           ),
           SizedBox(height: 3),
           Text(challenge.challengeName,
               style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontFamily: "Pretendard",
-                  fontWeight: FontWeight.w600)),
+                  fontWeight: FontWeight.w700,
+                  color: Palette.grey500)),
+          SizedBox(height: 3),
           Row(children: [
             Container(
               width: 20,
@@ -132,17 +145,19 @@ class ChallengeDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
               ),
-              child: SvgPicture.asset('assets/svgs/detail_user_icon.svg',
+              child: SvgPicture.asset(
+                'assets/svgs/detail_user_icon.svg',
                 fit: BoxFit.cover,
                 // 이미지가 동그라미 안에 맞도록 설정
               ),
             ),
+            SizedBox(width: 5),
             Text("${challenge.participants.length}명의 루티너가 참여중",
                 style: TextStyle(
                     color: Palette.purPle200,
                     fontSize: 10,
                     fontFamily: "Pretendard",
-                    fontWeight: FontWeight.bold))
+                    fontWeight: FontWeight.w500))
           ]),
           SizedBox(height: 8),
           Container(
@@ -210,5 +225,114 @@ class ChallengeDetailScreen extends StatelessWidget {
                     )
                   ]))
         ]);
+  }
+
+  Widget ChallengeExplanation() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("챌린지 소개",
+              style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: "Pretendard",
+                  fontWeight: FontWeight.w600)),
+          SizedBox(height: 10),
+          Text(challenge.challengeExplanation,
+              style: TextStyle(
+                  fontSize: 10,
+                  fontFamily: "Pretendard",
+                  fontWeight: FontWeight.w500))
+        ],
+      ),
+    );
+  }
+
+  Widget certificationMethod() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("인증 방식",
+              style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: "Pretendard",
+                  fontWeight: FontWeight.w600)),
+          SizedBox(height: 10),
+          Container(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              decoration: BoxDecoration(
+                  color: Color(0xFFF5F5F5), // 배경색 설정
+                  borderRadius: BorderRadius.circular(10)), // 컨테이너를 둥글게 만듭니다.
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("인증 가능 시간",
+                            style: TextStyle(
+                                color: Palette.grey200,
+                                fontSize: 10,
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w500)),
+                        Text(
+                            "${challenge.certificationStartTime}시 - ${challenge.certificationEndTime}",
+                            style: TextStyle(
+                                color: Palette.grey300,
+                                fontSize: 10,
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w700))
+                      ],
+                    ),
+                    SizedBox(height: 3),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("인증 횟수",
+                            style: TextStyle(
+                                color: Palette.grey200,
+                                fontSize: 10,
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w500)),
+                        Text(challenge.certificationFrequency,
+                            style: TextStyle(
+                                color: Palette.grey300,
+                                fontSize: 10,
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w700))
+                      ],
+                    ),
+                    SizedBox(height: 3),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("수단",
+                            style: TextStyle(
+                                color: Palette.grey200,
+                                fontSize: 10,
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w500)),
+                        Text(challenge.isGalleryPossible ? "카메라+갤러리" : "카메라",
+                            style: TextStyle(
+                                color: Palette.grey300,
+                                fontSize: 10,
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w700))
+                      ],
+                    )
+                  ])),
+          SizedBox(height: 10),
+          Text(challenge.certificationExplanation,
+              style: TextStyle(
+                  fontSize: 10,
+                  fontFamily: "Pretendard",
+                  fontWeight: FontWeight.w500))
+        ],
+      ),
+    );
   }
 }
