@@ -22,7 +22,8 @@ class ChallengeDetailScreen extends StatelessWidget {
       certificationFrequency: '평일 매일',
       certificationStartTime: 1,
       certificationEndTime: '24시',
-      certificationExplanation: '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
+      certificationExplanation:
+          '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
       isGalleryPossible: true,
       maximumPeople: 100,
       participants: []);
@@ -341,64 +342,61 @@ class ChallengeDetailScreen extends StatelessWidget {
           //     buildImageContainer(challenge.failedVerificationImage, Palette.red, false),
           //   ],
           // ),
-
         ],
       ),
     );
   }
 
-
   Widget buildImageContainer(XFile? file, Color color, bool isSuccess) {
     return Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                isSuccess
-                    ? 'assets/icons/check_green.png'
-                    : 'assets/icons/check_red.png',
-                color: color,
-              ),
-              SizedBox(width: 5),
-              Text(
-                isSuccess ? "성공 예시" : "실패 예시",
-                style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    color: Palette.grey200),
-              ),
-            ],
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Palette.greySoft,
-              borderRadius: BorderRadius.circular(33.0),
-              border: Border.all(
-                color: file != null ? color : Palette.greySoft,
-                width: 2.0,
-              ),
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              isSuccess
+                  ? 'assets/icons/check_green.png'
+                  : 'assets/icons/check_red.png',
+              color: color,
             ),
-            height: 120,
-            width: 120,
-            child: file != null
-                ? ClipRRect(
-              borderRadius: BorderRadius.circular(30.0),
-              child: Image.file(
-                File(file.path),
-                fit: BoxFit.cover,
-              ),
-            )
-                : Icon(
-              Icons.image,
-              size: 35,
-              color: Palette.grey300,
+            SizedBox(width: 5),
+            Text(
+              isSuccess ? "성공 예시" : "실패 예시",
+              style: TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: Palette.grey200),
+            ),
+          ],
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Palette.greySoft,
+            borderRadius: BorderRadius.circular(33.0),
+            border: Border.all(
+              color: file != null ? color : Palette.greySoft,
+              width: 2.0,
             ),
           ),
-          SizedBox(height: 5),
-
-        ],
-      );
+          height: 120,
+          width: 120,
+          child: file != null
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: Image.file(
+                    File(file.path),
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : Icon(
+                  Icons.image,
+                  size: 35,
+                  color: Palette.grey300,
+                ),
+        ),
+        SizedBox(height: 5),
+      ],
+    );
   }
 }
