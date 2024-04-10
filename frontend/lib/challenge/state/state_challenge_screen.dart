@@ -11,6 +11,7 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class ChallengeStateScreen extends StatelessWidget {
@@ -90,6 +91,7 @@ class ChallengeStateScreen extends StatelessWidget {
               'assets/svgs/divider.svg',
               fit: BoxFit.contain,
             ),
+            EntireCertificationStatus(screenWidth, screenHeight)
           ],
         ),
       ),
@@ -266,7 +268,7 @@ class ChallengeStateScreen extends StatelessWidget {
   Widget ChallengeExplanation() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -280,9 +282,9 @@ class ChallengeStateScreen extends StatelessWidget {
           Text(
             challenge.challengeName,
             style: const TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 fontFamily: "Pretendard",
-                fontWeight: FontWeight.w500),
+                fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -309,7 +311,7 @@ class ChallengeStateScreen extends StatelessWidget {
                   fontSize: 15,
                   fontFamily: "Pretendard",
                   fontWeight: FontWeight.w600)),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(children: [
               Text("${my_certification_number}회",
@@ -333,9 +335,9 @@ class ChallengeStateScreen extends StatelessWidget {
                     fontFamily: "Pretendard",
                     fontWeight: FontWeight.w400))
           ]),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           certificationStateBar(screenWidth),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -373,52 +375,142 @@ class ChallengeStateScreen extends StatelessWidget {
             color: Color(0xFFF5F5F5), // 배경색 설정
             borderRadius: BorderRadius.circular(10)), // 컨테이너를 둥글게 만듭니다.
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("현재 달성률",
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("현재 달성률",
+                      style: TextStyle(
+                          color: Palette.grey500,
+                          fontSize: 10,
+                          fontFamily: "Pretendard",
+                          fontWeight: FontWeight.w500)),
+                  Text(
+                      "${(my_certification_number / entire_certification_number * 100).toStringAsFixed(1)} %",
+                      style: const TextStyle(
+                          color: Palette.grey500,
+                          fontSize: 10,
+                          fontFamily: "Pretendard",
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                child: ProgressBar(
+                  width: screenWidth * 0.9,
+                  height: 4,
+                  value: double.parse(percent) * 0.01,
+                  backgroundColor: Palette.grey50,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Palette.purPle200, Palette.mainPurple],
+                  ),
+                ),
+                decoration: BoxDecoration(
+                    color: Palette.grey500, // 배경색 설정
+                    borderRadius: BorderRadius.circular(5)),
+              ),
+              const SizedBox(height: 5),
+              const Text("예상 달성률 : 100%",
                   style: TextStyle(
-                      color: Palette.grey500,
-                      fontSize: 10,
+                      color: Palette.grey200,
+                      fontSize: 9,
                       fontFamily: "Pretendard",
                       fontWeight: FontWeight.w500)),
-              Text(
-                  "${(my_certification_number / entire_certification_number * 100).toStringAsFixed(1)} %",
-                  style: const TextStyle(
-                      color: Palette.grey500,
+            ]));
+  }
+
+  Widget EntireCertificationStatus(double screenWidth, double screenHeight) {
+    double participant_number = 1000;
+    final dataMap = <String, double>{"100%": 100, "80% 이상": 300, "80% 미만": 600};
+    final colorList = <Color>[
+      Palette.purPle500,
+      Palette.purPle300,
+      Palette.purPle200,
+    ];
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("전체 현황",
+              style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: "Pretendard",
+                  fontWeight: FontWeight.w600)),
+          const SizedBox(height: 10),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(children: [
+              Text("총 참여인원 :",
+                  style: TextStyle(
                       fontSize: 10,
+                      color: Palette.grey300,
                       fontFamily: "Pretendard",
-                      fontWeight: FontWeight.w700))
-            ],
-          ),
-          const SizedBox(height: 5),
+                      fontWeight: FontWeight.w600)),
+              Text("  ${participant_number}명",
+                  style: TextStyle(
+                      fontSize: 11,
+                      color: Palette.purPle400,
+                      fontFamily: "Pretendard",
+                      fontWeight: FontWeight.w600))
+            ]),
+          ]),
+          const SizedBox(height: 20),
+          certificationStateBar(screenWidth),
+          const SizedBox(height: 15),
           Container(
-            child: ProgressBar(
-              width: screenWidth * 0.75,
-              height: 4,
-              value: double.parse(percent) * 0.01,
-              backgroundColor: Palette.grey50,
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Palette.purPle200, Palette.mainPurple],
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: PieChart(
+              dataMap: dataMap,
+              chartType: ChartType.ring,
+              ringStrokeWidth: 20,
+              chartRadius: 150,
+              baseChartColor: Colors.grey[50]!.withOpacity(0.15),
+              colorList: colorList,
+              chartValuesOptions: ChartValuesOptions(showChartValues: false),
+              totalValue: (participant_number),
+              legendOptions: LegendOptions(
+                showLegendsInRow: true,
+                legendPosition: LegendPosition.bottom,
+                showLegends: true,
+                legendShape: BoxShape.rectangle,
+                legendTextStyle: TextStyle(
+                    fontSize: 9,
+                    color: Palette.grey300,
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w600),
+              ),
+              centerWidget: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "평균 예상 달성률",
+                      style: TextStyle(
+                          fontSize: 10,
+                          color: Palette.grey200,
+                          fontFamily: "Pretendard",
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      "88.5%",
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Palette.grey500,
+                          fontFamily: "Pretendard",
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
               ),
             ),
-            decoration: BoxDecoration(
-                color: Palette.grey500, // 배경색 설정
-                borderRadius: BorderRadius.circular(5)),
-          ),
-          const SizedBox(height: 5),
-          const Text("예상 달성률 : 100%",
-
-              style: TextStyle(
-
-                  color: Palette.grey200,
-                  fontSize: 10,
-                  fontFamily: "Pretendard",
-                  fontWeight: FontWeight.w500)),
-        ]));
+          )
+        ],
+      ),
+    );
   }
 }
