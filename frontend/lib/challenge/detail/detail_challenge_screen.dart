@@ -64,7 +64,7 @@ class ChallengeDetailScreen extends StatelessWidget {
               actions: [
                 IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.ios_share,
                       color: Colors.white,
                     )),
@@ -76,7 +76,7 @@ class ChallengeDetailScreen extends StatelessWidget {
                   photoes(screenHeight),
                   Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       child: information_challenge(startDate, endDate)),
                   SvgPicture.asset(
                     'assets/svgs/divider.svg',
