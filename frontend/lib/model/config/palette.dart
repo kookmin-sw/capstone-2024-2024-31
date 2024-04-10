@@ -11,6 +11,7 @@ class Palette {
   static const Color softPurPle = Color(0xFFEEE9FD);
   static const Color purPle200 = Color(0xFFB39AF7);
   static const Color purPle400 = Color(0xFF7A50F1);
+  static const Color purPle700 = Color(0xFF3F1AA8);
   static const Color green = Color(0xFF1CC036);
   static const Color red = Color(0xFFD72D2D);
 

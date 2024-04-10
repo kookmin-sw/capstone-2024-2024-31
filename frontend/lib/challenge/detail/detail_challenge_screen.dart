@@ -44,69 +44,93 @@ class ChallengeDetailScreen extends StatelessWidget {
         int.parse(challenge.challengePeriod); // Challenge 기간, ex: 주 단위
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
-
     initializeDateFormatting('ko_KR', 'en_US');
 
     return SafeArea(
         child: Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        // AppBar를 투명하게 설정
-        elevation: 0,
-        // 그림자 없애기
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.ios_share,
-                color: Colors.white,
-              )),
-        ],
-
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            photoes(screenHeight),
-            Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: information_challenge(startDate, endDate)),
-            SvgPicture.asset(
-              'assets/svgs/divider.svg',
-              fit: BoxFit.contain,
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              // AppBar를 투명하게 설정
+              elevation: 0,
+              // 그림자 없애기
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                ),
+                onPressed: () {},
+              ),
+              actions: [
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.ios_share,
+                      color: Colors.white,
+                    )),
+              ],
             ),
-            ChallengeExplanation(),
-            ImageGridView(screenHeight, screenWidth),
-            SvgPicture.asset(
-              'assets/svgs/divider.svg',
-              fit: BoxFit.contain,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  photoes(screenHeight),
+                  Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                      child: information_challenge(startDate, endDate)),
+                  SvgPicture.asset(
+                    'assets/svgs/divider.svg',
+                    fit: BoxFit.contain,
+                  ),
+                  ChallengeExplanation(),
+                  ImageGridView(screenHeight, screenWidth),
+                  SvgPicture.asset(
+                    'assets/svgs/divider.svg',
+                    fit: BoxFit.contain,
+                  ),
+                  certificationMethod(screenWidth, screenHeight)
+                ],
+              ),
             ),
-            certificationMethod(screenWidth, screenHeight)
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        color: Colors.transparent,
-        width: double.infinity,
-        child: InkWell(
-          onTap: () {},
-          child: SvgPicture.asset(
-            'assets/svgs/join_challenge_btn.svg',
-            // width: double.infinity,
-            // height: 30,
-          ),
-        ),
-      ),
-    ));
+            bottomNavigationBar: Stack(children: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                height: 80,
+                color: Colors.transparent,
+                width: double.infinity,
+                child: InkWell(
+                  onTap: () {},
+                  child: SvgPicture.asset(
+                    'assets/svgs/join_challenge_btn.svg',
+                    // width: double.infinity,
+                    // height: 30,
+                  ),
+                ),
+              ),
+              Positioned(
+                  top: 5,
+                  left: 20,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Palette.purPle700,
+                      // 배경색 설정
+                      borderRadius: BorderRadius.circular(4),
+                      // 테두리를 둥글게 설정
+                    ),
+                    child: Text(
+                      " ${challenge.certificationFrequency} | ${challenge.challengePeriod}주 ",
+                      style: const TextStyle(
+                          fontSize: 11,
+                          fontFamily: "Pretendard",
+                          color: Palette.white,
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ))
+            ])));
   }
 
   Widget photoes(double screenHeight) {
@@ -259,10 +283,11 @@ class ChallengeDetailScreen extends StatelessWidget {
 
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 15),
-        height: screenHeight * 0.15* 3.3,
+        height: screenHeight * 0.15 * 3.3,
         child: GridView.builder(
           padding: EdgeInsets.symmetric(vertical: 4),
-          physics: NeverScrollableScrollPhysics(), // 스크롤 불가능하게 설정
+          physics: NeverScrollableScrollPhysics(),
+          // 스크롤 불가능하게 설정
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 4.0,
@@ -285,8 +310,10 @@ class ChallengeDetailScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15.0),
                 child: Image.asset(
                   imagePaths[index],
-                  height: screenHeight * 0.15, // 이미지 높이 고정
-                  width: screenWidth * 0.4, // 이미지 너비 고정                  imagePaths[index],
+                  height: screenHeight * 0.15,
+                  // 이미지 높이 고정
+                  width: screenWidth * 0.4,
+                  // 이미지 너비 고정                  imagePaths[index],
                   fit: BoxFit.cover,
                 ),
               ),
