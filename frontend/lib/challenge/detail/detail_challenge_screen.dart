@@ -83,7 +83,7 @@ class ChallengeDetailScreen extends StatelessWidget {
               'assets/svgs/divider.svg',
               fit: BoxFit.contain,
             ),
-            certificationMethod(screenWidth)
+            certificationMethod(screenWidth, screenHeight)
           ],
         ),
       ),
@@ -284,7 +284,7 @@ class ChallengeDetailScreen extends StatelessWidget {
   }
   Widget ChallengeExplanation() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -307,7 +307,7 @@ class ChallengeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget certificationMethod(double screenWidth) {
+  Widget certificationMethod(double screenWidth, double screenHeight) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       child: Column(
@@ -395,9 +395,9 @@ class ChallengeDetailScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildImageContainer(challenge.successfulVerificationImage, Palette.green, true, screenWidth),
+              buildImageContainer(challenge.successfulVerificationImage, Palette.green, true, screenWidth, screenHeight),
               SizedBox(width: 10),
-              buildImageContainer(challenge.failedVerificationImage, Palette.red, false, screenWidth),
+              buildImageContainer(challenge.failedVerificationImage, Palette.red, false, screenWidth, screenHeight),
             ],
           ),
         ],
@@ -405,7 +405,7 @@ class ChallengeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildImageContainer(File? file, Color color, bool isSuccess, double screenWidth) {
+  Widget buildImageContainer(File? file, Color color, bool isSuccess, double screenWidth, double screenHeight) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -424,7 +424,7 @@ class ChallengeDetailScreen extends StatelessWidget {
               style: const TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 10,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                   color: Palette.grey500),
             ),
 
@@ -440,8 +440,8 @@ class ChallengeDetailScreen extends StatelessWidget {
               width: 2.0,
             ),
           ),
-          height: 120,
-          width: screenWidth * 0.4,
+          height: screenHeight * 0.15,
+          width: screenWidth * 0.42,
           child: file != null
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(30.0),
