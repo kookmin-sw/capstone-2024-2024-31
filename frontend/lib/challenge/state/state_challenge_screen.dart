@@ -11,7 +11,7 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:pie_chart/pie_chart.dart';
+import 'package:frontend/model/edit_package/pie_chart/pie_chart.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class ChallengeStateScreen extends StatelessWidget {
@@ -277,6 +277,7 @@ class ChallengeStateScreen extends StatelessWidget {
               style: TextStyle(
                   fontSize: 15,
                   fontFamily: "Pretendard",
+                  color: Palette.grey500,
                   fontWeight: FontWeight.w600)),
           const SizedBox(height: 5),
           Text(
@@ -284,6 +285,7 @@ class ChallengeStateScreen extends StatelessWidget {
             style: const TextStyle(
                 fontSize: 12,
                 fontFamily: "Pretendard",
+                color: Palette.grey300,
                 fontWeight: FontWeight.w600),
           ),
         ],
@@ -429,10 +431,10 @@ class ChallengeStateScreen extends StatelessWidget {
     final colorList = <Color>[
       Palette.purPle500,
       Palette.purPle300,
-      Palette.purPle200,
+      Palette.purPle100,
     ];
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding: const EdgeInsets.only(top: 20, left :15, right: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -451,7 +453,7 @@ class ChallengeStateScreen extends StatelessWidget {
                       color: Palette.grey300,
                       fontFamily: "Pretendard",
                       fontWeight: FontWeight.w600)),
-              Text("  ${participant_number}명",
+              Text("  ${participant_number.toInt()}명",
                   style: TextStyle(
                       fontSize: 11,
                       color: Palette.purPle400,
@@ -463,17 +465,32 @@ class ChallengeStateScreen extends StatelessWidget {
           certificationStateBar(screenWidth),
           const SizedBox(height: 15),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
             child: PieChart(
               dataMap: dataMap,
               chartType: ChartType.ring,
               ringStrokeWidth: 20,
-              chartRadius: 150,
+              chartRadius: screenWidth * 0.35,
               baseChartColor: Colors.grey[50]!.withOpacity(0.15),
               colorList: colorList,
-              chartValuesOptions: ChartValuesOptions(showChartValues: false),
+              chartValuesOptions: ChartValuesOptions(
+                showChartValues: true,
+                showChartValuesInPercentage: true,
+                showChartValuesOutside: true,
+                showChartValueBackground: true,
+                chartValueStyle: TextStyle(
+                    fontSize: 9,
+                    color: Palette.grey300,
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w600),
+              ),
               totalValue: (participant_number),
               legendOptions: LegendOptions(
+                legendValueTextStyle: TextStyle(
+                    fontSize: 10,
+                    color: Palette.grey500,
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w600),
                 showLegendsInRow: true,
                 legendPosition: LegendPosition.bottom,
                 showLegends: true,
