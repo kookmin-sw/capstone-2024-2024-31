@@ -3,7 +3,6 @@ package km.cd.backend.challenge.service;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.dto.ChallengeReceivedDto;
-import km.cd.backend.challenge.dto.ChallengeResponseDto;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.user.User;
 import org.springframework.stereotype.Service;
@@ -38,12 +37,12 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public Challenge getChallenge(int id) {
+    public Challenge getChallenge(Long id) {
         return challengeRepository.findById(id).orElseThrow();
     }
 
     @Transactional
-    public void joinChallenge(int challengeId, User user) {
+    public void joinChallenge(Long challengeId, User user) {
         Challenge challenge = challengeRepository.findById(challengeId).orElseThrow();
 
         Participant participant = new Participant();
