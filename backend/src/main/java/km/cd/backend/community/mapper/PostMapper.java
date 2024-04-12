@@ -30,7 +30,6 @@ public interface PostMapper {
 
   @Mapping(target = "author", source = "user")
   @Mapping(target = "challenge", source = "challenge")
-  @Mapping(target = "comments", ignore = true)
   Post requestToEntity(PostRequest postRequest, User user, Challenge challenge);
 
   @Named("mapComments")

@@ -53,6 +53,10 @@ public class Comment {
     return parent != null;
   }
 
+  public void updateContent(String content) {
+    this.content = content;
+  }
+
   public void deleteComment() {
     this.isDeleted = true;
   }

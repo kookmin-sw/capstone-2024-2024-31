@@ -5,6 +5,7 @@ import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.common.domain.BaseTimeEntity;
 import km.cd.backend.user.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +38,7 @@ public class Post extends BaseTimeEntity {
   @OneToMany(mappedBy = "post", orphanRemoval = true)
   private List<Comment> comments = new ArrayList<>();
 
+  @Builder
   public Post(String title, String content, Challenge challenge, User author) {
     this.title = title;
     this.content = content;
