@@ -48,7 +48,7 @@ public class SecurityConfig {
                             .requestMatchers("/auth/**").permitAll()
                             .requestMatchers("/users/me").authenticated()
                             .requestMatchers("/users/**").permitAll()
-                            .requestMatchers("/challenge/**").authenticated()
+                            .requestMatchers("/challenge/**").permitAll()
                             .anyRequest().permitAll()
                 )
                 // oauth 설정
