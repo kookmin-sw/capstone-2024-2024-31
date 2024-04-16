@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/challenge/create/create_challenge_screen.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
-import 'package:frontend/community/community_screen.dart';
+import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/login/login_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
 import 'package:frontend/main/main_screen.dart';
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
                 'create_challenge' :  (context) => CreateChallenge(),
                 'detail_challenge' : (context) => ChallengeDetailScreen(),
                 'state_challenge' : (context) => ChallengeStateScreen(),
-                'community' : (context) => CommunityScreen(),
+                'community' : (context) => TabCommunityScreen(),
 
 
               });
