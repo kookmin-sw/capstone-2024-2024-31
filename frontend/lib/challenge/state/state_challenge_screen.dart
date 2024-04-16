@@ -11,7 +11,7 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:frontend/model/edit_package/pie_chart/pie_chart.dart';
+import 'package:frontend/model/package/pie_chart/pie_chart.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class ChallengeStateScreen extends StatelessWidget {

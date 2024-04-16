@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:frontend/model/edit_package/pie_chart/pie_chart.dart';
+import 'package:frontend/model/package/pie_chart/pie_chart.dart';
 
 const doublePi = math.pi * 2;
 

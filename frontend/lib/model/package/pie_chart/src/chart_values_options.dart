@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/model/edit_package/pie_chart/pie_chart.dart';
-import 'package:frontend/model/edit_package/pie_chart/src/utils.dart';
+import 'package:frontend/model/package/pie_chart/pie_chart.dart';
+import 'package:frontend/model/package/pie_chart/src/utils.dart';
 
 class ChartValuesOptions {
   final bool showChartValueBackground;
