@@ -1,13 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/community/post_detail_page.dart';
 import 'package:frontend/community/widget/post_button_widget.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 
 class PostCard extends StatefulWidget {
   int number;
-
+  static bool isLiked = false;
+  static int likeNum = 19;
+  static int commentNum = 1;
+  static String imageUrl = 'assets/images/24.png';
+  static String userName = '챌린지장인';
+  static String postText = "ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ래서 지금 이게 5줄이 넘을지 모르겟쯘올ㅇ";
+  static String authImage = 'assets/images/challenge_image.png';
   PostCard({required this.number, super.key});
 
   @override
@@ -15,34 +22,46 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  bool isLiked = false;
-  int likeNum = 19;
-  int commentNum = 1;
+
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Column(children: [
-      Container(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        child: Column(
-          children: [
-            post_top('assets/images/24.png', "챌린지장인",
-                DateTime(2024, 4, 4, 9, 23, 40)),
-            const SizedBox(height: 10),
-            post_text(
-                "오늘도 인증 완료입니다 아니근데 진짜 오늘 개 힘들었는데 그ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ래서 지금 이게 5줄이 넘을지 모르겟쯘올ㅇ"),
-            const SizedBox(height: 17),
-            post_image('assets/images/challenge_image.png'),
-            const SizedBox(height: 20),
-            PostBtnWidget(likeNum: likeNum, commentNum: commentNum),
-            const SizedBox(height: 15),
-          ],
-        ),
+    return InkWell(
+      onTap: () {
+        // 게시물 상세 정보 페이지로 이동하는 코드 추가
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PostDetailPage(), // PostDetailPage는 상세 정보 페이지의 이름입니다.
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+            child: Column(
+              children: [
+                post_top(PostCard.imageUrl, PostCard.userName,
+                    DateTime(2024, 4, 4, 9, 23, 40)),
+                const SizedBox(height: 10),
+                post_text(
+                    PostCard.postText),
+                const SizedBox(height: 17),
+                post_image(PostCard.authImage),
+                const SizedBox(height: 20),
+                PostBtnWidget(likeNum: PostCard.likeNum, commentNum: PostCard.commentNum),
+                const SizedBox(height: 15),
+              ],
+            ),
+          ),
+          Divider(thickness: 5, height: 15, color: Palette.greySoft),
+        ],
       ),
-      Divider(thickness: 5, height: 15, color: Palette.greySoft),
-    ]);
+    );
   }
 }
 
