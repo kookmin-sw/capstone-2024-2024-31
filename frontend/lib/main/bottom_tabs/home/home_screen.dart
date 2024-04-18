@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_list.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_top_stack_box.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_category_component.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_appBar.dart';
@@ -16,12 +17,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80), // 이미지의 높이에 맞춰서 설정
+          preferredSize: const Size.fromHeight(60), // 이미지의 높이에 맞춰서 설정
           child: home_appBar,
         ),
         body: SingleChildScrollView(
             child: Column(
-          children: [const ChallengeTopStack(), const SizedBox(height: 20), Home_Category()],
+          children: [const ChallengeTopStack(), const SizedBox(height: 20), Home_Category(), ChallengeItemList()],
         )));
   }
 }
