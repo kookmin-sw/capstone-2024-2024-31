@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/main/bottom_tabs/home/home_components/home_top_ChalBox.dart';
+import 'package:frontend/main/bottom_tabs/home/home_components/home_top_stack_box.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_category_component.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_appBar.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: SingleChildScrollView(
             child: Column(
-          children: [const ChallengeIngBox(), const SizedBox(height: 140), Home_Category()],
+          children: [const ChallengeTopStack(), const SizedBox(height: 20), Home_Category()],
         )));
   }
 }

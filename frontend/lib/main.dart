@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               // navigatorObservers: <NavigatorObserver>[observer],
-              initialRoute: 'community',
+              initialRoute: 'main',
               routes: {
                 // SplashScreen.routeName: (context) => SplashScreen(),
                 'login': (context) => const LoginScreen(),
