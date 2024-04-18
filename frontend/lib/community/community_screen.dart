@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/community/post_card.dart';
+import 'package:frontend/community/widget/post_card.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});

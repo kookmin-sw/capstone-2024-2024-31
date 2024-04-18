@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:frontend/community/post_card.dart';
+import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:intl/intl.dart';
 
@@ -136,6 +136,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   Widget Comment_Widget() {
+    Size size = MediaQuery.of(context).size;
     return Column(
       children: comment_list.map((comment) {
         List<Widget> commentAndReplies = [];
@@ -147,7 +148,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Container(
-              width: MediaQuery.of(context).size.width,
+              width: size.width,
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
@@ -167,25 +168,27 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         children: [
                           Image.asset(comment['image'], width: 35),
                           SizedBox(width: 8),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(comment['nickname']),
-                              Text("$uploadTimeString | $beforeHours"),
-                              SizedBox(height: 8),
-                              Text(
-                                comment['text'],
-                                softWrap: true,
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              InkWell(
-                                child: Text("답글 달기"),
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
+                          SizedBox(
+                              width: size.width * 0.55,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(comment['nickname']),
+                                  Text("$uploadTimeString | $beforeHours"),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    comment['text'],
+                                    softWrap: true,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  InkWell(
+                                    child: Text("답글 달기"),
+                                    onTap: () {},
+                                  ),
+                                ],
+                              )),
                         ],
                       ),
                       TextButton(
@@ -211,19 +214,21 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           SizedBox(width: 50),
                           Image.asset(reply['image'], width: 35),
                           SizedBox(width: 8),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(reply['nickname']),
-                              Text("$reUploadTimeString | $reBeforeHours"),
-                              Text(
-                                reply['text'],
-                                softWrap: true,
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
+                          SizedBox(
+                              width: size.width * 0.4,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(reply['nickname']),
+                                  Text("$reUploadTimeString | $reBeforeHours"),
+                                  Text(
+                                    reply['text'],
+                                    softWrap: true,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              )),
                           TextButton(
                             onPressed: () {},
                             child: Text("신고"),
