@@ -40,13 +40,13 @@ class Home_Category extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Text(
-                "챌린지 카테고리 >",
+                "챌린지 카테고리",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Pretendard',
@@ -85,7 +85,11 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: (){
+        print("${name}카테고리 클릭됨");
+      },
+        child: Container(
         padding: const EdgeInsets.all(0),
         width: 120, // Set the width of the card
         child: Card(
@@ -139,6 +143,6 @@ class CategoryCard extends StatelessWidget {
               )
             ],
           ),
-        ));
+        )));
   }
 }
