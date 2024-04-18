@@ -103,6 +103,30 @@ class _PostDetailPageState extends State<PostDetailPage> {
     },
   ];
 
+  TextStyle name_textStyle = const TextStyle(
+      fontFamily: 'Pretendard',
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      color: Palette.grey500);
+
+  TextStyle date_textStyle = const TextStyle(
+      fontFamily: 'Pretendard',
+      fontSize: 11,
+      fontWeight: FontWeight.w300,
+      color: Palette.grey300);
+
+  TextStyle text_textStyle = const TextStyle(
+      fontFamily: 'Pretendard',
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+      color: Palette.grey500);
+
+  TextStyle btn_textStyle = const TextStyle(
+      fontFamily: 'Pretendard',
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      color: Palette.grey200);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,18 +148,27 @@ class _PostDetailPageState extends State<PostDetailPage> {
         child: Container(
             color: Palette.greySoft,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 PostCard(number: 10),
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    child: Comment_Widget())
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                        "댓글 ${(comment_list.length + re_comment_list.length)}개",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Pretendard',
+                            fontSize: 15))),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    child: commentWidget())
               ],
             )),
       ),
     );
   }
 
-  Widget Comment_Widget() {
+  Widget commentWidget() {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: comment_list.map((comment) {
@@ -146,15 +179,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
         // Add the main comment
         commentAndReplies.add(
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 5),
             child: Container(
               width: size.width,
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(20.0),
                 // Adjust the radius as needed
-                border:
-                    Border.all(color: Palette.grey200), // Add border color here
+                border: Border.all(
+                    color: Palette.greySoft), // Add border color here
               ),
               child: Column(
                 children: [
@@ -166,35 +200,53 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset(comment['image'], width: 35),
-                          SizedBox(width: 8),
+                          SizedBox(width: 10),
+                          CircleAvatar(
+                            radius: 22,
+                            backgroundImage: AssetImage(
+                              comment['image'],
+                            ),
+                          ),
+                          SizedBox(width: 12),
                           SizedBox(
-                              width: size.width * 0.55,
+                              width: size.width * 0.6,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(comment['nickname']),
-                                  Text("$uploadTimeString | $beforeHours"),
+                                  Text(
+                                    comment['nickname'],
+                                    style: name_textStyle,
+                                  ),
+                                  Text(
+                                    "$uploadTimeString | $beforeHours",
+                                    style: date_textStyle,
+                                  ),
                                   SizedBox(height: 8),
                                   Text(
                                     comment['text'],
+                                    style: text_textStyle,
                                     softWrap: true,
                                     maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
+                                    overflow: TextOverflow.visible,
                                   ),
+                                  SizedBox(height: 8),
                                   InkWell(
-                                    child: Text("답글 달기"),
+                                    splashColor: Palette.grey50,
+                                    child: Text(
+                                      "답글 달기",
+                                      style: btn_textStyle,
+                                    ),
                                     onTap: () {},
                                   ),
                                 ],
                               )),
                         ],
                       ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text("신고"),
-                      )
+                      // TextButton(
+                      //   onPressed: () {},
+                      //   child: Text("신고", style: btn_textStyle),
+                      // )
                     ],
                   ),
 
@@ -207,32 +259,46 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         calculateBeforeHours(reply['dateTime']);
 
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(width: 50),
-                          Image.asset(reply['image'], width: 35),
-                          SizedBox(width: 8),
+                          CircleAvatar(
+                            radius: 22,
+                            backgroundImage: AssetImage(
+                              reply['image'],
+                            ),
+                          ),
+                          SizedBox(width: 12),
                           SizedBox(
-                              width: size.width * 0.4,
+                              width: size.width * 0.5,
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(reply['nickname']),
-                                  Text("$reUploadTimeString | $reBeforeHours"),
+                                  Text(
+                                    reply['nickname'],
+                                    style: name_textStyle,
+                                  ),
+                                  Text(
+                                    "$reUploadTimeString | $reBeforeHours",
+                                    style: date_textStyle,
+                                  ),
                                   Text(
                                     reply['text'],
                                     softWrap: true,
                                     maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
+                                    overflow: TextOverflow.visible,
+                                    style: text_textStyle,
                                   ),
                                 ],
                               )),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text("신고"),
-                          ),
+                          // TextButton(
+                          //   onPressed: () {},
+                          //   child: Text("신고", style: btn_textStyle),
+                          // ),
                         ],
                       ),
                     );
