@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,20 +10,29 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:weekly_date_picker/weekly_date_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:frontend/challenge/create/create_challenge_screen_thr.dart';
+import 'package:frontend/model/data/challenge.dart';
 
-class BodyPart2 extends StatefulWidget {
-  // final Function(bool, String) onPrivateButtonPressed;
-  //
-  // const BodyPart1({
-  //   required this.isPrivateSelected,
-  //   required this.onPrivateButtonPressed,
-  // });
+class CreateChallenge_sec extends StatefulWidget {
+  Challenge challenge;
+
+  CreateChallenge_sec({Key? key, required this.challenge});
 
   @override
-  State<StatefulWidget> createState() => _BodyPart2State();
+  State<CreateChallenge_sec> createState() => _CreateChallenge_secState();
 }
 
-class _BodyPart2State extends State<BodyPart2> {
+class _CreateChallenge_secState extends State<CreateChallenge_sec> {
+  late Challenge newChallenge;
+
+  bool? isPrivateSelected;
+
+  bool showAdditionalWidgets =
+      false; // Added state to control the visibility of additional widgets
+
+  bool showPart1 = true;
+  bool showPart2 = false;
+  bool showPart3 = false;
   final picker = ImagePicker();
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
   List<XFile?> multiImage = []; // 갤러리에서 여러 장의 사진을 선택해서 저장할 변수
@@ -46,33 +56,71 @@ class _BodyPart2State extends State<BodyPart2> {
   int? selectedHourStart = 0;
   int? selectedHourEnd = 24;
 
-
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     initializeDateFormatting('ko_KR', null);
+
+    newChallenge = widget.challenge;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {},
+          ),
+          title: const Text(
+            '챌린지 생성하기',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Pretendard',
+            ),
+          ),
+        ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          color: Colors.transparent,
+          width: double.infinity,
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      CreateChallenge_thr(challenge: newChallenge),
+                ),
+              );
+            },
+            child: SvgPicture.asset(
+              'assets/svgs/create_challenge_btn.svg',
+              // width: double.infinity,
+              // height: 30,
+            ),
+          ),
+        ),
         body: SingleChildScrollView(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: SvgPicture.asset('assets/svgs/create_challenge_level2.svg'),
-          ),
-          inputName(),
-          inputIntro(),
-          addPicture(),
-          selectWeekend(),
-          selectStartDay(),
-          selectFrequency(),
-          selectAuthTime()
-        ])));
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child:
+                    SvgPicture.asset('assets/svgs/create_challenge_level2.svg'),
+              ),
+              inputName(),
+              inputIntro(),
+              addPicture(),
+              selectWeekend(),
+              selectStartDay(),
+              selectFrequency(),
+              selectAuthTime()
+            ])));
   }
 
   Widget inputName() {
@@ -474,7 +522,7 @@ class _BodyPart2State extends State<BodyPart2> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight:  value == dropdownValue
+                    fontWeight: value == dropdownValue
                         ? FontWeight.bold
                         : FontWeight.w300,
                     color: value == dropdownValue
@@ -488,7 +536,6 @@ class _BodyPart2State extends State<BodyPart2> {
         ]));
   }
 
-
   Widget buildDropdownButton(int? selectedValue, ValueChanged<int?> onChanged) {
     return DropdownButton<int>(
       value: selectedValue,
@@ -500,27 +547,25 @@ class _BodyPart2State extends State<BodyPart2> {
         color: Palette.mainPurple,
       ),
       onChanged: onChanged,
-      items: List.generate(25, (index) => index).map<DropdownMenuItem<int>>((int value) {
+      items: List.generate(25, (index) => index)
+          .map<DropdownMenuItem<int>>((int value) {
         return DropdownMenuItem<int>(
           value: value,
           child: Text(
             value == 24 ? '24 (0시)' : '${value.toString()}시',
             style: TextStyle(
-              fontWeight: value == selectedValue
-                  ? FontWeight.bold
-                  : FontWeight.w300,
+              fontWeight:
+                  value == selectedValue ? FontWeight.bold : FontWeight.w300,
               fontSize: 12,
               fontFamily: 'Pretendard',
-              color: value == selectedValue
-                  ? Palette.mainPurple
-                  : Palette.grey300,
+              color:
+                  value == selectedValue ? Palette.mainPurple : Palette.grey300,
             ),
           ),
         );
       }).toList(),
     );
   }
-
 
   Widget selectAuthTime() {
     return Padding(
@@ -543,9 +588,13 @@ class _BodyPart2State extends State<BodyPart2> {
                   selectedHourStart = value;
                 });
               }),
-              const SizedBox(width: 10,),
+              const SizedBox(
+                width: 10,
+              ),
               const Icon(Icons.remove), // expand_more 아이콘 사용
-              const SizedBox(width: 10,), // '-' 아이콘
+              const SizedBox(
+                width: 10,
+              ), // '-' 아이콘
               buildDropdownButton(selectedHourEnd, (int? value) {
                 setState(() {
                   selectedHourEnd = value;

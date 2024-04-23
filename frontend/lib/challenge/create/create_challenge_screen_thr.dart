@@ -1,18 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/data/challenge.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 
-class BodyPart3 extends StatefulWidget {
+class CreateChallenge_thr extends StatefulWidget {
+  Challenge challenge;
+
+  CreateChallenge_thr({Key? key, required this.challenge});
+
   @override
-  State<StatefulWidget> createState() => _BodyPart3State();
+  State<CreateChallenge_thr> createState() => _CreateChallenge_thrState();
 }
 
-class _BodyPart3State extends State<BodyPart3> {
+class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
+  late Challenge newChallenge;
   final picker = ImagePicker();
   XFile? successFile;
   XFile? failFile;
@@ -28,44 +33,75 @@ class _BodyPart3State extends State<BodyPart3> {
         if (isSuccess) {
           successFile = XFile(pickedImage.path);
           print('successFile${successFile!.path}');
-
         } else {
           failFile = XFile(pickedImage.path);
           print('failFile${failFile!.path}');
-
         }
-
       });
     }
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    newChallenge = widget.challenge;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric( horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child:
-                  SvgPicture.asset('assets/svgs/create_challenge_level3.svg'),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {},
+          ),
+          title: const Text(
+            '챌린지 생성하기',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Pretendard',
             ),
-            inputAuthIntro(),
-            pickAuthMethod(),
-            SizedBox(height: 15),
-            addPicture(),
-            SizedBox(height: 25),
-            maxCapacity(),
-            SizedBox(height: 15),
-            _isCapacity ? buildMaxCapacity() : Container()
-          ],
+          ),
         ),
-      ),
-    ));
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          color: Colors.transparent,
+          width: double.infinity,
+          child: InkWell(
+            onTap: () {},
+            child: SvgPicture.asset(
+              'assets/svgs/create_challenge_btn.svg',
+              // width: double.infinity,
+              // height: 30,
+            ),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: SvgPicture.asset(
+                      'assets/svgs/create_challenge_level3.svg'),
+                ),
+                inputAuthIntro(),
+                pickAuthMethod(),
+                SizedBox(height: 15),
+                addPicture(),
+                SizedBox(height: 25),
+                maxCapacity(),
+                SizedBox(height: 15),
+                _isCapacity ? buildMaxCapacity() : Container()
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget inputAuthIntro() {
@@ -337,7 +373,8 @@ class _BodyPart3State extends State<BodyPart3> {
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                fontFamily: 'Pretendard'), // 입력 텍스트의 스타일을 변경합니다.
+                fontFamily: 'Pretendard'),
+            // 입력 텍스트의 스타일을 변경합니다.
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 2.0, color: Palette.mainPurple),
@@ -349,11 +386,10 @@ class _BodyPart3State extends State<BodyPart3> {
                   fontWeight: FontWeight.w300,
                   fontSize: 10,
                   fontFamily: 'Pretendard'),
-
-              suffixStyle:  TextStyle(fontFamily: 'Pretendard',fontSize: 10),
+              suffixStyle: TextStyle(fontFamily: 'Pretendard', fontSize: 10),
               suffix: Text(
-                '명',),
-
+                '명',
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15), // TextField를 둥글게 만듭니다.
               ),
