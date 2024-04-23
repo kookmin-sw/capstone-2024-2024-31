@@ -166,15 +166,18 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   }
 
   Widget verificationInput(Size screenSize) {
-    return Padding(
+    return Container(
         padding: EdgeInsets.symmetric(horizontal: 5),
+        decoration: BoxDecoration(
+            color: Color(0xFFF5F5F5), // 배경색 설정
+            borderRadius: BorderRadius.circular(10)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(height: 5),
             Text(
-              "패널티 전화번호 휴대폰 인증",
+              "패널티 휴대폰 인증",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
@@ -191,7 +194,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   fontFamily: 'Pretendard',
                   color: Palette.grey200),
             ),
-            SizedBox(height: 3),
+            SizedBox(height: 10),
             Row(
               children: [
                 SizedBox(
