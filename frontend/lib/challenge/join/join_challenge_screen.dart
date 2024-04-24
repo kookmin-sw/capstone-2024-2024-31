@@ -38,37 +38,13 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             onPressed: () {},
           ),
           title: const Text(
-            '루틴업 참여하기',
+            '루틴업 참가하기',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               fontFamily: 'Pretendard',
             ),
           ),
-        ),
-        bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-          color: Colors.transparent,
-          width: double.infinity,
-          child: isCheckList.every((element) => element == true)
-              ? InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => JoinChallengeScreen_sec(challenge: widget.challenge),
-                      ),
-                    );
-                  },
-                  child: SvgPicture.asset(
-                    'assets/svgs/next_btn_checked.svg',
-                    // width: double.infinity,
-                    // height: 30,
-                  ))
-              : SvgPicture.asset(
-                  'assets/svgs/next_btn_unchecked.svg',
-                  // width: double.infinity,
-                  // height: 30,
-                ),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -88,7 +64,32 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                       padding:
                           EdgeInsets.symmetric(vertical: 10, horizontal: 2),
                       child: Divider(thickness: 10, color: Palette.grey50)),
-                  AgreeCheckWidget()
+                  AgreeCheckWidget(),
+                  SizedBox(height: 20,),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                    color: Colors.transparent,
+                    width: double.infinity,
+                    child: isCheckList.every((element) => element == true)
+                        ? InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => JoinChallengeScreen_sec(challenge: widget.challenge),
+                            ),
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          'assets/svgs/next_btn_checked.svg',
+                          // width: double.infinity,
+                          // height: 30,
+                        ))
+                        : SvgPicture.asset(
+                      'assets/svgs/next_btn_unchecked.svg',
+                      // width: double.infinity,
+                      // height: 30,
+                    ),
+                  ),
                   // inputPenaltyName(screenSize),
                   // if (showVerificationInput) ...[
                   //   SizedBox(height: 5),
