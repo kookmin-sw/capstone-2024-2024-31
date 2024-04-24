@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
                 'main' : (context) => const MainScreen(),
                 'create_challenge' :  (context) => CreateChallenge_fir(),
                 'detail_challenge' : (context) => ChallengeDetailScreen(),
-                'state_challenge' : (context) => ChallengeStateScreen(),
+                // 'state_challenge' : (context) => ChallengeStateScreen(),
                 'community' : (context) => TabCommunityScreen(),
 
 

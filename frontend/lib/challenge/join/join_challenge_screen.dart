@@ -1,9 +1,11 @@
-import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
+import 'package:frontend/challenge/join/join_challenge_screen_sec.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 
@@ -18,6 +20,12 @@ class JoinChallengeScreen extends StatefulWidget {
 
 class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   bool showVerificationInput = false;
+  bool isCheckedAll = false;
+  bool _isCheckChallengeInform = false;
+  bool _isCheckPersonalInform = false;
+  bool _isCheckJoin = false;
+
+  List<bool> isCheckList = [false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +38,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             onPressed: () {},
           ),
           title: const Text(
-            '챌린지 참여하기',
+            '루틴업 참여하기',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -39,17 +47,28 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
           ),
         ),
         bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
           color: Colors.transparent,
           width: double.infinity,
-          child: InkWell(
-            onTap: () {},
-            child: SvgPicture.asset(
-              'assets/svgs/join_challenge_btn.svg',
-              // width: double.infinity,
-              // height: 30,
-            ),
-          ),
+          child: isCheckList.every((element) => element == true)
+              ? InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => JoinChallengeScreen_sec(challenge: widget.challenge),
+                      ),
+                    );
+                  },
+                  child: SvgPicture.asset(
+                    'assets/svgs/next_btn_checked.svg',
+                    // width: double.infinity,
+                    // height: 30,
+                  ))
+              : SvgPicture.asset(
+                  'assets/svgs/next_btn_unchecked.svg',
+                  // width: double.infinity,
+                  // height: 30,
+                ),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -63,14 +82,116 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                      child: Divider(thickness: 4, color: Palette.purPle100)),
-                  inputPenaltyName(screenSize),
-                  if (showVerificationInput) ...[
-                    SizedBox(height: 5),
-                    verificationInput(screenSize),
-                  ],
+                      child: Divider(thickness: 10, color: Palette.grey50)),
+                  ExampleMsg(screenSize),
+                  Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+                      child: Divider(thickness: 10, color: Palette.grey50)),
+                  AgreeCheckWidget()
+                  // inputPenaltyName(screenSize),
+                  // if (showVerificationInput) ...[
+                  //   SizedBox(height: 5),
+                  //   verificationInput(screenSize),
+                  // ],
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                  //   color: Colors.transparent,
+                  //   width: double.infinity,
+                  //   child: InkWell(
+                  //     onTap: () {},
+                  //     child: SvgPicture.asset(
+                  //       'assets/svgs/join_challenge_btn.svg',
+                  //       // width: double.infinity,
+                  //       // height: 30,
+                  //     ),
+                  //   ),
+                  // )
                 ],
               )),
+        ));
+  }
+
+  Widget ExampleMsg(Size _screenSize) {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/svgs/check_green.svg',
+                  width: 30,
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  "루틴업 성공 시",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Palette.grey500),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "나의 갓생을 자랑할 수 있어요!",
+              style: const TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  color: Palette.grey500),
+            ),
+            const SizedBox(height: 10),
+            BuildImageContainer(
+              path: 'assets/images/success_msg.jpg',
+              color: Palette.green,
+              isSuccess: true,
+              screenSize: _screenSize,
+              isJoinScreen: true,
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/svgs/check_red.svg',
+                  width: 30,
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  "루틴업 실패 시",
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Palette.grey500),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "실패 시 채찍의 한마디로 갓생을 향해 나아가요!",
+              style: const TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  color: Palette.grey500),
+            ),
+            const SizedBox(height: 10),
+            BuildImageContainer(
+                path: 'assets/images/fail_msg.jpg',
+                color: Palette.red,
+                isSuccess: false,
+                screenSize: _screenSize,
+                isJoinScreen: true),
+          ],
         ));
   }
 
@@ -81,7 +202,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            "패널티 알림 받을 전화번호 입력해 주세요.",
+            "결과 알림 받을 전화번호 입력해 주세요.",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
@@ -167,9 +288,10 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
 
   Widget verificationInput(Size screenSize) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 5),
+        // margin: EdgeInsets.only(left: 20, right: 20),
+        padding: EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
-            color: Color(0xFFF5F5F5), // 배경색 설정
+            // border: Palette.greySoft, // 배경색 설정
             borderRadius: BorderRadius.circular(10)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +338,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                       filled: true,
-                      fillColor: Palette.greySoft,
+                      fillColor: Palette.white,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                         borderSide: BorderSide(color: Palette.greySoft),
@@ -260,5 +382,66 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             ),
           ],
         ));
+  }
+
+  Widget AgreeCheckWidget() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "확인해주세요",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            fontFamily: 'Pretendard',
+            color: Palette.grey300,
+          ),
+        ),
+        const SizedBox(height: 10),
+        checkBoxWidget("타인의 개인정보(이름, 전화번호)를 입력하실 때는\n 반드시 해당 분의 동의 여부를 확인해주세요.",
+            isCheckList[0], (value) {
+          setState(() {
+            isCheckList[0] = value!;
+          });
+        }),
+        checkBoxWidget("루틴업 챌린지에 관한 안내사항을 확인했습니다.", isCheckList[1], (value) {
+          setState(() {
+            isCheckList[1] = value!;
+          });
+        }),
+        checkBoxWidget("루틴업 챌린지를 통해 갓생성장을 원해요!", isCheckList[2], (value) {
+          setState(() {
+            isCheckList[2] = value!;
+          });
+        })
+      ],
+    );
+  }
+
+  Widget checkBoxWidget(
+      String text, bool isChecked, void Function(bool?) onChanged) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      width: double.infinity,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(
+          text,
+          style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 10,
+              fontFamily: 'Pretendard',
+              color: Palette.grey200),
+        ),
+        Checkbox(
+          value: isChecked,
+          checkColor: Colors.white,
+          activeColor: Palette.purPle300,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          onChanged: onChanged,
+        ),
+      ]),
+    );
   }
 }

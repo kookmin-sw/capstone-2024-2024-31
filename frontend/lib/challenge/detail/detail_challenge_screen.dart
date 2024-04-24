@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/challenge/detail/detail_imageDetail_screen.dart';
+import 'package:frontend/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen.dart';
@@ -20,18 +21,18 @@ class ChallengeDetailScreen extends StatelessWidget {
       privateCode: 'privateCode',
       challengeName: '조깅 3KM 하기',
       challengeExplanation:
-      '챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라',
+          '챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라',
       challengePeriod: '8',
       startDate: '2024-04-08',
       certificationFrequency: '평일 매일',
       certificationStartTime: 1,
       certificationEndTime: '24시',
       certificationExplanation:
-      '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
+          '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
       successfulVerificationImage:
-      File("C:\Users\82103\Pictures\Screenshots\image.png"),
+          File("C:\Users\82103\Pictures\Screenshots\image.png"),
       failedVerificationImage:
-      File("C:\Users\82103\Pictures\Screenshots\image.png"),
+          File("C:\Users\82103\Pictures\Screenshots\image.png"),
       challengeImage1: File("C:\Users\82103\Pictures\Screenshots\image.png"),
       challengeImage2: File("C:\Users\82103\Pictures\Screenshots\image.png"),
       isGalleryPossible: true,
@@ -40,9 +41,7 @@ class ChallengeDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-
+    final screenSize = MediaQuery.of(context).size;
     initializeDateFormatting('ko_KR', 'en_US');
 
     return SafeArea(
@@ -72,22 +71,26 @@ class ChallengeDetailScreen extends StatelessWidget {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  PhotoesWidget(screenHeight: screenHeight, imageUrl: challenge.challengeImage1.toString(),), // screenHeight를 전달합니다.
+                  PhotoesWidget(
+                    screenHeight: screenSize.height,
+                    imageUrl: challenge.challengeImage1.toString(),
+                  ),
+                  // screenHeight를 전달합니다.
                   Container(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
                       child: InformationWidget(challenge: challenge)),
                   SvgPicture.asset(
                     'assets/svgs/divider.svg',
                     fit: BoxFit.contain,
                   ),
                   ChallengeExplanation(),
-                  ImageGridView(screenHeight, screenWidth),
+                  ImageGridView(screenSize),
                   SvgPicture.asset(
                     'assets/svgs/divider.svg',
                     fit: BoxFit.contain,
                   ),
-                  certificationMethod(screenWidth, screenHeight)
+                  certificationMethod(screenSize)
                 ],
               ),
             ),
@@ -95,7 +98,7 @@ class ChallengeDetailScreen extends StatelessWidget {
               Container(
                 alignment: Alignment.center,
                 padding:
-                const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                 height: 80,
                 color: Colors.transparent,
                 width: double.infinity,
@@ -104,7 +107,8 @@ class ChallengeDetailScreen extends StatelessWidget {
                     print("dddd");
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => JoinChallengeScreen(challenge: challenge),
+                        builder: (context) =>
+                            JoinChallengeScreen(challenge: challenge),
                       ),
                     );
                   },
@@ -139,9 +143,7 @@ class ChallengeDetailScreen extends StatelessWidget {
             ])));
   }
 
-
-
-  Widget ImageGridView(double screenHeight, double screenWidth) {
+  Widget ImageGridView(Size _screenSize) {
     final List<String> imagePaths = [
       'assets/images/image.png',
       'assets/images/image.png',
@@ -151,7 +153,7 @@ class ChallengeDetailScreen extends StatelessWidget {
 
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 15),
-        height: screenHeight * 0.15 * 3.3,
+        height: _screenSize.height * 0.15 * 3.3,
         child: GridView.builder(
           padding: EdgeInsets.symmetric(vertical: 4),
           physics: NeverScrollableScrollPhysics(),
@@ -178,9 +180,9 @@ class ChallengeDetailScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15.0),
                 child: Image.asset(
                   imagePaths[index],
-                  height: screenHeight * 0.15,
+                  height: _screenSize.height * 0.15,
                   // 이미지 높이 고정
-                  width: screenWidth * 0.4,
+                  width: _screenSize.width * 0.4,
                   // 이미지 너비 고정                  imagePaths[index],
                   fit: BoxFit.cover,
                 ),
@@ -214,7 +216,7 @@ class ChallengeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget certificationMethod(double screenWidth, double screenHeight) {
+  Widget certificationMethod(Size _screenSize) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       child: Column(
@@ -302,71 +304,21 @@ class ChallengeDetailScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildImageContainer(challenge.successfulVerificationImage,
-                  Palette.green, true, screenWidth, screenHeight),
+              BuildImageContainer(
+                  path: challenge.successfulVerificationImage!.toString(),
+                  color: Palette.green,
+                  isSuccess: true,
+                  screenSize: _screenSize),
               SizedBox(width: 10),
-              buildImageContainer(challenge.failedVerificationImage,
-                  Palette.red, false, screenWidth, screenHeight),
+              BuildImageContainer(
+                  path: challenge.failedVerificationImage!.toString(),
+                  color: Palette.red,
+                  isSuccess: true,
+                  screenSize: _screenSize),
             ],
           ),
         ],
       ),
-    );
-  }
-
-  Widget buildImageContainer(File? file, Color color, bool isSuccess,
-      double screenWidth, double screenHeight) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              isSuccess
-                  ? 'assets/svgs/check_green.svg'
-                  : 'assets/svgs/check_red.svg',
-            ),
-            const SizedBox(width: 3),
-            Text(
-              isSuccess ? "성공 예시" : "실패 예시",
-              style: const TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: Palette.grey500),
-            ),
-          ],
-        ),
-        const SizedBox(height: 5),
-        Container(
-          decoration: BoxDecoration(
-            color: Palette.greySoft,
-            borderRadius: BorderRadius.circular(33.0),
-            border: Border.all(
-              color: file != null ? color : Palette.greySoft,
-              width: 2.0,
-            ),
-          ),
-          height: screenHeight * 0.16,
-          width: screenWidth * 0.42,
-          child: file != null
-              ? ClipRRect(
-            borderRadius: BorderRadius.circular(30.0),
-            child: Image.file(
-              File(file.path),
-              fit: BoxFit.cover,
-            ),
-          )
-              : const Icon(
-            Icons.image,
-            size: 35,
-            color: Palette.grey300,
-          ),
-        ),
-        const SizedBox(height: 5),
-      ],
     );
   }
 }
