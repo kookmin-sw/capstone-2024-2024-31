@@ -25,92 +25,95 @@ import org.springframework.web.multipart.MultipartFile;
 public class ChallengeReceivedDto {
 
     @Schema(description = "비공개 챌린지 선택")
-    private Boolean is_private;
+    private Boolean isPrivate;
 
     @Schema(description = "암호 설정")
-    private String private_code;
+    private String privateCode;
 
     @Schema(description = "챌린지 이름")
-    private String challenge_name;
+    private String challengeName;
 
     @Schema(description = "챌린지 소개")
-    private String challenge_explanation;
+    private String challengeExplanation;
 
     @Schema(description = "챌린지 소개 사진")
-    private List<MultipartFile> challenge_image;
+    private List<MultipartFile> challengeImages;
     
     @Schema(description = "챌린지 기간")
-    private String challenge_period;
+    private String challengePeriod;
 
     @Schema(description = "챌린지 시작일")
-    private String start_date;
+    private String startDate;
 
     @Schema(description = "챌린지 인증 빈도")
-    private String certification_frequency;
+    private String certificationFrequency;
 
     @Schema(description = "챌린지 인증 가능 시작 시간")
-    private String certification_start_time;
+    private String certificationStartTime;
 
     @Schema(description = "챌린지 인증 가능 종료 시간")
-    private String certification_end_time;
+    private String certificationEndTime;
 
     @Schema(description = "인증 방법")
-    private String certification_explanation;
+    private String certificationExplanation;
 
     @Schema(description = "인증 수단")
-    private Boolean is_gallery_possible;
+    private Boolean isGalleryPossible;
 
     @Schema(description = "인증 성공 예시")
-    private MultipartFile failed_verification_image;
+    private MultipartFile failedVerificationImage;
 
     @Schema(description = "인증 실패 예시")
-    private MultipartFile successful_verification_image;
+    private MultipartFile successfulVerificationImage;
 
     @Schema(description = "최대 모집 인원")
-    private Integer maximum_people;
+    private Integer maximumPeople;
 
 
     public Challenge toEntity(S3Uploader s3Uploader) {
         Challenge challenge = new Challenge();
-        challenge.setChallenge_name(challenge_name);
-        challenge.setStart_date(
-            parseDateString(start_date)
+        challenge.setChallengeName(challengeName);
+        challenge.setStartDate(
+            parseDateString(startDate)
         );
-        challenge.setEnd_date(
-            calcylateEndDate(challenge.getStart_date(), challenge_period)
+        challenge.setChallengePeriod(
+            convertNumber(challengePeriod)
+        );
+        challenge.setEndDate(
+            calcylateEndDate(challenge.getStartDate(), challengePeriod)
         );
 
-        challenge.setCertification_frequency(certification_frequency);
-        challenge.setCertification_explanation(certification_explanation);
-        challenge.setCertification_start_time(
-            convertNumber(certification_start_time)
+        challenge.setCertificationFrequency(certificationFrequency);
+        challenge.setCertificationExplanation(certificationExplanation);
+        challenge.setCertificationStartTime(
+            convertNumber(certificationStartTime)
         );
-        challenge.setCertification_end_time(
-            convertNumber(certification_end_time)
+        challenge.setCertificationEndTime(
+            convertNumber(certificationEndTime)
         );
-        challenge.setChallenge_explanation(challenge_explanation);
-        challenge.setMaximum_people(maximum_people);
-        challenge.setIs_private(is_private);
-        challenge.setPrivate_code(private_code);
+        challenge.setChallengeExplanation(challengeExplanation);
+        challenge.setMaximumPeople(maximumPeople);
+        challenge.setIsPrivate(isPrivate);
+        challenge.setPrivateCode(privateCode);
         
         String filePath = FilePathEnum.CHALLENGES.getPath();
 
         List<String> imageUrls = new ArrayList<>();
-        for (MultipartFile multipartFile : challenge_image) {
+        for (MultipartFile multipartFile : challengeImages) {
             if (multipartFile != null && !multipartFile.isEmpty()) {
                 String imageUrl = s3Uploader.uploadFileToS3(multipartFile, filePath);
                 imageUrls.add(imageUrl);
             }
         }
-        challenge.setChallenge_image_path(imageUrls);
+        challenge.setChallengeImagePaths(imageUrls);
 
-        if (failed_verification_image != null && !failed_verification_image.isEmpty()) {
-            String failedVerificationImageUrl = s3Uploader.uploadFileToS3(failed_verification_image, filePath);
-            challenge.setFailed_verification_image(failedVerificationImageUrl);
+        if (failedVerificationImage != null && !failedVerificationImage.isEmpty()) {
+            String failedVerificationImageUrl = s3Uploader.uploadFileToS3(failedVerificationImage, filePath);
+            challenge.setFailedVerificationImage(failedVerificationImageUrl);
         }
-        if (successful_verification_image != null && !successful_verification_image.isEmpty()) {
-            String successfulVerificationImageUrl = s3Uploader.uploadFileToS3(successful_verification_image, filePath);
-            challenge.setSuccessful_verification_image(successfulVerificationImageUrl);
+        if (successfulVerificationImage != null && !successfulVerificationImage.isEmpty()) {
+            String successfulVerificationImageUrl = s3Uploader.uploadFileToS3(successfulVerificationImage, filePath);
+            challenge.setSuccessfulVerificationImage(successfulVerificationImageUrl);
         }
 
         return challenge;
