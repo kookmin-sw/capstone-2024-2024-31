@@ -2,14 +2,13 @@ package km.cd.backend.challenge.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import km.cd.backend.user.User;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.math.BigDecimal;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -28,9 +27,15 @@ public class Participant {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private boolean is_owner;
-
-    private BigDecimal deposit;
-
-    private boolean payment_status;
+    private boolean isOwner;
+    
+    @ElementCollection(fetch = FetchType.LAZY)
+    @MapKeyColumn(name = "date")
+    private Map<LocalDate, String> certificationImages = new HashMap<>();
+    
+    private Integer numberOfCertifications = 0;
+    
+    public void increaseNumOfCertifications() {
+        numberOfCertifications += 1;
+    }
 }
