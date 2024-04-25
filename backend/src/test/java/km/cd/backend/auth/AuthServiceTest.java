@@ -1,6 +1,5 @@
 package km.cd.backend.auth;
 
-import km.cd.backend.common.auth.AuthService;
 import km.cd.backend.common.error.CustomException;
 import km.cd.backend.common.jwt.JwtTokenProvider;
 import km.cd.backend.common.jwt.JwtTokenResponse;

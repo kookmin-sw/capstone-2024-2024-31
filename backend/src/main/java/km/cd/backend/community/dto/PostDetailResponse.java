@@ -10,7 +10,7 @@ public record PostDetailResponse(
         String title,
         String content,
         UserResponse author,
-        String picture,
+        String image,
         LocalDateTime createdDate,
         List<CommentResponse> comments) {
 }
