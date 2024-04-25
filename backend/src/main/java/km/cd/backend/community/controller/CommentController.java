@@ -11,7 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/challenge/{challengeId}/post/{postId}/comment")
+@RequestMapping("/challenges/{challengeId}/posts/{postId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
 

@@ -56,14 +56,14 @@ public class ChallengeControllerTest {
 
 
         ChallengeReceivedDto challengeReceivedDto = new ChallengeReceivedDto();
-        challengeReceivedDto.setChallenge_name("Test");
+        challengeReceivedDto.setChallengeName("Test");
 
         Challenge challenge = new Challenge();
-        challenge.setChallenge_id(1L);
+        challenge.setId(1L);
 
         doReturn(challenge)
             .when(challengeService)
-            .createChallenge(any(ChallengeReceivedDto.class), any(User.class));
+            .createChallenge(user.getId(), any(ChallengeReceivedDto.class));
 
         //when, then
         mockMvc.perform(post("/challenge/create")
