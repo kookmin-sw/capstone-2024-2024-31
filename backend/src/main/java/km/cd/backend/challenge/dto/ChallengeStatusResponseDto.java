@@ -1,0 +1,46 @@
+package km.cd.backend.challenge.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ChallengeStatusResponseDto {
+    
+    @Schema(description = "챌린지 ID")
+    private Long challengeId;
+    
+    @Schema(description = "챌린지 이름")
+    private String challengeName;
+    
+    @Schema(description = "챌린지 기간")
+    private Integer challengePeriod;
+    
+    @Schema(description = "챌린지 시작일")
+    private Date startDate;
+    
+    @Schema(description = "챌린지 종료일")
+    private Date endDate;
+    
+    @Schema(description = "인증 시작 시간")
+    private Integer certificationStartTime;
+    
+    @Schema(description = "인증 종료 시간")
+    private Integer certificationEndTime;
+    
+    @Schema(description = "인증 빈도")
+    private String certificationFrequency;
+    
+    @Schema(description = "전체 참여 인원")
+    private int totalParticipants;
+    
+    @Schema(description = "내 인증 횟수")
+    private int numberOfCertifications;
+    
+    @Schema(description = "전체 인증 횟수")
+    private int totalCertificationCount;
+}
