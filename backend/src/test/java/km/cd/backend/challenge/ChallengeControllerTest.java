@@ -56,10 +56,10 @@ public class ChallengeControllerTest {
 
 
         ChallengeReceivedDto challengeReceivedDto = new ChallengeReceivedDto();
-        challengeReceivedDto.setChallenge_name("Test");
+        challengeReceivedDto.setChallengeName("Test");
 
         Challenge challenge = new Challenge();
-        challenge.setChallenge_id(1L);
+        challenge.setChallengeId(1L);
 
         doReturn(challenge)
             .when(challengeService)

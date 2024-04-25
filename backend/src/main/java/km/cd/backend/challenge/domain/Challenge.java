@@ -1,6 +1,7 @@
 package km.cd.backend.challenge.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,46 +15,59 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
+@Data @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Challenge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long challenge_id;
+    private Long challengeId;
 
-    private Boolean is_private;
+    private Boolean isPrivate;
 
-    private String private_code;
+    private String privateCode;
 
-    private String challenge_name;
+    private String challengeName;
 
-    private String challenge_explanation;
+    private String challengeExplanation;
+    
+    private Integer challengePeriod;
 
-    private Date start_date;
+    private Date startDate;
 
-    private Date end_date;
+    private Date endDate;
 
-    private String certification_frequency;
+    private String certificationFrequency;
 
-    private Integer certification_start_time;
+    private Integer certificationStartTime;
 
-    private Integer certification_end_time;
+    private Integer certificationEndTime;
 
-    private String certification_explanation;
+    private String certificationExplanation;
 
-    private Boolean is_gallery_possible;
+    private Boolean isGalleryPossible;
 
-    private Integer maximum_people;
+    private Integer maximumPeople;
     
     @JsonManagedReference
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Participant> participants = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
-    private List<String> challenge_image_path;
+    private List<String> challengeImagePaths;
 
-    private String failed_verification_image;
+    private String failedVerificationImage;
 
-    private String successful_verification_image;
+    private String successfulVerificationImage;
+    
+    @Builder.Default
+    private Boolean isEnded = false;
+    
+    @Builder.Default
+    private Integer totalParticipants = 0;
+    
+    public void increaseNumOfParticipants() {
+        totalParticipants += 1;
+    }
 }
