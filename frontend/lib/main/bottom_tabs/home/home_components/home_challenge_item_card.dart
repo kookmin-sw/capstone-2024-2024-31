@@ -48,7 +48,8 @@ class ChallengeItemCard extends StatelessWidget {
                         child: Text(
                           "${this_challenge.challengeName}",
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
+                            color: Palette.grey500,
                             fontSize: 14,
                             fontFamily: 'Pretendard',
                           ),

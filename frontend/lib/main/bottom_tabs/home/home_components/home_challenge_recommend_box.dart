@@ -51,10 +51,10 @@ class ChallengeRecommendBox extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 14,
                     fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {},
                   style: ButtonStyle(
@@ -79,7 +79,7 @@ class ChallengeRecommendBox extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 30),
           SvgPicture.asset(
             '${randomCategory['svg_icon']}',
             width: 90, // 조절할 아이콘의 너비

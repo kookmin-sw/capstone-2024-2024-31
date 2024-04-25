@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
+import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:get/get.dart';
 
@@ -89,7 +90,8 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
               const Text(
                 "챌린지 모아보기 >",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
+                    color: Palette.grey500,
                     fontFamily: 'Pretendard',
                     fontSize: 15),
               ),

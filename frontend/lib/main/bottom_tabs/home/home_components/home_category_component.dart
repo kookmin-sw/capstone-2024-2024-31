@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/model/config/palette.dart';
 
 class Home_Category extends StatelessWidget {
   final List<Map<String, dynamic>> categoryList = [
@@ -48,7 +49,8 @@ class Home_Category extends StatelessWidget {
               const Text(
                 "챌린지 카테고리 >",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
+                    color: Palette.grey500,
                     fontFamily: 'Pretendard',
                     fontSize: 15),),
               const SizedBox(height: 10),
@@ -125,7 +127,7 @@ class CategoryCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 13,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     const SizedBox(height: 5),

@@ -51,15 +51,16 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         color: Palette.white,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: SizedBox(
-            height: 186, // Specify a fixed height here
+            height: 190, // Specify a fixed height here
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextButton(
@@ -70,9 +71,9 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                   child: const Text("내 챌린지 현황 >",
                       style: TextStyle(
                         fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                         color: Palette.grey500,
-                        fontSize: 15,
+                        fontSize: 14,
                       )),
                   onPressed: () {
                     print("dddd");
@@ -102,7 +103,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                     itemBuilder: (context, index) {
                       return Column(children: [
                         challengeStateCard(screenWidth, index),
-                        SizedBox(height: 10)
+                        SizedBox(height: 15)
                       ]);
                     },
                   ),

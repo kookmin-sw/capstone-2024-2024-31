@@ -35,8 +35,8 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           const BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
-          const BottomNavigationBarItem(icon: Icon(Icons.camera_enhance), label: "인증"),
-          const BottomNavigationBarItem(icon: Icon(Icons.supervised_user_circle_rounded), label: "마이페이지")
+          const BottomNavigationBarItem(icon: Icon(Icons.timelapse), label: "나의 루틴업"),
+          const BottomNavigationBarItem(icon: Icon(Icons.person), label: "마이페이지")
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Palette.mainPurple,
