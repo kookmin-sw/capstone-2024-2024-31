@@ -1,4 +1,4 @@
-package km.cd.backend.common.auth;
+package km.cd.backend.auth;
 
 import km.cd.backend.common.jwt.JwtTokenResponse;
 import km.cd.backend.user.dto.UserLogin;
