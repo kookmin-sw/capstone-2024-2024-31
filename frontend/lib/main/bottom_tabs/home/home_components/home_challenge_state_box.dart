@@ -158,7 +158,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                                       Text(
                                         challengeList[index]['name'], // 챌린지 이름
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w500,
                                           fontSize: 10,
                                         ),
                                       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/main/bottom_tabs/mypage/mypage_user_inform.dart';
+import 'package:frontend/main/bottom_tabs/mypage/mypage_pupleBtnBox.dart';
+import 'package:frontend/main/bottom_tabs/mypage/widget/mypage_user_inform.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -9,29 +10,35 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          // AppBar를 투명하게 설정
-          elevation: 0,
-          // 그림자 없애기
-          title: const Text(
-            '마이페이지',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'Pretendard',
-            ),
-          )
-        ),
+            backgroundColor: Colors.transparent,
+            // AppBar를 투명하게 설정
+            elevation: 0,
+            // 그림자 없애기
+            title: const Text(
+              '마이페이지',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Pretendard',
+              ),
+            )),
         body: SingleChildScrollView(
+            child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
-              UserInformation()
+              UserInformation(),
+              SizedBox(height: 5),
+              PurpleThreeBox()
             ],
           ),
-        ));
+        )));
   }
 }

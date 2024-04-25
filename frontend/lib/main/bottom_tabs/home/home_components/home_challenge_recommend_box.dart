@@ -54,7 +54,7 @@ class ChallengeRecommendBox extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: () {},
                   style: ButtonStyle(
