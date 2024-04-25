@@ -10,6 +10,7 @@ import km.cd.backend.community.dto.PostDetailResponse;
 import km.cd.backend.community.dto.PostRequest;
 import km.cd.backend.community.dto.PostSimpleResponse;
 import km.cd.backend.community.mapper.PostMapper;
+import km.cd.backend.community.repository.LikeRepository;
 import km.cd.backend.community.repository.PostRepository;
 import km.cd.backend.user.User;
 import km.cd.backend.user.UserRepository;
@@ -37,6 +38,10 @@ public class PostService {
 
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new CustomException(400, "Challenge not found."));
+
+    if (image.isEmpty()) {
+      throw new CustomException(400, "Image is null.");
+    }
 
     PostMapper postMapper = PostMapper.INSTANCE;
     Post post = postMapper.requestToEntity(postRequest, user, challenge);

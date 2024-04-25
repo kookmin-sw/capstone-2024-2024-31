@@ -34,7 +34,10 @@ public class Post extends BaseTimeEntity {
   private String image;
 
   @OneToMany(mappedBy = "post", orphanRemoval = true)
-  private List<Comment> comments = new ArrayList<>();
+  private final List<Comment> comments = new ArrayList<>();
+
+  @OneToMany(mappedBy = "post", orphanRemoval = true)
+  private final List<Like> likes = new ArrayList<>();
 
   @Builder
   public Post(String title, String content, Challenge challenge, User author) {
