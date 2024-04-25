@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ChallengeStatusResponseDto {
     
     @Schema(description = "챌린지 ID")
-    private Long challengeId;
+    private Long id;
     
     @Schema(description = "챌린지 이름")
     private String challengeName;

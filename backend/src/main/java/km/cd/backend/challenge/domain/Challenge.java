@@ -1,24 +1,23 @@
 package km.cd.backend.challenge.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Builder;
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data @Builder
+@Table(name = "challenges")
+@Getter @Setter
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor()
 public class Challenge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long challengeId;
+    private Long id;
 
     private Boolean isPrivate;
 
@@ -66,5 +65,9 @@ public class Challenge {
     
     public void increaseNumOfParticipants() {
         totalParticipants += 1;
+    }
+
+    public void finishChallenge() {
+        this.isEnded = true;
     }
 }

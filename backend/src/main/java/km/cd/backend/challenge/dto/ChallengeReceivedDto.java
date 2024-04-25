@@ -1,7 +1,5 @@
 package km.cd.backend.challenge.dto;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ChallengeReceivedDto {
 
     @Schema(description = "비공개 챌린지 선택")
@@ -80,7 +77,7 @@ public class ChallengeReceivedDto {
             convertNumber(challengePeriod)
         );
         challenge.setEndDate(
-            calcylateEndDate(challenge.getStartDate(), challengePeriod)
+            calculateEndDate(challenge.getStartDate(), challengePeriod)
         );
 
         challenge.setCertificationFrequency(certificationFrequency);
@@ -128,7 +125,7 @@ public class ChallengeReceivedDto {
         }
     }
 
-    private Date calcylateEndDate(Date StartDate, String challenge_period) {
+    private Date calculateEndDate(Date StartDate, String challenge_period) {
         int weeks = convertNumber(challenge_period);
 
         Calendar calendar = Calendar.getInstance();

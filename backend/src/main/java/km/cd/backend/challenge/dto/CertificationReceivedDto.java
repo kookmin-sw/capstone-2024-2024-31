@@ -10,10 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CertificationReceivedDto {
-    
-    @Schema(description = "챌린지 아이디")
-    private Long challengeId;
-    
+
     @Schema(description = "챌린지 인증 이미지")
     private MultipartFile certificationImage;
 }

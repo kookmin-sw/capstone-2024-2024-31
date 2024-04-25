@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/challenge/{challengeId}/post")
+@RequestMapping("/challenges/{challengeId}/posts")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -62,7 +62,7 @@ public class PostController {
     return ResponseEntity.ok(null);
   }
 
-  @PostMapping("/{postId}/like")
+  @PostMapping("/{postId}/likes")
   public ResponseEntity<Void> likePost(
           @AuthenticationPrincipal PrincipalDetails principalDetails,
           @PathVariable(name = "postId") Long postId
@@ -71,7 +71,7 @@ public class PostController {
     return ResponseEntity.ok(null);
   }
 
-  @DeleteMapping("/{postId}/like")
+  @DeleteMapping("/{postId}/likes")
   public ResponseEntity<Void> unlikePost(
           @AuthenticationPrincipal PrincipalDetails principalDetails,
           @PathVariable(name = "postId") Long postId

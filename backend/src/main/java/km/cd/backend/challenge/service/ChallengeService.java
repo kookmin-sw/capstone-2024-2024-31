@@ -1,42 +1,41 @@
 package km.cd.backend.challenge.service;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.domain.Participant;
-import km.cd.backend.challenge.dto.CertificationReceivedDto;
 import km.cd.backend.challenge.dto.ChallengeReceivedDto;
 import km.cd.backend.challenge.dto.ChallengeStatusResponseDto;
-import km.cd.backend.challenge.dto.enums.FilePathEnum;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.challenge.repository.ParticipantRepository;
+import km.cd.backend.common.error.CustomException;
 import km.cd.backend.common.utils.S3Uploader;
 import km.cd.backend.user.User;
-import lombok.AllArgsConstructor;
+import km.cd.backend.user.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ChallengeService {
-    
+
+    private final UserRepository userRepository;
     private final ChallengeRepository challengeRepository;
-    
     private final ParticipantRepository participantRepository;
-    
     private final S3Uploader s3Uploader;
 
     @Transactional
-    public Challenge createChallenge(ChallengeReceivedDto challengeReceivedDTO, User user) {
+    public Challenge createChallenge(Long userId, ChallengeReceivedDto challengeReceivedDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(400, "User not found."));
+
         // 프론트로부터 넘겨받은 챌린지 데이터
         Challenge challenge = challengeReceivedDTO.toEntity(s3Uploader);
-        
-        System.out.println(challenge);
+
         // participant 생성
         Participant creator = new Participant();
         creator.setChallenge(challenge);
@@ -45,7 +44,6 @@ public class ChallengeService {
 
         // 챌린지 participant에 생성자 추가
         challenge.getParticipants().add(creator);
-        
         challenge.increaseNumOfParticipants();
         
         // 챌린지 저장
@@ -55,8 +53,11 @@ public class ChallengeService {
     }
 
     @Transactional
-    public void joinChallenge(Long challengeId, User user) {
-        Challenge challenge = challengeRepository.findById(challengeId).orElseThrow();
+    public void joinChallenge(Long challengeId, Long userId) {
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new CustomException(400, "Challenge not found."));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(400, "User not found."));
 
         Participant participant = new Participant();
         participant.setChallenge(challenge);
@@ -66,47 +67,23 @@ public class ChallengeService {
 
         challengeRepository.save(challenge);
     }
-    
-    @Transactional
-    public String certificateChallenge(CertificationReceivedDto certificationReceivedDto, User user) {
-        Optional<Challenge> foundChallenge = challengeRepository.findById(certificationReceivedDto.getChallengeId());
-        if (foundChallenge.isEmpty()) {
-            throw new NoSuchElementException("Challenge를 찾을 수 없습니다.");
-        }
-        
-        Challenge challenge = foundChallenge.get();
-        Participant participant = participantRepository.findByChallengeAndUser(challenge, user);
-        if (participant == null) {
-            throw new NoSuchElementException("참가자를 찾을 수 없습니다.");
-        }
-        
-        MultipartFile certificationImage = certificationReceivedDto.getCertificationImage();
-        if (certificationImage == null || certificationImage.isEmpty()) {
-            throw new IllegalArgumentException("인증 이미지를 제대로 입력하세요.");
-        }
-        
-        String certificationImageUrl = s3Uploader.uploadFileToS3(certificationImage, FilePathEnum.PARTICIPANTS.getPath());
-        participant.getCertificationImages().put(LocalDate.now(), certificationImageUrl);
-        participant.increaseNumOfCertifications();
-        
-        return "성공";
-    }
-    
-    @Transactional
-    public ChallengeStatusResponseDto checkChallengeStatus(Long challenge_id, User user) {
-        Challenge challenge = challengeRepository.findById(challenge_id).orElseThrow();
-        Participant participant = participantRepository.findByChallengeAndUser(challenge, user);
+
+    public ChallengeStatusResponseDto checkChallengeStatus(Long challengeId, Long userId) {
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new CustomException(400, "Challenge not found."));
+        Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
+                .orElseThrow(() -> new CustomException(400, "Participant not found."));
         
         return ChallengeMapper.INSTANCE.toChallengeStatusResponseDto(challenge, participant);
     }
-    @Transactional
+
     public List<Challenge> findChallengesByEndDate(Date endDate) {
         return challengeRepository.findByEndDate(endDate);
     }
-    
+
     @Transactional
     public void finishChallenge(Challenge challenge) {
-        challenge.setIsEnded(true);
+        challenge.finishChallenge();
         challengeRepository.save(challenge);
     }
 }

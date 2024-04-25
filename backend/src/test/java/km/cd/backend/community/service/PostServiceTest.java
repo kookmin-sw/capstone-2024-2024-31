@@ -69,7 +69,7 @@ class PostServiceTest {
             "description"
         );
 
-        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getChallengeId(), postRequest, file);
+        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest, file);
         
         assertEquals(postRequest.title(), postDetailResponse.title());
         assertEquals(postRequest.content(), postDetailResponse.content());
@@ -87,10 +87,10 @@ class PostServiceTest {
             "description"
         );
         
-        postService.createPost(fakeUser.getId(), fakeChallenge.getChallengeId(), postRequest1, file);
-        postService.createPost(fakeUser.getId(), fakeChallenge.getChallengeId(), postRequest2, file);
+        postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest1, file);
+        postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest2, file);
         
-        List<PostSimpleResponse> postSimpleResponses = postService.findAllByChallengeId(fakeChallenge.getChallengeId());
+        List<PostSimpleResponse> postSimpleResponses = postService.findAllByChallengeId(fakeChallenge.getId());
         
         assertEquals(2, postSimpleResponses.size());
     }
@@ -109,7 +109,7 @@ class PostServiceTest {
             "description"
         );
         
-        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getChallengeId(), postRequest, file);
+        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest, file);
         
         postService.deletePost(fakeUser.getId(), postDetailResponse.id());
         

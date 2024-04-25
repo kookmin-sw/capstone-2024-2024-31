@@ -1,6 +1,5 @@
 package km.cd.backend.challenge.dto;
 
-import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.Participant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChallengeResponseDto {
-    private Long challengeId;
+    private Long id;
     private String challengeName;
     private Date startDate;
     private Date endDate;

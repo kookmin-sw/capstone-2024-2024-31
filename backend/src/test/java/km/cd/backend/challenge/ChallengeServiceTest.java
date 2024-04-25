@@ -5,7 +5,6 @@ import java.util.Optional;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
-import km.cd.backend.challenge.dto.CertificationReceivedDto;
 import km.cd.backend.challenge.dto.ChallengeStatusResponseDto;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.challenge.repository.ParticipantRepository;
@@ -22,13 +21,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class ChallengeServiceTest {
@@ -65,7 +62,7 @@ class ChallengeServiceTest {
         // Challenge Entity 설정
         challengeId = 2L;
         challenge = new Challenge();
-        challenge.setChallengeId(challengeId);
+        challenge.setId(challengeId);
         challenge.setChallengeName("Test Challenge");
         challenge.setChallengePeriod(4);
         challenge.setStartDate(new Date());
@@ -89,7 +86,7 @@ class ChallengeServiceTest {
     void checkChallengeStatus_Success() {
         // 반환값 설정
         ChallengeStatusResponseDto expectedResponseDto = new ChallengeStatusResponseDto(); // Set expected response DTO if needed
-        expectedResponseDto.setChallengeId(challengeId);
+        expectedResponseDto.setId(challengeId);
         expectedResponseDto.setChallengeName("Test Challenge");
         expectedResponseDto.setChallengePeriod(4);
         expectedResponseDto.setStartDate(new Date());
@@ -102,42 +99,17 @@ class ChallengeServiceTest {
         
         // Mock behavior
         when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-        when(participantRepository.findByChallengeAndUser(challenge, user)).thenReturn(participant);
+        when(participantRepository.findByChallengeIdAndUserId(challengeId, user.getId())).thenReturn(Optional.of(participant));
         
         ChallengeMapper challengeMapperMock = Mockito.mock(ChallengeMapper.class);
         when(challengeMapperMock.toChallengeStatusResponseDto(challenge, participant)).thenReturn(expectedResponseDto);
         
         
         // Call the method
-        ChallengeStatusResponseDto responseEntity = challengeService.checkChallengeStatus(challengeId, user);
+        ChallengeStatusResponseDto responseEntity = challengeService.checkChallengeStatus(challengeId, user.getId());
         
         // Verify the result
         assertEquals(responseEntity.toString(), expectedResponseDto.toString());
     }
-    
-    @Test
-    @DisplayName("인증 성공 테스트")
-    void testCertificateChallenge_Success() throws Exception {
-        // 인증 받을 이미지 설정
-        MockMultipartFile certificationImage = new MockMultipartFile("certificationImage", "test.jpg", "image/jpeg", "test image".getBytes());
-        
-        // CertificationReceivedDto 객체 설정
-        CertificationReceivedDto certificationReceivedDto = new CertificationReceivedDto();
-        certificationReceivedDto.setChallengeId(2L);
-        certificationReceivedDto.setCertificationImage(certificationImage);
-        
-        // 예상 결과 설정
-        String expectedMessage = "성공";
-        
-        // Mock behavior
-        when(challengeRepository.findById(2L)).thenReturn(Optional.of(challenge));
-        when(participantRepository.findByChallengeAndUser(challenge, user)).thenReturn(participant);
-        
-        // Call the method
-        String actualMessage = challengeService.certificateChallenge(certificationReceivedDto, user);
-        
-        // Verify the result
-        assertEquals(expectedMessage, actualMessage);
-    }
-    
+
 }
