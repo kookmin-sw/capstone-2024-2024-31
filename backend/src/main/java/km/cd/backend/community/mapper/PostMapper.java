@@ -29,7 +29,6 @@ public interface PostMapper {
   PostDetailResponse entityToDetailResponse(Post post);
 
   @Mapping(target = "author", source = "user")
-  @Mapping(target = "challenge", source = "challenge")
   Post requestToEntity(PostRequest postRequest, User user, Challenge challenge);
 
   @Named("mapComments")

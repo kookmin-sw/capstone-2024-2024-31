@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum FilePathEnum {
-  CHALLENGES("challenges");
+  CHALLENGES("challenges"),
+  COMMUNITY("community");
 
   private final String path;
 

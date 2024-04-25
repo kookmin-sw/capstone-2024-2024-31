@@ -11,13 +11,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/challenge/{challengeId}/posts/{postId}/comments")
+@RequestMapping("/challenge/{challengeId}/post/{postId}/comment")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<CommentResponse> createComment(
             @PathVariable(name = "postId") Long postId,
