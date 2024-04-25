@@ -77,10 +77,10 @@ class PurpleThreeBox extends StatelessWidget {
 
 
     return Container(
-        width: screenSize.width * 0.85,
+        width: screenSize.width * 0.87,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), // 컨테이너 둥글게 설정
-          color: Palette.purPle200, // 밑줄 색상 설정
+          borderRadius: BorderRadius.circular(12), // 컨테이너 둥글게 설정
+          color: Palette.purPle300
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
