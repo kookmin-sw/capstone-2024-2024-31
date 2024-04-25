@@ -44,7 +44,7 @@ public class PostController {
     return ResponseEntity.ok(postSimpleResponses);
   }
 
-  @GetMapping("{postId}")
+  @GetMapping("/{postId}")
   public ResponseEntity<PostDetailResponse> getPost(
           @PathVariable(name = "postId") Long postId
   ) {
@@ -52,7 +52,7 @@ public class PostController {
     return ResponseEntity.ok(postDetailResponse);
   }
 
-  @DeleteMapping("{postId}")
+  @DeleteMapping("/{postId}")
   public ResponseEntity<Void> deletePost(
           @PathVariable(name = "postId") Long postId,
           @AuthenticationPrincipal PrincipalDetails principalDetails) {
