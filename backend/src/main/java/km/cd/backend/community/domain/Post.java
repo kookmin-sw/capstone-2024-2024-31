@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.common.domain.BaseTimeEntity;
 import km.cd.backend.user.User;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +30,8 @@ public class Post extends BaseTimeEntity {
   @JoinColumn(name = "author_id")
   private User author;
 
-  private String picture;
+  @Setter
+  private String image;
 
   @OneToMany(mappedBy = "post", orphanRemoval = true)
   private List<Comment> comments = new ArrayList<>();

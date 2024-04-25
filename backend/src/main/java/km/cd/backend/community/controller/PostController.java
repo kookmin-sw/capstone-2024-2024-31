@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,9 +27,10 @@ public class PostController {
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<PostDetailResponse> createPost(
       @PathVariable(name = "challengeId") Long challengeId,
-      @RequestBody PostRequest postRequest,
+      @RequestPart(value = "data") PostRequest postRequest,
+      @RequestPart(value = "image") MultipartFile image,
       @AuthenticationPrincipal PrincipalDetails principalDetails) {
-    PostDetailResponse postResponse = postService.createPost(principalDetails.getUserId(), challengeId, postRequest);
+    PostDetailResponse postResponse = postService.createPost(principalDetails.getUserId(), challengeId, postRequest, image);
     return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(postResponse);

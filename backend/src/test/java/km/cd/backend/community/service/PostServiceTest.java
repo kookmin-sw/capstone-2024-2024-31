@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,11 @@ class PostServiceTest {
 
     private User fakeUser;
     private Challenge fakeChallenge;
+    private final MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "imageFile.png",
+            "image/png",
+            "<<png data>>".getBytes());
 
     @BeforeEach
     void setUp() {
@@ -50,8 +56,7 @@ class PostServiceTest {
                 .email("email")
                 .name("name")
                 .build();
-        fakeChallenge = Challenge.builder()
-                .build();
+        fakeChallenge = new Challenge();
         userRepository.save(fakeUser);
         challengeRepository.save(fakeChallenge);
     }
@@ -64,7 +69,7 @@ class PostServiceTest {
                 "description"
         );
 
-        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getChallenge_id(), postRequest);
+        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getChallenge_id(), postRequest, file);
 
         assertEquals(postRequest.title(), postDetailResponse.title());
         assertEquals(postRequest.content(), postDetailResponse.content());
@@ -81,8 +86,8 @@ class PostServiceTest {
                 "title",
                 "description"
         );
-        postService.createPost(fakeUser.getId(), fakeChallenge.getChallenge_id(), postRequest1);
-        postService.createPost(fakeUser.getId(), fakeChallenge.getChallenge_id(), postRequest2);
+        postService.createPost(fakeUser.getId(), fakeChallenge.getChallenge_id(), postRequest1, file);
+        postService.createPost(fakeUser.getId(), fakeChallenge.getChallenge_id(), postRequest2, file);
 
         List<PostSimpleResponse> postSimpleResponses = postService.findAllByChallengeId(fakeChallenge.getChallenge_id());
 
@@ -103,7 +108,7 @@ class PostServiceTest {
                 "description"
         );
 
-        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getChallenge_id(), postRequest);
+        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getChallenge_id(), postRequest, file);
 
         postService.deletePost(fakeUser.getId(), postDetailResponse.id());
 

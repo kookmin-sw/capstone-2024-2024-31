@@ -45,7 +45,6 @@ class CommentServiceTest {
     CommentService commentService;
 
     private User fakeUser;
-    private Challenge fakeChallenge;
     private Post fakePost;
 
     @BeforeEach
@@ -54,8 +53,7 @@ class CommentServiceTest {
                 .email("email")
                 .name("name")
                 .build();
-        fakeChallenge = Challenge.builder()
-                .build();
+        Challenge fakeChallenge = new Challenge();
         fakePost = Post.builder()
                 .title("title")
                 .content("content")
