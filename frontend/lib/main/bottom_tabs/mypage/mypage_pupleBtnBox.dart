@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 
 class PurpleThreeBox extends StatelessWidget {
   PurpleThreeBox({super.key});
+
+  
   final List<dynamic> _followerList = [
     {
       'image': 'assets/images/image.png',
