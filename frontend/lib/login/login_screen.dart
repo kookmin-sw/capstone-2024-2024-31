@@ -57,26 +57,26 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Palette.mainPurple,
             body: Container(
               width: double.infinity,
-                padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
-                child:  Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 100),
-                        Image.asset(
-                          'assets/images/logo/logo_white.png',
-                          height: 220,
-                        ),
-                        const Spacer(),
-                        _googleLoginButton(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        _naverLoginButton(),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                      ]),
-                )));
+              padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 100),
+                    Image.asset(
+                      'assets/images/logo/logo_white.png',
+                      height: 220,
+                    ),
+                    const Spacer(),
+                    _googleLoginButton(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _naverLoginButton(),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                  ]),
+            )));
   }
 
 // UI: 구글 로그인 버튼
@@ -103,7 +103,10 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               '구글 로그인 ',
               style: TextStyle(
-                  fontSize: 17, color: Colors.black.withOpacity(0.85)),
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 17,
+                  color: Colors.black.withOpacity(0.85)),
             )
           ],
         ),
@@ -139,7 +142,10 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               '네이버 로그인 ',
               style: TextStyle(
-                  fontSize: 17, color: Colors.black.withOpacity(0.85)),
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 17,
+                  color: Colors.black.withOpacity(0.85)),
             )
           ],
         ),

@@ -1,11 +1,27 @@
 import 'package:flutter/painting.dart';
 
 class Palette {
-  //9754FB
+  //Main
   static const Color mainPurple = Color(0xFF5924ED);
-  static const Color mid_dark_mainSkyBlue = Color(0xFF89DEE1);
-  static const Color dark_mainSkyBlue = Color.fromARGB(255, 96, 157, 159);
-  static const Color tanSu = Color(0xFFFEC85F);
-  static const Color danBaek = Color(0xFF5CE3F5);
-  static const Color jiBang = Color(0xFFFA7D84);
+  //Grey
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color greySoft = Color(0xFFF5F5F5);
+  static const Color grey50 = Color(0xFFE8E8E9);
+  static const Color grey200 = Color(0xFF96979B);
+  static const Color grey300 = Color(0xFF66676D);
+  static const Color grey500 = Color(0xFF1A1C25);
+  //Purple
+  static const Color softPurPle = Color(0xFFEEE9FD);
+  static const Color purPle50 = Color(0xFFEEE9FD);
+  static const Color purPle100 = Color(0xFFCCBBF9);
+  static const Color purPle200 = Color(0xFFB39AF7);
+  static const Color purPle300 = Color(0xFF906CF3);
+  static const Color purPle400 = Color(0xFF7A50F1);
+  static const Color purPle500 = Color(0xFF5924ED);
+
+
+  static const Color purPle700 = Color(0xFF3F1AA8);
+  //etc
+  static const Color green = Color(0xFF1CC036);
+  static const Color red = Color(0xFFD72D2D);
 }
