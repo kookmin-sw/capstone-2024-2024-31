@@ -40,7 +40,7 @@ public class JwtTokenProvider {
         this.refreshTokenExpirationInMs = refreshTokenExpirationInMs;
     }
 
-    public String generateAccessToken(String email, String name, Collection<? extends GrantedAuthority> authorities) {
+    public String generateAccessToken(Long userId, String email, String name, Collection<? extends GrantedAuthority> authorities) {
         String authoritiesStr = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(DELIMITER));
@@ -48,6 +48,7 @@ public class JwtTokenProvider {
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
+                .setSubject(userId.toString())
                 .claim(CLAIM_EMAIL, email)
                 .claim(CLAIM_NAME, name)
                 .claim(CLAIM_AUTHORITIES, authoritiesStr)
@@ -57,11 +58,11 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String generateRefreshToken(String email) {
+    public String generateRefreshToken(Long userId) {
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
-                .claim(CLAIM_EMAIL, email)
+                .setSubject(userId.toString())
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + refreshTokenExpirationInMs))
                 .signWith(jwtSecret, SignatureAlgorithm.HS512)
@@ -88,6 +89,7 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
+        Long userId = Long.valueOf(claims.getSubject());
         String email = claims.get(CLAIM_EMAIL, String.class);
         String name = claims.get(CLAIM_NAME, String.class);
         Collection<? extends GrantedAuthority> authorities =
@@ -95,7 +97,7 @@ public class JwtTokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        PrincipalDetails principleDetails = new PrincipalDetails(email, name, authorities);
+        PrincipalDetails principleDetails = new PrincipalDetails(userId, email, name, authorities);
         return new UsernamePasswordAuthenticationToken(principleDetails, null, authorities);
     }
 }

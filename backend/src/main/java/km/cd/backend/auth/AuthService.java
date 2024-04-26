@@ -1,4 +1,4 @@
-package km.cd.backend.common.auth;
+package km.cd.backend.auth;
 
 import km.cd.backend.common.error.CustomException;
 import km.cd.backend.common.jwt.JwtTokenProvider;
@@ -57,6 +57,7 @@ public class AuthService {
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(
+                user.getId(),
                 user.getEmail(),
                 user.getName(),
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole()))

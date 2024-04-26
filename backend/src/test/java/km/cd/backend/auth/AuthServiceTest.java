@@ -1,6 +1,5 @@
 package km.cd.backend.auth;
 
-import km.cd.backend.common.auth.AuthService;
 import km.cd.backend.common.error.CustomException;
 import km.cd.backend.common.jwt.JwtTokenProvider;
 import km.cd.backend.common.jwt.JwtTokenResponse;
@@ -95,6 +94,7 @@ class AuthServiceTest {
         when(userRepository.findByEmail(anyString()))
                 .thenReturn(Optional.of(fakeUser));
         when(jwtTokenProvider.generateAccessToken(
+                eq(fakeUser.getId()),
                 eq(fakeUser.getEmail()),
                 eq(fakeUser.getName()),
                 anyCollection()

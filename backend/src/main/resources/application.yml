@@ -6,16 +6,19 @@ spring:
   profiles:
     include: oauth
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
+  # pr 올릴 때 무조건 아래 설정 적용해서 올리기
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:routine-up;MODE=MySQL;DATABASE_TO_LOWER=TRUE
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_ENDPOINT}:${MYSQL_PORT}/${MYSQL_DB_NAME}?autoReconnect=true
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+
+  # local test
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/routineUp?&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=UTC
+#    username: root
+#    password: ${LOCAL_PASSWORD}
 
   jpa:
     properties:
@@ -30,10 +33,45 @@ spring:
     ansi:
       enabled: always
 
+  web:
+    resources:
+      add-mappings: false
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  kafka:
+    bootstrap-servers: 127.0.0.1:10000,127.0.0.1:10001,127.0.0.1:10002
+    template:
+      default-topic: my-topic
+    consumer:
+      group-id: routiner
+
 jwt:
   secret: ${JWT_SECRET}
   ac_expiration_in_ms: ${JWT_AC_EXPIRATION_IN_MS}
   rf_expiration_in_ms: ${JWT_RF_EXPIRATION_IN_MS}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET_NAME}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+
+coolsms:
+  api:
+    key: ${COOLSMS_API_KEY}
+    secret: ${COOLSMS_API_SECRET}
+  caller: ${COOLSMS_CALLER}
 
 logging:
   level:

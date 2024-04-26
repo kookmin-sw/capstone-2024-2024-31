@@ -1,61 +1,73 @@
 package km.cd.backend.challenge.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
+@Table(name = "challenges")
 @Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor()
 public class Challenge {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer challenge_id;
+    private Long id;
 
-    private String challenge_name;
+    private Boolean isPrivate;
 
-    private Date start_date;
+    private String privateCode;
 
-    private Date end_date;
+    private String challengeName;
 
-    private Integer certification_frequency;
+    private String challengeExplanation;
+    
+    private Integer challengePeriod;
 
-    private String certification_explanation;
+    private Date startDate;
 
-    private Integer certification_count;
+    private Date endDate;
 
-    private String certification_method;
+    private String certificationFrequency;
 
-    private String challenge_explanation;
+    private Integer certificationStartTime;
 
-    private Integer maximum_people;
+    private Integer certificationEndTime;
 
-    private Boolean is_private;
+    private String certificationExplanation;
 
-    private String private_code;
+    private Boolean isGalleryPossible;
 
-    public Challenge() {}
-    @Builder
-    public Challenge(String challenge_name, Date start_date, Date end_date, Integer certification_frequency,
-                     String certification_explanation, Integer certification_count, String certification_method,
-                     String challenge_explanation, Integer maximum_people, Boolean is_private, String private_code) {
-        this.challenge_name = challenge_name;
-        this.start_date = start_date;
-        this.end_date = end_date;
-        this.certification_frequency = certification_frequency;
-        this.certification_explanation = certification_explanation;
-        this.certification_count = certification_count;
-        this.certification_method = certification_method;
-        this.challenge_explanation = challenge_explanation;
-        this.maximum_people = maximum_people;
-        this.is_private = is_private;
-        this.private_code = private_code;
+    private Integer maximumPeople;
+    
+    @JsonManagedReference
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Participant> participants = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> challengeImagePaths;
+
+    private String failedVerificationImage;
+
+    private String successfulVerificationImage;
+    
+    @Builder.Default
+    private Boolean isEnded = false;
+    
+    @Builder.Default
+    private Integer totalParticipants = 0;
+    
+    public void increaseNumOfParticipants() {
+        totalParticipants += 1;
     }
 
+    public void finishChallenge() {
+        this.isEnded = true;
+    }
 }
