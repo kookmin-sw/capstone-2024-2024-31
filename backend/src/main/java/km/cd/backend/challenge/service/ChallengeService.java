@@ -7,11 +7,13 @@ import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.dto.ChallengeReceivedDto;
+import km.cd.backend.challenge.dto.ChallengeResponseDto;
 import km.cd.backend.challenge.dto.ChallengeStatusResponseDto;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.challenge.repository.ParticipantRepository;
 import km.cd.backend.common.error.CustomException;
 import km.cd.backend.common.utils.S3Uploader;
+import km.cd.backend.community.repository.PostRepository;
 import km.cd.backend.user.User;
 import km.cd.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class ChallengeService {
     private final UserRepository userRepository;
     private final ChallengeRepository challengeRepository;
     private final ParticipantRepository participantRepository;
+    private final PostRepository postRepository;
     private final S3Uploader s3Uploader;
 
     @Transactional
@@ -71,10 +74,10 @@ public class ChallengeService {
     public ChallengeStatusResponseDto checkChallengeStatus(Long challengeId, Long userId) {
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new CustomException(400, "Challenge not found."));
-        Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
-                .orElseThrow(() -> new CustomException(400, "Participant not found."));
-        
-        return ChallengeMapper.INSTANCE.toChallengeStatusResponseDto(challenge, participant);
+
+        Long countCertifications = postRepository.countCertification(challengeId, userId);
+
+        return ChallengeMapper.INSTANCE.toChallengeStatusResponseDto(challenge, countCertifications);
     }
 
     public List<Challenge> findChallengesByEndDate(Date endDate) {
@@ -85,5 +88,19 @@ public class ChallengeService {
     public void finishChallenge(Challenge challenge) {
         challenge.finishChallenge();
         challengeRepository.save(challenge);
+    }
+
+    public ChallengeResponseDto getChallenge(Long challengeId) {
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new CustomException(400, "Challenge not found."));
+
+        return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
+    }
+
+    public void leaveChallenge(Long userId, Long challengeId) {
+        Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
+                .orElseThrow(() -> new CustomException(400, "Participant not found."));
+
+        participantRepository.delete(participant);
     }
 }

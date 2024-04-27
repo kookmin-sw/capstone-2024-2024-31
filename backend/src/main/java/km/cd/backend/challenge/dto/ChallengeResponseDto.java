@@ -1,5 +1,6 @@
 package km.cd.backend.challenge.dto;
 
+import km.cd.backend.certification.domain.CertificationType;
 import km.cd.backend.challenge.domain.Participant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class ChallengeResponseDto {
     private Date endDate;
     private String certificationFrequency;
     private String certificationExplanation;
+    private CertificationType certificationType;
     private Integer maximumPeople;
     private Boolean isPrivate;
     private String privateCode;

@@ -2,7 +2,7 @@ package km.cd.backend.challenge.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import km.cd.backend.challenge.certification.domain.CertificationType;
+import km.cd.backend.certification.domain.CertificationType;
 import lombok.*;
 
 import java.util.ArrayList;
