@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/challenge/create/create_challenge_screen.dart';
 import 'package:frontend/challenge/create/create_challenge_screen_fir.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
-import 'package:frontend/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/login/login_screen.dart';
-import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
+import 'package:frontend/login/splash_screen.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,9 +31,9 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               // navigatorObservers: <NavigatorObserver>[observer],
-              initialRoute: 'main',
+              initialRoute: SplashScreen.routeName,
               routes: {
-                // SplashScreen.routeName: (context) => SplashScreen(),
+                SplashScreen.routeName: (context) => SplashScreen(),
                 'login': (context) => const LoginScreen(),
                 'main' : (context) => const MainScreen(),
                 'create_challenge' :  (context) => CreateChallenge_fir(),

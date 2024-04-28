@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
+import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-
 import 'package:logger/logger.dart';
-import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,19 +17,24 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late BuildContext scaffoldContext;
-
+  bool isPressGoogleLogin = false;
+  bool isSuccessGoogleLogin = false;
   final logger = Logger();
   final API_SERVER_URL = "http://3.34.14.45.nip.io:8080";
 
   Future<void> _pressGoogleLoginButton() async {
+    // setState(() {
+    //   isPressGoogleLogin = true;
+    // });
     const callbackUrlScheme = "web-auth-callback";
 
     final url = Uri.parse("$API_SERVER_URL/oauth2/authorization/google");
 
-    final result = await FlutterWebAuth2.authenticate(url: url.toString(), callbackUrlScheme: callbackUrlScheme);
+    final result = await FlutterWebAuth2.authenticate(
+        url: url.toString(), callbackUrlScheme: callbackUrlScheme);
 
     final accessToken = Uri.parse(result).queryParameters["access_token"];
-    logger.d("access_token: $accessToken");
+    logger.d("access_token: $accessToken \n url : $url");
 
     if (accessToken != null) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -37,8 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       logger.d("saved access_token!");
     }
-
-    // TODO: 메인 화면으로 이동
+    print(' 구글 로그인 성공 👋');
+    Get.offAll(() => MainScreen());
   }
 
   @override
