@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/challenge/create/create_challenge_screen.dart';
+import 'package:frontend/challenge/create/create_challenge_screen_fir.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  // This widget is the root of your application.
+  // This widgets is the root of your application.
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: const Size(375, 844),
@@ -32,14 +33,14 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               // navigatorObservers: <NavigatorObserver>[observer],
-              initialRoute: 'community',
+              initialRoute: 'main',
               routes: {
                 // SplashScreen.routeName: (context) => SplashScreen(),
                 'login': (context) => const LoginScreen(),
                 'main' : (context) => const MainScreen(),
-                'create_challenge' :  (context) => CreateChallenge(),
+                'create_challenge' :  (context) => CreateChallenge_fir(),
                 'detail_challenge' : (context) => ChallengeDetailScreen(),
-                'state_challenge' : (context) => ChallengeStateScreen(),
+                // 'state_challenge' : (context) => ChallengeStateScreen(),
                 'community' : (context) => TabCommunityScreen(),
 
 

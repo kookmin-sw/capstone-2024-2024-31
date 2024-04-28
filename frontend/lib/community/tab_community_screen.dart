@@ -47,12 +47,11 @@ class _TabCommunityScreenState extends State<TabCommunityScreen>
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 child: Container(
                     height: 40,
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TabBar(
                       indicatorSize: TabBarIndicatorSize.label,
-                      dividerHeight: 2,
-                      dividerColor: Palette.greySoft,
-                      padding: EdgeInsets.only(right: size.width * 0.45),
+                      dividerHeight: 0,
+                      padding: EdgeInsets.only(right: size.width * 0.4),
                       controller: _tabController,
                       splashBorderRadius: BorderRadius.circular(25),
                       overlayColor: MaterialStateProperty.all(Palette.purPle50),

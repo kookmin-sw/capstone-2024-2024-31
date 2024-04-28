@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/community/post_card.dart';
+import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/model/config/palette.dart';
 
 class CommunityScreen extends StatefulWidget {
@@ -41,34 +41,34 @@ class _CommunityScreenState extends State<CommunityScreen>
       minimumSize: Size(60, 36));
 
   final _unselectedButtonStyle = ElevatedButton.styleFrom(
-      shape: RoundedRectangleBorder(
-        side: BorderSide.none,
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      foregroundColor: Palette.grey200,
-      backgroundColor: Palette.greySoft,
-      shadowColor: Colors.transparent,
-      minimumSize: Size(60, 36),
+    shape: RoundedRectangleBorder(
+      side: BorderSide.none,
+      borderRadius: BorderRadius.circular(20.0),
+    ),
+    foregroundColor: Palette.grey200,
+    backgroundColor: Palette.greySoft,
+    shadowColor: Colors.transparent,
+    minimumSize: Size(60, 36),
 
-      // padding: const EdgeInsets.symmetric(vertical: 12.0),
-      );
+    // padding: const EdgeInsets.symmetric(vertical: 12.0),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: Column(
-      children: [
-        _buildSortButtons(),
-        Expanded(
-            child: ListView.builder(
-                itemCount: 30,
-                itemBuilder: (BuildContext context, int index) {
-                  return PostCard(
-                    number: index,
-                  );
-                }))
-      ],
+              children: [
+                _buildSortButtons(),
+                Expanded(
+                    child: ListView.builder(
+                        itemCount: 30,
+                        itemBuilder: (BuildContext context, int index) {
+                          return PostCard(
+                            number: index,
+                          );
+                        }))
+              ],
             )));
   }
 
@@ -83,7 +83,7 @@ class _CommunityScreenState extends State<CommunityScreen>
             });
           },
           style:
-              _sortIndex == 0 ? _selectedButtonStyle : _unselectedButtonStyle,
+          _sortIndex == 0 ? _selectedButtonStyle : _unselectedButtonStyle,
           child: const Text(
             '최신순',
             style: TextStyle(
@@ -100,7 +100,7 @@ class _CommunityScreenState extends State<CommunityScreen>
             });
           },
           style:
-              _sortIndex == 1 ? _selectedButtonStyle : _unselectedButtonStyle,
+          _sortIndex == 1 ? _selectedButtonStyle : _unselectedButtonStyle,
           child: const Text('인기순',
               style: TextStyle(
                   fontWeight: FontWeight.w500,

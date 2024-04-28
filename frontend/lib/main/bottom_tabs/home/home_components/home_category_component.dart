@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/model/config/palette.dart';
 
 class Home_Category extends StatelessWidget {
   final List<Map<String, dynamic>> categoryList = [
@@ -40,7 +41,7 @@ class Home_Category extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -48,10 +49,10 @@ class Home_Category extends StatelessWidget {
               const Text(
                 "챌린지 카테고리 >",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
+                    color: Palette.grey500,
                     fontFamily: 'Pretendard',
-                    fontSize: 15),
-              ),
+                    fontSize: 15),),
               const SizedBox(height: 10),
               SizedBox(
                   height: 160,
@@ -85,7 +86,11 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: (){
+        print("${name} 카테고리 클릭됨");
+      },
+        child: Container(
         padding: const EdgeInsets.all(0),
         width: 120, // Set the width of the card
         child: Card(
@@ -122,7 +127,7 @@ class CategoryCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 13,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     const SizedBox(height: 5),
@@ -139,6 +144,6 @@ class CategoryCard extends StatelessWidget {
               )
             ],
           ),
-        ));
+        )));
   }
 }
