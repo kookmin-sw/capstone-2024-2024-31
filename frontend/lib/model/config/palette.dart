@@ -13,7 +13,6 @@ class Palette {
   static const Color greyBG = Color(0xFFF2F4F6);
 
 
-
   //Purple
   static const Color softPurPle = Color(0xFFEEE9FD);
   static const Color purPle50 = Color(0xFFEEE9FD);

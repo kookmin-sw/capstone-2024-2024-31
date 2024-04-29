@@ -6,9 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="b59046f6-dcaf-47ab-9ffe-599f2b4d013e" name="Changes" comment="[FE/style] CREATE SplashScreen, Add 스크린 이동">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/community/community_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/community_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/community/tab_community_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/tab_community_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/lib/community/widget/post_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/widget/post_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/home/home_components/home_category_component.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/home/home_components/home_category_component.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/home/home_components/home_challenge_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/home/home_components/home_challenge_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/home/home_components/home_challenge_state_box.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/home/home_components/home_challenge_state_box.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/home/home_components/home_top_stack_box.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/home/home_components/home_top_stack_box.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/model/config/palette.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/model/config/palette.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

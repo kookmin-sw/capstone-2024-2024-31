@@ -122,7 +122,7 @@ Widget post_text(String post_text) {
 
 Widget post_image(String image) {
   return ClipRRect(
-    borderRadius: BorderRadius.circular(15.0),
+    borderRadius: BorderRadius.circular(12.0),
     child: Container(
       width: double.infinity,
       color: Colors.grey[200], // 테두리 색상
