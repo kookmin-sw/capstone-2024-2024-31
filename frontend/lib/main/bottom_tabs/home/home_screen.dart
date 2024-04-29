@@ -22,7 +22,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: SingleChildScrollView(
             child: Column(
-          children: [const ChallengeTopStack(), const SizedBox(height: 35), Home_Category(), const SizedBox(height: 10),ChallengeItemList()],
+          children: [
+            const ChallengeTopStack(),
+            const SizedBox(height: 35),
+            Home_Category(),
+            const SizedBox(height: 10),
+            ChallengeItemList()
+          ],
         )));
   }
 }

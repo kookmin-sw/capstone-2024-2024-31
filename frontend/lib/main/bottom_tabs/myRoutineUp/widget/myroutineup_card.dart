@@ -40,7 +40,7 @@ class MyRoutineUpCard extends StatelessWidget {
                     opacity: isIng ? 1.0 : 0.5, // 불투명도 조절
                     child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 10),
+                            horizontal: 5, vertical: 20),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
