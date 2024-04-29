@@ -1,6 +1,7 @@
 package km.cd.backend.common.jwt;
 
 import km.cd.backend.common.error.CustomException;
+import km.cd.backend.common.error.ExceptionCode;
 
 /**
  * 토큰이 유효하지 않을때 발생하는 Exception
@@ -12,7 +13,7 @@ public class JwtTokenInvalidException extends CustomException {
     public static final JwtTokenInvalidException INSTANCE = new JwtTokenInvalidException();
 
     private JwtTokenInvalidException() {
-        super(401, "Invalid Token.");
+        super(ExceptionCode.TOKEN_NOT_VALID);
     }
 
 }

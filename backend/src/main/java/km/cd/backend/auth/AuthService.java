@@ -1,6 +1,7 @@
 package km.cd.backend.auth;
 
 import km.cd.backend.common.error.CustomException;
+import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.common.jwt.JwtTokenProvider;
 import km.cd.backend.common.jwt.JwtTokenResponse;
 import km.cd.backend.user.User;
@@ -8,7 +9,6 @@ import km.cd.backend.user.UserRepository;
 import km.cd.backend.user.dto.UserLogin;
 import km.cd.backend.user.dto.UserRegister;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class AuthService {
     @Transactional
     public User register(final UserRegister userRequest) {
         if (emailExists(userRequest.getEmail()) != null) {
-            throw new CustomException(400, "This email is already signed up.");
+            throw new CustomException(ExceptionCode.ALREADY_SIGNED_UP_ERROR);
         }
         String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
 
@@ -49,11 +49,11 @@ public class AuthService {
 
         User user = emailExists(email);
         if (user == null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "Invalid email or password.");
+            throw new CustomException(ExceptionCode.INVALID_EMAIL_PASSWORD_ERROR);
         }
 
         if (!passwordEncoder.matches(userLogin.getPassword(), user.getPassword())) {
-            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "Invalid email or password.");
+            throw new CustomException(ExceptionCode.INVALID_EMAIL_PASSWORD_ERROR);
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(

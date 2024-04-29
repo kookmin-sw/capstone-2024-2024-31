@@ -12,6 +12,7 @@ import km.cd.backend.challenge.dto.ChallengeStatusResponseDto;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.challenge.repository.ParticipantRepository;
 import km.cd.backend.common.error.CustomException;
+import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.common.utils.S3Uploader;
 import km.cd.backend.community.repository.PostRepository;
 import km.cd.backend.user.User;
@@ -34,7 +35,7 @@ public class ChallengeService {
     @Transactional
     public Challenge createChallenge(Long userId, ChallengeReceivedDto challengeReceivedDTO) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(400, "User not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
 
         // 프론트로부터 넘겨받은 챌린지 데이터
         Challenge challenge = challengeReceivedDTO.toEntity(s3Uploader);
@@ -58,9 +59,9 @@ public class ChallengeService {
     @Transactional
     public void joinChallenge(Long challengeId, Long userId) {
         Challenge challenge = challengeRepository.findById(challengeId)
-                .orElseThrow(() -> new CustomException(400, "Challenge not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.CHALLENGE_NOT_FOUND));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(400, "User not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
 
         Participant participant = new Participant();
         participant.setChallenge(challenge);
@@ -73,7 +74,7 @@ public class ChallengeService {
 
     public ChallengeStatusResponseDto checkChallengeStatus(Long challengeId, Long userId) {
         Challenge challenge = challengeRepository.findById(challengeId)
-                .orElseThrow(() -> new CustomException(400, "Challenge not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.CHALLENGE_NOT_FOUND));
 
         Long countCertifications = postRepository.countCertification(challengeId, userId);
 
@@ -92,14 +93,14 @@ public class ChallengeService {
 
     public ChallengeResponseDto getChallenge(Long challengeId) {
         Challenge challenge = challengeRepository.findById(challengeId)
-                .orElseThrow(() -> new CustomException(400, "Challenge not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.CHALLENGE_NOT_FOUND));
 
         return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
     }
 
     public void leaveChallenge(Long userId, Long challengeId) {
         Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
-                .orElseThrow(() -> new CustomException(400, "Participant not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.PARTICIPANT_NOT_FOUND_ERROR));
 
         participantRepository.delete(participant);
     }
