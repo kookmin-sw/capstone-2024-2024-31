@@ -30,6 +30,12 @@ public class ChallengeController {
     }
 
     @GetMapping("/{challengeId}")
+    public ResponseEntity<ChallengeResponseDto> getChallenge(@PathVariable Long challengeId) {
+        ChallengeResponseDto challengeResponseDto =  challengeService.getChallenge(challengeId);
+        return ResponseEntity.ok(challengeResponseDto);
+    }
+
+    @GetMapping("/{challengeId}/status")
     public ResponseEntity<ChallengeStatusResponseDto> checkChallengeStatus(
             @PathVariable(name = "challengeId") Long challengeId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -42,6 +48,15 @@ public class ChallengeController {
             @PathVariable Long challengeId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         challengeService.joinChallenge(challengeId, principalDetails.getUserId());
+        return ResponseEntity.ok("Success");
+    }
+
+    @PostMapping("/{challengeId}/leave")
+    public ResponseEntity<String> leaveChallenge(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long challengeId
+    ) {
+        challengeService.leaveChallenge(principalDetails.getUserId(), challengeId);
         return ResponseEntity.ok("Success");
     }
 

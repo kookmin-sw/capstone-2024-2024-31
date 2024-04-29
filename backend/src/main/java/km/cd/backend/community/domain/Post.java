@@ -33,6 +33,8 @@ public class Post extends BaseTimeEntity {
   @Setter
   private String image;
 
+  private Boolean isRejected;
+
   @OneToMany(mappedBy = "post", orphanRemoval = true)
   private final List<Comment> comments = new ArrayList<>();
 
@@ -45,11 +47,15 @@ public class Post extends BaseTimeEntity {
     this.content = content;
     this.challenge = challenge;
     this.author = author;
+    this.isRejected = false;
   }
-
-  private boolean isVerified = false;
 
   public boolean isAuthor(Long userId) {
     return this.author.getId().equals(userId);
   }
+
+  public void rejectCertification() {
+    this.isRejected = true;
+  }
+
 }

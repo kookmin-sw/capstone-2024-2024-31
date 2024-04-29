@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Optional;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.Participant;
-import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.dto.ChallengeStatusResponseDto;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.challenge.repository.ParticipantRepository;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -75,7 +73,6 @@ class ChallengeServiceTest {
         participant.setId(1L);
         participant.setChallenge(challenge);
         participant.setUser(user);
-        participant.setNumberOfCertifications(3);
         participantRepository.save(participant);
         
         mockMvc = MockMvcBuilders.standaloneSetup().build();
@@ -100,10 +97,6 @@ class ChallengeServiceTest {
         // Mock behavior
         when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
         when(participantRepository.findByChallengeIdAndUserId(challengeId, user.getId())).thenReturn(Optional.of(participant));
-        
-        ChallengeMapper challengeMapperMock = Mockito.mock(ChallengeMapper.class);
-        when(challengeMapperMock.toChallengeStatusResponseDto(challenge, participant)).thenReturn(expectedResponseDto);
-        
         
         // Call the method
         ChallengeStatusResponseDto responseEntity = challengeService.checkChallengeStatus(challengeId, user.getId());

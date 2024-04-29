@@ -15,4 +15,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   @Query("SELECT p FROM Post p WHERE p.challenge.id = :challengeId")
   List<Post> findAllByChallengeId(Long challengeId);
 
+  /**
+   * challengeId와 userId를 이용해서 현재까지 인증 성공한 Post의 개수를 가져옵니다.
+   * 신고에 의해 reject된 post는 제외됩니다.
+   * @param challengeId pk of challenge
+   * @param userId pk of user
+   * @return 인증 성공한 Post의 개수
+   */
+  @Query("SELECT COUNT(p) FROM Post p WHERE p.author.id = :userId AND p.challenge.id = :challengeId AND p.isRejected = false")
+  Long countCertification(Long challengeId, Long userId);
 }

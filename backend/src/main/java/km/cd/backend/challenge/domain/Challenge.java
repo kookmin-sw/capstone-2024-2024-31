@@ -2,6 +2,7 @@ package km.cd.backend.challenge.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import km.cd.backend.certification.domain.CertificationType;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -62,6 +63,9 @@ public class Challenge {
     
     @Builder.Default
     private Integer totalParticipants = 0;
+
+    @Enumerated(EnumType.STRING)
+    private CertificationType certificationType;
     
     public void increaseNumOfParticipants() {
         totalParticipants += 1;
