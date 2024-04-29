@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/main/bottom_tabs/Auth/main_auth_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
+import 'package:frontend/main/bottom_tabs/myRoutineUp/myRoutineUp_screen.dart';
 import 'package:frontend/main/bottom_tabs/mypage/mypage_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 
@@ -16,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const MainAuthScreen(),
+    const MyRoutineUpScreen(),
     const MyPageScreen(),
   ];
 
