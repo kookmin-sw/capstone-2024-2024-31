@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b59046f6-dcaf-47ab-9ffe-599f2b4d013e" name="Changes" comment="[FE/style] CREATE SplashScreen, Add 스크린 이동">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/community/post_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/post_card.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/community/post_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/post_detail_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/community/community_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/community_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/lib/community/tab_community_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/tab_community_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/lib/community/widget/post_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/widget/post_card.dart" afterDir="false" />
     </list>

@@ -42,7 +42,7 @@ class _PostCardState extends State<PostCard> {
         children: [
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             child: Column(
               children: [
                 post_top(PostCard.imageUrl, PostCard.userName,
@@ -58,7 +58,7 @@ class _PostCardState extends State<PostCard> {
               ],
             ),
           ),
-          Divider(thickness: 5, height: 15, color: Palette.greySoft),
+          const Divider(height: 0, thickness: 7, color: Palette.greySoft, indent: 0, endIndent: 0),
         ],
       ),
     );
@@ -122,7 +122,7 @@ Widget post_text(String post_text) {
 
 Widget post_image(String image) {
   return ClipRRect(
-    borderRadius: BorderRadius.circular(20.0),
+    borderRadius: BorderRadius.circular(15.0),
     child: Container(
       width: double.infinity,
       color: Colors.grey[200], // 테두리 색상
