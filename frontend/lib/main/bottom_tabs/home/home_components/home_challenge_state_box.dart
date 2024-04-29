@@ -51,67 +51,63 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: Palette.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: SizedBox(
-            height: 190, // Specify a fixed height here
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextButton(
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero, // 내부 패딩을 없앰
-                    splashFactory: NoSplash.splashFactory,
-                  ),
-                  child: const Text("내 챌린지 현황 >",
-                      style: TextStyle(
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        color: Palette.grey500,
-                        fontSize: 14,
-                      )),
-                  onPressed: () {
-                    print("dddd");
-                  },
-                ),
-                const Text(
-                  "챌린지를 진행하고 인증을 완료해 주세요!",
-                  style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 11,
-                      color: Colors.grey),
-                ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: Swiper(
-                    itemCount: challengeList.length,
-                    pagination: new SwiperPagination(
-                      alignment: Alignment.bottomCenter,
-                      builder: new DotSwiperPaginationBuilder(
-                          space: 3,
-                          size: 8,
-                          activeSize: 9,
-                          color: Palette.softPurPle,
-                          activeColor: Palette.purPle300),
-                    ),
-                    itemBuilder: (context, index) {
-                      return Column(children: [
-                        challengeStateCard(screenWidth, index),
-                        SizedBox(height: 15)
-                      ]);
-                    },
-                  ),
-                ),
-              ],
+      height: 195,
+      // Specify a fixed height here
+      decoration: BoxDecoration(
+          color: Palette.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(width: 1, color: Palette.greyBG)),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextButton(
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero, // 내부 패딩을 없앰
+              splashFactory: NoSplash.splashFactory,
+            ),
+            child: const Text("내 챌린지 현황 >",
+                style: TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w500,
+                  color: Palette.grey500,
+                  fontSize: 14,
+                )),
+            onPressed: () {
+              print("dddd");
+            },
+          ),
+          const Text(
+            "챌린지를 진행하고 인증을 완료해 주세요!",
+            style: TextStyle(
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w500,
+                fontSize: 11,
+                color: Colors.grey),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Swiper(
+              itemCount: challengeList.length,
+              pagination: new SwiperPagination(
+                alignment: Alignment.bottomCenter,
+                builder: new DotSwiperPaginationBuilder(
+                    space: 3,
+                    size: 8,
+                    activeSize: 9,
+                    color: Palette.softPurPle,
+                    activeColor: Palette.purPle300),
+              ),
+              itemBuilder: (context, index) {
+                return Column(children: [
+                  challengeStateCard(screenWidth, index),
+                  SizedBox(height: 15)
+                ]);
+              },
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -130,7 +126,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
         child: Container(
             width: screenWidth * 0.95,
             child: Card(
-                color: Colors.grey[90],
+                color: Palette.greySoft,
                 child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                     child: Row(

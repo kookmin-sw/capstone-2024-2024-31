@@ -31,6 +31,7 @@ class _TabCommunityScreenState extends State<TabCommunityScreen>
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Palette.white,
           title: Container(
               height: 30,
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -90,9 +91,6 @@ class _TabCommunityScreenState extends State<TabCommunityScreen>
     );
   }
 
-  Widget CommunityList() {
-    return Container();
-  }
 
   Widget ChattingList() {
     return Container();

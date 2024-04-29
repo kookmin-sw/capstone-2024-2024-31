@@ -25,14 +25,14 @@ class _ChallengeTopStackState extends State<ChallengeTopStack> {
           Container(
             child: ChallengeRecommendBox(name: '신혜은'),
           ),
-          Container(height: 85, color: Palette.mainPurple),
+          Container(height: 100, color: Palette.mainPurple),
           Container(height: 80, color: Colors.transparent),
         ]),
         Positioned(
           right: 0,
           left: 0,
-          top: 130,
-          child: ChallengeStateBox(),
+          top: 150,
+          child: Padding(padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), child: ChallengeStateBox()),
         ),
       ],
     );

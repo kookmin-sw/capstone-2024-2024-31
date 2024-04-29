@@ -41,7 +41,7 @@ class Home_Category extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -53,7 +53,7 @@ class Home_Category extends StatelessWidget {
                     color: Palette.grey500,
                     fontFamily: 'Pretendard',
                     fontSize: 15),),
-              const SizedBox(height: 10),
+              const SizedBox(height: 13),
               SizedBox(
                   height: 160,
                   child: ListView(
