@@ -12,10 +12,9 @@ import 'package:intl/intl.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class MyRoutineUpCard extends StatelessWidget {
-  MyRoutineUpCard(
-      {super.key, required this.isCompleted, required this.challenge});
+  MyRoutineUpCard({super.key, required this.isIng, required this.challenge});
 
-  final bool isCompleted;
+  final bool isIng;
   final Challenge challenge;
 
   @override
@@ -38,7 +37,7 @@ class MyRoutineUpCard extends StatelessWidget {
             child: Card(
                 color: Colors.grey[90],
                 child: Opacity(
-                    opacity: isCompleted ? 0.5 : 1.0, // 불투명도 조절
+                    opacity: isIng ? 1.0 : 0.5, // 불투명도 조절
                     child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 5, vertical: 10),

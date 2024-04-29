@@ -5,24 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b59046f6-dcaf-47ab-9ffe-599f2b4d013e" name="Changes" comment="[FE/style] CREATE SplashScreen, Add 스크린 이동">
-      <change afterPath="$PROJECT_DIR$/frontend/assets/svgs/more_view_btn.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/assets/svgs/no_challenge_box.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/assets/svgs/no_complete_challenge.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/assets/svgs/no_complete_challenge_box.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/myRoutineUp_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/widget/myroutineup_card.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/lib/model/config/image_from_file.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/widget/myroutineWidget.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/Auth/Auth_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/Auth_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/Auth/main_auth_screen.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/main/main_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/main_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/model/config/palette.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/model/config/palette.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/linux/flutter/generated_plugins.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/windows/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/myRoutineUp_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/myRoutineUp_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/widget/myroutineup_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/widget/myroutineup_card.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +63,6 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
     "io.flutter.reload.alreadyRun": "true",
     "last_opened_file_path": "C:/Users/82103/Documents/GitHub/capstone-2024-31/frontend",
     "show.migrate.to.gradle.popup": "false"
