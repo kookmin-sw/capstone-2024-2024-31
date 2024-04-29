@@ -9,6 +9,8 @@ public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태
     POST_NOT_FOUND(404, "POST_001", "해당되는 id 의 글을 찾을 수 없습니다."),
     REPLY_NOT_FOUND(404, "REPLY_001", "해당되는 id의 댓글을 찾을 수 없습니다."),
     PARENT_COMMENT_NOT_FOUND(400, "COMMENT_001", "상위 댓글을 찾을 수 없습니다."),
+    PARTICIPANT_NOT_FOUND_ERROR(404, "PARTICIPANT_001", "해당되는 참가자를 찾을 수 없습니다."),
+    
     
     ALREADY_LIKED(400, "LIKE_001", "이미 '좋아요'를 누른 상태입니다."),
     LIKE_NOT_FOUND(400, "LIKE_003", "'좋아요'를 누르지 않은 상태입니다."),
