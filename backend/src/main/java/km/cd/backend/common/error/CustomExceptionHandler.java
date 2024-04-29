@@ -66,7 +66,7 @@ public class CustomExceptionHandler {
     
     // 여기부턴 클라이언트 측의 잘못된 요청에 의한 에러를 처리해줌.
     @ExceptionHandler(NullPointerException.class) // nullPointerExceptiono발생시
-    protected ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
+    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
         log.error("handleNullPointerException", e);
         final ErrorResponse response = ErrorResponse.of(ExceptionCode.NULL_POINT_ERROR, e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
@@ -74,7 +74,7 @@ public class CustomExceptionHandler {
     
     // @valid 유효성 검증에 실패했을 경우 발생하는 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.error("handleMethodArgumentNotValidException", ex);
         BindingResult bindingResult = ex.getBindingResult();
         StringBuilder stringBuilder = new StringBuilder();
