@@ -1,6 +1,7 @@
 package km.cd.backend.community.service;
 
 import km.cd.backend.common.error.CustomException;
+import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.community.domain.Comment;
 import km.cd.backend.community.domain.Post;
 import km.cd.backend.community.dto.CommentRequest;
@@ -26,9 +27,9 @@ public class CommentService {
     @Transactional
     public CommentResponse createComment(Long userId, Long postId, CommentRequest commentRequest, Long parentId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(400, "User not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(400, "Post not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.POST_NOT_FOUND));
 
         String content = commentRequest.content();
         Comment comment = new Comment(
@@ -38,7 +39,7 @@ public class CommentService {
         );
         if (parentId != null) {
             Comment parent = commentRepository.findById(parentId)
-                    .orElseThrow(() -> new CustomException(400, "Parent comment not found."));
+                    .orElseThrow(() -> new CustomException(ExceptionCode.PARENT_COMMENT_NOT_FOUND));
             comment.setParent(parent);
         }
         commentRepository.save(comment);
@@ -48,10 +49,10 @@ public class CommentService {
     @Transactional
     public void updateComment(Long authorId, Long commentId, String newContent) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CustomException(400, "Comment not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.REPLY_NOT_FOUND));
 
         if (!comment.getAuthor().getId().equals(authorId)) {
-            throw new CustomException(403, "You do not have permission to update comments.");
+            throw new CustomException(ExceptionCode.PERMISSION_UPDATE_COMMENT_DENIED);
         }
 
         comment.updateContent(newContent);
@@ -61,10 +62,10 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long authorId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CustomException(400, "Comment not found."));
+                .orElseThrow(() -> new CustomException(ExceptionCode.REPLY_NOT_FOUND));
 
         if (!comment.getAuthor().getId().equals(authorId)) {
-            throw new CustomException(403, "You do not have permission to delete comments.");
+            throw new CustomException(ExceptionCode.PERMISSION_DELETE_COMMENT_DENIED);
         }
 
         comment.deleteComment();
