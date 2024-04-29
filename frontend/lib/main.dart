@@ -7,9 +7,14 @@ import 'package:frontend/login/splash_screen.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
-
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // Firebase.initializeApp().whenComplete(() => {
+  FlutterNativeSplash.remove();
+// });
   runApp(const MyApp());
 }
 
@@ -31,17 +36,15 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               // navigatorObservers: <NavigatorObserver>[observer],
-              initialRoute: SplashScreen.routeName,
+              initialRoute:  'login',
               routes: {
-                SplashScreen.routeName: (context) => SplashScreen(),
+                // SplashScreen.routeName: (context) => SplashScreen(),
                 'login': (context) => const LoginScreen(),
-                'main' : (context) => const MainScreen(),
-                'create_challenge' :  (context) => CreateChallenge_fir(),
-                'detail_challenge' : (context) => ChallengeDetailScreen(),
+                'main': (context) => const MainScreen(),
+                'create_challenge': (context) => CreateChallenge_fir(),
+                'detail_challenge': (context) => ChallengeDetailScreen(),
                 // 'state_challenge' : (context) => ChallengeStateScreen(),
-                'community' : (context) => TabCommunityScreen(),
-
-
+                'community': (context) => TabCommunityScreen(),
               });
         });
   }
