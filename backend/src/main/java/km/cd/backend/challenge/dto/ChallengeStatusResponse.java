@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChallengeStatusResponseDto {
+public class ChallengeStatusResponse {
     
     @Schema(description = "챌린지 ID")
     private Long id;

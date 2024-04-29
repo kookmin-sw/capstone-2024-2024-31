@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChallengeResponseDto {
+public class ChallengeInformationResponse {
     private Long id;
     private String challengeName;
     private Date startDate;

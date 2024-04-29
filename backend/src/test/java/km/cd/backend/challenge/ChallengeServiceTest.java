@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.Optional;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.Participant;
-import km.cd.backend.challenge.dto.ChallengeStatusResponseDto;
+import km.cd.backend.challenge.dto.ChallengeStatusResponse;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.challenge.repository.ParticipantRepository;
 import km.cd.backend.challenge.service.ChallengeService;
-import km.cd.backend.common.utils.S3Uploader;
+import km.cd.backend.common.utils.s3.S3Uploader;
 import km.cd.backend.user.User;
 import km.cd.backend.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,7 +82,7 @@ class ChallengeServiceTest {
     @DisplayName("내 챌린지 정보 확인하기")
     void checkChallengeStatus_Success() {
         // 반환값 설정
-        ChallengeStatusResponseDto expectedResponseDto = new ChallengeStatusResponseDto(); // Set expected response DTO if needed
+        ChallengeStatusResponse expectedResponseDto = new ChallengeStatusResponse(); // Set expected response DTO if needed
         expectedResponseDto.setId(challengeId);
         expectedResponseDto.setChallengeName("Test Challenge");
         expectedResponseDto.setChallengePeriod(4);
@@ -99,7 +99,7 @@ class ChallengeServiceTest {
         when(participantRepository.findByChallengeIdAndUserId(challengeId, user.getId())).thenReturn(Optional.of(participant));
         
         // Call the method
-        ChallengeStatusResponseDto responseEntity = challengeService.checkChallengeStatus(challengeId, user.getId());
+        ChallengeStatusResponse responseEntity = challengeService.checkChallengeStatus(challengeId, user.getId());
         
         // Verify the result
         assertEquals(responseEntity.toString(), expectedResponseDto.toString());

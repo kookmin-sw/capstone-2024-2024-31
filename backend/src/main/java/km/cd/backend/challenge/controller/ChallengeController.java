@@ -1,13 +1,16 @@
 package km.cd.backend.challenge.controller;
 
+import jakarta.validation.Valid;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
-import km.cd.backend.challenge.dto.ChallengeReceivedDto;
-import km.cd.backend.challenge.dto.ChallengeResponseDto;
-import km.cd.backend.challenge.dto.ChallengeStatusResponseDto;
+import km.cd.backend.challenge.dto.ChallengeInformationResponse;
+import km.cd.backend.challenge.dto.ChallengeInviteCodeResponse;
+import km.cd.backend.challenge.dto.ChallengeCreateRequest;
+import km.cd.backend.challenge.dto.ChallengeStatusResponse;
 import km.cd.backend.challenge.service.ChallengeService;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,26 +24,27 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @PostMapping(path = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ChallengeResponseDto> createChallenge(
-            @ModelAttribute ChallengeReceivedDto challengeReceivedDTO,
+    public ResponseEntity<ChallengeInformationResponse> createChallenge(
+            @ModelAttribute ChallengeCreateRequest challengeCreateRequest,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Challenge saved = challengeService.createChallenge(principalDetails.getUserId(), challengeReceivedDTO);
-        ChallengeResponseDto challenge = ChallengeMapper.INSTANCE.challengeToChallengeResponse(saved);
+        Challenge saved = challengeService.createChallenge(principalDetails.getUserId(),
+            challengeCreateRequest);
+        ChallengeInformationResponse challenge = ChallengeMapper.INSTANCE.challengeToChallengeResponse(saved);
         return ResponseEntity.ok(challenge);
     }
 
     @GetMapping("/{challengeId}")
-    public ResponseEntity<ChallengeResponseDto> getChallenge(@PathVariable Long challengeId) {
-        ChallengeResponseDto challengeResponseDto =  challengeService.getChallenge(challengeId);
-        return ResponseEntity.ok(challengeResponseDto);
+    public ResponseEntity<ChallengeInformationResponse> getChallenge(@PathVariable Long challengeId) {
+        ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId);
+        return ResponseEntity.ok(challengeInformationResponse);
     }
 
     @GetMapping("/{challengeId}/status")
-    public ResponseEntity<ChallengeStatusResponseDto> checkChallengeStatus(
+    public ResponseEntity<ChallengeStatusResponse> checkChallengeStatus(
             @PathVariable(name = "challengeId") Long challengeId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        ChallengeStatusResponseDto challengeStatusResponseDto = challengeService.checkChallengeStatus(challengeId, principalDetails.getUserId());
-        return ResponseEntity.ok(challengeStatusResponseDto);
+        ChallengeStatusResponse challengeStatusResponse = challengeService.checkChallengeStatus(challengeId, principalDetails.getUserId());
+        return ResponseEntity.ok(challengeStatusResponse);
     }
 
     @PostMapping("/{challengeId}/join")
@@ -48,7 +52,7 @@ public class ChallengeController {
             @PathVariable Long challengeId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         challengeService.joinChallenge(challengeId, principalDetails.getUserId());
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/{challengeId}/leave")
@@ -57,7 +61,22 @@ public class ChallengeController {
             @PathVariable Long challengeId
     ) {
         challengeService.leaveChallenge(principalDetails.getUserId(), challengeId);
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
-
+    
+    @PostMapping("/{challengeId}/invite-code")
+    public ResponseEntity<ChallengeInviteCodeResponse> generateChallengeInviteCode(
+        @PathVariable final Long challengeId
+    ) {
+        final ChallengeInviteCodeResponse challengeInviteCodeResponse = challengeService.generateChallengeInviteCode(challengeId);
+        return ResponseEntity.ok(challengeInviteCodeResponse);
+    }
+    
+    @PostMapping("/{challengeId}/join")
+    public ResponseEntity<String> joinChallenge(
+        @PathVariable Long challengeId,
+        @Valid @RequestBody final ChallengeInviteCodeRequest request) {
+        challengeService.joinChallenge(challengeId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

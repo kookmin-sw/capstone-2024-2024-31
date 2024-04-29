@@ -5,7 +5,7 @@ import km.cd.backend.challenge.dto.enums.FilePathEnum;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.common.error.CustomException;
 import km.cd.backend.common.error.ExceptionCode;
-import km.cd.backend.common.utils.S3Uploader;
+import km.cd.backend.common.utils.s3.S3Uploader;
 import km.cd.backend.community.domain.Post;
 import km.cd.backend.community.dto.PostDetailResponse;
 import km.cd.backend.community.dto.PostRequest;

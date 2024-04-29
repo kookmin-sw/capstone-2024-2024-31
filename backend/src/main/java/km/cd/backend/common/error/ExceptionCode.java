@@ -22,6 +22,7 @@ public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태
     PERMISSION_UPDATE_COMMENT_DENIED(403, "AUTH_004", "댓글 수정 권한이 없습니다."),
     PERMISSION_DELETE_COMMENT_DENIED(403, "AUTH_005", "댓글 삭제 권한이 없습니다."),
     
+    REDIS_KEY_NOT_FOUND(404, "REDIS_001", "Key에 해당하는 Value값이 없습니다"),
     
     USER_NOT_FOUND(404, "USER_004", "해당 유저를 찾을 수 없습니다."),
     TOKEN_NOT_VALID(401, "TOKEN_001", "토큰이 만료되었습니다. 다시 로그인 해주세요."),

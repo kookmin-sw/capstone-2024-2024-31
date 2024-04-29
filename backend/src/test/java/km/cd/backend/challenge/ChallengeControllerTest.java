@@ -3,7 +3,7 @@ package km.cd.backend.challenge;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import km.cd.backend.challenge.controller.ChallengeController;
 import km.cd.backend.challenge.domain.Challenge;
-import km.cd.backend.challenge.dto.ChallengeReceivedDto;
+import km.cd.backend.challenge.dto.ChallengeCreateRequest;
 import km.cd.backend.challenge.service.ChallengeService;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import km.cd.backend.user.User;
@@ -55,21 +55,21 @@ public class ChallengeControllerTest {
         PrincipalDetails principalDetails = new PrincipalDetails(user.getId(), user.getEmail(), user.getName(), user.getAuthorities());
 
 
-        ChallengeReceivedDto challengeReceivedDto = new ChallengeReceivedDto();
-        challengeReceivedDto.setChallengeName("Test");
+        ChallengeCreateRequest challengeCreateRequest = new ChallengeCreateRequest();
+        challengeCreateRequest.setChallengeName("Test");
 
         Challenge challenge = new Challenge();
         challenge.setId(1L);
 
         doReturn(challenge)
             .when(challengeService)
-            .createChallenge(user.getId(), any(ChallengeReceivedDto.class));
+            .createChallenge(user.getId(), any(ChallengeCreateRequest.class));
 
         //when, then
         mockMvc.perform(post("/challenge/create")
                 .with(SecurityMockMvcRequestPostProcessors.user(principalDetails))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(challengeReceivedDto)))
+                .content(new ObjectMapper().writeValueAsString(challengeCreateRequest)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.challengeId").exists());
     }
