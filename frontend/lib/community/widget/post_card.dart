@@ -11,10 +11,11 @@ class PostCard extends StatefulWidget {
   static bool isLiked = false;
   static int likeNum = 19;
   static int commentNum = 1;
-  static String imageUrl = 'assets/images/24.png';
+  static String imageUrl = 'assets/images/image.png';
   static String userName = '챌린지장인';
   static String postText = "ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ래서 지금 이게 5줄이 넘을지 모르겟쯘올ㅇ";
   static String authImage = 'assets/images/challenge_image.png';
+
   PostCard({required this.number, super.key});
 
   @override
@@ -22,8 +23,6 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -34,7 +33,8 @@ class _PostCardState extends State<PostCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PostDetailPage(), // PostDetailPage는 상세 정보 페이지의 이름입니다.
+            builder: (context) =>
+                PostDetailPage(), // PostDetailPage는 상세 정보 페이지의 이름입니다.
           ),
         );
       },
@@ -48,12 +48,12 @@ class _PostCardState extends State<PostCard> {
                 post_top(PostCard.imageUrl, PostCard.userName,
                     DateTime(2024, 4, 4, 9, 23, 40)),
                 const SizedBox(height: 10),
-                post_text(
-                    PostCard.postText),
+                post_text(PostCard.postText),
                 const SizedBox(height: 17),
                 post_image(PostCard.authImage),
                 const SizedBox(height: 20),
-                PostBtnWidget(likeNum: PostCard.likeNum, commentNum: PostCard.commentNum),
+                PostBtnWidget(
+                    likeNum: PostCard.likeNum, commentNum: PostCard.commentNum),
                 const SizedBox(height: 15),
               ],
             ),
@@ -75,11 +75,11 @@ Widget post_top(String image, String name, DateTime uploadTime) {
     children: [
       Row(
         children: [
-          Image.asset(
-            image,
-            width: 35,
+          CircleAvatar(
+            radius: 25,
+            backgroundImage: AssetImage(image),
           ),
-          SizedBox(width: 8), // Add some space between the image and text
+          SizedBox(width: 13), // Add some space between the image and text
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
               name,

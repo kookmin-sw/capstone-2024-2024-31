@@ -90,9 +90,6 @@ class _TabCommunityScreenState extends State<TabCommunityScreen>
     );
   }
 
-  Widget CommunityList() {
-    return Container();
-  }
 
   Widget ChattingList() {
     return Container();

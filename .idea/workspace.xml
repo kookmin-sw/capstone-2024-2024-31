@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b59046f6-dcaf-47ab-9ffe-599f2b4d013e" name="Changes" comment="[FE/style] CREATE SplashScreen, Add 스크린 이동">
-      <change afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/widget/myroutineWidget.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/myRoutineUp_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/myRoutineUp_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/widget/myroutineup_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main/bottom_tabs/myRoutineUp/widget/myroutineup_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/community/post_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/post_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/community/post_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/post_detail_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/community/tab_community_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/tab_community_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/community/widget/post_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/community/widget/post_card.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +64,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
     "io.flutter.reload.alreadyRun": "true",
     "last_opened_file_path": "C:/Users/82103/Documents/GitHub/capstone-2024-31/frontend",
     "show.migrate.to.gradle.popup": "false"

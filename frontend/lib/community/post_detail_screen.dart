@@ -106,7 +106,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   TextStyle name_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 11,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       color: Palette.grey500);
 
   TextStyle date_textStyle = const TextStyle(
@@ -118,7 +118,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   TextStyle text_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 12,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.w500,
       color: Palette.grey500);
 
   TextStyle btn_textStyle = const TextStyle(
@@ -202,7 +202,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         children: [
                           SizedBox(width: 10),
                           CircleAvatar(
-                            radius: 22,
+                            radius: 20,
                             backgroundImage: AssetImage(
                               comment['image'],
                             ),
@@ -266,7 +266,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         children: [
                           SizedBox(width: 50),
                           CircleAvatar(
-                            radius: 22,
+                            radius: 20,
                             backgroundImage: AssetImage(
                               reply['image'],
                             ),
