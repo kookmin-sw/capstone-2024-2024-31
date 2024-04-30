@@ -1,8 +1,8 @@
 package km.cd.backend.challenge.domain.mapper;
 
 import km.cd.backend.challenge.domain.Challenge;
-import km.cd.backend.challenge.dto.ChallengeInformationResponse;
-import km.cd.backend.challenge.dto.ChallengeStatusResponse;
+import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
+import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
 import km.cd.backend.challenge.dto.enums.ChallengeFrequency;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -3,10 +3,11 @@ package km.cd.backend.challenge.controller;
 import jakarta.validation.Valid;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
-import km.cd.backend.challenge.dto.ChallengeInformationResponse;
-import km.cd.backend.challenge.dto.ChallengeInviteCodeResponse;
-import km.cd.backend.challenge.dto.ChallengeCreateRequest;
-import km.cd.backend.challenge.dto.ChallengeStatusResponse;
+import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
+import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
+import km.cd.backend.challenge.dto.response.ChallengeInviteCodeResponse;
+import km.cd.backend.challenge.dto.request.ChallengeCreateRequest;
+import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
 import km.cd.backend.challenge.service.ChallengeService;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +65,7 @@ public class ChallengeController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     
-    @PostMapping("/{challengeId}/invite-code")
+    @PostMapping("/{challengeId}/inviteCode")
     public ResponseEntity<ChallengeInviteCodeResponse> generateChallengeInviteCode(
         @PathVariable final Long challengeId
     ) {
@@ -72,11 +73,13 @@ public class ChallengeController {
         return ResponseEntity.ok(challengeInviteCodeResponse);
     }
     
-    @PostMapping("/{challengeId}/join")
-    public ResponseEntity<String> joinChallenge(
+    @PostMapping("/{challengeId}/joinByInviteCode")
+    public ResponseEntity<String> joinChallengeByInviteCode(
         @PathVariable Long challengeId,
-        @Valid @RequestBody final ChallengeInviteCodeRequest request) {
-        challengeService.joinChallenge(challengeId, request);
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @Valid @RequestBody final ChallengeInviteCodeRequest request)
+    {
+        challengeService.joinChallengeByInviteCode(challengeId, principalDetails.getUserId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
