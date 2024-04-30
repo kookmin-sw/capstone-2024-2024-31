@@ -1,4 +1,4 @@
-package km.cd.backend.challenge.dto;
+package km.cd.backend.challenge.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;

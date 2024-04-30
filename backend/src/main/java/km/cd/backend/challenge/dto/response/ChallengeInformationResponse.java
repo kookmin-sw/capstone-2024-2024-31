@@ -1,4 +1,4 @@
-package km.cd.backend.challenge.dto;
+package km.cd.backend.challenge.dto.response;
 
 import km.cd.backend.certification.domain.CertificationType;
 import km.cd.backend.challenge.domain.Participant;
