@@ -48,23 +48,17 @@ class ChallengeServiceTest {
     @Autowired
     protected RedisUtil redisUtil;
     
-    private Long challengeId;
-    private Long userId;
     private Challenge challenge;
     private User user;
     private Participant participant;
     
     @BeforeEach
     public void setUp() {
-        user = userRepository.save(UserFixture.user());
-        userId = user.getId();
-
-        challenge = challengeRepository.save(ChallengeFixture.challenge());
-        challengeId = challenge.getId();
-
-        System.out.println(challengeId);
-        System.out.println(userId);
-
+        user = UserFixture.user();
+        challenge = ChallengeFixture.challenge();
+        userRepository.save(user);
+        challengeRepository.save(challenge);
+        
         // Participant Entity 설정
         participant = new Participant();
         participant.setId(1L);
@@ -82,10 +76,10 @@ class ChallengeServiceTest {
     @DisplayName("[성공] 초대코드는 생성된다.")
     public void generateTeamInviteCode_초대코드는_생성된다_성공() {
         //when
-        var teamInviteLinkResponse = challengeService.generateChallengeInviteCode(challengeId);
+        var teamInviteLinkResponse = challengeService.generateChallengeInviteCode(challenge.getId());
         
         //then
-        Optional<String> data = redisUtil.getData("teamId:%d".formatted(challengeId), String.class);
+        Optional<String> data = redisUtil.getData("teamId:%d".formatted(challenge.getId()), String.class);
         assertThat(data).isNotEmpty();
         assertThat(data.get()).isEqualTo(teamInviteLinkResponse.code());
     }
@@ -94,10 +88,10 @@ class ChallengeServiceTest {
     @DisplayName("[성공] 이미 존재하는 초대코드가 있을 경우 초대코드를 반환한다.")
     public void generateTeamInviteCode_이미_존재하는_초대코드가_있을_경우_초대코드를_반환한다_성공() {
         //given
-        var createdCode = challengeService.generateChallengeInviteCode(challengeId).code();
+        var createdCode = challengeService.generateChallengeInviteCode(challenge.getId()).code();
         
         //when
-        var getCode = challengeService.generateChallengeInviteCode(challengeId).code();
+        var getCode = challengeService.generateChallengeInviteCode(challenge.getId()).code();
         
         //then
         assertThat(createdCode).isEqualTo(getCode);
@@ -107,22 +101,22 @@ class ChallengeServiceTest {
     @DisplayName("[성공] 초대코드와 유저코드가 일치하면 팀 가입은 성공한다.")
     public void joinTeam_초대코드와_유저코드가_일치하면_팀_가입은_성공한다_성공() {
         //given
-        var createdCode = challengeService.generateChallengeInviteCode(challengeId).code();
+        var createdCode = challengeService.generateChallengeInviteCode(challenge.getId()).code();
         
         //when & then
-        assertDoesNotThrow(() -> challengeService.joinChallengeByInviteCode(challengeId,
+        assertDoesNotThrow(() -> challengeService.joinChallengeByInviteCode(challenge.getId(),
             user.getId(), new ChallengeInviteCodeRequest(createdCode)));
     }
     
     @Test
     @DisplayName("[실패] 초대코드와 유저코드가 일치하지 않으면 팀 가입은 실패한다.")
-    public void joinTeam_초대코드와_유저코드가_일치하지_않으면_팀_가입은_실패한다() {
+    public void joinTeam_초대코드와_유저코드가_일치하지_않으면_팀_가입은_실패() {
         //given
-        challengeService.generateChallengeInviteCode(challengeId).code();
+        challengeService.generateChallengeInviteCode(challenge.getId()).code();
         
         //when & then
         assertThatThrownBy(() -> {
-            challengeService.joinChallengeByInviteCode(challengeId,
+            challengeService.joinChallengeByInviteCode(challenge.getId(),
                 user.getId(), new ChallengeInviteCodeRequest("invalid code"));
         }).isInstanceOf(CustomException.class)
             .hasMessage(ExceptionCode.INVALID_INVITE_CODE.getMessage());
@@ -135,11 +129,11 @@ class ChallengeServiceTest {
         ChallengeStatusResponse expectedResponseDto = ChallengeMapper.INSTANCE.toChallengeStatusResponseDto(challenge, 0L);
         
         // Mock behavior
-        when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-        when(participantRepository.findByChallengeIdAndUserId(challengeId, user.getId())).thenReturn(Optional.of(participant));
+        when(challengeRepository.findById(challenge.getId())).thenReturn(Optional.of(challenge));
+        when(participantRepository.findByChallengeIdAndUserId(challenge.getId(), user.getId())).thenReturn(Optional.of(participant));
         
         // Call the method
-        ChallengeStatusResponse responseEntity = challengeService.checkChallengeStatus(challengeId, user.getId());
+        ChallengeStatusResponse responseEntity = challengeService.checkChallengeStatus(challenge.getId(), user.getId());
         
         // Verify the result
         assertEquals(responseEntity.toString(), expectedResponseDto.toString());
