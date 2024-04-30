@@ -3,7 +3,7 @@ package km.cd.backend.challenge;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import km.cd.backend.challenge.controller.ChallengeController;
 import km.cd.backend.challenge.domain.Challenge;
-import km.cd.backend.challenge.dto.ChallengeCreateRequest;
+import km.cd.backend.challenge.dto.request.ChallengeCreateRequest;
 import km.cd.backend.challenge.service.ChallengeService;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import km.cd.backend.user.User;
