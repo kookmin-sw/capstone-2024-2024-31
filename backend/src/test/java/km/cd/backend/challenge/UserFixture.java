@@ -7,7 +7,6 @@ public class UserFixture {
     
     public static User user() {
         return User.builder()
-            .id(1L)
             .email("example@example.com")
             .password("password123")
             .provider("local")
