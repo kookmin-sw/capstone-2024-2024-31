@@ -119,19 +119,14 @@ public class ChallengeService {
     }
     
     public ChallengeInviteCodeResponse generateChallengeInviteCode(final Long challengeId) {
-        System.out.println(1);
         validateExistChallenge(challengeId);
-        System.out.println(2);
         final Optional<String> link = redisUtil.getData(INVITE_LINK_PREFIX.formatted(challengeId), String.class);
         if (link.isEmpty()) {
-            System.out.println(3);
             final String randomCode = RandomUtil.generateRandomCode('0', 'z', 10);
-            System.out.println(4);
             redisUtil.setDataExpire(INVITE_LINK_PREFIX.formatted(challengeId), randomCode, RedisUtil.toTomorrow());
-            System.out.println(5);
             return new ChallengeInviteCodeResponse(randomCode);
         }
-        System.out.println(6);
+        
         return new ChallengeInviteCodeResponse(link.get());
     }
     

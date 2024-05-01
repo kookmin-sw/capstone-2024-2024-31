@@ -9,7 +9,7 @@ public class ChallengeFixture {
     
     public static Challenge challenge() {
         return Challenge.builder()
-            .id(1L)
+            .id(123L)
             .isPrivate(false)
             .privateCode("ABC123")
             .challengeName("피트니스 챌린지")
