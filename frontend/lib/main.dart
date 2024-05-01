@@ -1,4 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/challenge/certification/camera/camera_app.dart';
+import 'package:frontend/challenge/certification/certification_screen.dart';
 import 'package:frontend/challenge/create/create_challenge_screen_fir.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
@@ -9,8 +12,16 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
+
+late List<CameraDescription> _cameras;
+
+
 void main() async {
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  _cameras = await availableCameras();
+
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await initializeDateFormatting('ko_KR', null);
 
@@ -38,7 +49,7 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               // navigatorObservers: <NavigatorObserver>[observer],
-              initialRoute:  'main',
+              initialRoute:  'camera',
               routes: {
                 // SplashScreen.routeName: (context) => SplashScreen(),
                 'login': (context) => const LoginScreen(),
@@ -47,6 +58,7 @@ class _MyAppState extends State<MyApp> {
                 'detail_challenge': (context) => ChallengeDetailScreen(),
                 // 'state_challenge' : (context) => ChallengeStateScreen(),
                 'community': (context) => TabCommunityScreen(),
+                'camera' : (context) => CameraApp(cameras: _cameras)
               });
         });
   }

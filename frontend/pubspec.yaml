@@ -50,6 +50,8 @@ dependencies:
   shared_preferences: ^2.2.3
   logger: ^2.2.0
   flutter_native_splash: ^2.2.7
+  camera: ^0.10.5+9
+  custom_ratio_camera: ^0.0.4
 
 dev_dependencies:
   flutter_test:

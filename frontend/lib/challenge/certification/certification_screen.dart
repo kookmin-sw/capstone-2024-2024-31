@@ -1,15 +1,27 @@
-import 'package:flutter/material.dart';
-
-class CertificationScreen extends StatefulWidget {
-  const CertificationScreen({super.key});
-
-  @override
-  State<CertificationScreen> createState() => _CertificationScreenState();
-}
-
-class _CertificationScreenState extends State<CertificationScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
+// import 'package:flutter/material.dart';
+// import 'package:frontend/challenge/certification/camera/camera_app.dart';
+//
+//
+// class CertificationApp extends StatelessWidget {
+//   const CertificationApp({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: CertificationScreen(),
+//     );
+//   }
+// }
+//
+// class CertificationScreen extends StatelessWidget {
+//   const CertificationScreen({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: CameraApp(),
+//       ),
+//     );
+//   }
+// }
