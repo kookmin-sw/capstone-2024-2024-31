@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
 
 Widget home_appBar = AppBar(
@@ -24,10 +24,10 @@ Widget home_appBar = AppBar(
             },
           ),
           IconButton(
-            icon: SvgPicture.asset('assets/svgs/icon_point.svg',color: Colors.white,
-            width: 50),
+            icon:  Icon(CupertinoIcons.add),
             onPressed: () {
   print("buttton");
+
               },
           ),
         ],
