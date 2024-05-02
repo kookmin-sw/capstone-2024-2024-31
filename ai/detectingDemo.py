@@ -7,7 +7,7 @@ import cv2
 model_custom = torch.hub.load(
     "ultralytics/yolov5",
     "custom",
-    path="./yolov5/best2.pt",
+    path="./best2.pt",
 )
 
 # 0은 연결되어있는 스마트폰, 1은 노트북 카메라(맥북기준)
