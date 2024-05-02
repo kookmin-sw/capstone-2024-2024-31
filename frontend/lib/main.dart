@@ -3,7 +3,7 @@ import 'package:frontend/challenge/create/create_challenge_screen_fir.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/login/login_screen.dart';
-import 'package:frontend/login/splash_screen.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +12,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await initializeDateFormatting('ko_KR', null);
+
   // Firebase.initializeApp().whenComplete(() => {
   FlutterNativeSplash.remove();
 // });
@@ -36,7 +38,7 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               // navigatorObservers: <NavigatorObserver>[observer],
-              initialRoute:  'login',
+              initialRoute:  'main',
               routes: {
                 // SplashScreen.routeName: (context) => SplashScreen(),
                 'login': (context) => const LoginScreen(),

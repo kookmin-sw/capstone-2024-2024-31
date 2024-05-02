@@ -56,24 +56,26 @@ class _CommunityScreenState extends State<CommunityScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            child: Column(
-              children: [
-                _buildSortButtons(),
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: 30,
-                        itemBuilder: (BuildContext context, int index) {
-                          return PostCard(
-                            number: index,
-                          );
-                        }))
-              ],
-            )));
+        body: Column(
+      children: [
+        _buildSortButtons(),
+        const Divider(height: 0,thickness: 2, color: Palette.greySoft, indent: 0, endIndent: 0),
+        Expanded(
+            child: ListView.builder(
+                itemCount: 30,
+                itemBuilder: (BuildContext context, int index) {
+                  return PostCard(
+                    number: index,
+                  );
+                }))
+      ],
+    ));
   }
 
   Widget _buildSortButtons() {
-    return Row(
+    return Container(padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        color: Palette.white,
+        child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ElevatedButton(
@@ -83,7 +85,7 @@ class _CommunityScreenState extends State<CommunityScreen>
             });
           },
           style:
-          _sortIndex == 0 ? _selectedButtonStyle : _unselectedButtonStyle,
+              _sortIndex == 0 ? _selectedButtonStyle : _unselectedButtonStyle,
           child: const Text(
             '최신순',
             style: TextStyle(
@@ -100,7 +102,7 @@ class _CommunityScreenState extends State<CommunityScreen>
             });
           },
           style:
-          _sortIndex == 1 ? _selectedButtonStyle : _unselectedButtonStyle,
+              _sortIndex == 1 ? _selectedButtonStyle : _unselectedButtonStyle,
           child: const Text('인기순',
               style: TextStyle(
                   fontWeight: FontWeight.w500,
@@ -108,6 +110,6 @@ class _CommunityScreenState extends State<CommunityScreen>
                   fontSize: 12)),
         ),
       ],
-    );
+    ));
   }
 }

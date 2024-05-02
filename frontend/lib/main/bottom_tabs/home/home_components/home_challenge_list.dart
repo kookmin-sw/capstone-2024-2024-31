@@ -30,7 +30,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
           certificationStartTime: 13,
           certificationEndTime: '24',
           certificationExplanation: 'certificationExplanation',
-          challengeImage1 : File('assets/images/image.png'),
+          challengeImage1: File('assets/images/image.png'),
           isGalleryPossible: true,
           maximumPeople: 100,
           participants: []),
@@ -38,7 +38,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
           isPrivate: false,
           privateCode: 'privateCode',
           challengeName: '걷기',
-          challengeImage1 : File('assets/images/image.png'),
+          challengeImage1: File('assets/images/image.png'),
           challengeExplanation: 'challengeExplanation',
           challengePeriod: '2주',
           startDate: DateTime(2023, 3, 16).toString(),
@@ -51,7 +51,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
           participants: []),
       Challenge(
           isPrivate: true,
-          challengeImage1 : File('assets/images/image.png'),
+          challengeImage1: File('assets/images/image.png'),
           privateCode: 'privateCode',
           challengeName: '수영가기 매일매일',
           challengeExplanation: 'challengeExplanation',
@@ -68,7 +68,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
           isPrivate: false,
           privateCode: 'privateCode',
           challengeName: '매일 코딩하기',
-          challengeImage1 : File('assets/images/image.png'),
+          challengeImage1: File('assets/images/image.png'),
           challengeExplanation: 'challengeExplanation',
           challengePeriod: '3주',
           startDate: DateTime(2023, 3, 18).toString(),
@@ -95,15 +95,17 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
                     fontFamily: 'Pretendard',
                     fontSize: 15),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 13),
               SizedBox(
                   height: screenSize.height * 0.3,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: List.generate(challengeList.length, (index) {
-                      return ChallengeItemCard(this_challenge: challengeList[index]);
+                      return ChallengeItemCard(
+                          this_challenge: challengeList[index]);
                     }),
-                  ))
+                  )),
+              const SizedBox(height: 10),
             ]));
   }
 }
