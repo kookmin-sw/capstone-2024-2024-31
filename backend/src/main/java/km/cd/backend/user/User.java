@@ -45,12 +45,6 @@ public class User {
     private LocalDateTime createdDate;
 
     @Builder.Default
-    private int level = 1;
-
-    @Builder.Default
-    private int xp = 0;
-
-    @Builder.Default
     private int point = 0;
 
     public User(Long id, String email, String name) {
