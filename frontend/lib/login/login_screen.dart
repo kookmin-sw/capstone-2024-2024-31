@@ -41,37 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
       prefs.setString("access_token", accessToken);
     }
 
-    bool isLoginSuccess = await _getUserData();
-    if (isLoginSuccess) {
-      logger.d(' 구글 로그인 성공 👋');
-      Get.offAll(() => const MainScreen());
-    }
-  }
-
-  Future<bool> _getUserData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? accessToken = prefs.getString('access_token');
-    const String url = '${Env.serverUrl}/users/me';
-
-    final response = await http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      UserController userController = Get.find<UserController>();
-      final Map<String, dynamic> data =
-          jsonDecode(utf8.decode(response.bodyBytes));
-      final User user = User.fromJson(data);
-      userController.saveUser(user);
-      return true;
-    }
-
-    Get.snackbar('로그인 실패', '다시 로그인해주세요');
-    return false;
+    logger.d(' 구글 로그인 성공 👋');
+    Get.offAll(() => const MainScreen());
   }
 
   @override
