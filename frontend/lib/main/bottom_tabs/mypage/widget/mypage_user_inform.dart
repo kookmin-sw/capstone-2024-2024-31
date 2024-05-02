@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/controller/user_controller.dart';
+import 'package:get/get.dart';
 
 class UserInformation extends StatelessWidget {
-  const UserInformation({super.key});
+  UserInformation({super.key});
 
-  final String userName = '신혜은';
+  final UserController userController = Get.find<UserController>();
+
+  // final String userName = ;
   final int followingNum = 10;
   final int followerNum = 1;
   final int level = 1;
@@ -56,7 +60,7 @@ class UserInformation extends StatelessWidget {
         child: Stack(children: [
           CircleAvatar(
             radius: 70,
-            backgroundImage: AssetImage('assets/images/detail_man_icon.png'),
+            backgroundImage: NetworkImage(userController.user.avatar),
           ),
           Positioned(
               child: SvgPicture.asset('assets/svgs/level_stack.svg'),
@@ -78,38 +82,36 @@ class UserInformation extends StatelessWidget {
   }
 
   Widget nameText(Size screenSize) {
-    return  Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+      Container(
+          width: userController.user.name.length * 25,
+          height: 35,
+          child: Stack(
+            alignment: Alignment.bottomCenter,
             children: [
-          Container(
-              width: userName.length * 25,
-              height: 35,
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Container(
-                    height: 10, // 밑줄의 높이
-                    color: Palette.purPle50, // 밑줄 색상 설정
-                  ),
-                  Text(
-                    userName,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      overflow: TextOverflow.ellipsis, // 오버플로우 발생 시 처리 방식 설정
-                    ),
-                  )
-                ],
-              )),
-          Text(
-            '님 반가워요!',
-            style: TextStyle(
-                overflow: TextOverflow.fade,
-                fontSize: 17,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w500),
-          )
-        ]);
+              Container(
+                height: 10, // 밑줄의 높이
+                color: Palette.purPle50, // 밑줄 색상 설정
+              ),
+              Text(
+                userController.user.name,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w500,
+                  overflow: TextOverflow.ellipsis, // 오버플로우 발생 시 처리 방식 설정
+                ),
+              )
+            ],
+          )),
+      Text(
+        '님 반가워요!',
+        style: TextStyle(
+            overflow: TextOverflow.fade,
+            fontSize: 17,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w500),
+      )
+    ]);
   }
 }
