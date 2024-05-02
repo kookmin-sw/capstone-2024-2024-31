@@ -1,4 +1,4 @@
-package km.cd.backend.challenge;
+package km.cd.backend.challenge.fixture;
 
 
 import km.cd.backend.user.User;
