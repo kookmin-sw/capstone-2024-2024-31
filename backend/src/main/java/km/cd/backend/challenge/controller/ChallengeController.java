@@ -1,6 +1,7 @@
 package km.cd.backend.challenge.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
@@ -8,6 +9,7 @@ import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInviteCodeResponse;
 import km.cd.backend.challenge.dto.request.ChallengeCreateRequest;
 import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
+import km.cd.backend.challenge.dto.response.ParticipantResponse;
 import km.cd.backend.challenge.service.ChallengeService;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,7 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
 
-    @PostMapping(path = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ChallengeInformationResponse> createChallenge(
             @ModelAttribute ChallengeCreateRequest challengeCreateRequest,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -39,7 +41,12 @@ public class ChallengeController {
         ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId);
         return ResponseEntity.ok(challengeInformationResponse);
     }
-
+    
+    @GetMapping(value = "/{challengeId}/participant")
+    public ResponseEntity<List<ParticipantResponse>> getParticipant(@PathVariable Long challengeId) {
+        List<ParticipantResponse> participants =  challengeService.getParticipant(challengeId);
+        return ResponseEntity.ok(participants);
+    }
     @GetMapping("/{challengeId}/status")
     public ResponseEntity<ChallengeStatusResponse> checkChallengeStatus(
             @PathVariable(name = "challengeId") Long challengeId,

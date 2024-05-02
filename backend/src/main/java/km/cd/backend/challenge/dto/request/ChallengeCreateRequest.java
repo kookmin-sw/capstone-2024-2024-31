@@ -88,6 +88,7 @@ public class ChallengeCreateRequest {
         challenge.setCertificationEndTime(
             convertNumber(certificationEndTime)
         );
+        challenge.setIsGalleryPossible(isGalleryPossible);
         challenge.setChallengeExplanation(challengeExplanation);
         challenge.setMaximumPeople(maximumPeople);
         challenge.setIsPrivate(isPrivate);
