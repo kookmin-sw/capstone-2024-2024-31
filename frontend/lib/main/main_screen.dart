@@ -5,11 +5,11 @@ import 'package:frontend/main/bottom_tabs/myRoutineUp/myRoutineUp_screen.dart';
 import 'package:frontend/main/bottom_tabs/mypage/mypage_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
-import 'package:frontend/model/data/global_variables.dart';
 import 'package:frontend/model/data/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:frontend/env.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,6 +20,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  late Future<User> _userDataFuture;
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
@@ -33,10 +34,11 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  void _getUserData() async {
+  Future<User> _getUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final UserController userController = Get.find<UserController>();
     final String? accessToken = prefs.getString('access_token');
-    final String url = '${GlobalVariables().SERVER_URL}/users/me';
+    const String url = '${Env.serverUrl}/users/me';
 
     final response = await http.get(
       Uri.parse(url),
@@ -47,21 +49,38 @@ class _MainScreenState extends State<MainScreen> {
     );
 
     if (response.statusCode == 200) {
-      UserController userController = Get.find<UserController>();
-      final Map<String, dynamic> data =
+      final Map<String, dynamic> userMap =
           jsonDecode(utf8.decode(response.bodyBytes));
-      final User user = User.fromJson(data);
+      final User user = User.fromJson(userMap);
       userController.saveUser(user);
+      return user;
     } else {
-      Get.snackbar('로그인 실패', '다시 로그인해주세요');
+      throw Exception('Failed to load user data');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _userDataFuture = _getUserData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: FutureBuilder<User>(
+        future: _userDataFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else {
+            return SafeArea(
+              child: _widgetOptions.elementAt(_selectedIndex),
+            );
+          }
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -74,17 +93,5 @@ class _MainScreenState extends State<MainScreen> {
         onTap: _onItemTapped,
       ),
     );
-  }
-
-  @override
-  void initState() {
-    //해당 클래스가 호출되었을떄
-    super.initState();
-    _getUserData();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
