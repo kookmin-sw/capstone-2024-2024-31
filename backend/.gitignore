@@ -41,5 +41,6 @@ out/
 src/main/generated
 
 # env
-src/main/resources/properties/env.properties
-src/test/java/km/cd/backend/auth/EnvPropertiesTest.java
+**/src/main/resources/firebase/routineup-firebase-key.json
+**/src/main/resources/properties/env.properties
+**/src/test/java/km/cd/backend/auth/EnvPropertiesTest.java
