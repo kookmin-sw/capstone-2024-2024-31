@@ -102,6 +102,8 @@ jobs:
           port: 22
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
+            pwd
+            ls -l
             sudo docker ps
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-dev
