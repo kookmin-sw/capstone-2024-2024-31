@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/challenge/%20search/challenge_search_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
@@ -16,7 +17,9 @@ class ChallengeItemList extends StatefulWidget {
 class _ChallengeItemListState extends State<ChallengeItemList> {
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
 
     List<dynamic> challengeList = [
       Challenge(
@@ -87,14 +90,18 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text(
-                "챌린지 모아보기 >",
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Palette.grey500,
-                    fontFamily: 'Pretendard',
-                    fontSize: 15),
-              ),
+              GestureDetector(
+                  onTap: () {
+                    Get.to(() => ChallengeSearchScreen());
+                  },
+                  child: const Text(
+                    "챌린지 모아보기 >",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Palette.grey500,
+                        fontFamily: 'Pretendard',
+                        fontSize: 15),
+                  )),
               const SizedBox(height: 13),
               SizedBox(
                   height: screenSize.height * 0.3,
