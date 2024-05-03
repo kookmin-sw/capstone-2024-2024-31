@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import km.cd.backend.common.error.CustomException;
+import km.cd.backend.common.error.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -48,6 +51,12 @@ public class RedisUtil {
         final LocalDateTime tomorrow = now.plusDays(1);
         final long secondsUntilTomorrow = tomorrow.toEpochSecond(UTC) - now.toEpochSecond(UTC);
         return secondsUntilTomorrow * 1000;
+    }
+    
+    public LocalDateTime getTTL(String key) {
+        Long seconds = redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        if (seconds < 0) throw new CustomException(ExceptionCode.REDIS_KEY_EXPIRED);
+        return LocalDateTime.now().plusSeconds(seconds);
     }
     
     public void flushAll() {

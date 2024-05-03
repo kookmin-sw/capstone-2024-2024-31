@@ -1,5 +1,6 @@
 package km.cd.backend.challenge.service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInviteCodeResponse;
 import km.cd.backend.challenge.dto.request.ChallengeCreateRequest;
 import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
+import km.cd.backend.challenge.dto.response.ParticipantResponse;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.challenge.repository.ParticipantRepository;
 import km.cd.backend.common.error.CustomException;
@@ -94,7 +96,7 @@ public class ChallengeService {
 
         Long countCertifications = postRepository.countCertification(challengeId, userId);
 
-        return ChallengeMapper.INSTANCE.toChallengeStatusResponseDto(challenge, countCertifications);
+        return ChallengeMapper.INSTANCE.toChallengeStatusResponse(challenge, countCertifications);
     }
 
     public List<Challenge> findChallengesByEndDate(Date endDate) {
@@ -110,6 +112,11 @@ public class ChallengeService {
         Challenge challenge = validateExistChallenge(challengeId);
         return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
     }
+    
+    public List<ParticipantResponse> getParticipant(Long challengeId) {
+        Challenge challenge = validateExistChallenge(challengeId);
+        return ChallengeMapper.INSTANCE.participantListToParticipantResponseList(challenge.getParticipants());
+    }
 
     public void leaveChallenge(Long userId, Long challengeId) {
         Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
@@ -124,10 +131,10 @@ public class ChallengeService {
         if (link.isEmpty()) {
             final String randomCode = RandomUtil.generateRandomCode('0', 'z', 10);
             redisUtil.setDataExpire(INVITE_LINK_PREFIX.formatted(challengeId), randomCode, RedisUtil.toTomorrow());
-            return new ChallengeInviteCodeResponse(randomCode);
+            return new ChallengeInviteCodeResponse(randomCode, redisUtil.getTTL(INVITE_LINK_PREFIX.formatted(challengeId)));
         }
         
-        return new ChallengeInviteCodeResponse(link.get());
+        return new ChallengeInviteCodeResponse(link.get(), redisUtil.getTTL(INVITE_LINK_PREFIX.formatted(challengeId)));
     }
     
     public void validateMatchLink(String link, String inviteCode) {

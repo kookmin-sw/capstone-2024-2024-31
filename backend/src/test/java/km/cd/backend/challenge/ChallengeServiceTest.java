@@ -6,6 +6,8 @@ import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
 import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
+import km.cd.backend.challenge.fixture.ChallengeFixture;
+import km.cd.backend.challenge.fixture.UserFixture;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.challenge.repository.ParticipantRepository;
 import km.cd.backend.challenge.service.ChallengeService;
@@ -124,7 +126,7 @@ class ChallengeServiceTest extends IntegrationTest {
     @DisplayName("[성공] 챌린지와 인증 횟수가 주어지면 챌린지 진행 현황 조회는 성공한다.")
     void checkChallengeStatus_챌린지와_인증_횟수가_주어지면_챌린지_진행_현황_조회는_성공() {
         // 반환값 설정
-        ChallengeStatusResponse expectedResponseDto = ChallengeMapper.INSTANCE.toChallengeStatusResponseDto(challenge, 0L);
+        ChallengeStatusResponse expectedResponseDto = ChallengeMapper.INSTANCE.toChallengeStatusResponse(challenge, 0L);
         
         // Mock behavior
         when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));

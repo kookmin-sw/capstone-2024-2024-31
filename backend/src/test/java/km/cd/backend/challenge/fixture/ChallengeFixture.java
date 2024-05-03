@@ -1,4 +1,4 @@
-package km.cd.backend.challenge;
+package km.cd.backend.challenge.fixture;
 
 import java.util.Arrays;
 import java.util.Date;
