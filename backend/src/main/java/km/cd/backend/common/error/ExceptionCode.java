@@ -25,6 +25,7 @@ public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태
     INVALID_EMAIL_PASSWORD_ERROR(400, "AUTH_003", "유효하지 않은 이메일 또는 비밀번호입니다."),
     
     REDIS_KEY_NOT_FOUND(404, "REDIS_001", "Key에 해당하는 Value값이 없습니다"),
+    REDIS_KEY_EXPIRED(400, "REDIS_001", "Key가 만료되었습니다"),
     INVALID_INVITE_CODE(404, "INVITE-001", "매칭되는 초대링크가 없습니다."),
     EXPIRED_INVITE_CODE(404, "INVITE-002", "만료된 초대링크입니다."),
     
