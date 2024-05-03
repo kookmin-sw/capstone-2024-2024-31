@@ -1,4 +1,4 @@
-package km.cd.backend.common.utils;
+package km.cd.backend.common.utils.sms;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

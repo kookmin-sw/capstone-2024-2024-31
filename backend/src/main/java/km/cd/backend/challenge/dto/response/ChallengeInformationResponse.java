@@ -1,4 +1,4 @@
-package km.cd.backend.challenge.dto;
+package km.cd.backend.challenge.dto.response;
 
 import km.cd.backend.certification.domain.CertificationType;
 import km.cd.backend.challenge.domain.Participant;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChallengeResponseDto {
+public class ChallengeInformationResponse {
     private Long id;
     private String challengeName;
     private Date startDate;
