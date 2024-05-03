@@ -1,5 +1,6 @@
 package km.cd.backend.challenge.service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -130,10 +131,10 @@ public class ChallengeService {
         if (link.isEmpty()) {
             final String randomCode = RandomUtil.generateRandomCode('0', 'z', 10);
             redisUtil.setDataExpire(INVITE_LINK_PREFIX.formatted(challengeId), randomCode, RedisUtil.toTomorrow());
-            return new ChallengeInviteCodeResponse(randomCode);
+            return new ChallengeInviteCodeResponse(randomCode, redisUtil.getTTL(INVITE_LINK_PREFIX.formatted(challengeId)));
         }
         
-        return new ChallengeInviteCodeResponse(link.get());
+        return new ChallengeInviteCodeResponse(link.get(), redisUtil.getTTL(INVITE_LINK_PREFIX.formatted(challengeId)));
     }
     
     public void validateMatchLink(String link, String inviteCode) {
