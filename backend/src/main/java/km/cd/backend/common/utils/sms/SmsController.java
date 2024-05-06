@@ -1,8 +1,7 @@
-package km.cd.backend.common.utils;
+package km.cd.backend.common.utils.sms;
 
 import lombok.AllArgsConstructor;
 
-import net.nurigo.sdk.message.model.Message;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;

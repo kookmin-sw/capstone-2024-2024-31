@@ -1,4 +1,4 @@
-package km.cd.backend.challenge.dto;
+package km.cd.backend.challenge.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChallengeStatusResponseDto {
+public class ChallengeStatusResponse {
     
     @Schema(description = "챌린지 ID")
     private Long id;

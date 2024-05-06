@@ -1,4 +1,4 @@
-package km.cd.backend.common.utils;
+package km.cd.backend.common.utils.sms;
 
 import jakarta.annotation.PostConstruct;
 import net.nurigo.sdk.NurigoApp;

@@ -1,4 +1,4 @@
-package km.cd.backend.challenge.dto;
+package km.cd.backend.challenge.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.dto.enums.FilePathEnum;
-import km.cd.backend.common.utils.S3Uploader;
+import km.cd.backend.common.utils.s3.S3Uploader;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChallengeReceivedDto {
+public class ChallengeCreateRequest {
 
     @Schema(description = "비공개 챌린지 선택")
     private Boolean isPrivate;
@@ -88,6 +88,7 @@ public class ChallengeReceivedDto {
         challenge.setCertificationEndTime(
             convertNumber(certificationEndTime)
         );
+        challenge.setIsGalleryPossible(isGalleryPossible);
         challenge.setChallengeExplanation(challengeExplanation);
         challenge.setMaximumPeople(maximumPeople);
         challenge.setIsPrivate(isPrivate);

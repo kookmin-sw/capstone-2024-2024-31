@@ -6,22 +6,28 @@ import lombok.Getter;
 public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태, code, message 커스텀
     
     CHALLENGE_NOT_FOUND(404,"CHALLENGE_001", "해당되는 id 의 챌린지를 찾을 수 없습니다."),
-    POST_NOT_FOUND(404, "POST_001", "해당되는 id 의 글을 찾을 수 없습니다."),
-    REPLY_NOT_FOUND(404, "REPLY_001", "해당되는 id의 댓글을 찾을 수 없습니다."),
-    PARENT_COMMENT_NOT_FOUND(400, "COMMENT_001", "상위 댓글을 찾을 수 없습니다."),
+    ALREADY_JOINED_CHALLENGE(404, "CHALLENGE_002", "이미 챌린지에 가입되어 있습니다."),
+    
     PARTICIPANT_NOT_FOUND_ERROR(404, "PARTICIPANT_001", "해당되는 참가자를 찾을 수 없습니다."),
     
+    POST_NOT_FOUND(404, "POST_001", "해당되는 id 의 글을 찾을 수 없습니다."),
+    
+    REPLY_NOT_FOUND(404, "COMMENT_001", "해당되는 id의 댓글을 찾을 수 없습니다."),
+    PARENT_COMMENT_NOT_FOUND(400, "COMMENT_002", "상위 댓글을 찾을 수 없습니다."),
+    PERMISSION_UPDATE_COMMENT_DENIED(403, "COMMENT_003", "댓글 수정 권한이 없습니다."),
+    PERMISSION_DELETE_COMMENT_DENIED(403, "COMMENT_004", "댓글 삭제 권한이 없습니다."),
     
     ALREADY_LIKED(400, "LIKE_001", "이미 '좋아요'를 누른 상태입니다."),
     LIKE_NOT_FOUND(400, "LIKE_003", "'좋아요'를 누르지 않은 상태입니다."),
     IMAGE_IS_NULL(400, "IMAGE_001", "이미지를 확인해주세요."),
     
-    
     ALREADY_SIGNED_UP_ERROR(400, "SIGNUP_001", "이미 화원가입 된 이메일입니다."),
     INVALID_EMAIL_PASSWORD_ERROR(400, "AUTH_003", "유효하지 않은 이메일 또는 비밀번호입니다."),
-    PERMISSION_UPDATE_COMMENT_DENIED(403, "AUTH_004", "댓글 수정 권한이 없습니다."),
-    PERMISSION_DELETE_COMMENT_DENIED(403, "AUTH_005", "댓글 삭제 권한이 없습니다."),
     
+    REDIS_KEY_NOT_FOUND(404, "REDIS_001", "Key에 해당하는 Value값이 없습니다"),
+    REDIS_KEY_EXPIRED(400, "REDIS_001", "Key가 만료되었습니다"),
+    INVALID_INVITE_CODE(404, "INVITE-001", "매칭되는 초대링크가 없습니다."),
+    EXPIRED_INVITE_CODE(404, "INVITE-002", "만료된 초대링크입니다."),
     
     USER_NOT_FOUND(404, "USER_004", "해당 유저를 찾을 수 없습니다."),
     TOKEN_NOT_VALID(401, "TOKEN_001", "토큰이 만료되었습니다. 다시 로그인 해주세요."),
