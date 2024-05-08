@@ -108,7 +108,8 @@ public class ChallengeControllerTest extends IntegrationTest {
         // then
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$.[0].challengeName").value(challenge.getChallengeName()));
     }
 
 }
