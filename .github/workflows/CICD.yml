@@ -124,9 +124,9 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/$APP:latest
             sudo docker-compose -f $COMPOSE up -d
 
-        ## slack notification      
-        - name: Send GitHub Action trigger data to Slack workflow
-          id: slack
-          uses: slackapi/slack-github-action@v1.26.0
-          env:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      ## slack notification      
+      - name: Send GitHub Action trigger data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
