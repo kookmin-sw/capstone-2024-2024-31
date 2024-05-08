@@ -4,6 +4,7 @@ import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
+import km.cd.backend.challenge.dto.response.ChallengeSimpleResponse;
 import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
 import km.cd.backend.challenge.dto.enums.ChallengeFrequency;
 import km.cd.backend.challenge.dto.response.ParticipantResponse;
@@ -35,5 +36,7 @@ public interface ChallengeMapper {
     default int calculateTotalCertificationCount(Integer challengePeriod, String certificationFrequency) {
         return challengePeriod * ChallengeFrequency.findByFrequency(certificationFrequency).getDaysPerWeek();
     }
+ 
+    ChallengeSimpleResponse entityToSimpleResponse(Challenge challenge);
 }
 

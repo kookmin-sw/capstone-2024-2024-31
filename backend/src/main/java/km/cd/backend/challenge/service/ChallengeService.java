@@ -1,6 +1,5 @@
 package km.cd.backend.challenge.service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +10,9 @@ import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInviteCodeResponse;
+import km.cd.backend.challenge.dto.response.ChallengeSimpleResponse;
 import km.cd.backend.challenge.dto.request.ChallengeCreateRequest;
+import km.cd.backend.challenge.dto.request.ChallengeFilter;
 import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
 import km.cd.backend.challenge.dto.response.ParticipantResponse;
 import km.cd.backend.challenge.repository.ChallengeRepository;
@@ -111,6 +112,12 @@ public class ChallengeService {
     public ChallengeInformationResponse getChallenge(Long challengeId) {
         Challenge challenge = validateExistChallenge(challengeId);
         return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
+    }
+
+    public List<ChallengeSimpleResponse> getAllChallenge(Long cursorId, ChallengeFilter filter) {
+        List<Challenge> challenges = challengeRepository.findByChallengeWithFilterAndPaging(cursorId, filter);
+
+        return challenges.stream().map(challenge -> ChallengeMapper.INSTANCE.entityToSimpleResponse(challenge)).toList();
     }
     
     public List<ParticipantResponse> getParticipant(Long challengeId) {

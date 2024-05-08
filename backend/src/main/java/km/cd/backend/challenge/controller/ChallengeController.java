@@ -7,7 +7,9 @@ import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInviteCodeResponse;
+import km.cd.backend.challenge.dto.response.ChallengeSimpleResponse;
 import km.cd.backend.challenge.dto.request.ChallengeCreateRequest;
+import km.cd.backend.challenge.dto.request.ChallengeFilter;
 import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
 import km.cd.backend.challenge.dto.response.ParticipantResponse;
 import km.cd.backend.challenge.service.ChallengeService;
@@ -18,6 +20,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/challenges")
@@ -35,6 +40,16 @@ public class ChallengeController {
         ChallengeInformationResponse challenge = ChallengeMapper.INSTANCE.challengeToChallengeResponse(saved);
         return ResponseEntity.ok(challenge);
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<ChallengeSimpleResponse>> getAllChallenge(
+        @RequestParam(name = "cursorId", required = false, defaultValue = "0") Long cursorId,
+        @RequestBody ChallengeFilter filter
+    ) {
+        List<ChallengeSimpleResponse> challenges = challengeService.getAllChallenge(cursorId, filter);
+        return ResponseEntity.ok(challenges);
+    }
+    
 
     @GetMapping("/{challengeId}")
     public ResponseEntity<ChallengeInformationResponse> getChallenge(@PathVariable Long challengeId) {
