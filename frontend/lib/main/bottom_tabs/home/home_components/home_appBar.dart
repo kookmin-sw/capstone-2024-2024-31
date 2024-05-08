@@ -4,7 +4,7 @@ import 'package:frontend/challenge/create/create_challenge_screen_fir.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 
-Widget home_appBar = AppBar(
+Widget homeAppBar = AppBar(
   backgroundColor: Palette.mainPurple,
   foregroundColor: Colors.white,
   leading: Padding(
@@ -29,7 +29,7 @@ Widget home_appBar = AppBar(
             icon: Icon(CupertinoIcons.add),
             onPressed: () {
               print("챌린지 생성 버튼 클릭");
-              Get.to(() => CreateChallenge_fir());
+              Get.to(() => const CreateChallengeFir());
             },
           ),
         ],

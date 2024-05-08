@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/community/post_report_bottomScreen.dart';
+import 'package:frontend/main/bottom_tabs/mypage/widget/category_bottom_sheet.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-Future<void> repostPostButtonPress(
-    BuildContext context, int postID, int userID) async {
+Future<void> CategoryButtonPress(BuildContext context) async {
   double heightSize = MediaQuery.of(context).size.height;
   double widthSize = MediaQuery.of(context).size.width;
 
@@ -18,16 +18,12 @@ Future<void> repostPostButtonPress(
     builder: (BuildContext context) {
       return Padding(
           padding: MediaQuery.of(context).viewInsets,
-          child: ClipRRect(
-              borderRadius: const BorderRadius.only(
+          child: const ClipRRect(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
               ),
-              child: PostReportBottomSheet(
-                postId: postID,
-                userId: userID,
-              )));
+              child: CategoryBottomSheet()));
     },
   );
 }
-

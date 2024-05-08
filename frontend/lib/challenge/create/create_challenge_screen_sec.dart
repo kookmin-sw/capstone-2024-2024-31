@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:frontend/model/config/category_list.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,16 +14,16 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:frontend/challenge/create/create_challenge_screen_thr.dart';
 import 'package:frontend/model/data/challenge.dart';
 
-class CreateChallenge_sec extends StatefulWidget {
+class CreateChallengeSec extends StatefulWidget {
   Challenge challenge;
 
-  CreateChallenge_sec({Key? key, required this.challenge});
+  CreateChallengeSec({Key? key, required this.challenge});
 
   @override
-  State<CreateChallenge_sec> createState() => _CreateChallenge_secState();
+  State<CreateChallengeSec> createState() => _CreateChallengeSecState();
 }
 
-class _CreateChallenge_secState extends State<CreateChallenge_sec> {
+class _CreateChallengeSecState extends State<CreateChallengeSec> {
   late Challenge newChallenge;
 
   bool? isPrivateSelected;
@@ -39,7 +40,11 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
   List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수\
 
   int selectedIndex = -1;
+  String selectCategoryText = '';
   DateTime _selectedDay = DateTime.now();
+  String dropdownValue = '매일';
+  int? selectedHourStart = 0;
+  int? selectedHourEnd = 24;
 
   List<String> frequencyList = <String>[
     '매일',
@@ -52,16 +57,11 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
     '주 5회',
     '주 6회'
   ];
-  String dropdownValue = '매일';
-  int? selectedHourStart = 0;
-  int? selectedHourEnd = 24;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initializeDateFormatting('ko_KR', null);
-
     newChallenge = widget.challenge;
   }
 
@@ -78,7 +78,7 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Pretender',
             ),
           ),
         ),
@@ -91,7 +91,7 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) =>
-                      CreateChallenge_thr(challenge: newChallenge),
+                      CreateChallengeThr(challenge: newChallenge),
                 ),
               );
             },
@@ -117,6 +117,7 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
               inputIntro(),
               addPicture(),
               selectWeekend(),
+              selectCategory(),
               selectStartDay(),
               selectFrequency(),
               selectAuthTime()
@@ -129,23 +130,23 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
         child: Form(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
+          const Text(
             "챌린지 이름",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                fontFamily: 'Pretendard',
+                fontFamily: 'Pretender',
                 color: Palette.grey300),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           SizedBox(
               height: 70,
               child: TextFormField(
                 maxLength: 20,
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 11,
-                    fontFamily: 'Pretendard'),
+                    fontFamily: 'Pretender'),
                 decoration: InputDecoration(
                     hintText: "챌린지 이름을 입력해주세요.",
                     hintStyle: const TextStyle(
@@ -156,19 +157,19 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
                     counterStyle: const TextStyle(
                         fontSize: 10, // 최대 길이 카운터의 글자 크기
                         color: Palette.grey200,
-                        fontFamily: 'Pretendard' // 최대 길이 카운터의 색상
+                        fontFamily: 'Pretender' // 최대 길이 카운터의 색상
                         ),
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     filled: true,
                     fillColor: Palette.greySoft,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Palette.greySoft)),
+                        borderSide: const BorderSide(color: Palette.greySoft)),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
                       borderSide:
-                          BorderSide(color: Palette.mainPurple, width: 2),
+                          const BorderSide(color: Palette.mainPurple, width: 2),
                     )),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -185,51 +186,51 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
 
   Widget inputIntro() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
         child: Form(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
+          const Text(
             "챌린지 소개",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                fontFamily: 'Pretendard',
+                fontFamily: 'Pretender',
                 color: Palette.grey300),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           SizedBox(
               height: 140,
               child: TextField(
                 maxLines: 5,
                 maxLength: 50,
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 11,
-                    fontFamily: 'Pretendard'),
+                    fontFamily: 'Pretender'),
                 decoration: InputDecoration(
                     hintText: "챌린지를 소개하는 글을 적어주세요.",
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w300,
                       color: Palette.grey200,
                     ),
-                    counterStyle: TextStyle(
+                    counterStyle: const TextStyle(
                         fontSize: 10, // 최대 길이 카운터의 글자 크기
                         color: Palette.grey200,
-                        fontFamily: 'Pretendard' // 최대 길이 카운터의 색상
+                        fontFamily: 'Pretender' // 최대 길이 카운터의 색상
                         ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 10),
                     filled: true,
                     fillColor: Palette.greySoft,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Palette.greySoft)),
+                        borderSide: const BorderSide(color: Palette.greySoft)),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
                       borderSide:
-                          BorderSide(color: Palette.mainPurple, width: 2),
+                          const BorderSide(color: Palette.mainPurple, width: 2),
                     )),
               ))
         ])));
@@ -237,17 +238,17 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
 
   Widget addPicture() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
+          const Text(
             "챌린지 소개 사진",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                fontFamily: 'Pretendard',
+                fontFamily: 'Pretender',
                 color: Palette.grey300),
           ),
-          Container(
+          SizedBox(
             height: 100, // 이미지가 표시될 높이
             width: double.infinity,
             child: SingleChildScrollView(
@@ -315,7 +316,7 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
                       ])),
                   // 선택한 이미지들을 나타내는 그리드 뷰
                   Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     height: 80,
                     // 그리드 뷰의 높이
                     width: images.length * 100.0,
@@ -326,7 +327,8 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
                       padding: EdgeInsets.all(5),
                       shrinkWrap: true,
                       itemCount: images.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 1, // 수평으로 한 번에 보여질 이미지 수
                         childAspectRatio: 1, // 이미지의 가로 세로 비율
                         mainAxisSpacing: 10, // 그리드 뷰의 아이템들 간의 수평 간격 조정
@@ -358,7 +360,7 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
                               child: IconButton(
                                 padding: EdgeInsets.zero,
                                 constraints: BoxConstraints(),
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.close,
                                   color: Colors.white,
                                   size: 13,
@@ -387,15 +389,15 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            "챌린지 기간",
+          const Text(
+            "기간",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
                 fontFamily: 'Pretendard',
                 color: Palette.grey300),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -403,7 +405,7 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
                 children: List.generate(
                     8,
                     (index) => Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -417,7 +419,8 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
                           },
                           style: ButtonStyle(
                             minimumSize: MaterialStateProperty.all<Size>(
-                                Size(10, 35)), // Adjust the button's size
+                                const Size(10, 35)),
+                            // Adjust the button's size
 
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
@@ -441,13 +444,96 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
         ]));
   }
 
+  Widget selectCategory() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "카테고리 선택",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                fontFamily: 'Pretendard',
+                color: Palette.grey300),
+          ),
+          const SizedBox(height: 10),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(CategoryList.length, (categoryIndex) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (selectCategoryText ==
+                              CategoryList[categoryIndex]['category']) {
+                            selectCategoryText =
+                                ''; // Deselect if already selected
+                          } else {
+                            selectCategoryText = CategoryList[categoryIndex]
+                                ['category']; // Select otherwise
+                          }
+                        });
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
+                          const EdgeInsets.symmetric(horizontal: 10),
+                        ),
+                        maximumSize: MaterialStateProperty.all<Size>(
+                            const Size(110, 50)),
+                        minimumSize:
+                            MaterialStateProperty.all<Size>(const Size(10, 35)),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        backgroundColor: selectCategoryText ==
+                            CategoryList[categoryIndex]['category']
+                            ? MaterialStateProperty.all<Color>(
+                                Palette.mainPurple)
+                            : null,
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            child: CategoryList[categoryIndex]['icon'],
+                            width: 30,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            CategoryList[categoryIndex]['category'],
+                            style: TextStyle(
+                              fontSize: 11.0,
+                              fontWeight: FontWeight.w500,
+                              color: selectCategoryText ==
+                                  CategoryList[categoryIndex]['category']
+                                  ? Colors.white
+                                  : Colors.black, // 선택된 항목은 진한 파란색으로 설정
+                            ),
+                          ),
+                        ],
+                      ),
+                    ));
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget selectStartDay() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(
-              "챌린지 시작일",
+            const Text(
+              "시작일",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
@@ -456,14 +542,14 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
             ),
             Text(
               "${DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDay)}   ",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
+              style: const TextStyle(
+                  fontWeight: FontWeight.w500,
                   fontSize: 12,
                   fontFamily: 'Pretendard',
-                  color: Palette.mainPurple),
+                  color: Palette.purPle400),
             )
           ]),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           WeeklyDatePicker(
             selectedDay: _selectedDay,
             changeDay: (value) => setState(() {
@@ -476,7 +562,7 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
             backgroundColor: Palette.greySoft,
             weekdayTextColor: Palette.grey200,
             digitsColor: Colors.grey,
-            selectedDigitBackgroundColor: Palette.mainPurple,
+            selectedDigitBackgroundColor: Palette.purPle300,
             weekdays: const ["월", "화", "수", "목", "금", "토", "일"],
             daysInWeek: 7,
           ),
@@ -485,17 +571,17 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
 
   Widget selectFrequency() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            "챌린지 인증 빈도",
+          const Text(
+            "인증 빈도",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                fontFamily: 'Pretendard',
+                fontFamily: 'Pretender',
                 color: Palette.grey300),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           DropdownButton<String>(
             value: dropdownValue,
             icon: const Icon(Icons.expand_more),
@@ -505,7 +591,7 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
             ),
             underline: Container(
               height: 2,
-              color: Palette.mainPurple,
+              color: Palette.purPle300,
             ),
             onChanged: (String? value) {
               // This is called when the user selects an item.
@@ -523,10 +609,10 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: value == dropdownValue
-                        ? FontWeight.bold
+                        ? FontWeight.w500
                         : FontWeight.w300,
                     color: value == dropdownValue
-                        ? Palette.mainPurple
+                        ? Palette.purPle300
                         : Palette.grey300,
                   ),
                 ),
@@ -544,7 +630,7 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
       style: const TextStyle(color: Palette.mainPurple),
       underline: Container(
         height: 2,
-        color: Palette.mainPurple,
+        color: Palette.purPle300,
       ),
       onChanged: onChanged,
       items: List.generate(25, (index) => index)
@@ -555,11 +641,11 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
             value == 24 ? '24 (0시)' : '${value.toString()}시',
             style: TextStyle(
               fontWeight:
-                  value == selectedValue ? FontWeight.bold : FontWeight.w300,
+                  value == selectedValue ? FontWeight.w500 : FontWeight.w300,
               fontSize: 12,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Pretender',
               color:
-                  value == selectedValue ? Palette.mainPurple : Palette.grey300,
+                  value == selectedValue ? Palette.purPle300 : Palette.grey300,
             ),
           ),
         );
@@ -569,17 +655,17 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
 
   Widget selectAuthTime() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            "챌린지 인증 가능 시간",
+          const Text(
+            "인증 가능 시간",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                fontFamily: 'Pretendard',
+                fontFamily: 'Pretender',
                 color: Palette.grey300),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

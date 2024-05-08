@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60), // 이미지의 높이에 맞춰서 설정
-          child: home_appBar,
+          child: homeAppBar,
         ),
         body: SingleChildScrollView(
             child: Column(
