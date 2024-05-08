@@ -8,8 +8,6 @@ class UserController extends GetxController {
     email: "",
     avatar: "",
     name: "",
-    level: 0,
-    xp: 0,
     point: 0,
   ).obs;
 
