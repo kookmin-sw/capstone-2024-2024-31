@@ -33,10 +33,11 @@ public interface ChallengeMapper {
     ParticipantResponse participantToParticipantResponse(Participant participant);
     List<ParticipantResponse> participantListToParticipantResponseList(List<Participant> participants);
 
+    ChallengeSimpleResponse entityToSimpleResponse(Challenge challenge);
+
     default int calculateTotalCertificationCount(Integer challengePeriod, String certificationFrequency) {
         return challengePeriod * ChallengeFrequency.findByFrequency(certificationFrequency).getDaysPerWeek();
     }
- 
-    ChallengeSimpleResponse entityToSimpleResponse(Challenge challenge);
+
 }
 
