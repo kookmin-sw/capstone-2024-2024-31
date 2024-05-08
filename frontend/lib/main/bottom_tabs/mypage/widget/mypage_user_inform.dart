@@ -73,7 +73,7 @@ class UserInformation extends StatelessWidget {
                       onPressed: () {
                         CategoryButtonPress(context);
                       },
-                      child: Text("관심있는 #카테고리를 설정하세요!", style: tagTextStyle))
+                      child: Text("관심있는 #카테고리 설정하기", style: tagTextStyle))
               ])
             ]));
   }
