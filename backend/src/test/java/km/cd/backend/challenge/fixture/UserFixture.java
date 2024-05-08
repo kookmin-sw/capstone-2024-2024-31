@@ -14,8 +14,6 @@ public class UserFixture {
             .name("John Doe")
             .avatar("avatar.jpg")
             .role("ROLE_USER")
-            .level(1)
-            .xp(0)
             .point(0)
             .build();
     }

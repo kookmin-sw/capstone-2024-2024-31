@@ -17,6 +17,7 @@ import km.cd.backend.challenge.domain.QChallenge;
 import km.cd.backend.challenge.dto.request.ChallengeFilter;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,11 +30,17 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
   @Override
   public List<Challenge> findByChallengeWithFilterAndPaging(Long cursorId, ChallengeFilter filter) {
     QChallenge challenge = QChallenge.challenge;
-    BooleanExpression predicate = challenge.challengeName.startsWith(filter.name());    
+    BooleanExpression predicate = challenge.isNotNull();
 
-    if (filter.isPrivate()) {
-      predicate = predicate.and(challenge.isPrivate.eq(true));
+    if (cursorId != 0) {
+      predicate = challenge.id.lt(cursorId);
     }
+
+    if (StringUtils.hasText(filter.name())) {
+      predicate = challenge.challengeName.startsWith(filter.name());
+    }
+
+    predicate = predicate.and(challenge.isPrivate.eq(filter.isPrivate()));
 
     if (filter.category() != null) {
       predicate = predicate.and(challenge.category.eq(filter.category()));
@@ -41,7 +48,7 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
 
     return queryFactory
       .selectFrom(challenge)
-      .where(challenge.id.lt(cursorId), predicate)
+      .where(predicate)
       .limit(DEFAULT_PAGE_SIZE)
       .fetch();
   }
