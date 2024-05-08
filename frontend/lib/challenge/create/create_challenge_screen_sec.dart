@@ -148,12 +148,12 @@ class _CreateChallenge_secState extends State<CreateChallenge_sec> {
                     fontFamily: 'Pretendard'),
                 decoration: InputDecoration(
                     hintText: "챌린지 이름을 입력해주세요.",
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w300,
                       color: Palette.grey200,
                     ),
-                    counterStyle: TextStyle(
+                    counterStyle: const TextStyle(
                         fontSize: 10, // 최대 길이 카운터의 글자 크기
                         color: Palette.grey200,
                         fontFamily: 'Pretendard' // 최대 길이 카운터의 색상
