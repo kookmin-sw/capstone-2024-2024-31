@@ -2,20 +2,14 @@ package km.cd.backend.challenge.repository;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.QChallenge;
 import km.cd.backend.challenge.dto.request.ChallengeFilter;
-import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 
