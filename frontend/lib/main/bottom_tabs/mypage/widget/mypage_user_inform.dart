@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
+import 'package:frontend/model/data/user.dart';
 import 'package:get/get.dart';
 
 class UserInformation extends StatelessWidget {
@@ -22,9 +23,9 @@ class UserInformation extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
 
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
         child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               imageStackLevel(),
@@ -32,7 +33,7 @@ class UserInformation extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 nameText(screenSize),
                 const SizedBox(height: 4),
-                Text(
+                const Text(
                   "루티너님의 관심사는",
                   style: TextStyle(
                       fontFamily: 'Pretendard',
@@ -40,6 +41,7 @@ class UserInformation extends StatelessWidget {
                       fontSize: 11,
                       color: Colors.grey),
                 ),
+                // if(User(id: id, email: email, avatar: avatar, name: name, point: point))
                 Text(
                   "#그림 #헬스 #운동 #환경",
                   style: TextStyle(
