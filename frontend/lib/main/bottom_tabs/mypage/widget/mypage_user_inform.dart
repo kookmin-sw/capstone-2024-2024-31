@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/main/bottom_tabs/mypage/widget/categoryButtonPress.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/user.dart';
@@ -12,11 +13,17 @@ class UserInformation extends StatelessWidget {
 
   final UserController userController = Get.find<UserController>();
 
-  // final String userName = ;
   final int followingNum = 10;
   final int followerNum = 1;
   final int level = 1;
   final String imgUrl = '';
+  final tagTextStyle = const TextStyle(
+      fontFamily: 'Pretender',
+      fontWeight: FontWeight.w600,
+      fontSize: 11,
+      color: Palette.purPle500);
+
+  List<String> categoryList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,23 +40,40 @@ class UserInformation extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 nameText(screenSize),
                 const SizedBox(height: 4),
-                const Text(
-                  "루티너님의 관심사는",
-                  style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 11,
-                      color: Colors.grey),
-                ),
-                // if(User(id: id, email: email, avatar: avatar, name: name, point: point))
-                Text(
-                  "#그림 #헬스 #운동 #환경",
-                  style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 11,
-                      color: Palette.purPle500),
-                ),
+                if (categoryList.isNotEmpty)
+                  Column(
+                    children: [
+                      const Text(
+                        "루티너님의 관심사는",
+                        style: TextStyle(
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 11,
+                            color: Colors.grey),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            CategoryButtonPress(context);
+                          },
+                          child: Row(
+                              children:
+                                  List.generate(categoryList.length, (index) {
+                            return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Text(
+                                  "#${categoryList[index]}",
+                                  style: tagTextStyle,
+                                ));
+                          })))
+                    ],
+                  )
+                else
+                  TextButton(
+                      onPressed: () {
+                        CategoryButtonPress(context);
+                      },
+                      child: Text("관심있는 #카테고리를 설정하세요!", style: tagTextStyle))
               ])
             ]));
   }
@@ -65,27 +89,27 @@ class UserInformation extends StatelessWidget {
             backgroundImage: NetworkImage(userController.user.avatar),
           ),
           Positioned(
-              child: SvgPicture.asset('assets/svgs/level_stack.svg'),
               left: 65,
-              top: 65),
+              top: 65,
+              child: SvgPicture.asset('assets/svgs/level_stack.svg')),
           Positioned(
+              left: 75,
+              top: 67,
               child: Text(
                 level.toString(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Pretendard',
                     fontSize: 11),
-              ),
-              left: 75,
-              top: 67),
+              )),
         ]));
   }
 
   Widget nameText(Size screenSize) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Container(
+      SizedBox(
           width: userController.user.name.length * 25,
           height: 35,
           child: Stack(
@@ -97,7 +121,7 @@ class UserInformation extends StatelessWidget {
               ),
               Text(
                 userController.user.name,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w500,
@@ -106,7 +130,7 @@ class UserInformation extends StatelessWidget {
               )
             ],
           )),
-      Text(
+      const Text(
         '님 반가워요!',
         style: TextStyle(
             overflow: TextOverflow.fade,
