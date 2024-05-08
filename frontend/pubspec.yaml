@@ -55,6 +55,7 @@ dependencies:
   easy_search_bar: ^2.5.0
   get_storage: ^2.1.1
   http: ^1.2.1
+  modal_bottom_sheet: ^3.0.0
 
 dev_dependencies:
   flutter_test:
