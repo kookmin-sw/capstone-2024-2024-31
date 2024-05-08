@@ -7,14 +7,14 @@ import 'package:frontend/challenge/create/create_challenge_screen_sec.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 
-class CreateChallenge_fir extends StatefulWidget {
-  const CreateChallenge_fir({Key? key});
+class CreateChallengeFir extends StatefulWidget {
+  const CreateChallengeFir({Key? key});
 
   @override
-  State<CreateChallenge_fir> createState() => _CreateChallenge_firState();
+  State<CreateChallengeFir> createState() => _CreateChallengeFirState();
 }
 
-class _CreateChallenge_firState extends State<CreateChallenge_fir> {
+class _CreateChallengeFirState extends State<CreateChallengeFir> {
   late Challenge newChallenge = Challenge(
       isPrivate: false,
       privateCode: '',
@@ -64,7 +64,7 @@ class _CreateChallenge_firState extends State<CreateChallenge_fir> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Pretender',
             ),
           ),
         ),
@@ -76,7 +76,7 @@ class _CreateChallenge_firState extends State<CreateChallenge_fir> {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => CreateChallenge_sec(challenge: newChallenge),
+                  builder: (context) => CreateChallengeSec(challenge: newChallenge),
                 ),
               );
             },
@@ -121,7 +121,7 @@ class _CreateChallenge_firState extends State<CreateChallenge_fir> {
                             privateCode =
                                 value; // TextField에 입력된 값을 privateCode 변수에 저장
                           },
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: '암호',
                             labelStyle: TextStyle(
                                 fontSize: 12,

@@ -7,23 +7,23 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 
-class CreateChallenge_thr extends StatefulWidget {
+class CreateChallengeThr extends StatefulWidget {
   Challenge challenge;
 
-  CreateChallenge_thr({Key? key, required this.challenge});
+  CreateChallengeThr({Key? key, required this.challenge});
 
   @override
-  State<CreateChallenge_thr> createState() => _CreateChallenge_thrState();
+  State<CreateChallengeThr> createState() => _CreateChallengeThrState();
 }
 
-class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
+class _CreateChallengeThrState extends State<CreateChallengeThr> {
   late Challenge newChallenge;
   final picker = ImagePicker();
   XFile? successFile;
   XFile? failFile;
-  List<bool> _toggleSelections = [true, false];
+  final List<bool> _toggleSelections = [true, false];
   bool _isCapacity = false;
-  TextEditingController _maxCapacityController = TextEditingController();
+  final TextEditingController _maxCapacityController = TextEditingController();
 
   Future<void> _pickImage(bool isSuccess) async {
     final pickedImage =
@@ -32,10 +32,10 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
       setState(() {
         if (isSuccess) {
           successFile = XFile(pickedImage.path);
-          print('successFile${successFile!.path}');
+          // print('successFile${successFile!.path}');
         } else {
           failFile = XFile(pickedImage.path);
-          print('failFile${failFile!.path}');
+          // print('failFile${failFile!.path}');
         }
       });
     }
@@ -61,7 +61,7 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Pretender',
             ),
           ),
         ),
@@ -92,11 +92,11 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
                 ),
                 inputAuthIntro(),
                 pickAuthMethod(),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 addPicture(),
-                SizedBox(height: 25),
+                const SizedBox(height: 25),
                 maxCapacity(),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 _isCapacity ? buildMaxCapacity() : Container()
               ],
             ),
@@ -108,7 +108,7 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "인증 방법",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -116,36 +116,36 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
             color: Palette.grey300,
           ),
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         TextField(
           maxLines: 5,
           minLines: 3,
           maxLength: 200,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w300,
             fontSize: 11,
           ),
           decoration: InputDecoration(
             hintText: "인증 방법을 자세하게 알려주세요.",
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w300,
               color: Palette.grey200,
             ),
-            counterStyle: TextStyle(
+            counterStyle: const TextStyle(
               fontSize: 10,
               color: Palette.grey200,
             ),
-            contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             filled: true,
             fillColor: Palette.greySoft,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.0),
-              borderSide: BorderSide(color: Palette.greySoft),
+              borderSide: const BorderSide(color: Palette.greySoft),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.0),
-              borderSide: BorderSide(color: Palette.mainPurple, width: 2),
+              borderSide: const BorderSide(color: Palette.mainPurple, width: 2),
             ),
           ),
         ),
@@ -157,7 +157,7 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "인증 수단",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -165,7 +165,7 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
             color: Palette.grey300,
           ),
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         ToggleButtons(
           borderRadius: BorderRadius.circular(12), // 전체 토글 버튼의 둥근 정도 설정
           isSelected: _toggleSelections,
@@ -185,7 +185,7 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
           },
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               height: 50,
               width: 130,
               child: Text(
@@ -202,7 +202,7 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               height: 50,
               width: 130,
               child: Text(
@@ -228,8 +228,8 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 15),
-        Text(
+        const SizedBox(height: 15),
+        const Text(
           "인증 성공 / 실패 예시",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -237,11 +237,11 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
             color: Palette.grey300,
           ),
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Row(
           children: [
             buildImageContainer(successFile, Palette.green, true),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             buildImageContainer(failFile, Palette.red, false),
           ],
         ),
@@ -275,13 +275,13 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
                       fit: BoxFit.cover,
                     ),
                   )
-                : Icon(
+                : const Icon(
                     Icons.image,
                     size: 35,
                     color: Palette.grey300,
                   ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -291,10 +291,10 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
                     : 'assets/icons/check_red.png',
                 color: color,
               ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Text(
                 isSuccess ? "성공 예시" : "실패 예시",
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Pretendard',
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
@@ -311,7 +311,7 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             "최대 모집 인원 설정하기",
             style: TextStyle(
@@ -351,8 +351,8 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
         Container(
           width: 300,
           height: 56,
-          padding: EdgeInsets.symmetric(vertical: 5),
-          margin: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 10),
           child: TextField(
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly,
@@ -370,24 +370,23 @@ class _CreateChallenge_thrState extends State<CreateChallenge_thr> {
             ],
             controller: _maxCapacityController,
             keyboardType: TextInputType.number,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                fontFamily: 'Pretendard'),
-            // 입력 텍스트의 스타일을 변경합니다.
+                fontFamily: 'Pretender'),
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2.0, color: Palette.mainPurple),
+                borderSide: const BorderSide(width: 2.0, color: Palette.mainPurple),
                 // 포커스가 있을 때의 테두리 색상을 지정합니다.
                 borderRadius: BorderRadius.circular(25), // 테두리를 둥글게 만듭니다.
               ),
               hintText: '1~1000',
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 10,
                   fontFamily: 'Pretendard'),
-              suffixStyle: TextStyle(fontFamily: 'Pretendard', fontSize: 10),
-              suffix: Text(
+              suffixStyle: const TextStyle(fontFamily: 'Pretendard', fontSize: 10),
+              suffix: const Text(
                 '명',
               ),
               border: OutlineInputBorder(
