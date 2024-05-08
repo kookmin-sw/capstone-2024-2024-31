@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                 // SplashScreen.routeName: (context) => SplashScreen(),
                 'login': (context) => const LoginScreen(),
                 'main': (context) => const MainScreen(),
-                'create_challenge': (context) => const CreateChallenge_fir(),
+                'create_challenge': (context) => const CreateChallengeFir(),
                 'detail_challenge': (context) => ChallengeDetailScreen(),
                 // 'state_challenge' : (context) => ChallengeStateScreen(),
                 'community': (context) => const TabCommunityScreen(),
