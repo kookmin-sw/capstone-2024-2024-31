@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:frontend/model/config/category_list.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,6 +42,9 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
   int selectedIndex = -1;
   String selectCategoryText = '';
   DateTime _selectedDay = DateTime.now();
+  String dropdownValue = '매일';
+  int? selectedHourStart = 0;
+  int? selectedHourEnd = 24;
 
   List<String> frequencyList = <String>[
     '매일',
@@ -53,35 +57,6 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
     '주 5회',
     '주 6회'
   ];
-
-  List<Map<String, dynamic>> categoryList = [
-    {
-      'category': '식습관',
-      'icon': SvgPicture.asset(
-        'assets/icons/category_icons/eating.svg',
-      )
-    },
-    {
-      'category': '운동',
-      'icon': SvgPicture.asset('assets/icons/category_icons/exercise.svg')
-    },
-    {
-      'category': '취미',
-      'icon': SvgPicture.asset('assets/icons/category_icons/hobby.svg')
-    },
-    {
-      'category': '환경',
-      'icon': SvgPicture.asset('assets/icons/category_icons/nature.svg')
-    },
-    {
-      'category': '공부',
-      'icon': SvgPicture.asset('assets/icons/category_icons/study.svg')
-    }
-  ];
-
-  String dropdownValue = '매일';
-  int? selectedHourStart = 0;
-  int? selectedHourEnd = 24;
 
   @override
   void initState() {
@@ -488,18 +463,18 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: List.generate(categoryList.length, (categoryIndex) {
+              children: List.generate(CategoryList.length, (categoryIndex) {
                 return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
                           if (selectCategoryText ==
-                              categoryList[categoryIndex]['category']) {
+                              CategoryList[categoryIndex]['category']) {
                             selectCategoryText =
                                 ''; // Deselect if already selected
                           } else {
-                            selectCategoryText = categoryList[categoryIndex]
+                            selectCategoryText = CategoryList[categoryIndex]
                                 ['category']; // Select otherwise
                           }
                         });
@@ -518,7 +493,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                           ),
                         ),
                         backgroundColor: selectCategoryText ==
-                            categoryList[categoryIndex]['category']
+                            CategoryList[categoryIndex]['category']
                             ? MaterialStateProperty.all<Color>(
                                 Palette.mainPurple)
                             : null,
@@ -526,17 +501,17 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                       child: Row(
                         children: [
                           SizedBox(
-                            child: categoryList[categoryIndex]['icon'],
+                            child: CategoryList[categoryIndex]['icon'],
                             width: 30,
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            categoryList[categoryIndex]['category'],
+                            CategoryList[categoryIndex]['category'],
                             style: TextStyle(
                               fontSize: 11.0,
                               fontWeight: FontWeight.w500,
                               color: selectCategoryText ==
-                                  categoryList[categoryIndex]['category']
+                                  CategoryList[categoryIndex]['category']
                                   ? Colors.white
                                   : Colors.black, // 선택된 항목은 진한 파란색으로 설정
                             ),
