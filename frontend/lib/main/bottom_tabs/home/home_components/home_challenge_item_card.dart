@@ -46,12 +46,12 @@ class ChallengeItemCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 8),
                         child: Text(
-                          "${this_challenge.challengeName}",
-                          style: TextStyle(
+                          this_challenge.challengeName,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Palette.grey500,
                             fontSize: 14,
-                            fontFamily: 'Pretendard',
+                            fontFamily: 'Pretender',
                           ),
                         ),
                       ),
@@ -64,14 +64,14 @@ class ChallengeItemCard extends StatelessWidget {
                               width: 16,
                               color: Palette.grey200,
                             ),
-                            SizedBox(width: 5),
+                            const SizedBox(width: 5),
                             Text(
                               modifiedString,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Palette.grey200,
                                   fontSize: 10,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: 'Pretendard'),
+                                  fontFamily: 'Pretender'),
                             ),
                           ],
                         ),
@@ -85,14 +85,14 @@ class ChallengeItemCard extends StatelessWidget {
                               width: 16,
                               color: Palette.purPle400,
                             ),
-                            SizedBox(width: 5),
+                            const SizedBox(width: 5),
                             Text(
                               '${this_challenge.participants.length}명의 루티너',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Palette.purPle400,
                                   fontSize: 10,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: 'Pretendard'),
+                                  fontFamily: 'Pretender'),
                             ),
                           ],
                         ),
@@ -101,44 +101,43 @@ class ChallengeItemCard extends StatelessWidget {
   }
 
   Widget challenge_image(Size screenSize) {
-    return Container(
-        child: Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            'assets/images/image.png', // 이미지 경로
-            fit: BoxFit.cover,
-            width: screenSize.width * 0.45,
-            height: screenSize.width * 0.45 * (3 / 4),
+    return Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+    ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Image.asset(
+        'assets/images/image.png', // 이미지 경로
+        fit: BoxFit.cover,
+        width: screenSize.width * 0.45,
+        height: screenSize.width * 0.45 * (3 / 4),
+      ),
+    ),
+    Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: Container(
+          width: screenSize.width * 0.45,
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            // 투명도 조절 가능한 검은색 배경
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(0), // 상단 모서리는 안둥글게
+              bottom: Radius.circular(10), // 하단 모서리만 둥글게
+            ),
           ),
-        ),
-        Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              width: screenSize.width * 0.45,
-              padding: EdgeInsets.symmetric(vertical: 5),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
-                // 투명도 조절 가능한 검은색 배경
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(0), // 상단 모서리는 안둥글게
-                  bottom: Radius.circular(10), // 하단 모서리만 둥글게
-                ),
-              ),
-              child: Text(
-                "${this_challenge.certificationFrequency} | ${this_challenge.challengePeriod} 간",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400),
-              ),
-            ))
-      ],
-    ));
+          child: Text(
+            "${this_challenge.certificationFrequency} | ${this_challenge.challengePeriod} 간",
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.w400),
+          ),
+        ))
+          ],
+        );
   }
 }

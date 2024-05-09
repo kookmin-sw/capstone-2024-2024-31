@@ -79,20 +79,20 @@ Widget post_top(String image, String name, DateTime uploadTime) {
             radius: 25,
             backgroundImage: AssetImage(image),
           ),
-          SizedBox(width: 13), // Add some space between the image and text
+          const SizedBox(width: 13), // Add some space between the image and text
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
               name,
-              style: TextStyle(
-                  fontFamily: 'Pretendard',
+              style: const TextStyle(
+                  fontFamily: 'Pretender',
                   fontSize: 14,
                   color: Colors.black,
                   fontWeight: FontWeight.w600),
             ),
             Text(
               uploadTimeString,
-              style: TextStyle(
-                  fontFamily: 'Pretendard',
+              style: const TextStyle(
+                  fontFamily: 'Pretender',
                   fontSize: 11,
                   color: Palette.grey200),
             ),
@@ -101,8 +101,8 @@ Widget post_top(String image, String name, DateTime uploadTime) {
       ),
       Text(
         '${BeforeHours}',
-        style: TextStyle(
-            fontFamily: 'Pretendard', fontSize: 10, color: Palette.grey200),
+        style: const TextStyle(
+            fontFamily: 'Pretender', fontSize: 10, color: Palette.grey200),
       ),
     ],
   );

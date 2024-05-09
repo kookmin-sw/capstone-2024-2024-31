@@ -47,11 +47,11 @@ class _ChallengeWidgetState extends State<ChallengeWidget> {
       certificationEndTime: '24시',
       certificationExplanation:
       '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
-      successfulVerificationImage: File("assets/images/image.png"),
+      successfulVerificationImage: File('/data/user/0/com.routineUp.frontend/cache/992e048f-4ae7-4bf1-9a35-866086fbe0a4/1000009385.jpg'),
       failedVerificationImage:
-      File("C:/Users/82103/Pictures/Screenshots/image.png"),
-      challengeImage1: File("C:/Users/82103/Pictures/Screenshots/image.png"),
-      challengeImage2: File("C:/Users/82103/Pictures/Screenshots/image.png"),
+      File( '/data/user/0/com.routineUp.frontend/cache/21e41d3f-38da-45ea-b9f0-95229ac1c12f/1000009467.jpg'),
+      challengeImage1: File('/data/user/0/com.routineUp.frontend/cache/992e048f-4ae7-4bf1-9a35-866086fbe0a4/1000009385.jpg'),
+      challengeImage2: File('/data/user/0/com.routineUp.frontend/cache/992e048f-4ae7-4bf1-9a35-866086fbe0a4/1000009385.jpg'),
       isGalleryPossible: true,
       maximumPeople: 100,
       participants: []);

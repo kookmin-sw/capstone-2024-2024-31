@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/community/community_screen.dart';
 import 'package:frontend/main/bottom_tabs/myRoutineUp/widget/myroutineWidget.dart';
 import 'package:frontend/main/bottom_tabs/myRoutineUp/widget/myroutineup_card.dart';
+import 'package:frontend/main/bottom_tabs/myRoutineUp/widget/progress_widget.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 
@@ -35,22 +36,26 @@ class _MyRoutineUpScreenState extends State<MyRoutineUpScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.greyBG,
-        title: Text(
+        title: const Text(
           '나의 루틴업',
           style: TextStyle(
             fontFamily: 'Pretendard',
             fontSize: 16,
+            fontWeight: FontWeight.w500
           ),
         ),
       ),
       backgroundColor: Palette.greyBG,
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           children: [
+            ChallengeProgressWidget(challengeProgressNumberList: [0,6,3]),
+            Divider(height: 10,thickness: 3, indent: 20, endIndent: 20, color: Palette.grey50,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: ChallengeWidget(isIng: true),
             ),
+            Divider(height: 10,thickness: 3, indent: 20, endIndent: 20, color: Palette.grey50,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: ChallengeWidget(isIng:false),
