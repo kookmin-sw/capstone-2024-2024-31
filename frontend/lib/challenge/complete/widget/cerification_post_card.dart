@@ -60,7 +60,6 @@ class PostItemCard extends StatelessWidget {
                       userInform(article.author.avatar, article.author.name),
                       const SizedBox(height: 2),
                       articleInform(),
-                      const SizedBox(height: 2),
                       Text(
                         "   $beforeHours",
                         style: const TextStyle(
