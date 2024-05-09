@@ -1,11 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/challenge/complete/widget/cerification_post_card.dart';
+import 'package:frontend/challenge/complete/widget/reward_card.dart';
 import 'package:frontend/challenge/detail/widgets/certification_method_widget.dart';
+import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:frontend/model/data/post.dart';
+import 'package:frontend/model/data/sms.dart';
 import 'package:get/get.dart';
 import 'dart:io';
+import '../../../model/data/sms.dart';
 
 class ChallengeCompleteScreen extends StatelessWidget {
   final Map<String, dynamic> postData;
@@ -38,13 +43,21 @@ class ChallengeCompleteScreen extends StatelessWidget {
   }
 
   final Challenge challenge;
+  final Sms _sms = Sms(
+      receiverNumber: '010-3333-9999',
+      userName: '신혜은',
+      challengeName: '조깅 3KM 진행하고 상금받자',
+      relationship: '친구',
+      receiverName: '김추환',
+      letter: '이거 실패하면 공차 사줄게~');
 
-  TextStyle titleStyle = const TextStyle(
-    fontWeight: FontWeight.bold,
-    fontFamily: 'Pretender',
-    fontSize: 15,
-  );
-  bool isSuccess = false;
+  TextStyle titleStyle(double fontSize) => TextStyle(
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Pretender',
+        fontSize: fontSize,
+      );
+
+  final bool _isSuccess = false;
   bool isEnded = false;
 
   @override
@@ -63,8 +76,8 @@ class ChallengeCompleteScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(isSuccess ? "챌린지를 성공했어요! 👍" : "챌린지를 실패했어요 😭",
-                  style: titleStyle),
+              Text(_isSuccess ? "챌린지를 성공했어요! 👍" : "챌린지를 실패했어요 😭",
+                  style: titleStyle(21.0)),
               const SizedBox(height: 10),
               const Text(
                 "당신의 갓생을 루틴업이 응원합니다!",
@@ -75,24 +88,46 @@ class ChallengeCompleteScreen extends StatelessWidget {
                     color: Palette.purPle200),
               ),
               const SizedBox(height: 25),
-              challengeInform()
+              challengeInform(),
+              const SizedBox(height: 15),
+              const Divider(
+                  indent: 20,
+                  endIndent: 20,
+                  height: 10,
+                  thickness: 1.5,
+                  color: Palette.grey50),
+              const SizedBox(height: 10),
+              CertificationMethod(challenge: challenge),
+              const SizedBox(height: 10),
+              GestureDetector(
+                  child: Text("인증 게시글 모음 > ", style: titleStyle(15.0)),
+                  onTap: () => Get.to(() => const TabCommunityScreen())),
+              const SizedBox(height: 10),
+              certificationPostList(),
+              const SizedBox(height: 15),
+              const Divider(
+                  indent: 20,
+                  endIndent: 20,
+                  height: 10,
+                  thickness: 1.5,
+                  color: Palette.grey50),
+              const SizedBox(height: 15),
+              RewardCard(isSuccess: _isSuccess, sms: _sms)
             ],
           ),
         )));
   }
 
   Widget challengeInform() {
-    print(challenge.challengeImage1);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (challenge.challengeImage1 != null)
               SizedBox(
-                  width: 90,
-                  height: 70,
+                  width: 100,
+                  height: 75,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image(
@@ -107,28 +142,17 @@ class ChallengeCompleteScreen extends StatelessWidget {
                 fallbackHeight: 100, // Example height
                 fallbackWidth: 100, // Example width
               ),
+            const SizedBox(width: 20),
             Text(
               challenge.challengeName,
               style: const TextStyle(
                   fontSize: 11,
-                  fontFamily: "Pretendard",
+                  fontFamily: "Pretender",
+                  overflow: TextOverflow.ellipsis,
                   fontWeight: FontWeight.bold),
             )
           ],
         ),
-        const SizedBox(height: 15),
-        const Divider(
-            indent: 20,
-            endIndent: 20,
-            height: 10,
-            thickness: 1.5,
-            color: Palette.grey50),
-        const SizedBox(height: 10),
-        CertificationMethod(challenge: challenge),
-        const SizedBox(height: 10),
-        Text("인증 게시글 모음 > ", style: titleStyle),
-        const SizedBox(height: 10),
-        certificationPostList()
       ],
     );
   }
@@ -137,14 +161,10 @@ class ChallengeCompleteScreen extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-          children: List.generate(10, (index) {
+          children: List.generate(5, (index) {
         Article article = Article.fromJson(postDataList[index]);
         return PostItemCard(article: article);
       })),
     );
-  }
-
-  Widget Result() {
-    return Container();
   }
 }
