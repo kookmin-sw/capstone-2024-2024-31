@@ -3,16 +3,19 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:frontend/challenge/complete/challenge_complete_screen.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/model/config/image_from_file.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class MyRoutineUpCard extends StatelessWidget {
-  MyRoutineUpCard({super.key, required this.isIng, required this.challenge});
+  const MyRoutineUpCard(
+      {super.key, required this.isIng, required this.challenge});
 
   final bool isIng;
   final Challenge challenge;
@@ -27,12 +30,11 @@ class MyRoutineUpCard extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TabCommunityScreen()),
-          );
+          isIng
+              ? Get.to(() => const TabCommunityScreen())
+              : Get.to(() => ChallengeCompleteScreen(challenge: challenge));
         },
-        child: Container(
+        child: SizedBox(
             width: screenSize.width * 0.95,
             child: Card(
                 color: Colors.grey[90],
@@ -53,7 +55,7 @@ class MyRoutineUpCard extends StatelessWidget {
                                   fit: BoxFit.fitWidth,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                               ),
                               Column(
@@ -73,9 +75,9 @@ class MyRoutineUpCard extends StatelessWidget {
                                               fontSize: 10,
                                             ),
                                           ),
-                                          Text(
+                                          const Text(
                                             '50%',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                                 fontSize: 11), // 진행 상태
                                           ),
                                         ],

@@ -11,13 +11,12 @@ class BuildImageContainer extends StatelessWidget {
   final bool isJoinScreen;
 
   const BuildImageContainer(
-      {Key? key,
+      {super.key,
       required this.path,
       required this.color,
       required this.isSuccess,
       required this.screenSize,
-      this.isJoinScreen = false})
-      : super(key: key);
+      this.isJoinScreen = false});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class BuildImageContainer extends StatelessWidget {
           ),
         const SizedBox(height: 5),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 3),
           decoration: BoxDecoration(
             color: Palette.white,
             borderRadius: BorderRadius.circular(33.0),
@@ -62,11 +61,10 @@ class BuildImageContainer extends StatelessWidget {
           child: path != null
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(30.0),
-
                   child: isJoinScreen
                       ? Image.asset(
                           path,
-                          fit: BoxFit.fitHeight,
+                          fit: BoxFit.fitWidth,
                         )
                       : Image.file(
                           File(path),

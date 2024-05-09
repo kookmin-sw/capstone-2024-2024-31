@@ -17,7 +17,7 @@ import 'package:frontend/model/data/challenge.dart';
 class CreateChallengeSec extends StatefulWidget {
   Challenge challenge;
 
-  CreateChallengeSec({Key? key, required this.challenge});
+  CreateChallengeSec({super.key, required this.challenge});
 
   @override
   State<CreateChallengeSec> createState() => _CreateChallengeSecState();
@@ -57,6 +57,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
     '주 5회',
     '주 6회'
   ];
+
 
   @override
   void initState() {
@@ -334,6 +335,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                         mainAxisSpacing: 10, // 그리드 뷰의 아이템들 간의 수평 간격 조정
                       ),
                       itemBuilder: (BuildContext context, int index) {
+                        print(File(images[index]!.path));
+
                         // 이미지와 삭제 버튼을 포함한 스택
                         return Stack(
                           alignment: Alignment.topRight,

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 class InformationWidget extends StatelessWidget {
   final Challenge challenge;
 
-  const InformationWidget({Key? key, required this.challenge}) : super(key: key);
+  const InformationWidget({super.key, required this.challenge});
 
   @override
   Widget build(BuildContext context) {

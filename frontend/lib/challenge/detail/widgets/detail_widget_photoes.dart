@@ -4,7 +4,7 @@ class PhotoesWidget extends StatelessWidget {
   final double screenHeight;
   final String imageUrl;
 
-  const PhotoesWidget({Key? key, required this.screenHeight, required this.imageUrl}) : super(key: key);
+  const PhotoesWidget({super.key, required this.screenHeight, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
