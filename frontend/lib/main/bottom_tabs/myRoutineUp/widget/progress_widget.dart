@@ -16,7 +16,7 @@ class ChallengeProgressWidget extends StatelessWidget {
         decoration: BoxDecoration(
             border: Border.all(),
             borderRadius: BorderRadius.circular(15),
-            color: Palette.purPle300),
+            color: Palette.mainPurple),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children:
@@ -25,6 +25,7 @@ class ChallengeProgressWidget extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
                           alignment: Alignment.center,
@@ -48,7 +49,7 @@ class ChallengeProgressWidget extends StatelessWidget {
                           progressLabelText[index],
                           style: const TextStyle(
                               color: Palette.white,
-                              fontSize: 10,
+                              fontSize: 11,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Pretender'),
                         )
