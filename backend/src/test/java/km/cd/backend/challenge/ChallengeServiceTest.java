@@ -1,5 +1,5 @@
 package km.cd.backend.challenge;
-;
+
 import java.util.Optional;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.Participant;

@@ -66,6 +66,9 @@ public class Challenge {
 
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
+
+    @Enumerated(EnumType.STRING)
+    private ChallengeCategory category;
     
     public void increaseNumOfParticipants() {
         totalParticipants += 1;
