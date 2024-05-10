@@ -2,6 +2,7 @@ package km.cd.backend.challenge.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import km.cd.backend.category.entity.Category;
 import km.cd.backend.certification.domain.CertificationType;
 import lombok.*;
 
@@ -67,6 +68,15 @@ public class Challenge {
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
     
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "challenge_by_category",
+        joinColumns = @JoinColumn(name = "challenge_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    
+    private List<Category> categories;
+    
     public void increaseNumOfParticipants() {
         totalParticipants += 1;
     }
@@ -74,4 +84,6 @@ public class Challenge {
     public void finishChallenge() {
         this.isEnded = true;
     }
+    
+    
 }
