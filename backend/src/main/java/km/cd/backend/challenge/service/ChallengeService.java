@@ -1,10 +1,11 @@
 package km.cd.backend.challenge.service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 import java.util.Optional;
+import km.cd.backend.category.entity.Category;
+import km.cd.backend.category.repository.CategoryRepository;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.domain.Participant;
@@ -39,6 +40,7 @@ public class ChallengeService {
     private final PostRepository postRepository;
     private final S3Uploader s3Uploader;
     private final RedisUtil redisUtil;
+    private final CategoryRepository categoryRepository;
     
     final private static String INVITE_LINK_PREFIX = "challengeId=%d";
     
@@ -57,6 +59,11 @@ public class ChallengeService {
         // 챌린지 participant에 생성자 추가
         challenge.getParticipants().add(creator);
         challenge.increaseNumOfParticipants();
+        
+        // category 설정 및 저장
+        List<Category> categories = challengeCreateRequest.getCategoriesAsEntities();
+        List<Category> savedCategories = categoryRepository.saveAll(categories);
+        challenge.setCategories(savedCategories);
         
         // 챌린지 저장
         challengeRepository.save(challenge);
