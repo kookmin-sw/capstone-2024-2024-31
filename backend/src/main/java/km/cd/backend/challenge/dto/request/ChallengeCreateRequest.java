@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
+import km.cd.backend.category.entity.Category;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.dto.enums.FilePathEnum;
 import km.cd.backend.common.utils.s3.S3Uploader;
@@ -65,7 +67,22 @@ public class ChallengeCreateRequest {
 
     @Schema(description = "최대 모집 인원")
     private Integer maximumPeople;
-
+    
+    private List<String> categories;
+    
+    public List<Category> getCategoriesAsEntities() {
+        return categories.stream()
+            .map(this::createCategoryFromName)
+            .collect(Collectors.toList());
+    }
+    
+    private Category createCategoryFromName(String categoryName) {
+        Category category = new Category();
+        category.setName(categoryName);
+        category.setBranch(categoryName);
+        category.setCode(categoryName);
+        return category;
+    }
 
     public Challenge toEntity(S3Uploader s3Uploader) {
         Challenge challenge = new Challenge();
