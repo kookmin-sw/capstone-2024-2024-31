@@ -1,5 +1,6 @@
 package km.cd.backend.challenge.dto.response;
 
+import km.cd.backend.category.entity.Category;
 import lombok.Data;
 
 import java.util.Date;
@@ -46,5 +47,7 @@ public class ChallengeInformationResponse {
     private Boolean isEnded;
     
     private Integer totalParticipants ;
+    
+    private List<Category> categories;
 }
 
