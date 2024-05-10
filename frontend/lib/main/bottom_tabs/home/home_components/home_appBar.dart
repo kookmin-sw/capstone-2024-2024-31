@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/challenge/create/create_challenge_screen_fir.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:get/get.dart';
 
-Widget home_appBar = AppBar(
+Widget homeAppBar = AppBar(
   backgroundColor: Palette.mainPurple,
   foregroundColor: Colors.white,
   leading: Padding(
@@ -14,7 +16,7 @@ Widget home_appBar = AppBar(
   leadingWidth: 100,
   actions: [
     Padding(
-      padding: const EdgeInsets.symmetric( horizontal: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 2),
       child: Row(
         children: [
           IconButton(
@@ -24,11 +26,11 @@ Widget home_appBar = AppBar(
             },
           ),
           IconButton(
-            icon: SvgPicture.asset('assets/svgs/icon_point.svg',color: Colors.white,
-            width: 50),
+            icon: Icon(CupertinoIcons.add),
             onPressed: () {
-  print("buttton");
-              },
+              print("챌린지 생성 버튼 클릭");
+              Get.to(() => const CreateChallengeFir());
+            },
           ),
         ],
       ),

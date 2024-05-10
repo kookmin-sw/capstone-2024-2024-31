@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:frontend/community/post_report_bottomScreen.dart';
 import 'package:frontend/community/widget/post_card.dart';
+import 'package:frontend/community/widget/report_post_btn.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:intl/intl.dart';
 
 class PostDetailPage extends StatefulWidget {
-  const PostDetailPage({Key? key}) : super(key: key);
+  const PostDetailPage({super.key});
 
   @override
   State<PostDetailPage> createState() => _PostDetailPageState();
@@ -143,6 +145,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
             fontFamily: 'Pretendard',
           ),
         ),
+        actions: [IconButton(onPressed: (){
+          repostPostButtonPress(context, 1010, 1010);
+        }, icon: const Icon(Icons.report_problem_outlined, color: Palette.red,))],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -167,6 +172,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       ),
     );
   }
+
 
   Widget commentWidget() {
     Size size = MediaQuery.of(context).size;
@@ -243,14 +249,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               )),
                         ],
                       ),
-                      // TextButton(
-                      //   onPressed: () {},
-                      //   child: Text("신고", style: btn_textStyle),
-                      // )
+
                     ],
                   ),
-
-                  // Include replies for the current comment
                   ...re_comment_list
                       .where((reply) => reply['index'] == comment['index'])
                       .map((reply) {
@@ -295,10 +296,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                   ),
                                 ],
                               )),
-                          // TextButton(
-                          //   onPressed: () {},
-                          //   child: Text("신고", style: btn_textStyle),
-                          // ),
                         ],
                       ),
                     );
@@ -308,7 +305,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
             ),
           ),
         );
-
         return Column(
           children: commentAndReplies,
         );

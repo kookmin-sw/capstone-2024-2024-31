@@ -75,7 +75,7 @@ class PurpleThreeBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    int level = 1;
+    int point = 1;
 
 
     return Container(
@@ -99,13 +99,13 @@ class PurpleThreeBox extends StatelessWidget {
               height: 40,
               color: Colors.grey[100],
             ),
-            button(context, screenSize, level, '레벨', isLevel: true),
+            button(context, screenSize, point, '포인트', isPoint: true),
           ],
         ));
   }
 
   Widget button(BuildContext context, Size screenSize, int number, String text,
-      {isLevel = false}) {
+      {isPoint = false}) {
     return GestureDetector(
         onTap: () {
           if (text == '팔로잉') {
@@ -127,15 +127,15 @@ class PurpleThreeBox extends StatelessWidget {
         },
         child: Container(
           // color: Colors.grey,
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             width: screenSize.width * 0.25,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  isLevel ? 'LV.$number' : number.toString(),
-                  style: TextStyle(
+                  isPoint ? '$number point' : number.toString(),
+                  style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Pretendard',
                       fontSize: 15,
@@ -143,7 +143,7 @@ class PurpleThreeBox extends StatelessWidget {
                 ),
                 Text(
                   text,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontWeight: FontWeight.w100,
                       fontFamily: 'Pretendard',
                       fontSize: 10,

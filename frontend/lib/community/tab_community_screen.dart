@@ -56,19 +56,19 @@ class _TabCommunityScreenState extends State<TabCommunityScreen>
                       controller: _tabController,
                       splashBorderRadius: BorderRadius.circular(25),
                       overlayColor: MaterialStateProperty.all(Palette.purPle50),
-                      tabs: [
+                      tabs: const [
                         Tab(
-                          child: const Text(
+                          child: Text(
                             '커뮤니티',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 13, fontFamily: 'Pretendard'),
                           ),
 
                         ),
                         Tab(
-                          child: const Text(
+                          child: Text(
                             'CHAT',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 13, fontFamily: 'Pretendard'),
                           ),
                         ),
@@ -87,7 +87,7 @@ class _TabCommunityScreenState extends State<TabCommunityScreen>
       body: TabBarView(
           controller: _tabController,
           physics: const NeverScrollableScrollPhysics(),
-          children: [CommunityScreen(), ChattingList()]),
+          children: [const CommunityScreen(), ChattingList()]),
     );
   }
 

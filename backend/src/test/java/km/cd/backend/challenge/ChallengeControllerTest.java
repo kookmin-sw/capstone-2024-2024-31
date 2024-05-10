@@ -3,7 +3,11 @@ package km.cd.backend.challenge;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import km.cd.backend.challenge.controller.ChallengeController;
 import km.cd.backend.challenge.domain.Challenge;
+import km.cd.backend.challenge.domain.ChallengeCategory;
 import km.cd.backend.challenge.dto.request.ChallengeCreateRequest;
+import km.cd.backend.challenge.dto.request.ChallengeFilter;
+import km.cd.backend.challenge.fixture.ChallengeFixture;
+import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.challenge.service.ChallengeService;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import km.cd.backend.helper.IntegrationTest;
@@ -13,7 +17,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -31,7 +37,9 @@ public class ChallengeControllerTest extends IntegrationTest {
     
     @Autowired
     private UserRepository userRepository;
-    
+
+    @Autowired
+    private ChallengeRepository challengeRepository;
     
     @Test
     @DisplayName("[성공] 챌린지를 생성한 후 올바른 response 값을 반환한다.")
@@ -78,4 +86,30 @@ public class ChallengeControllerTest extends IntegrationTest {
             .andExpect(status().isOk())
             .andExpect(content().string("Success"));
     }
+
+    @Test
+    @DisplayName("챌린지 필터링 및 페이징 테스트")
+    @WithMockUser
+    public void get_challenge_with_filtering_and_paging() throws Exception {
+        // given
+        Challenge challenge = ChallengeFixture.challengeWithCategory(ChallengeCategory.HOBBY);
+        challenge = challengeRepository.save(challenge);
+
+        ChallengeFilter filter
+                = new ChallengeFilter("", false, ChallengeCategory.HOBBY);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(
+                get("/challenges/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(filter))
+        );
+
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$.[0].challengeName").value(challenge.getChallengeName()));
+    }
+
 }
