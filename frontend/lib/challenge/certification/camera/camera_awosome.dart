@@ -11,8 +11,7 @@ class CameraAwesomeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CameraPage(
-    );
+    return const CameraPage();
   }
 }
 
@@ -33,9 +32,9 @@ class CameraPage extends StatelessWidget {
         previewAlignment: Alignment.topRight,
         // Buttons of CamerAwesome UI will use this theme
         theme: AwesomeTheme(
-          bottomActionsBackgroundColor:Palette.purPle400.withOpacity(0.5),
+          bottomActionsBackgroundColor: Palette.purPle400.withOpacity(0.5),
           buttonTheme: AwesomeButtonTheme(
-            backgroundColor:Palette.white.withOpacity(0.5),
+            backgroundColor: Palette.white.withOpacity(0.5),
             iconSize: 20,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.all(16),

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/challenge/%20search/challenge_search_screen.dart';
+import 'package:frontend/challenge/search/challenge_search_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
@@ -17,9 +17,7 @@ class ChallengeItemList extends StatefulWidget {
 class _ChallengeItemListState extends State<ChallengeItemList> {
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery
-        .of(context)
-        .size;
+    final screenSize = MediaQuery.of(context).size;
 
     List<dynamic> challengeList = [
       Challenge(

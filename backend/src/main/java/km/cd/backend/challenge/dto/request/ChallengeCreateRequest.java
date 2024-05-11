@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
+import km.cd.backend.challenge.domain.ChallengeCategory;
 import km.cd.backend.challenge.dto.enums.FilePathEnum;
 import km.cd.backend.common.utils.s3.S3Uploader;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,9 @@ public class ChallengeCreateRequest {
     @Schema(description = "인증 방법")
     private String certificationExplanation;
 
+    @Schema(description = "챌린지 카테고리")
+    private ChallengeCategory challengeCategory;
+
     @Schema(description = "인증 수단")
     private Boolean isGalleryPossible;
 
@@ -62,6 +66,7 @@ public class ChallengeCreateRequest {
 
     @Schema(description = "인증 실패 예시")
     private MultipartFile successfulVerificationImage;
+
 
     @Schema(description = "최대 모집 인원")
     private Integer maximumPeople;

@@ -10,9 +10,9 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 class CreateChallengeThr extends StatefulWidget {
-  Challenge challenge;
+  final Challenge challenge;
 
-  CreateChallengeThr({Key? key, required this.challenge});
+  const CreateChallengeThr({super.key, required this.challenge});
 
   @override
   State<CreateChallengeThr> createState() => _CreateChallengeThrState();
@@ -34,10 +34,8 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
       setState(() {
         if (isSuccess) {
           successFile = XFile(pickedImage.path);
-          // print('successFile${successFile!.path}');
         } else {
           failFile = XFile(pickedImage.path);
-          // print('failFile${failFile!.path}');
         }
       });
     }
@@ -45,7 +43,6 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     newChallenge = widget.challenge;
   }
@@ -56,7 +53,9 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+            },
           ),
           title: const Text(
             '챌린지 생성하기',
@@ -73,7 +72,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
           width: double.infinity,
           child: InkWell(
             onTap: () {
-              Get.offAll(()=> const CreateCompleteScreen());
+              Get.offAll(() => const CreateCompleteScreen());
             },
             child: SvgPicture.asset(
               'assets/svgs/create_challenge_btn.svg',
@@ -140,7 +139,8 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
               fontSize: 10,
               color: Palette.grey200,
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             filled: true,
             fillColor: Palette.greySoft,
             enabledBorder: OutlineInputBorder(
@@ -380,7 +380,8 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                 fontFamily: 'Pretender'),
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 2.0, color: Palette.mainPurple),
+                borderSide:
+                    const BorderSide(width: 2.0, color: Palette.mainPurple),
                 // 포커스가 있을 때의 테두리 색상을 지정합니다.
                 borderRadius: BorderRadius.circular(25), // 테두리를 둥글게 만듭니다.
               ),
@@ -389,7 +390,8 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                   fontWeight: FontWeight.w300,
                   fontSize: 10,
                   fontFamily: 'Pretendard'),
-              suffixStyle: const TextStyle(fontFamily: 'Pretendard', fontSize: 10),
+              suffixStyle:
+                  const TextStyle(fontFamily: 'Pretendard', fontSize: 10),
               suffix: const Text(
                 '명',
               ),
