@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
                 'login': (context) => const LoginScreen(),
                 'main': (context) => const MainScreen(),
                 'create_challenge': (context) => const CreateChallengeFir(),
-                'detail_challenge': (context) => ChallengeDetailScreen(),
+                'detail_challenge': (context) => ChallengeDetailScreen(isFromMainScreen: true),
                 // 'state_challenge' : (context) => ChallengeStateScreen(),
                 'community': (context) => const TabCommunityScreen(),
                 // 'camera': (context) => CameraApp(cameras: _cameras),
