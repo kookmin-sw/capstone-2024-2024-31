@@ -81,7 +81,7 @@ class _CreateChallengeFirState extends State<CreateChallengeFir> {
               );
             },
             child: SvgPicture.asset(
-              'assets/svgs/create_challenge_btn.svg',
+              'assets/svgs/create_challenge_next_btn.svg',
               // width: double.infinity,
               // height: 30,
             ),

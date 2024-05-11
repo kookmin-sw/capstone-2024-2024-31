@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/challenge/create/create_challenge_screen_complete.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -70,7 +72,9 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
           color: Colors.transparent,
           width: double.infinity,
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Get.offAll(()=> const CreateCompleteScreen());
+            },
             child: SvgPicture.asset(
               'assets/svgs/create_challenge_btn.svg',
               // width: double.infinity,
@@ -80,7 +84,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

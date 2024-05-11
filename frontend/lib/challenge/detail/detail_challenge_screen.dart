@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/challenge/detail/detail_imageDetail_screen.dart';
@@ -10,13 +8,16 @@ import 'package:frontend/challenge/detail/widgets/certification_method_widget.da
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen.dart';
+import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
 class ChallengeDetailScreen extends StatelessWidget {
-  ChallengeDetailScreen({super.key});
+  final bool isFromMainScreen;
+
+  ChallengeDetailScreen({super.key, required this.isFromMainScreen});
 
   Challenge challenge = Challenge(
       isPrivate: false,
@@ -48,67 +49,79 @@ class ChallengeDetailScreen extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     initializeDateFormatting('ko_KR', 'en_US');
 
-    return SafeArea(
-        child: Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              // AppBar를 투명하게 설정
-              elevation: 0,
-              // 그림자 없애기
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                ),
+    return Scaffold(
+        appBar: AppBar(
+          leading: isFromMainScreen
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Palette.grey300,
+                  ),
+                  onPressed: () {
+                    Get.back();
+                  })
+              : IconButton(
+                  icon: const Icon(
+                    Icons.home,
+                    color: Palette.grey300,
+                  ),
+                  onPressed: () {
+                    Get.offAll(() => const MainScreen());
+                  }),
+          title: const Text("챌린지 자세히 보기",
+              style: TextStyle(
+                  color: Palette.grey300,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  fontFamily: "Pretender")),
+          actions: [
+            IconButton(
                 onPressed: () {},
+                icon: const Icon(
+                  Icons.ios_share,
+                  color: Palette.grey300,
+                )),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              PhotoesWidget(
+                screenHeight: screenSize.height,
+                imageUrl: challenge.challengeImage1.toString(),
               ),
-              actions: [
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.ios_share,
-                      color: Colors.white,
-                    )),
-              ],
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  PhotoesWidget(
-                    screenHeight: screenSize.height,
-                    imageUrl: challenge.challengeImage1.toString(),
-                  ),
-                  // screenHeight를 전달합니다.
-                  Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 15),
-                      child: InformationWidget(challenge: challenge)),
-                  SvgPicture.asset(
-                    'assets/svgs/divider.svg',
-                    fit: BoxFit.contain,
-                  ),
-                  challengeExplanation(),
-                  ImageGridView(screenSize),
-                  SvgPicture.asset(
-                    'assets/svgs/divider.svg',
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text("인증 방식",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: "Pretendard",
-                          fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 15),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: CertificationMethod(challenge: challenge)),
-                  certificationExplainPicture(screenSize)
-                ],
+              // screenHeight를 전달합니다.
+              Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: InformationWidget(challenge: challenge)),
+              SvgPicture.asset(
+                'assets/svgs/divider.svg',
+                fit: BoxFit.contain,
               ),
-            ),
-            bottomNavigationBar: Stack(children: <Widget>[
+              challengeExplanation(),
+              ImageGridView(screenSize),
+              SvgPicture.asset(
+                'assets/svgs/divider.svg',
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 10),
+              const Text("인증 방식",
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: "Pretendard",
+                      fontWeight: FontWeight.w600)),
+              const SizedBox(height: 15),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: CertificationMethod(challenge: challenge)),
+              certificationExplainPicture(screenSize)
+            ],
+          ),
+        ),
+        bottomNavigationBar: Visibility(
+            visible: isFromMainScreen,
+            child: Stack(children: <Widget>[
               Container(
                 alignment: Alignment.center,
                 padding:
@@ -136,7 +149,8 @@ class ChallengeDetailScreen extends StatelessWidget {
                   top: 5,
                   left: 20,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: Palette.purPle700,
@@ -168,8 +182,8 @@ class ChallengeDetailScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 15),
         height: screenSize.height * 0.15 * 3.3,
         child: GridView.builder(
-          padding: EdgeInsets.symmetric(vertical: 4),
-          physics: NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          physics: const NeverScrollableScrollPhysics(),
           // 스크롤 불가능하게 설정
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -233,7 +247,7 @@ class ChallengeDetailScreen extends StatelessWidget {
     return Column(
       children: [
         Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(challenge.certificationExplanation,
                 style: const TextStyle(
                     fontSize: 10,
