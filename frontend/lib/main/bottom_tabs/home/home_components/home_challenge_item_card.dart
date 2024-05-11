@@ -25,7 +25,7 @@ class ChallengeItemCard extends StatelessWidget {
           print("${this_challenge.challengeName} 챌린지 클릭됨");
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ChallengeDetailScreen()),
+            MaterialPageRoute(builder: (context) => ChallengeDetailScreen(isFromMainScreen: true)),
           );
         },
         child: Container(
