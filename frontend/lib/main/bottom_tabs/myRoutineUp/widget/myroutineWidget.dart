@@ -10,8 +10,9 @@ import 'package:frontend/model/data/challenge.dart';
 
 class ChallengeWidget extends StatefulWidget {
   final bool isIng;
+  final bool isStarted;
 
-  const ChallengeWidget({Key? key, required this.isIng}) : super(key: key);
+  const ChallengeWidget({super.key, required this.isIng, required this.isStarted});
 
   @override
   _ChallengeWidgetState createState() => _ChallengeWidgetState();
@@ -74,19 +75,30 @@ class _ChallengeWidgetState extends State<ChallengeWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.isIng
-            ? Text(
-          "진행중 ${ing_challengeList.length}",
-          textAlign: TextAlign.start,
-          style: const TextStyle(
-            fontFamily: 'Pretendard',
-            fontSize: 10,
-            color: Palette.grey500,
-            fontWeight: FontWeight.bold,
-          ),
-        )
-            : Text(
-          "완료 ${complete_challengeList.length}",
+        widget.isStarted ?
+          widget.isIng
+              ? Text(
+            "진행중 ${ing_challengeList.length}",
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+              fontFamily: 'Pretendard',
+              fontSize: 10,
+              color: Palette.grey500,
+              fontWeight: FontWeight.bold,
+            ),
+          )
+              : Text(
+            "완료 ${complete_challengeList.length}",
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+              fontFamily: 'Pretendard',
+              fontSize: 10,
+              color: Palette.grey200,
+              fontWeight: FontWeight.bold,
+            ),
+          )
+        : Text(
+          "진행 전 ${complete_challengeList.length}",
           textAlign: TextAlign.start,
           style: const TextStyle(
             fontFamily: 'Pretendard',
@@ -113,6 +125,7 @@ class _ChallengeWidgetState extends State<ChallengeWidget> {
                   (index) {
                 return MyRoutineUpCard(
                   isIng: widget.isIng,
+                  isStarted: widget.isStarted,
                   challenge: challenge,
                 );
               },

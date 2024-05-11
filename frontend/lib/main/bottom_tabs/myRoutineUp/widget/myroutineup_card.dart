@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/challenge/complete/challenge_complete_screen.dart';
+import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/model/config/image_from_file.dart';
@@ -15,10 +16,11 @@ import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class MyRoutineUpCard extends StatelessWidget {
   const MyRoutineUpCard(
-      {super.key, required this.isIng, required this.challenge});
+      {super.key, required this.isIng, required this.challenge, required this.isStarted});
 
   final bool isIng;
   final Challenge challenge;
+  final bool isStarted;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,11 @@ class MyRoutineUpCard extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          isIng
+          isStarted
+          ? isIng
               ? Get.to(() => const TabCommunityScreen())
-              : Get.to(() => ChallengeCompleteScreen(challenge: challenge));
+              : Get.to(() => ChallengeCompleteScreen(challenge: challenge))
+          : Get.to(() => ChallengeDetailScreen(isFromMainScreen: false));
         },
         child: SizedBox(
             width: screenSize.width * 0.95,
