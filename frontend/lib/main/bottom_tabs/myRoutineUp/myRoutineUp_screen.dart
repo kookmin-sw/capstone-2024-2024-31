@@ -55,6 +55,7 @@ class _MyRoutineUpScreenState extends State<MyRoutineUpScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: ChallengeWidget(isIng: false, isStarted: false),
             ),
+            Divider(height: 10,thickness: 3, indent: 20, endIndent: 20, color: Palette.grey50,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: ChallengeWidget(isIng: true, isStarted: true),
