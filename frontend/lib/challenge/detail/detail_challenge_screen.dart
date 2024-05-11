@@ -8,12 +8,15 @@ import 'package:frontend/challenge/detail/widgets/certification_method_widget.da
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen.dart';
+import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:get/get.dart';
 
 class ChallengeDetailScreen extends StatelessWidget {
   final bool isFromMainScreen;
+
   ChallengeDetailScreen({super.key, required this.isFromMainScreen});
 
   Challenge challenge = Challenge(
@@ -47,62 +50,78 @@ class ChallengeDetailScreen extends StatelessWidget {
     initializeDateFormatting('ko_KR', 'en_US');
 
     return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.grey,
-                ),
+        appBar: AppBar(
+          leading: isFromMainScreen
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Palette.grey300,
+                  ),
+                  onPressed: () {
+                    Get.back();
+                  })
+              : IconButton(
+                  icon: const Icon(
+                    Icons.home,
+                    color: Palette.grey300,
+                  ),
+                  onPressed: () {
+                    Get.offAll(() => const MainScreen());
+                  }),
+          title: const Text("챌린지 자세히 보기",
+              style: TextStyle(
+                  color: Palette.grey300,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  fontFamily: "Pretender")),
+          actions: [
+            IconButton(
                 onPressed: () {},
+                icon: const Icon(
+                  Icons.ios_share,
+                  color: Palette.grey300,
+                )),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              PhotoesWidget(
+                screenHeight: screenSize.height,
+                imageUrl: challenge.challengeImage1.toString(),
               ),
-              actions: [
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.ios_share,
-                      color: Colors.grey,
-                    )),
-              ],
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  PhotoesWidget(
-                    screenHeight: screenSize.height,
-                    imageUrl: challenge.challengeImage1.toString(),
-                  ),
-                  // screenHeight를 전달합니다.
-                  Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 15),
-                      child: InformationWidget(challenge: challenge)),
-                  SvgPicture.asset(
-                    'assets/svgs/divider.svg',
-                    fit: BoxFit.contain,
-                  ),
-                  challengeExplanation(),
-                  ImageGridView(screenSize),
-                  SvgPicture.asset(
-                    'assets/svgs/divider.svg',
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text("인증 방식",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: "Pretendard",
-                          fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 15),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: CertificationMethod(challenge: challenge)),
-                  certificationExplainPicture(screenSize)
-                ],
+              // screenHeight를 전달합니다.
+              Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: InformationWidget(challenge: challenge)),
+              SvgPicture.asset(
+                'assets/svgs/divider.svg',
+                fit: BoxFit.contain,
               ),
-            ),
-            bottomNavigationBar:  Visibility(
-              visible: isFromMainScreen,
-                child: Stack(children: <Widget>[
+              challengeExplanation(),
+              ImageGridView(screenSize),
+              SvgPicture.asset(
+                'assets/svgs/divider.svg',
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 10),
+              const Text("인증 방식",
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: "Pretendard",
+                      fontWeight: FontWeight.w600)),
+              const SizedBox(height: 15),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: CertificationMethod(challenge: challenge)),
+              certificationExplainPicture(screenSize)
+            ],
+          ),
+        ),
+        bottomNavigationBar: Visibility(
+            visible: isFromMainScreen,
+            child: Stack(children: <Widget>[
               Container(
                 alignment: Alignment.center,
                 padding:
@@ -130,7 +149,8 @@ class ChallengeDetailScreen extends StatelessWidget {
                   top: 5,
                   left: 20,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: Palette.purPle700,
