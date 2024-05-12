@@ -23,9 +23,6 @@ public class ChallengeCreateRequest {
 
     @Schema(description = "챌린지 소개")
     private String challengeExplanation;
-
-    @Schema(description = "챌린지 소개 사진")
-    private List<MultipartFile> challengeImages;
     
     @Schema(description = "챌린지 기간")
     private String challengePeriod;
@@ -53,5 +50,4 @@ public class ChallengeCreateRequest {
 
     @Schema(description = "최대 모집 인원")
     private Integer maximumPeople;
-
 }
