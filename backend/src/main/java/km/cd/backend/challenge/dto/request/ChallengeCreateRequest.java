@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
+import km.cd.backend.challenge.dto.enums.ChallengeFrequency;
 import km.cd.backend.challenge.dto.enums.FilePathEnum;
 import km.cd.backend.common.utils.s3.S3Uploader;
 import lombok.AllArgsConstructor;
@@ -94,6 +95,10 @@ public class ChallengeCreateRequest {
         challenge.setIsPrivate(isPrivate);
         challenge.setPrivateCode(privateCode);
         
+        challenge.setTotalCertificationCount(
+            calculateTotalCertificationCount(challenge.getChallengePeriod(), certificationFrequency)
+        );
+        
         String filePath = FilePathEnum.CHALLENGES.getPath();
 
         List<String> imageUrls = new ArrayList<>();
@@ -115,6 +120,10 @@ public class ChallengeCreateRequest {
         }
 
         return challenge;
+    }
+    
+    private Integer calculateTotalCertificationCount(Integer challengePeriod, String certificationFrequency) {
+        return challengePeriod * ChallengeFrequency.findByFrequency(certificationFrequency).getDaysPerWeek();
     }
 
     private Date parseDateString(String dateString) {

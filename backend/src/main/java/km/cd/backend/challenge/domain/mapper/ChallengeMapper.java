@@ -18,11 +18,7 @@ public interface ChallengeMapper {
     ChallengeMapper INSTANCE = Mappers.getMapper(ChallengeMapper.class);
     
     ChallengeInformationResponse challengeToChallengeResponse(Challenge challenge);
-
-    @Mappings({
-            @Mapping(target = "id", source = "challenge.id"),
-            @Mapping(target = "totalCertificationCount", expression = "java(calculateTotalCertificationCount(challenge.getChallengePeriod(), challenge.getCertificationFrequency()))"),
-    })
+    
     ChallengeStatusResponse toChallengeStatusResponse(Challenge challenge, Long numberOfCertifications);
     
     @Mappings({
@@ -34,10 +30,6 @@ public interface ChallengeMapper {
     List<ParticipantResponse> participantListToParticipantResponseList(List<Participant> participants);
 
     ChallengeSimpleResponse entityToSimpleResponse(Challenge challenge);
-
-    default int calculateTotalCertificationCount(Integer challengePeriod, String certificationFrequency) {
-        return challengePeriod * ChallengeFrequency.findByFrequency(certificationFrequency).getDaysPerWeek();
-    }
 
 }
 
