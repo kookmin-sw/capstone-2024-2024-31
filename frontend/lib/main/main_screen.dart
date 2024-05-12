@@ -42,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final UserController userController = Get.find<UserController>();
     final String? accessToken = prefs.getString('access_token');
-    const String url = '${Env.serverUrl}/users/me';
+    final String url = '${Env.serverUrl}/users/me';
 
     final response = await http.get(
       Uri.parse(url),
