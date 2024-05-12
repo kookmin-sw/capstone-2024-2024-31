@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/main/bottom_tabs/mypage/follow_level_screen/tab_follow_screen.dart';
-import 'package:frontend/main/bottom_tabs/mypage/follow_level_screen/level_screen.dart';
+import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/point_screen.dart.dart';
+import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/tab_follow_screen.dart';
+import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/point_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 
 class PurpleThreeBox extends StatelessWidget {
   PurpleThreeBox({super.key});
-
 
   final List<dynamic> _followerList = [
     {
@@ -77,13 +77,11 @@ class PurpleThreeBox extends StatelessWidget {
 
     int point = 1;
 
-
     return Container(
         width: screenSize.width * 0.87,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12), // 컨테이너 둥글게 설정
-          color: Palette.purPle300
-        ),
+            borderRadius: BorderRadius.circular(12), // 컨테이너 둥글게 설정
+            color: Palette.purPle300),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -109,24 +107,23 @@ class PurpleThreeBox extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           if (text == '팔로잉') {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TabFollowScreen(followerList: _followerList, followingList: _followingList, isFromFollowing: true,)),
-            );
+            Get.to(() => TabFollowScreen(
+                  followerList: _followerList,
+                  followingList: _followingList,
+                  isFromFollowing: true,
+                ));
           } else if (text == '팔로워') {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TabFollowScreen(followerList: _followerList, followingList: _followingList, isFromFollowing: false,)),
-            );
+            Get.to(() => TabFollowScreen(
+                  followerList: _followerList,
+                  followingList: _followingList,
+                  isFromFollowing: false,
+                ));
           } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LevelScreen()),
-            );
+            Get.to(() => PointScreen());
           }
         },
         child: Container(
-          // color: Colors.grey,
+            // color: Colors.grey,
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             width: screenSize.width * 0.25,
             child: Column(

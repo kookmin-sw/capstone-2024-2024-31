@@ -1,8 +1,8 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/main/bottom_tabs/mypage/follow_level_screen/follower_tab.dart';
-import 'package:frontend/main/bottom_tabs/mypage/follow_level_screen/following_tab.dart';
+import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/follower_tab.dart';
+import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/following_tab.dart';
 import 'package:frontend/model/config/palette.dart';
 
 class TabFollowScreen extends StatefulWidget {
