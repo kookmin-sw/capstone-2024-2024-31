@@ -93,33 +93,38 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                     Get.to(() => const CreateChallengeThr());
                   }
                 })),
-        body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child:
-                    SvgPicture.asset('assets/svgs/create_challenge_level2.svg'),
-              ),
-              Form(
-                key: formKey,
+        body: GestureDetector(
+            // GestureDetector를 사용하여 화면 터치 이벤트를 감지합니다.
+            onTap: () {
+              FocusScope.of(context).unfocus(); // 터치 시 키보드를 숨깁니다.
+            },
+            child: SingleChildScrollView(
                 child: Column(
-                  children: [
-                    inputName(),
-                    inputExplanation(),
-                    addPicture(),
-                    selectPeriod(),
-                    selectCategory(),
-                    selectStartDay(),
-                    selectFrequency(),
-                    selectAuthTime()
-                  ],
-                ),
-              )
-            ]))));
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    child: SvgPicture.asset(
+                        'assets/svgs/create_challenge_level2.svg'),
+                  ),
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        inputName(),
+                        inputExplanation(),
+                        addPicture(),
+                        selectPeriod(),
+                        selectCategory(),
+                        selectStartDay(),
+                        selectFrequency(),
+                        selectAuthTime()
+                      ],
+                    ),
+                  )
+                ])))));
   }
 
   Widget inputName() {
@@ -274,7 +279,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                                 IconButton(
                                   //todo : 이미지 5장만 추가할 수 있게 block
                                   padding: EdgeInsets.zero,
-                                  alignment: Alignment.topCenter, // 아이콘을 중앙에 배치
+                                  alignment: Alignment.topCenter,
+                                  // 아이콘을 중앙에 배치
                                   onPressed: () async {
                                     if (controller.form.challengeImages.length <
                                         5) {
@@ -463,7 +469,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                               style: TextStyle(
                                   color: selectedFrequency == index
                                       ? Colors.white
-                                      : Palette.grey200,
+                                      : Colors.black,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w500)),
                         ))),
@@ -507,10 +513,13 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
                           const EdgeInsets.symmetric(horizontal: 10),
                         ),
-                        maximumSize: MaterialStateProperty.all<Size>(
-                            const Size(110, 50)),
-                        minimumSize:
-                            MaterialStateProperty.all<Size>(const Size(10, 35)),
+                        fixedSize: MaterialStateProperty.all<Size>(
+                            const Size.fromHeight(50.0)),
+
+                        // maximumSize: MaterialStateProperty.all<Size>(
+                        //     const Size(110, 50)),
+                        // minimumSize:
+                        //     MaterialStateProperty.all<Size>(const Size(10, 35)),
                         shape: MaterialStateProperty.all<OutlinedBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
