@@ -5,7 +5,7 @@ abstract class Env {
   static String serverUrlNip = 'http://${serverIpByEnv()}.nip.io:8080';
 
   static String serverIpByEnv() {
-    const env = String.fromEnvironment("env", defaultValue: 'production');
+    const env = String.fromEnvironment("env", defaultValue: 'development');
     switch (env) {
       case 'development':
         return '3.34.14.45';
