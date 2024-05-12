@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
+import km.cd.backend.challenge.dto.request.ChallengeJoinRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInviteCodeResponse;
@@ -73,8 +74,9 @@ public class ChallengeController {
     @PostMapping("/{challengeId}/join")
     public ResponseEntity<String> joinChallenge(
             @PathVariable Long challengeId,
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        challengeService.joinChallenge(challengeId, principalDetails.getUserId());
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody ChallengeJoinRequest challengeJoinRequest) {
+        challengeService.joinChallenge(challengeId, principalDetails.getUserId(), challengeJoinRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
