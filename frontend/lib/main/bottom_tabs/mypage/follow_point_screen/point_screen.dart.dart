@@ -142,12 +142,18 @@ class PointScreen extends StatelessWidget {
               ))),
     );
   }
-
   List<Widget> generatePointHistoryCards() {
+    // Sort pointHistory by dateTime in descending order
+    pointHistory.sort((a, b) => b["dateTime"].compareTo(a["dateTime"]));
+
+    // Generate PointHistoryCard widgets
     return List.generate(pointHistory.length, (index) {
-      return Padding(padding: const EdgeInsets.symmetric(vertical: 5),
-      child: PointHistoryCard(history: pointHistory[index]));
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: PointHistoryCard(history: pointHistory[index]),
+      );
     });
   }
+
 
 }
