@@ -7,7 +7,9 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 
 class CreateCompleteScreen extends StatelessWidget {
-  const CreateCompleteScreen({super.key});
+  final int challengeId;
+
+  const CreateCompleteScreen({super.key, required this.challengeId});
 
   TextStyle buttonTextStyle(Color? textColor) => TextStyle(
       fontWeight: FontWeight.w500, fontFamily: "Pretender", color: textColor);

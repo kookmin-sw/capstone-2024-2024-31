@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:frontend/main/main_screen.dart';
@@ -8,9 +6,6 @@ import 'package:logger/logger.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/env.dart';
-import 'package:http/http.dart' as http;
-import 'package:frontend/model/controller/user_controller.dart';
-import 'package:frontend/model/data/user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -39,10 +34,14 @@ class _LoginScreenState extends State<LoginScreen> {
     if (accessToken != null) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("access_token", accessToken);
+      logger.d(' 구글 로그인 성공 👋');
+      Get.offAll(() => const MainScreen());
+      return;
     }
 
-    logger.d(' 구글 로그인 성공 👋');
-    Get.offAll(() => const MainScreen());
+    logger.d(' 구글 로그인 실패 😭');
+    Get.snackbar('로그인 실패', '다시 시도해주세요',
+        backgroundColor: Colors.red, colorText: Colors.white);
   }
 
   @override
