@@ -1,7 +1,9 @@
 import 'dart:io';
-
+import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:frontend/model/data/challenge_form.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ChallengeFormController extends GetxController {
   final _form = ChallengeForm(
@@ -123,6 +125,40 @@ class ChallengeFormController extends GetxController {
   void updateMaximumPeople(int maximumPeople) {
     _form.update((val) {
       val?.maximumPeople = maximumPeople;
+    });
+  }
+
+  dio.FormData toFormData() {
+    return dio.FormData.fromMap({
+      "json": dio.MultipartFile.fromString(
+          jsonEncode({
+            "isPrivate": form.isPrivate,
+            "challengeName": form.challengeName,
+            "challengeExplanation": form.challengeExplanation,
+            "challengePeriod": form.challengePeriod,
+            "challengeCategory": form.challengeCategory,
+            "startDate": form.startDate,
+            "certificationFrequency": form.certificationFrequency,
+            "certificationStartTime": form.certificationStartTime,
+            "certificationEndTime": form.certificationEndTime,
+            "certificationExplanation": form.certificationExplanation,
+            "isGalleryPossible": form.isGalleryPossible,
+            "maximumPeople": form.maximumPeople,
+          }),
+          contentType: MediaType('application', 'json')),
+      "images": form.challengeImages
+          .map((image) => dio.MultipartFile.fromFileSync(image.path,
+              contentType: MediaType('image', 'jpeg')))
+          .toList(),
+      "failedImage": form.failedVerificationImage != null
+          ? dio.MultipartFile.fromFileSync(form.failedVerificationImage!.path,
+              contentType: MediaType('image', 'jpeg'))
+          : null,
+      "successImage": form.successfulVerificationImage != null
+          ? dio.MultipartFile.fromFileSync(
+              form.successfulVerificationImage!.path,
+              contentType: MediaType('image', 'jpeg'))
+          : null,
     });
   }
 }

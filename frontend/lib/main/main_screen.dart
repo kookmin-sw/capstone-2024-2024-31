@@ -79,6 +79,7 @@ class _MainScreenState extends State<MainScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(errorMessage),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 Get.to(() => const LoginScreen());

@@ -11,6 +11,7 @@ import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInviteCodeResponse;
 import km.cd.backend.challenge.dto.response.ChallengeSimpleResponse;
+import km.cd.backend.challenge.dto.enums.FilePathEnum;
 import km.cd.backend.challenge.dto.request.ChallengeCreateRequest;
 import km.cd.backend.challenge.dto.request.ChallengeFilter;
 import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
@@ -28,6 +29,7 @@ import km.cd.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -43,11 +45,15 @@ public class ChallengeService {
     
     final private static String INVITE_LINK_PREFIX = "challengeId=%d";
     
-    public Challenge createChallenge(Long userId, ChallengeCreateRequest challengeCreateRequest) {
+    public Challenge createChallenge(
+        Long userId, ChallengeCreateRequest challengeCreateRequest,
+        List<MultipartFile> images,
+        MultipartFile successfulVerificationImage,
+        MultipartFile failedVerificationImage) {
         User user = validateExistUser(userId);
 
         // 프론트로부터 넘겨받은 챌린지 데이터
-        Challenge challenge = challengeCreateRequest.toEntity(s3Uploader);
+        Challenge challenge = ChallengeMapper.INSTANCE.requestToEntity(challengeCreateRequest);
 
         // participant 생성
         Participant creator = new Participant();
@@ -59,10 +65,22 @@ public class ChallengeService {
         challenge.getParticipants().add(creator);
         challenge.increaseNumOfParticipants();
         
-        // 챌린지 저장
-        challengeRepository.save(challenge);
+        // 챌린지 이미지 업로드
+        List<String> imagePaths = images.stream().map(
+            image -> s3Uploader.uploadFileToS3(image, FilePathEnum.CHALLENGES.getPath())
+            ).toList();
+            challenge.setChallengeImagePaths(imagePaths);
+            
 
-        return challenge;
+        // 인증 성공 이미지 업로드
+        String successImagePath = s3Uploader.uploadFileToS3(successfulVerificationImage, FilePathEnum.CHALLENGES.getPath());
+        challenge.setSuccessfulVerificationImage(successImagePath);
+
+        // 인증 실패 이미지 업로드
+        String failImagePath = s3Uploader.uploadFileToS3(failedVerificationImage, FilePathEnum.CHALLENGES.getPath());
+        challenge.setFailedVerificationImage(failImagePath);
+
+        return challengeRepository.save(challenge);
     }
     
     public void joinChallenge(Long challengeId, Long userId) {

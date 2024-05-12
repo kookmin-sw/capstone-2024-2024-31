@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/challenge/create/create_challenge_screen_thr.dart';
 import 'package:frontend/model/config/category_list.dart';
 import 'package:frontend/model/controller/challenge_form_controller.dart';
 import 'package:frontend/widgets/custom_button.dart';
@@ -78,6 +79,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                     logger.d("설정된 챌린지 이름: ${controller.form.challengeName}");
                     logger.d(
                         "설정된 챌린지 소개: ${controller.form.challengeExplanation}");
+                    logger.d("설정된 챌린지 사진: ${controller.form.challengeImages}");
+                    logger.d("설정된 챌린지 기간: ${controller.form.challengePeriod}");
                     logger.d(
                         "설정된 챌린지 카테고리: ${controller.form.challengeCategory}");
                     logger.d("설정된 챌린지 시작일: ${controller.form.startDate}");
@@ -87,7 +90,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                         "설정된 챌린지 인증 시작 시간: ${controller.form.certificationStartTime}");
                     logger.d(
                         "설정된 챌린지 인증 종료 시간: ${controller.form.certificationEndTime}");
-                    logger.d("설정된 챌린지 이미지: ${controller.form.challengeImages}");
+                    Get.to(() => const CreateChallengeThr());
                   }
                 })),
         body: SingleChildScrollView(
@@ -108,7 +111,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                     inputName(),
                     inputExplanation(),
                     addPicture(),
-                    selectWeekend(),
+                    selectPeriod(),
                     selectCategory(),
                     selectStartDay(),
                     selectFrequency(),
@@ -408,7 +411,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
         ]));
   }
 
-  Widget selectWeekend() {
+  Widget selectPeriod() {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -436,8 +439,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                                 selectedFrequency = -1;
                               } else {
                                 selectedFrequency = index;
-                                controller.updateChallengePeriod(
-                                    frequencyList[index]);
+                                controller
+                                    .updateChallengePeriod('${index + 1}주');
                               }
                             });
                           },
@@ -574,6 +577,16 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           WeeklyDatePicker(
             selectedDay: selectedDay,
             changeDay: (value) => setState(() {
+              var today = DateTime.now();
+              today = DateTime(today.year, today.month, today.day);
+              if (value.isBefore(today)) {
+                Get.snackbar("알림", "오늘 이후의 날짜를 선택해주세요.",
+                    backgroundColor: Palette.purPle300,
+                    colorText: Colors.white,
+                    snackPosition: SnackPosition.BOTTOM,
+                    margin: const EdgeInsets.all(8));
+                return;
+              }
               selectedDay = value;
               final DateFormat formatter = DateFormat('yyyy-MM-dd');
               controller.updateStartDate(formatter.format(value));
@@ -605,6 +618,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           ),
           const SizedBox(height: 10),
           DropdownButton<String>(
+            isExpanded: true,
             value: controller.form.certificationFrequency,
             icon: const Icon(Icons.expand_more),
             elevation: 16,

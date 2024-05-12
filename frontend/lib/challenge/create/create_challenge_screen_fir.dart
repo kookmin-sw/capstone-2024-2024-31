@@ -61,7 +61,7 @@ class _CreateChallengeFirState extends State<CreateChallengeFir> {
                 text: "다음으로",
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    logger.d('설정된 공개 여부: ${controller.form.isPrivate}');
+                    logger.d('설정된 비공개 여부: ${controller.form.isPrivate}');
                     logger.d('설정된 암호: ${controller.form.privateCode}');
                     Get.to(() => const CreateChallengeSec());
                   }
