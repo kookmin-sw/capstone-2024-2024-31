@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SmsRequestDto {
+public class SmsResultRequest {
     
     @Schema(description = "수신 번호")
     private String receiverNumber;
@@ -18,5 +18,4 @@ public class SmsRequestDto {
     
     @Schema(description = "챌린지 이름")
     private String challengeName;
-    
 }
