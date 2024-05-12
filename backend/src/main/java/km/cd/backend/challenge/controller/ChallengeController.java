@@ -23,6 +23,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -33,13 +34,19 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ChallengeInformationResponse> createChallenge(
-            @ModelAttribute ChallengeCreateRequest challengeCreateRequest,
+    public ResponseEntity<Long> createChallenge(
+            @RequestPart(name = "json") ChallengeCreateRequest challengeCreateRequest,
+            @RequestPart(name = "images") List<MultipartFile> images,
+            @RequestPart(name = "successImage") MultipartFile successfulVerificationImage,
+            @RequestPart(name = "failedImage") MultipartFile failedVerificationImage,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Challenge saved = challengeService.createChallenge(principalDetails.getUserId(),
-            challengeCreateRequest);
-        ChallengeInformationResponse challenge = ChallengeMapper.INSTANCE.challengeToChallengeResponse(saved);
-        return ResponseEntity.ok(challenge);
+        Challenge saved = challengeService.createChallenge(
+            principalDetails.getUserId(),
+            challengeCreateRequest,
+            images,
+            successfulVerificationImage,
+            failedVerificationImage);
+        return ResponseEntity.ok(saved.getId());
     }
 
     @GetMapping("/list")

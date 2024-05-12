@@ -1,50 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
+import 'package:frontend/challenge/create/create_challenge_screen_thr.dart';
 import 'package:frontend/model/config/category_list.dart';
+import 'package:frontend/model/controller/challenge_form_controller.dart';
+import 'package:frontend/widgets/custom_button.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:weekly_date_picker/weekly_date_picker.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:frontend/challenge/create/create_challenge_screen_thr.dart';
-import 'package:frontend/model/data/challenge.dart';
 
 class CreateChallengeSec extends StatefulWidget {
-  Challenge challenge;
-
-  CreateChallengeSec({super.key, required this.challenge});
+  const CreateChallengeSec({super.key});
 
   @override
   State<CreateChallengeSec> createState() => _CreateChallengeSecState();
 }
 
 class _CreateChallengeSecState extends State<CreateChallengeSec> {
-  late Challenge newChallenge;
+  final formKey = GlobalKey<FormState>();
+  final ChallengeFormController controller = Get.find();
+  final logger = Logger();
 
-  bool? isPrivateSelected;
-
-  bool showAdditionalWidgets =
-      false; // Added state to control the visibility of additional widgets
-
-  bool showPart1 = true;
-  bool showPart2 = false;
-  bool showPart3 = false;
   final picker = ImagePicker();
-  XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
-  List<XFile?> multiImage = []; // 갤러리에서 여러 장의 사진을 선택해서 저장할 변수
-  List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수\
-
-  int selectedIndex = -1;
-  String selectCategoryText = '';
-  DateTime _selectedDay = DateTime.now();
-  String dropdownValue = '매일';
-  int? selectedHourStart = 0;
-  int? selectedHourEnd = 24;
 
   List<String> frequencyList = <String>[
     '매일',
@@ -57,22 +39,25 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
     '주 5회',
     '주 6회'
   ];
-
+  int selectedFrequency = -1;
+  DateTime selectedDay = DateTime.now();
+  int selectedHourStart = 0;
+  int selectedHourEnd = 24;
 
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting('ko_KR', null);
-    newChallenge = widget.challenge;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(() => Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+            },
           ),
           title: const Text(
             '챌린지 생성하기',
@@ -84,25 +69,30 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           ),
         ),
         bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-          color: Colors.transparent,
-          width: double.infinity,
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) =>
-                      CreateChallengeThr(challenge: newChallenge),
-                ),
-              );
-            },
-            child: SvgPicture.asset(
-              'assets/svgs/create_challenge_btn.svg',
-              // width: double.infinity,
-              // height: 30,
-            ),
-          ),
-        ),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            color: Colors.transparent,
+            width: double.infinity,
+            child: CustomButton(
+                text: "다음으로",
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    logger.d("설정된 챌린지 이름: ${controller.form.challengeName}");
+                    logger.d(
+                        "설정된 챌린지 소개: ${controller.form.challengeExplanation}");
+                    logger.d("설정된 챌린지 사진: ${controller.form.challengeImages}");
+                    logger.d("설정된 챌린지 기간: ${controller.form.challengePeriod}");
+                    logger.d(
+                        "설정된 챌린지 카테고리: ${controller.form.challengeCategory}");
+                    logger.d("설정된 챌린지 시작일: ${controller.form.startDate}");
+                    logger.d(
+                        "설정된 챌린지 인증 빈도: ${controller.form.certificationFrequency}");
+                    logger.d(
+                        "설정된 챌린지 인증 시작 시간: ${controller.form.certificationStartTime}");
+                    logger.d(
+                        "설정된 챌린지 인증 종료 시간: ${controller.form.certificationEndTime}");
+                    Get.to(() => const CreateChallengeThr());
+                  }
+                })),
         body: SingleChildScrollView(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -114,21 +104,28 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                 child:
                     SvgPicture.asset('assets/svgs/create_challenge_level2.svg'),
               ),
-              inputName(),
-              inputIntro(),
-              addPicture(),
-              selectWeekend(),
-              selectCategory(),
-              selectStartDay(),
-              selectFrequency(),
-              selectAuthTime()
-            ])));
+              Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    inputName(),
+                    inputExplanation(),
+                    addPicture(),
+                    selectPeriod(),
+                    selectCategory(),
+                    selectStartDay(),
+                    selectFrequency(),
+                    selectAuthTime()
+                  ],
+                ),
+              )
+            ]))));
   }
 
   Widget inputName() {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-        child: Form(
+        child: SizedBox(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Text(
@@ -172,23 +169,16 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                       borderSide:
                           const BorderSide(color: Palette.mainPurple, width: 2),
                     )),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '챌린지 이름을 입력하세요.';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  // _submittedName = value;
-                },
+                validator: (value) => value!.isEmpty ? '챌린지 이름을 입력해주세요.' : null,
+                onChanged: (value) => controller.updateChallengeName(value),
               ))
         ])));
   }
 
-  Widget inputIntro() {
+  Widget inputExplanation() {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-        child: Form(
+        child: SizedBox(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Text(
@@ -202,7 +192,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           const SizedBox(height: 15),
           SizedBox(
               height: 140,
-              child: TextField(
+              child: TextFormField(
                 maxLines: 5,
                 maxLength: 50,
                 style: const TextStyle(
@@ -233,7 +223,10 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                       borderSide:
                           const BorderSide(color: Palette.mainPurple, width: 2),
                     )),
-              ))
+                validator: (value) => value!.isEmpty ? '챌린지 소개를 입력해주세요.' : null,
+                onChanged: (value) =>
+                    controller.updateChallengeExplanation(value),
+              )),
         ])));
   }
 
@@ -254,143 +247,173 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
             width: double.infinity,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal, // 수평 스크롤
-              child: Row(
-                children: [
-                  Container(
-                      padding: EdgeInsets.zero,
-                      // 갤러리에서 가져오기 버튼
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: Palette.greySoft,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 0.5,
-                            blurRadius: 5,
-                          )
-                        ],
-                      ),
-                      child: Stack(alignment: Alignment.center, children: [
-                        IconButton(
-                          //todo : 이미지 5장만 추가할 수 있게 block
-                          padding: EdgeInsets.zero,
-                          alignment: Alignment.topCenter, // 아이콘을 중앙에 배치
-                          onPressed: () async {
-                            if (images.length < 5) {
-                              // 이미지가 5장 미만일 때만 이미지 추가 동작 수행
-                              multiImage = await picker.pickMultiImage();
-                              setState(() {
-                                images.addAll(multiImage);
-                              });
-                            } else {
-                              Fluttertoast.showToast(
-                                msg: "이미지는 최대 5장까지 선택할 수 있습니다.",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                backgroundColor: Colors.grey,
-                                textColor: Colors.white,
-                                fontSize: 10.0,
-                              );
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.add_photo_alternate_outlined,
-                            size: 24,
-                            color: Palette.grey200,
-                          ),
-                        ),
-                        Positioned(
-                            bottom: 6,
-                            child: Text(
-                              "${images.length}/5",
-                              style: TextStyle(
-                                fontSize: 9,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w300,
-                                color: images.length < 5
-                                    ? Palette.grey200
-                                    : Colors.red[20], // 텍스트 색상 설정
-                              ),
-                            ))
-                      ])),
-                  // 선택한 이미지들을 나타내는 그리드 뷰
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    height: 80,
-                    // 그리드 뷰의 높이
-                    width: images.length * 100.0,
-                    // 그리드 뷰의 너비 (이미지 너비 * 이미지 개수)
-                    child: GridView.builder(
-                      scrollDirection: Axis.horizontal,
-                      // 수평 스크롤
-                      padding: EdgeInsets.all(5),
-                      shrinkWrap: true,
-                      itemCount: images.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1, // 수평으로 한 번에 보여질 이미지 수
-                        childAspectRatio: 1, // 이미지의 가로 세로 비율
-                        mainAxisSpacing: 10, // 그리드 뷰의 아이템들 간의 수평 간격 조정
-                      ),
-                      itemBuilder: (BuildContext context, int index) {
-                        print(File(images[index]!.path));
-
-                        // 이미지와 삭제 버튼을 포함한 스택
-                        return Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Container(
+              child: FormField<File>(
+                builder: (formFieldState) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.zero,
+                              // 갤러리에서 가져오기 버튼
+                              height: 60,
+                              width: 60,
                               decoration: BoxDecoration(
+                                color: Palette.greySoft,
                                 borderRadius: BorderRadius.circular(8),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: FileImage(
-                                    File(images[index]!.path),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 0.5,
+                                    blurRadius: 5,
+                                  )
+                                ],
+                              ),
+                              child:
+                                  Stack(alignment: Alignment.center, children: [
+                                IconButton(
+                                  //todo : 이미지 5장만 추가할 수 있게 block
+                                  padding: EdgeInsets.zero,
+                                  alignment: Alignment.topCenter, // 아이콘을 중앙에 배치
+                                  onPressed: () async {
+                                    if (controller.form.challengeImages.length <
+                                        5) {
+                                      // 이미지가 5장 미만일 때만 이미지 추가 동작 수행
+                                      List<XFile> images =
+                                          await picker.pickMultiImage();
+                                      if (images.isNotEmpty) {
+                                        controller.updateChallengeImages(images
+                                            .map((e) => File(e.path))
+                                            .toList());
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg: "이미지는 최대 5장까지 선택할 수 있습니다.",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey,
+                                        textColor: Colors.white,
+                                        fontSize: 10.0,
+                                      );
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.add_photo_alternate_outlined,
+                                    size: 24,
+                                    color: Palette.grey200,
                                   ),
                                 ),
+                                Positioned(
+                                    bottom: 6,
+                                    child: Text(
+                                      "${controller.form.challengeImages.length}/5",
+                                      style: TextStyle(
+                                        fontSize: 9,
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w300,
+                                        color: controller.form.challengeImages
+                                                    .length <
+                                                5
+                                            ? Palette.grey200
+                                            : Colors.red[20], // 텍스트 색상 설정
+                                      ),
+                                    ))
+                              ])),
+                          // 선택한 이미지들을 나타내는 그리드 뷰
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            height: 80,
+                            // 그리드 뷰의 높이
+                            width:
+                                controller.form.challengeImages.length * 100.0,
+                            // 그리드 뷰의 너비 (이미지 너비 * 이미지 개수)
+                            child: GridView.builder(
+                              scrollDirection: Axis.horizontal,
+                              // 수평 스크롤
+                              padding: const EdgeInsets.all(5),
+                              shrinkWrap: true,
+                              itemCount: controller.form.challengeImages.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 1, // 수평으로 한 번에 보여질 이미지 수
+                                childAspectRatio: 1, // 이미지의 가로 세로 비율
+                                mainAxisSpacing: 10, // 그리드 뷰의 아이템들 간의 수평 간격 조정
                               ),
+                              itemBuilder: (BuildContext context, int index) {
+                                // 이미지와 삭제 버튼을 포함한 스택
+                                return Stack(
+                                  alignment: Alignment.topRight,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: FileImage(
+                                            File(controller.form
+                                                .challengeImages[index].path),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // 삭제 버튼
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        color: Palette.grey300,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        icon: const Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 13,
+                                        ),
+                                        onPressed: () {
+                                          controller
+                                              .removeChallengeImageByIndex(
+                                                  index);
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
-                            // 삭제 버튼
-                            Container(
-                              height: 20,
-                              width: 20,
-                              decoration: BoxDecoration(
-                                color: Palette.grey300,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: BoxConstraints(),
-                                icon: const Icon(
-                                  Icons.close,
-                                  color: Colors.white,
-                                  size: 13,
-                                ),
-                                onPressed: () {
-                                  // 이미지 삭제
-                                  setState(() {
-                                    images.remove(images[index]);
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                          ),
+                        ],
+                      ),
+                      if (formFieldState.hasError)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            formFieldState.errorText!,
+                            style: TextStyle(
+                                fontFamily: 'Pretendard',
+                                fontSize: 13,
+                                color: Colors.red[900],
+                                height: 0.5),
+                          ),
+                        )
+                    ]),
+                validator: (value) {
+                  if (controller.form.challengeImages.isEmpty) {
+                    return '챌린지 소개 사진을 추가해주세요.';
+                  }
+                  return null;
+                },
               ),
             ),
           )
         ]));
   }
 
-  Widget selectWeekend() {
+  Widget selectPeriod() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Text(
             "기간",
@@ -412,11 +435,12 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              if (selectedIndex == index) {
-                                selectedIndex =
-                                    -1; // Deselect if already selected
+                              if (selectedFrequency == index) {
+                                selectedFrequency = -1;
                               } else {
-                                selectedIndex = index; // Select otherwise
+                                selectedFrequency = index;
+                                controller
+                                    .updateChallengePeriod('${index + 1}주');
                               }
                             });
                           },
@@ -430,14 +454,14 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
-                            backgroundColor: selectedIndex == index
+                            backgroundColor: selectedFrequency == index
                                 ? MaterialStateProperty.all<Color>(
                                     Palette.mainPurple)
                                 : null,
                           ),
                           child: Text("${(index + 1).toString()}주",
                               style: TextStyle(
-                                  color: selectedIndex == index
+                                  color: selectedFrequency == index
                                       ? Colors.white
                                       : Palette.grey200,
                                   fontSize: 11,
@@ -471,16 +495,13 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: ElevatedButton(
                       onPressed: () {
-                        setState(() {
-                          if (selectCategoryText ==
-                              CategoryList[categoryIndex]['category']) {
-                            selectCategoryText =
-                                ''; // Deselect if already selected
-                          } else {
-                            selectCategoryText = CategoryList[categoryIndex]
-                                ['category']; // Select otherwise
-                          }
-                        });
+                        if (controller.form.challengeCategory ==
+                            CategoryList[categoryIndex]['category']) {
+                          controller.updateChallengeCategory('');
+                        } else {
+                          controller.updateChallengeCategory(
+                              CategoryList[categoryIndex]['category']);
+                        }
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
@@ -495,8 +516,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        backgroundColor: selectCategoryText ==
-                            CategoryList[categoryIndex]['category']
+                        backgroundColor: controller.form.challengeCategory ==
+                                CategoryList[categoryIndex]['category']
                             ? MaterialStateProperty.all<Color>(
                                 Palette.mainPurple)
                             : null,
@@ -513,8 +534,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                             style: TextStyle(
                               fontSize: 11.0,
                               fontWeight: FontWeight.w500,
-                              color: selectCategoryText ==
-                                  CategoryList[categoryIndex]['category']
+                              color: controller.form.challengeCategory ==
+                                      CategoryList[categoryIndex]['category']
                                   ? Colors.white
                                   : Colors.black, // 선택된 항목은 진한 파란색으로 설정
                             ),
@@ -544,7 +565,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                   color: Palette.grey300),
             ),
             Text(
-              "${DateFormat('M월 d일 (E)', 'ko_KR').format(_selectedDay)}   ",
+              "${DateFormat('M월 d일 (E)', 'ko_KR').format(selectedDay)}   ",
               style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 12,
@@ -554,10 +575,21 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           ]),
           const SizedBox(height: 15),
           WeeklyDatePicker(
-            selectedDay: _selectedDay,
+            selectedDay: selectedDay,
             changeDay: (value) => setState(() {
-              _selectedDay = value;
-              print(_selectedDay);
+              var today = DateTime.now();
+              today = DateTime(today.year, today.month, today.day);
+              if (value.isBefore(today)) {
+                Get.snackbar("알림", "오늘 이후의 날짜를 선택해주세요.",
+                    backgroundColor: Palette.purPle300,
+                    colorText: Colors.white,
+                    snackPosition: SnackPosition.BOTTOM,
+                    margin: const EdgeInsets.all(8));
+                return;
+              }
+              selectedDay = value;
+              final DateFormat formatter = DateFormat('yyyy-MM-dd');
+              controller.updateStartDate(formatter.format(value));
             }),
             enableWeeknumberText: false,
             weeknumberColor: Palette.grey200,
@@ -586,7 +618,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           ),
           const SizedBox(height: 10),
           DropdownButton<String>(
-            value: dropdownValue,
+            isExpanded: true,
+            value: controller.form.certificationFrequency,
             icon: const Icon(Icons.expand_more),
             elevation: 16,
             style: const TextStyle(
@@ -597,11 +630,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
               color: Palette.purPle300,
             ),
             onChanged: (String? value) {
-              // This is called when the user selects an item.
-              setState(() {
-                dropdownValue = value!;
-                print(dropdownValue);
-              });
+              controller.updateCertificationFrequency(value!);
             },
             items: frequencyList.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
@@ -611,10 +640,10 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: value == dropdownValue
+                    fontWeight: value == selectedFrequency.toString()
                         ? FontWeight.w500
                         : FontWeight.w300,
-                    color: value == dropdownValue
+                    color: value == selectedFrequency.toString()
                         ? Palette.purPle300
                         : Palette.grey300,
                   ),
@@ -674,7 +703,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
             children: [
               buildDropdownButton(selectedHourStart, (int? value) {
                 setState(() {
-                  selectedHourStart = value;
+                  selectedHourStart = value!;
+                  controller.updateCertificationStartTime(value.toString());
                 });
               }),
               const SizedBox(
@@ -686,7 +716,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
               ), // '-' 아이콘
               buildDropdownButton(selectedHourEnd, (int? value) {
                 setState(() {
-                  selectedHourEnd = value;
+                  selectedHourEnd = value!;
+                  controller.updateCertificationEndTime(value.toString());
                 });
               }),
             ],

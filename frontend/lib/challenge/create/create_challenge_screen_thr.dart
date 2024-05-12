@@ -1,51 +1,73 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/env.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/controller/challenge_form_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:frontend/widgets/custom_button.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
+import 'package:frontend/challenge/create/create_challenge_screen_complete.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateChallengeThr extends StatefulWidget {
-  Challenge challenge;
-
-  CreateChallengeThr({Key? key, required this.challenge});
+  const CreateChallengeThr({super.key});
 
   @override
   State<CreateChallengeThr> createState() => _CreateChallengeThrState();
 }
 
 class _CreateChallengeThrState extends State<CreateChallengeThr> {
-  late Challenge newChallenge;
+  final logger = Logger();
+  final formKey = GlobalKey<FormState>();
+  final controller = Get.find<ChallengeFormController>();
   final picker = ImagePicker();
-  XFile? successFile;
-  XFile? failFile;
+
+  bool _canSetCapacity = false;
   final List<bool> _toggleSelections = [true, false];
-  bool _isCapacity = false;
   final TextEditingController _maxCapacityController = TextEditingController();
 
   Future<void> _pickImage(bool isSuccess) async {
     final pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      setState(() {
-        if (isSuccess) {
-          successFile = XFile(pickedImage.path);
-          // print('successFile${successFile!.path}');
-        } else {
-          failFile = XFile(pickedImage.path);
-          // print('failFile${failFile!.path}');
-        }
-      });
+      if (isSuccess) {
+        controller.updateSuccessfulVerificationImage(File(pickedImage.path));
+      } else {
+        controller.updateFailedVerificationImage(File(pickedImage.path));
+      }
+    }
+  }
+
+  Future<int> _postChallenge() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dio.Dio dioInstance = dio.Dio();
+
+    dioInstance.options.contentType = 'multipart/form-data';
+    dioInstance.options.headers['Authorization'] =
+        'Bearer ${prefs.getString('access_token')}';
+
+    dio.FormData formData = controller.toFormData();
+
+    try {
+      final response = await dioInstance.post(
+        '${Env.serverUrl}/challenges/create',
+        data: formData,
+      );
+
+      return response.data as int;
+    } catch (err) {
+      return Future.error(err.toString());
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    newChallenge = widget.challenge;
   }
 
   @override
@@ -54,7 +76,9 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+            },
           ),
           title: const Text(
             '챌린지 생성하기',
@@ -66,91 +90,116 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
           ),
         ),
         bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-          color: Colors.transparent,
-          width: double.infinity,
-          child: InkWell(
-            onTap: () {},
-            child: SvgPicture.asset(
-              'assets/svgs/create_challenge_btn.svg',
-              // width: double.infinity,
-              // height: 30,
-            ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: SvgPicture.asset(
-                      'assets/svgs/create_challenge_level3.svg'),
-                ),
-                inputAuthIntro(),
-                pickAuthMethod(),
-                const SizedBox(height: 15),
-                addPicture(),
-                const SizedBox(height: 25),
-                maxCapacity(),
-                const SizedBox(height: 15),
-                _isCapacity ? buildMaxCapacity() : Container()
-              ],
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            color: Colors.transparent,
+            width: double.infinity,
+            child: CustomButton(
+              text: "참가하기",
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  logger
+                      .d('인증 방법: ${controller.form.certificationExplanation}');
+                  logger.d('인증 수단: ${controller.form.isGalleryPossible}');
+                  logger.d(
+                      '성공 이미지: ${controller.form.successfulVerificationImage}');
+                  logger
+                      .d('실패 이미지: ${controller.form.failedVerificationImage}');
+                  logger.d('최대 인원: ${controller.form.maximumPeople}');
+
+                  try {
+                    final int challengeId = await _postChallenge();
+                    logger.d('챌린지 생성 성공: $challengeId');
+                    Get.to(
+                        () => CreateCompleteScreen(challengeId: challengeId));
+                  } catch (err) {
+                    Get.snackbar("챌린지 생성 실패", "다시 시도해주세요.");
+                  }
+                }
+              },
+            )),
+        body: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: SvgPicture.asset(
+                        'assets/svgs/create_challenge_level3.svg'),
+                  ),
+                  inputCertificationExplanation(),
+                  pickAuthMethod(),
+                  const SizedBox(height: 15),
+                  addPicture(),
+                  const SizedBox(height: 25),
+                  maxCapacity(),
+                  const SizedBox(height: 15),
+                  _canSetCapacity ? buildMaxCapacity() : Container()
+                ],
+              ),
             ),
           ),
         ));
   }
 
-  Widget inputAuthIntro() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "인증 방법",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
-            color: Palette.grey300,
-          ),
-        ),
-        const SizedBox(height: 15),
-        TextField(
-          maxLines: 5,
-          minLines: 3,
-          maxLength: 200,
-          style: const TextStyle(
-            fontWeight: FontWeight.w300,
-            fontSize: 11,
-          ),
-          decoration: InputDecoration(
-            hintText: "인증 방법을 자세하게 알려주세요.",
-            hintStyle: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w300,
-              color: Palette.grey200,
+  Widget inputCertificationExplanation() {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "인증 방법",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                color: Palette.grey300,
+              ),
             ),
-            counterStyle: const TextStyle(
-              fontSize: 10,
-              color: Palette.grey200,
+            const SizedBox(height: 15),
+            TextFormField(
+              maxLines: 5,
+              minLines: 3,
+              maxLength: 200,
+              style: const TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 11,
+              ),
+              decoration: InputDecoration(
+                hintText: "인증 방법을 자세하게 알려주세요.",
+                hintStyle: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w300,
+                  color: Palette.grey200,
+                ),
+                counterStyle: const TextStyle(
+                  fontSize: 10,
+                  color: Palette.grey200,
+                ),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                filled: true,
+                fillColor: Palette.greySoft,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: const BorderSide(color: Palette.greySoft),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide:
+                      const BorderSide(color: Palette.mainPurple, width: 2),
+                ),
+              ),
+              validator: (value) => value!.isEmpty ? "내용을 입력해주세요." : null,
+              onChanged: (value) =>
+                  controller.updateCertificationExplanation(value),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            filled: true,
-            fillColor: Palette.greySoft,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.0),
-              borderSide: const BorderSide(color: Palette.greySoft),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.0),
-              borderSide: const BorderSide(color: Palette.mainPurple, width: 2),
-            ),
-          ),
-        ),
-      ],
-    );
+          ],
+        ));
   }
 
   Widget pickAuthMethod() {
@@ -171,17 +220,10 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
           isSelected: _toggleSelections,
           onPressed: (int index) {
             setState(() {
-              // 토글 버튼이 클릭되었을 때 포커스를 변경
-              for (int buttonIndex = 0;
-                  buttonIndex < _toggleSelections.length;
-                  buttonIndex++) {
-                if (buttonIndex == index) {
-                  _toggleSelections[buttonIndex] = true;
-                } else {
-                  _toggleSelections[buttonIndex] = false;
-                }
-              }
+              _toggleSelections[index] = true;
+              _toggleSelections[(index + 1) % 2] = false;
             });
+            controller.updateIsGalleryPossible(index == 1);
           },
           children: [
             Container(
@@ -238,18 +280,22 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
           ),
         ),
         const SizedBox(height: 15),
-        Row(
-          children: [
-            buildImageContainer(successFile, Palette.green, true),
-            const SizedBox(width: 20),
-            buildImageContainer(failFile, Palette.red, false),
-          ],
-        ),
+        Obx(
+          () => Row(
+            children: [
+              buildImageContainer(controller.form.successfulVerificationImage,
+                  Palette.green, true),
+              const SizedBox(width: 20),
+              buildImageContainer(
+                  controller.form.failedVerificationImage, Palette.red, false),
+            ],
+          ),
+        )
       ],
     );
   }
 
-  Widget buildImageContainer(XFile? file, Color color, bool isSuccess) {
+  Widget buildImageContainer(File? file, Color color, bool isSuccess) {
     return GestureDetector(
       onTap: () {
         _pickImage(isSuccess);
@@ -332,11 +378,11 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
           ),
         ]),
         CupertinoSwitch(
-          value: _isCapacity,
+          value: _canSetCapacity,
           activeColor: Palette.mainPurple,
           onChanged: (bool? value) {
             setState(() {
-              _isCapacity = value ?? false;
+              _canSetCapacity = value ?? false;
             });
           },
         ),
@@ -353,7 +399,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
           height: 56,
           padding: const EdgeInsets.symmetric(vertical: 5),
           margin: const EdgeInsets.symmetric(horizontal: 10),
-          child: TextField(
+          child: TextFormField(
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(4), // 최대 4자리까지 입력 가능
@@ -376,7 +422,8 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                 fontFamily: 'Pretender'),
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 2.0, color: Palette.mainPurple),
+                borderSide:
+                    const BorderSide(width: 2.0, color: Palette.mainPurple),
                 // 포커스가 있을 때의 테두리 색상을 지정합니다.
                 borderRadius: BorderRadius.circular(25), // 테두리를 둥글게 만듭니다.
               ),
@@ -385,7 +432,8 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                   fontWeight: FontWeight.w300,
                   fontSize: 10,
                   fontFamily: 'Pretendard'),
-              suffixStyle: const TextStyle(fontFamily: 'Pretendard', fontSize: 10),
+              suffixStyle:
+                  const TextStyle(fontFamily: 'Pretendard', fontSize: 10),
               suffix: const Text(
                 '명',
               ),
@@ -394,8 +442,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
               ),
             ),
             onChanged: (value) {
-              // 입력이 변경될 때 호출되는 콜백 함수
-              print('입력된 값: $value');
+              controller.updateMaximumPeople(int.parse(value));
             },
           ),
         ),

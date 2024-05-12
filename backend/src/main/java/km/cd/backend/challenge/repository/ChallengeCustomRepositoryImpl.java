@@ -37,7 +37,7 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
     predicate = predicate.and(challenge.isPrivate.eq(filter.isPrivate()));
 
     if (filter.category() != null) {
-      predicate = predicate.and(challenge.category.eq(filter.category()));
+      predicate = predicate.and(challenge.challengeCategory.eq(filter.category()));
     }
 
     return queryFactory

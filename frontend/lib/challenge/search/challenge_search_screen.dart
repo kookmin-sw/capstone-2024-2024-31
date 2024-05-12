@@ -108,7 +108,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: EasySearchBar(
-          backgroundColor: Palette.purPle200,
+          backgroundColor: Palette.mainPurple,
           foregroundColor: Palette.white,
           searchTextStyle: const TextStyle(
             color: Palette.mainPurple,
@@ -209,7 +209,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                           ),
                           backgroundColor: selectedIndex == index
                               ? MaterialStateProperty.all<Color>(
-                                  Palette.purPle300)
+                                  Palette.purPle400)
                               : null,
                         ),
                         child: Text(categoryList[index],
