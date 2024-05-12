@@ -37,6 +37,7 @@ public interface ChallengeMapper {
     @Mapping(target = "certificationType", ignore = true)
     @Mapping(target = "isEnded", ignore = true)
     @Mapping(target = "totalParticipants", ignore = true)
+    @Mapping(target = "totalCertificationCount", expression = "java(calculateTotalCertificationCount(convertNumber(request.getChallengePeriod()), request.getCertificationFrequency()))")
     Challenge requestToEntity(ChallengeCreateRequest request);
     
     ChallengeInformationResponse challengeToChallengeResponse(Challenge challenge);
