@@ -20,14 +20,15 @@ class PostDetailPage extends StatefulWidget {
 class _PostDetailPageState extends State<PostDetailPage> {
   bool _isTapSendCommentBtn = false;
   Timer? _timer;
-  final _commentFocusNode = FocusNode();
 
-  bool _isTapRecomment = false;
+  final _commentFocusNode = FocusNode();
+  final TextEditingController _commentController = TextEditingController();
+
+  late String textFieldHintText;
 
   @override
   void dispose() {
     _commentFocusNode.dispose();
-    _isTapRecomment = false;
     super.dispose();
   }
 
@@ -144,7 +145,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
       fontSize: 12,
       fontWeight: FontWeight.w500,
       color: Palette.grey200);
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    textFieldHintText = "댓글을 남겨보세요";
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,13 +194,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   children: [
                     Expanded(
                         child: TextFormField(
+                      controller: _commentController,
                       focusNode: _commentFocusNode,
                       style: const TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 11,
                           fontFamily: 'Pretender'),
                       decoration: InputDecoration(
-                          hintText: _isTapRecomment ? "답글을 남겨보세요" : "댓글을 남겨보세요",
+                          hintText: textFieldHintText,
                           hintStyle: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
@@ -213,16 +220,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             borderSide: const BorderSide(
                                 color: Palette.grey50, width: 2),
                           )),
-                      validator: (value) => value!.isEmpty
-                          ? _isTapRecomment
-                              ? "답글을 남겨보세요"
-                              : "댓글을 남겨보세요"
-                          : null,
-                      onEditingComplete: () {
-                        setState(() {
-                          _isTapRecomment = false;
-                        });
-                      },
+                      validator: (value) => value!.isEmpty ? textFieldHintText : null,
                     )),
                     const SizedBox(width: 10),
                     GestureDetector(
@@ -246,7 +244,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               _isTapSendCommentBtn = false;
                             });
                           });
-
+                          _commentController.clear();
                           _commentFocusNode.unfocus();
                         })
                   ],
@@ -258,9 +256,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PostCard(number: 10,  commentFocusNode: _commentFocusNode),
+                PostCard(number: 10, commentFocusNode: _commentFocusNode),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
                     child: Text(
                         "댓글 ${(comment_list.length + re_comment_list.length)}개",
                         style: const TextStyle(
@@ -346,9 +345,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                       style: btn_textStyle,
                                     ),
                                     onTap: () {
-                                      setState(() {
-                                        _isTapRecomment = true;
-                                      });
+                                      _commentController.clear();
                                       _commentFocusNode
                                           .requestFocus(); // 포커스 요청
                                     },
@@ -366,7 +363,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     String reUploadTimeString = formatDate(reply['dateTime']);
                     String reBeforeHours =
                         calculateBeforeHours(reply['dateTime']);
-
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Row(
