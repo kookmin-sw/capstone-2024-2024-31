@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:frontend/challenge/detail/detail_imageDetail_screen.dart';
+import 'package:frontend/challenge/detail/detail_image_detail_screen.dart';
 import 'package:frontend/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/challenge/detail/widgets/certification_method_widget.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
