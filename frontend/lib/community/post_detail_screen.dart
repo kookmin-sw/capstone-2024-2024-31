@@ -107,26 +107,26 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   TextStyle name_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
-      fontSize: 11,
+      fontSize: 10,
       fontWeight: FontWeight.w600,
       color: Palette.grey500);
 
   TextStyle date_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
-      fontSize: 11,
+      fontSize: 10,
       fontWeight: FontWeight.w300,
       color: Palette.grey300);
 
   TextStyle text_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 12,
-      fontWeight: FontWeight.w500,
-      color: Palette.grey500);
+      fontWeight: FontWeight.bold,
+      color: Palette.grey300);
 
   TextStyle btn_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 12,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       color: Palette.grey200);
 
   @override
@@ -151,21 +151,21 @@ class _PostDetailPageState extends State<PostDetailPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-            color: Palette.greySoft,
+            color: Palette.greyBG,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 PostCard(number: 10),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 6),
                     child: Text(
                         "댓글 ${(comment_list.length + re_comment_list.length)}개",
                         style: const TextStyle(
-                            fontWeight: FontWeight.w400,
+                            fontWeight: FontWeight.w500,
                             fontFamily: 'Pretendard',
                             fontSize: 15))),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: commentWidget())
               ],
             )),
@@ -185,10 +185,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
         // Add the main comment
         commentAndReplies.add(
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: Container(
               width: size.width,
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20.0),
@@ -206,14 +206,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           CircleAvatar(
                             radius: 20,
                             backgroundImage: AssetImage(
                               comment['image'],
                             ),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           SizedBox(
                               width: size.width * 0.6,
                               child: Column(
@@ -252,6 +252,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
                     ],
                   ),
+                  const SizedBox(height: 5),
                   ...re_comment_list
                       .where((reply) => reply['index'] == comment['index'])
                       .map((reply) {
@@ -265,14 +266,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(width: 50),
+                          const SizedBox(width: 50),
                           CircleAvatar(
                             radius: 20,
                             backgroundImage: AssetImage(
                               reply['image'],
                             ),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           SizedBox(
                               width: size.width * 0.5,
                               child: Column(
@@ -287,6 +288,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     "$reUploadTimeString | $reBeforeHours",
                                     style: date_textStyle,
                                   ),
+                                  const SizedBox(height: 5),
                                   Text(
                                     reply['text'],
                                     softWrap: true,
@@ -299,7 +301,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),
