@@ -3,17 +3,18 @@ import numpy as np
 import cv2
 
 
-#미리 학습해둔 파라미터를 yolo 모델 구조에 대입
+# 미리 학습해둔 파라미터를 yolo 모델 구조에 대입
 model_custom = torch.hub.load(
     "ultralytics/yolov5",
     "custom",
-    path="./best2.pt",
+    path="ai/detectingDemo.py",
+    force_reload=True,
 )
 
 # 0은 연결되어있는 스마트폰, 1은 노트북 카메라(맥북기준)
 cap = cv2.VideoCapture(0)
 
-#q버튼 누를 때까지
+# q버튼 누를 때까지
 while True:
     #  카메라에서 프레임 받아오기
     ret, frame = cap.read()
