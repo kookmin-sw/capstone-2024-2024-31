@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
               initialRoute: widget.isLoggedIn ? 'main' : 'login',
               routes: {
                 'login': (context) => const LoginScreen(),
-                'main': (context) => const MainScreen(),
+                'main': (context) => MainScreen(),
                 'create_challenge': (context) => const CreateChallengeFir(),
                 'detail_challenge': (context) =>
                     ChallengeDetailScreen(isFromMainScreen: true),

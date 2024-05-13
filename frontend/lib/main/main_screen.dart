@@ -15,7 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/env.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  int? tabNumber;
+
+  MainScreen({super.key, this.tabNumber});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -24,7 +26,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   late Future<User> _userDataFuture;
   final logger = Logger();
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
@@ -69,6 +71,12 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _userDataFuture = _getUserData();
+    if (widget.tabNumber != null) {
+      _selectedIndex = widget.tabNumber!;
+    }
+    else{
+      _selectedIndex = 0;
+    }
   }
 
   Widget _errorView(String errorMessage) {
