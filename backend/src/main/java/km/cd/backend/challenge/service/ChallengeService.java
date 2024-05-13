@@ -161,8 +161,8 @@ public class ChallengeService {
         return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
     }
 
-    public List<ChallengeSimpleResponse> getAllChallenge(Long cursorId, ChallengeFilter filter) {
-        List<Challenge> challenges = challengeRepository.findByChallengeWithFilterAndPaging(cursorId, filter);
+    public List<ChallengeSimpleResponse> getAllChallenge(Long cursorId, int size, ChallengeFilter filter) {
+        List<Challenge> challenges = challengeRepository.findByChallengeWithFilterAndPaging(cursorId, size, filter);
 
         return challenges.stream().map(challenge -> ChallengeMapper.INSTANCE.entityToSimpleResponse(challenge)).toList();
     }

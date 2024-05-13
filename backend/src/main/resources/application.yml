@@ -9,14 +9,14 @@ spring:
   # pr 올릴 때 무조건 아래 설정 적용해서 올리기
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_ENDPOINT}:${MYSQL_PORT}/${MYSQL_DB_NAME}?autoReconnect=true
+    url: jdbc:mysql://${MYSQL_ENDPOINT}:${MYSQL_PORT}/${MYSQL_DB_NAME}?autoReconnect=true&createDatabaseIfNotExist=TRUE
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
 
   # local test
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/routineUp?&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=UTC
+#    url: jdbc:mysql://localhost:3306/routineUp?&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=UTC&createDatabaseIfNotExist=TRUE
 #    username: root
 #    password: ${LOCAL_PASSWORD}
 

@@ -11,11 +11,9 @@ class InformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime startDate = DateTime.parse(challenge.startDate);
-    final int challengePeriod =
-    int.parse(challenge.challengePeriod); // Challenge 기간, ex: 주 단위
+    final DateTime startDate = challenge.startDate;
+    final int challengePeriod = challenge.challengePeriod;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
-
 
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +67,7 @@ class InformationWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 5),
-            Text("${challenge.participants.length}명의 루티너가 참여중",
+            Text("${challenge.totalParticipants}명의 루티너가 참여중",
                 style: const TextStyle(
                     color: Palette.purPle200,
                     fontSize: 10,
@@ -78,9 +76,9 @@ class InformationWidget extends StatelessWidget {
           ]),
           const SizedBox(height: 8),
           Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               decoration: BoxDecoration(
-                  color: Color(0xFFF5F5F5), // 배경색 설정
+                  color: const Color(0xFFF5F5F5), // 배경색 설정
                   borderRadius: BorderRadius.circular(10)), // 컨테이너를 둥글게 만듭니다.
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -114,7 +112,8 @@ class InformationWidget extends StatelessWidget {
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text(
-                            "${DateFormat("yyyy년 M월 d일 (E)", "ko_KR").format(startDate)}",
+                            DateFormat("yyyy년 M월 d일 (E)", "ko_KR")
+                                .format(startDate),
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
@@ -132,7 +131,7 @@ class InformationWidget extends StatelessWidget {
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
-                        Text("${challenge.certificationFrequency}",
+                        Text(challenge.certificationFrequency,
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,

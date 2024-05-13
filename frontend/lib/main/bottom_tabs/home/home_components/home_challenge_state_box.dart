@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
@@ -25,28 +23,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
     {'name': '매일 먹기', 'percent': '30', 'image': 'assets/images/image.png'},
   ];
 
-  Challenge challenge = Challenge(
-      isPrivate: false,
-      privateCode: 'privateCode',
-      challengeName: '조깅 3KM 진행하고 상금받자!',
-      challengeExplanation:
-          '챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라',
-      challengePeriod: '8',
-      startDate: '2024-04-08',
-      certificationFrequency: '평일 매일',
-      certificationStartTime: 1,
-      certificationEndTime: '24시',
-      certificationExplanation:
-          '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
-      successfulVerificationImage:
-          File("C:/Users/82103/Pictures/Screenshots/image.png"),
-      failedVerificationImage:
-          File("C:/Users/82103/Pictures/Screenshots/image.png"),
-      challengeImage1: File("C:/Users/82103/Pictures/Screenshots/image.png"),
-      challengeImage2: File("C:/Users/82103/Pictures/Screenshots/image.png"),
-      isGalleryPossible: true,
-      maximumPeople: 100,
-      participants: []);
+  Challenge challenge = Challenge.getDummyData();
 
   @override
   Widget build(BuildContext context) {

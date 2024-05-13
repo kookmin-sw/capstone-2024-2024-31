@@ -52,6 +52,7 @@ public interface ChallengeMapper {
     ParticipantResponse participantToParticipantResponse(Participant participant);
     List<ParticipantResponse> participantListToParticipantResponseList(List<Participant> participants);
 
+    @Mapping(target = "imageUrl", expression = "java(challenge.getChallengeImagePaths().get(0))")
     ChallengeSimpleResponse entityToSimpleResponse(Challenge challenge);
 
     default int calculateTotalCertificationCount(Integer challengePeriod, String certificationFrequency) {

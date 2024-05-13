@@ -53,7 +53,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 children: [
                   PhotoesWidget(
                       screenHeight: screenSize.height,
-                      imageUrl: widget.challenge.challengeImage1.toString()),
+                      imageUrl: widget.challenge.challengeImageUrls[0]),
                   InformationWidget(challenge: widget.challenge),
                   Padding(
                       padding:
@@ -65,30 +65,34 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                           EdgeInsets.symmetric(vertical: 10, horizontal: 2),
                       child: Divider(thickness: 10, color: Palette.grey50)),
                   AgreeCheckWidget(),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                     color: Colors.transparent,
                     width: double.infinity,
                     child: isCheckList.every((element) => element == true)
                         ? InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => JoinChallengeScreen_sec(challenge: widget.challenge),
-                            ),
-                          );
-                        },
-                        child: SvgPicture.asset(
-                          'assets/svgs/next_btn_checked.svg',
-                          // width: double.infinity,
-                          // height: 30,
-                        ))
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => JoinChallengeScreen_sec(
+                                      challenge: widget.challenge),
+                                ),
+                              );
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svgs/next_btn_checked.svg',
+                              // width: double.infinity,
+                              // height: 30,
+                            ))
                         : SvgPicture.asset(
-                      'assets/svgs/next_btn_unchecked.svg',
-                      // width: double.infinity,
-                      // height: 30,
-                    ),
+                            'assets/svgs/next_btn_unchecked.svg',
+                            // width: double.infinity,
+                            // height: 30,
+                          ),
                   ),
                   // inputPenaltyName(screenSize),
                   // if (showVerificationInput) ...[

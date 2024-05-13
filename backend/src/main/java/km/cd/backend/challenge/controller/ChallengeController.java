@@ -52,9 +52,10 @@ public class ChallengeController {
     @GetMapping("/list")
     public ResponseEntity<List<ChallengeSimpleResponse>> getAllChallenge(
         @RequestParam(name = "cursorId", required = false, defaultValue = "0") Long cursorId,
+        @RequestParam(name = "size", required = false, defaultValue = "5") int size,
         @RequestBody ChallengeFilter filter
     ) {
-        List<ChallengeSimpleResponse> challenges = challengeService.getAllChallenge(cursorId, filter);
+        List<ChallengeSimpleResponse> challenges = challengeService.getAllChallenge(cursorId, size, filter);
         return ResponseEntity.ok(challenges);
     }
     
