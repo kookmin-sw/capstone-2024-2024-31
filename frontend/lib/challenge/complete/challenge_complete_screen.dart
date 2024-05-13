@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/challenge/complete/widget/cerification_post_card.dart';
 import 'package:frontend/challenge/complete/widget/reward_card.dart';
 import 'package:frontend/challenge/detail/widgets/certification_method_widget.dart';
+import 'package:frontend/community/community_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
@@ -99,7 +100,7 @@ class ChallengeCompleteScreen extends StatelessWidget {
               const SizedBox(height: 10),
               GestureDetector(
                   child: Text("인증 게시글 모음 > ", style: titleStyle(15.0)),
-                  onTap: () => Get.to(() => const TabCommunityScreen())),
+                  onTap: () => Get.to(() => const CommunityScreen())),
               const SizedBox(height: 10),
               certificationPostList(),
               const SizedBox(height: 15),

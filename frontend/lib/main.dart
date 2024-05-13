@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/challenge/certification/camera/camera_awosome.dart';
 import 'package:frontend/challenge/create/create_challenge_screen_fir.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
+import 'package:frontend/community/community_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/login/login_screen.dart';
 import 'package:frontend/model/controller/user_controller.dart';
@@ -50,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                 'create_challenge': (context) => const CreateChallengeFir(),
                 'detail_challenge': (context) =>
                     ChallengeDetailScreen(isFromMainScreen: true),
-                'community': (context) => const TabCommunityScreen(),
+                'community': (context) => const CommunityScreen(),
                 'camera2': (context) => const CameraAwesomeApp(),
               });
         });

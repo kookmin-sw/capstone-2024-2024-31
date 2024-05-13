@@ -2,10 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
+import 'package:get/get.dart';
 
 class CommunityScreen extends StatefulWidget {
-  const CommunityScreen({super.key});
+  const CommunityScreen(
+      {super.key, this.isFromCreatePostingScreen=false});
 
+  final bool isFromCreatePostingScreen;
   @override
   State<CommunityScreen> createState() => _CommunityScreenState();
 }
@@ -55,7 +59,26 @@ class _CommunityScreenState extends State<CommunityScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return  Scaffold(
+        appBar: AppBar(
+        backgroundColor: Palette.white,
+        leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios),
+    onPressed: () {
+    widget.isFromCreatePostingScreen
+    ? Get.back()
+        : Get.to(() => const HomeScreen());
+    },
+    ),
+    title: const Text(
+    "인증 커뮤니티",
+    style: TextStyle(
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.bold,
+    fontSize: 16),
+    ),
+    ),
+    body: Column(
       children: [
         _buildSortButtons(),
         Expanded(
@@ -67,7 +90,7 @@ class _CommunityScreenState extends State<CommunityScreen>
                   );
                 }))
       ],
-    );
+    ));
   }
 
   Widget _buildSortButtons() {
