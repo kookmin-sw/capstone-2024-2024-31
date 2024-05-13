@@ -45,51 +45,49 @@ class _PostReportBottomSheetState extends State<PostReportBottomSheet> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(child: Text("신고", style: titleStyle)),
+            Center(child: Text("🚨 신고", style: titleStyle)),
             const Divider(thickness: 2, height: 20),
             const SizedBox(height: 10),
             Text("이 게시글을 신고하는 이유", style: textStyle),
             const SizedBox(height: 10),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              DropdownButton<String>(
-                // isExpanded: true,
-                value: dropdownValue,
-                icon: const Icon(Icons.expand_more),
-                elevation: 16,
-                style: const TextStyle(
-                  color: Palette.mainPurple,
-                ),
-                underline: Container(
-                  height: 2,
-                  color: Palette.purPle300,
-                ),
-                onChanged: (String? value) {
-                  // This is called when the user selects an item.
-                  setState(() {
-                    dropdownValue = value!;
-                  });
-                },
-                items: reportTextList
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: value == dropdownValue
-                            ? FontWeight.w600
-                            : FontWeight.w300,
-                        color: value == dropdownValue
-                            ? Palette.purPle400
-                            : Palette.grey300,
-                      ),
+            DropdownButton<String>(
+              isExpanded: true,
+              value: dropdownValue,
+              icon: const Icon(Icons.expand_more),
+              elevation: 16,
+              style: const TextStyle(
+                color: Palette.mainPurple,
+              ),
+              underline: Container(
+                height: 2,
+                color: Palette.purPle300,
+              ),
+              onChanged: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  dropdownValue = value!;
+                });
+              },
+              items:
+                  reportTextList.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: value == dropdownValue
+                          ? FontWeight.w600
+                          : FontWeight.w300,
+                      color: value == dropdownValue
+                          ? Palette.purPle400
+                          : Palette.grey300,
                     ),
-                  );
-                }).toList(),
-              )
-            ]),
+                  ),
+                );
+              }).toList(),
+            ),
             const SizedBox(height: 10),
             if (dropdownValue != reportTextList[0])
               Padding(

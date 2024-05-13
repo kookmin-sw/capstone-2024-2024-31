@@ -56,7 +56,7 @@ class CreateCompleteScreen extends StatelessWidget {
         const SizedBox(height: 10),
         GestureDetector(
             onTap: () {
-              Get.offAll(const MainScreen());
+              Get.offAll(MainScreen());
             },
             child: Container(
                 width: screenSize.width * 0.6,
