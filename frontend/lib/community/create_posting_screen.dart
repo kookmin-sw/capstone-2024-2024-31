@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/community/community_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
@@ -145,7 +146,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                               // final int challengeId = await _postChallenge();
                               logger.d('인증글 생성 성공: ');
                               Get.snackbar("오늘의 인증 성공 ✨", "당신의 갓생을 응원해요!");
-                              Get.offAll(() => const TabCommunityScreen(
+                              Get.offAll(() => const CommunityScreen(
                                   isFromCreatePostingScreen: true));
                             } catch (err) {
                               Get.snackbar("오늘의 인증 실패", "다시 시도해주세요😭");

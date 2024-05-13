@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:frontend/challenge/complete/challenge_complete_screen.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
+import 'package:frontend/community/community_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/model/config/image_from_file.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -34,7 +35,7 @@ class MyRoutineUpCard extends StatelessWidget {
         onTap: () {
           isStarted
           ? isIng
-              ? Get.to(() => const TabCommunityScreen())
+              ? Get.to(() => const CommunityScreen())
               : Get.to(() => ChallengeCompleteScreen(challenge: challenge))
           : Get.to(() => ChallengeDetailScreen(isFromMainScreen: false));
         },
