@@ -72,23 +72,14 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: isFromMainScreen
-              ? IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Palette.grey300,
-                  ),
-                  onPressed: () {
-                    Get.back();
-                  })
-              : IconButton(
-                  icon: const Icon(
-                    Icons.home,
-                    color: Palette.grey300,
-                  ),
-                  onPressed: () {
-                    Get.offAll(() => MainScreen());
-                  }),
+          leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Palette.grey300,
+              ),
+              onPressed: () {
+                Get.back();
+              }),
           title: const Text("챌린지 자세히 보기",
               style: TextStyle(
                   color: Palette.grey300,
