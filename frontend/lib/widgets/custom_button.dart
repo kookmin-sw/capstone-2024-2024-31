@@ -4,8 +4,10 @@ import 'package:frontend/model/config/palette.dart';
 class CustomButton extends StatelessWidget {
   final Function onPressed;
   final String text;
+  bool? disabled;
 
-  const CustomButton({super.key, required this.onPressed, required this.text});
+  CustomButton(
+      {super.key, required this.onPressed, required this.text, this.disabled});
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +15,14 @@ class CustomButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          onPressed();
+          if (disabled == null || disabled == false) {
+            onPressed();
+          }
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Palette.mainPurple,
+          backgroundColor: disabled == null || disabled == false
+              ? Palette.mainPurple
+              : Palette.greySoft,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),

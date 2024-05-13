@@ -1,110 +1,96 @@
-import 'dart:convert';
-import 'dart:io';
-
 class Challenge {
+  late int id;
   late bool isPrivate;
   late String privateCode;
   late String challengeName;
   late String challengeExplanation;
-  late File? challengeImage1;
-  late File? challengeImage2;
-  late File? challengeImage3;
-  late File? challengeImage4;
-  late File? challengeImage5;
-  late String challengePeriod;
-  late String startDate;
+  late List<String> challengeImageUrls;
+  late int challengePeriod;
+  late DateTime startDate;
+  late DateTime endDate;
   late String certificationFrequency;
   late int certificationStartTime;
-  late String certificationEndTime;
+  late int certificationEndTime;
   late String certificationExplanation;
+  late String failedVerificationImageUrl;
+  late String successfulVerificationImageUrl;
   late bool isGalleryPossible;
-  late File? failedVerificationImage;
-  late File? successfulVerificationImage;
   late int maximumPeople;
-  late List<Participant> participants;
+  late bool isEnded;
+  late int totalParticipants;
 
   Challenge({
+    required this.id,
     required this.isPrivate,
     required this.privateCode,
     required this.challengeName,
     required this.challengeExplanation,
-    this.challengeImage1,
-    this.challengeImage2,
-    this.challengeImage3,
-    this.challengeImage4,
-    this.challengeImage5,
     required this.challengePeriod,
+    required this.challengeImageUrls,
     required this.startDate,
+    required this.endDate,
     required this.certificationFrequency,
     required this.certificationStartTime,
     required this.certificationEndTime,
     required this.certificationExplanation,
     required this.isGalleryPossible,
-    this.failedVerificationImage,
-    this.successfulVerificationImage,
+    required this.failedVerificationImageUrl,
+    required this.successfulVerificationImageUrl,
     required this.maximumPeople,
-    required this.participants,
+    required this.isEnded,
+    required this.totalParticipants,
   });
 
   factory Challenge.fromJson(Map<String, dynamic> json) {
     return Challenge(
-      isPrivate: json['is_private'],
-      privateCode: json['private_code'],
-      challengeName: json['challenge_name'],
-      challengeExplanation: json['challenge_explanation'],
-      challengePeriod: json['challenge_period'],
-      startDate: json['start_date'],
-      certificationFrequency: json['certification_frequency'],
-      certificationStartTime: json['certification_start_time'],
-      certificationEndTime: json['certification_end_time'],
-      certificationExplanation: json['certification_explanation'],
-      isGalleryPossible: json['is_gallery_possible'],
-      maximumPeople: json['maximum_people'],
-      participants: (json['participants'] as List<dynamic>)
-          .map((e) => Participant.fromJson(e))
-          .toList(),
+      id: json['id'],
+      isPrivate: json['isPrivate'],
+      privateCode: json['privateCode'] ?? '',
+      challengeName: json['challengeName'],
+      challengeExplanation: json['challengeExplanation'],
+      challengePeriod: json['challengePeriod'],
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
+      certificationFrequency: json['certificationFrequency'],
+      certificationStartTime: json['certificationStartTime'],
+      certificationEndTime: json['certificationEndTime'],
+      certificationExplanation: json['certificationExplanation'],
+      isGalleryPossible: json['isGalleryPossible'],
+      maximumPeople: json['maximumPeople'],
+      challengeImageUrls:
+          (json['challengeImagePaths'] as List<dynamic>).cast<String>(),
+      failedVerificationImageUrl: json['failedVerificationImage'],
+      successfulVerificationImageUrl: json['successfulVerificationImage'],
+      isEnded: json['isEnded'],
+      totalParticipants: json['totalParticipants'],
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'is_private': isPrivate,
-      'private_code': privateCode,
-      'challenge_name': challengeName,
-      'challenge_explanation': challengeExplanation,
-      'challenge_period': challengePeriod,
-      'start_date': startDate,
-      'certification_frequency': certificationFrequency,
-      'certification_start_time': certificationStartTime,
-      'certification_end_time': certificationEndTime,
-      'certification_explanation': certificationExplanation,
-      'is_gallery_possible': isGalleryPossible,
-      'maximum_people': maximumPeople,
-      'participants': participants.map((e) => e.toJson()).toList(),
-    };
-  }
-}
-
-class Participant {
-  late int participantId;
-  late Challenge challenge;
-
-  Participant({
-    required this.participantId,
-    required this.challenge,
-  });
-
-  factory Participant.fromJson(Map<String, dynamic> json) {
-    return Participant(
-      participantId: json['participant_id'],
-      challenge: Challenge.fromJson(json['challenge']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'participant_id': participantId,
-      'challenge': challenge.toJson(),
-    };
+  static Challenge getDummyData() {
+    return Challenge(
+        id: 1,
+        isPrivate: false,
+        privateCode: 'privateCode',
+        challengeName: '조깅 3KM 진행하고 상금받자!',
+        challengeExplanation:
+            '챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라',
+        challengePeriod: 4,
+        startDate: DateTime.parse('2024-04-08'),
+        endDate: DateTime.parse('2024-05-08'),
+        certificationFrequency: '평일 매일',
+        certificationStartTime: 1,
+        certificationEndTime: 24,
+        certificationExplanation:
+            '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
+        successfulVerificationImageUrl: "https://picsum.photos/250?image=9",
+        failedVerificationImageUrl: "https://picsum.photos/250?image=9",
+        challengeImageUrls: [
+          "https://picsum.photos/250?image=9",
+          "https://picsum.photos/250?image=9"
+        ],
+        isGalleryPossible: true,
+        maximumPeople: 100,
+        isEnded: false,
+        totalParticipants: 50);
   }
 }

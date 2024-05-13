@@ -39,7 +39,9 @@ class CreateCompleteScreen extends StatelessWidget {
         const SizedBox(height: 50),
         GestureDetector(
             onTap: () {
-              Get.offAll(ChallengeDetailScreen(isFromMainScreen: false));
+              Get.offAll(ChallengeDetailScreen(
+                challengeId: challengeId,
+              ));
             },
             child: Container(
                 alignment: Alignment.center,

@@ -1,5 +1,6 @@
 package km.cd.backend.challenge.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
@@ -13,6 +14,7 @@ public record ChallengeSimpleResponse(
         String challengeName,
 
         @Schema(description = "챌린지 시작일")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         Date startDate,
 
         @Schema(description = "챌린지 기간")
@@ -22,6 +24,10 @@ public record ChallengeSimpleResponse(
         String certificationFrequency,
 
         @Schema(description = "전체 참여 인원")
-        int totalParticipants
+        int totalParticipants,
 
-) { }
+        @Schema(description = "챌린지 대표 이미지 url")
+        String imageUrl
+
+) {
+}
