@@ -11,11 +11,9 @@ class InformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime startDate = DateTime.parse(challenge.startDate);
-    final int challengePeriod =
-    int.parse(challenge.challengePeriod); // Challenge 기간, ex: 주 단위
+    final DateTime startDate = challenge.startDate;
+    final int challengePeriod = challenge.challengePeriod;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
-
 
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +67,7 @@ class InformationWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 5),
-            Text("${challenge.participants.length}명의 루티너가 참여중",
+            Text("${challenge.totalParticipants}명의 루티너가 참여중",
                 style: const TextStyle(
                     color: Palette.purPle200,
                     fontSize: 10,

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/challenge/complete/widget/cerification_post_card.dart';
 import 'package:frontend/challenge/complete/widget/reward_card.dart';
@@ -9,8 +8,6 @@ import 'package:frontend/model/data/challenge.dart';
 import 'package:frontend/model/data/post.dart';
 import 'package:frontend/model/data/sms.dart';
 import 'package:get/get.dart';
-import 'dart:io';
-import '../../../model/data/sms.dart';
 
 class ChallengeCompleteScreen extends StatelessWidget {
   final Map<String, dynamic> postData;
@@ -124,14 +121,14 @@ class ChallengeCompleteScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            if (challenge.challengeImage1 != null)
+            if (challenge.challengeImageUrls.isNotEmpty)
               SizedBox(
                   width: 100,
                   height: 75,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Image(
-                      image: FileImage(challenge.challengeImage1!),
+                    child: Image.network(
+                      challenge.challengeImageUrls[0],
                       fit: BoxFit.cover,
                       // You can set other properties like width, height, etc. here
                     ),

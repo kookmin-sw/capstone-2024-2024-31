@@ -16,16 +16,16 @@ import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class ChallengeStateScreen extends StatelessWidget {
   final Challenge challenge;
-  ChallengeStateScreen({super.key, required this.challenge});
 
+  const ChallengeStateScreen({super.key, required this.challenge});
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final DateTime startDate = DateTime.parse(challenge.startDate);
+    final DateTime startDate = challenge.startDate;
     final int challengePeriod =
-        int.parse(challenge.challengePeriod); // Challenge 기간, ex: 주 단위
+        challenge.challengePeriod; // Challenge 기간, ex: 주 단위
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     initializeDateFormatting('ko_KR', 'en_US');
@@ -233,7 +233,7 @@ class ChallengeStateScreen extends StatelessWidget {
                                   fontSize: 10,
                                   fontFamily: "Pretendard",
                                   fontWeight: FontWeight.w500)),
-                          Text("${challenge.participants.length}명",
+                          Text("${challenge.totalParticipants}명",
                               style: const TextStyle(
                                   color: Palette.grey300,
                                   fontSize: 10,
@@ -413,7 +413,7 @@ class ChallengeStateScreen extends StatelessWidget {
       Palette.purPle100,
     ];
     return Container(
-      padding: const EdgeInsets.only(top: 20, left :15, right: 15),
+      padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,

@@ -44,12 +44,13 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp(
               theme: ThemeData(primaryColor: Colors.white),
               initialRoute: widget.isLoggedIn ? 'main' : 'login',
+              useInheritedMediaQuery: true,
               routes: {
                 'login': (context) => const LoginScreen(),
                 'main': (context) => const MainScreen(),
                 'create_challenge': (context) => const CreateChallengeFir(),
                 'detail_challenge': (context) =>
-                    ChallengeDetailScreen(isFromMainScreen: true),
+                    ChallengeDetailScreen(challengeId: Get.arguments),
                 'community': (context) => const TabCommunityScreen(),
                 'camera2': (context) => const CameraAwesomeApp(),
               });

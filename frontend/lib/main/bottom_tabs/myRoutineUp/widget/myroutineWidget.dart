@@ -36,30 +36,7 @@ class _ChallengeWidgetState extends State<ChallengeWidget> {
     // {'name': '매일 먹기', 'percent': '30', 'image': 'assets/images/image.png'},
   ];
 
-  Challenge challenge = Challenge(
-      isPrivate: false,
-      privateCode: 'privateCode',
-      challengeName: '조깅 3KM 진행하고 상금받자!',
-      challengeExplanation:
-          '챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라 챌린지에대한 설명이올시다. 챌린지를 하지 않는자 도태되리라',
-      challengePeriod: '8',
-      startDate: '2024-04-08',
-      certificationFrequency: '평일 매일',
-      certificationStartTime: 1,
-      certificationEndTime: '24시',
-      certificationExplanation:
-          '인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~인증방식에 대한 설명이다. 인증해야지 안인증하면 안인정해줌 어잊인정~',
-      successfulVerificationImage: File(
-          '/data/user/0/com.routineUp.frontend/cache/992e048f-4ae7-4bf1-9a35-866086fbe0a4/1000009385.jpg'),
-      failedVerificationImage: File(
-          '/data/user/0/com.routineUp.frontend/cache/21e41d3f-38da-45ea-b9f0-95229ac1c12f/1000009467.jpg'),
-      challengeImage1: File(
-          '/data/user/0/com.routineUp.frontend/cache/992e048f-4ae7-4bf1-9a35-866086fbe0a4/1000009385.jpg'),
-      challengeImage2: File(
-          '/data/user/0/com.routineUp.frontend/cache/992e048f-4ae7-4bf1-9a35-866086fbe0a4/1000009385.jpg'),
-      isGalleryPossible: true,
-      maximumPeople: 100,
-      participants: []);
+  Challenge challenge = Challenge.getDummyData();
 
   int viewChallengeLength = 3;
   int additionalChallengesToShow = 3;
