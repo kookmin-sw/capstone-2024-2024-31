@@ -26,13 +26,11 @@ class _ChallengeTopStackState extends State<ChallengeTopStack> {
       clipBehavior: Clip.none,
       children: [
         Column(mainAxisSize: MainAxisSize.min, children: [
-          Container(
-            child: ChallengeRecommendBox(name: userController.user.name),
-          ),
-          Container(height: 100, color: Palette.mainPurple),
-          Container(height: 80, color: Colors.transparent),
+          ChallengeRecommendBox(name: userController.user.name),
+          Container(height: 110, color: Palette.mainPurple),
+          Container(height: 100, color: Colors.transparent),
         ]),
-        Positioned(
+        const Positioned(
           right: 0,
           left: 0,
           top: 150,

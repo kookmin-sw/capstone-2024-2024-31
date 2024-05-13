@@ -94,9 +94,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                   }
                 })),
         body: GestureDetector(
-            // GestureDetector를 사용하여 화면 터치 이벤트를 감지합니다.
             onTap: () {
-              FocusScope.of(context).unfocus(); // 터치 시 키보드를 숨깁니다.
+              FocusScope.of(context).unfocus();
             },
             child: SingleChildScrollView(
                 child: Column(

@@ -117,33 +117,37 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                 }
               },
             )),
-        body: Form(
-          key: formKey,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: SvgPicture.asset(
-                        'assets/svgs/create_challenge_level3.svg'),
+        body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child:  SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: SvgPicture.asset(
+                            'assets/svgs/create_challenge_level3.svg'),
+                      ),
+                      inputCertificationExplanation(),
+                      pickAuthMethod(),
+                      const SizedBox(height: 15),
+                      addPicture(),
+                      const SizedBox(height: 25),
+                      maxCapacity(),
+                      const SizedBox(height: 15),
+                      _canSetCapacity ? buildMaxCapacity() : Container()
+                    ],
                   ),
-                  inputCertificationExplanation(),
-                  pickAuthMethod(),
-                  const SizedBox(height: 15),
-                  addPicture(),
-                  const SizedBox(height: 25),
-                  maxCapacity(),
-                  const SizedBox(height: 15),
-                  _canSetCapacity ? buildMaxCapacity() : Container()
-                ],
+                ),
               ),
-            ),
-          ),
-        ));
+            )));
   }
 
   Widget inputCertificationExplanation() {
