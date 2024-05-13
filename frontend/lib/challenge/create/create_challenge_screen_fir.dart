@@ -34,9 +34,7 @@ class _CreateChallengeFirState extends State<CreateChallengeFir> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Form(
-        key: formKey,
-        child: Scaffold(
+    return Obx(() => Scaffold(
             appBar: AppBar(
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
@@ -69,7 +67,9 @@ class _CreateChallengeFirState extends State<CreateChallengeFir> {
               ),
             ),
             body: SingleChildScrollView(
-              child: Column(
+              child:  Form(
+                key: formKey,
+                child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
