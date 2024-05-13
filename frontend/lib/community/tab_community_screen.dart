@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/community/community_screen.dart';
+import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:get/get.dart';
 
 class TabCommunityScreen extends StatefulWidget {
-  const TabCommunityScreen({super.key});
+  const TabCommunityScreen(
+      {super.key, this.isFromCreatePostingScreen=false});
+
+  final bool isFromCreatePostingScreen;
 
   @override
   State<TabCommunityScreen> createState() => _TabCommunityScreenState();
@@ -30,8 +35,16 @@ class _TabCommunityScreenState extends State<TabCommunityScreen>
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Palette.white,
+        appBar: AppBar(
+          backgroundColor: Palette.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              widget.isFromCreatePostingScreen
+                  ? Get.back()
+                  : Get.to(() => const HomeScreen());
+            },
+          ),
           title: Container(
               height: 30,
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -42,8 +55,7 @@ class _TabCommunityScreenState extends State<TabCommunityScreen>
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
               )),
-      ),
-      body: const CommunityScreen()
-    );
+        ),
+        body: const CommunityScreen());
   }
 }

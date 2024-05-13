@@ -55,11 +55,9 @@ class _CommunityScreenState extends State<CommunityScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(
+    return Column(
       children: [
         _buildSortButtons(),
-        const Divider(height: 0,thickness: 2, color: Palette.greySoft, indent: 0, endIndent: 0),
         Expanded(
             child: ListView.builder(
                 itemCount: 30,
@@ -69,7 +67,7 @@ class _CommunityScreenState extends State<CommunityScreen>
                   );
                 }))
       ],
-    ));
+    );
   }
 
   Widget _buildSortButtons() {

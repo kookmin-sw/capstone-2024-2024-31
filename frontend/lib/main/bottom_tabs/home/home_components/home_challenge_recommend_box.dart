@@ -36,7 +36,7 @@ class ChallengeRecommendBox extends StatelessWidget {
     );
     return Container(
       color: Palette.mainPurple,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -79,7 +79,7 @@ class ChallengeRecommendBox extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 30),
+          const SizedBox(width: 15),
           SvgPicture.asset(
             '${randomCategory['svg_icon']}',
             width: 90, // 조절할 아이콘의 너비
