@@ -69,6 +69,7 @@ class _CommunityScreenState extends State<CommunityScreen>
               widget.isFromCreatePostingScreen
                   ? Get.to(() => MainScreen())
                   : Get.back();
+
             },
           ),
           title: const Text(

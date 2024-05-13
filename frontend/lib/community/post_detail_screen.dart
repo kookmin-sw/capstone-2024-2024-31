@@ -260,8 +260,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               children: [
                 PostCard(number: 10,  commentFocusNode: _commentFocusNode),
                 Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 6),
                     child: Text(
                         "댓글 ${(comment_list.length + re_comment_list.length)}개",
                         style: const TextStyle(
