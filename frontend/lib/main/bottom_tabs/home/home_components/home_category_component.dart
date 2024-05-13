@@ -77,7 +77,7 @@ class CategoryCard extends StatelessWidget {
   final String iconPath;
   final Color color;
 
-  CategoryCard({
+  const CategoryCard({super.key,
     required this.name,
     required this.memo,
     required this.iconPath,
@@ -88,7 +88,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        print("${name} 카테고리 클릭됨");
+        print("$name 카테고리 클릭됨");
       },
         child: Container(
         padding: const EdgeInsets.all(0),
