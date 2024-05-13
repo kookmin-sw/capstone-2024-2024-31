@@ -133,6 +133,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Palette.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {},
