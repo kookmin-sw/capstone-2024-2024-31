@@ -9,7 +9,7 @@ import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/widgets/custom_button.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';

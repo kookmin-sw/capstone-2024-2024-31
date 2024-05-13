@@ -1,17 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_recommend_box.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_state_box.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:get/get.dart';
 
 class ChallengeTopStack extends StatefulWidget {
-  const ChallengeTopStack({Key? key}) : super(key: key);
+  const ChallengeTopStack({super.key});
 
   @override
   State<ChallengeTopStack> createState() => _ChallengeTopStackState();

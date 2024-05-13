@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ChallengeFrequency {
-  EVERY_WEEKDAY("평일매일", 7),
+  EVERY_DAY("매일", 7),
+  EVERY_WEEKDAY("평일매일", 5),
   EVERY_WEEKEND("주말매일", 2),
   WEEKDAYS("평일",5),
   EVERY_WEEK("주1일",1),

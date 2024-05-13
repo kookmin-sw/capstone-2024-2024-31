@@ -5,7 +5,7 @@ import 'package:frontend/challenge/detail/widgets/certification_method_widget.da
 import 'package:frontend/community/community_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/model/data/post.dart';
 import 'package:frontend/model/data/sms.dart';
 import 'package:get/get.dart';
@@ -14,7 +14,7 @@ class ChallengeCompleteScreen extends StatelessWidget {
   final Map<String, dynamic> postData;
   final List<dynamic> postDataList;
 
-  ChallengeCompleteScreen({super.key, required this.challenge})
+  ChallengeCompleteScreen({super.key})
       : postData = {
           "id": 0,
           "title": "오늘도 챌린지 완료~!",
@@ -40,7 +40,7 @@ class ChallengeCompleteScreen extends StatelessWidget {
     }
   }
 
-  final Challenge challenge;
+  final Challenge challenge = Challenge.getDummyData();
   final Sms _sms = Sms(
       receiverNumber: '010-3333-9999',
       userName: '신혜은',

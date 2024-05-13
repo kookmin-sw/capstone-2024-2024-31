@@ -6,6 +6,7 @@ class ChallengeSimple {
   final int challengePeriod;
   final int totalParticipants;
   final String imageUrl;
+  final bool isEnded;
 
   ChallengeSimple({
     required this.id,
@@ -15,6 +16,7 @@ class ChallengeSimple {
     required this.challengePeriod,
     required this.totalParticipants,
     required this.imageUrl,
+    required this.isEnded,
   });
 
   factory ChallengeSimple.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class ChallengeSimple {
       challengePeriod: json['challengePeriod'],
       totalParticipants: json['totalParticipants'],
       imageUrl: json['imageUrl'],
+      isEnded: json['isEnded'],
     );
   }
 }
