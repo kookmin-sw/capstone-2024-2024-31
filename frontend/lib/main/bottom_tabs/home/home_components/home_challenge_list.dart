@@ -1,11 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:frontend/challenge/%20search/challenge_search_screen.dart';
+import 'package:frontend/challenge/search/challenge_search_screen.dart';
+import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge_filter.dart';
+import 'package:frontend/model/data/challenge_simple.dart';
 import 'package:get/get.dart';
+import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChallengeItemList extends StatefulWidget {
   const ChallengeItemList({super.key});
@@ -15,74 +18,39 @@ class ChallengeItemList extends StatefulWidget {
 }
 
 class _ChallengeItemListState extends State<ChallengeItemList> {
+  final logger = Logger();
+
+  Future<List<ChallengeSimple>> getChallengeList() async {
+    Dio dio = Dio();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    dio.options.headers['content-Type'] = 'application/json';
+    dio.options.headers['Authorization'] =
+        'Bearer ${prefs.getString('access_token')}';
+
+    try {
+      final response = await dio.get('${Env.serverUrl}/challenges/list',
+          data: ChallengeFilter(isPrivate: false).toJson(),
+          queryParameters: {
+            'size': 2,
+          });
+
+      if (response.statusCode == 200) {
+        logger.d(response.data);
+        return (response.data as List)
+            .map((c) => ChallengeSimple.fromJson(c))
+            .toList();
+      }
+      throw Exception("Failed to load challenges");
+    } catch (e) {
+      logger.e(e.toString());
+      throw Exception("챌린지 목록을 불러오는데 실패했습니다.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery
-        .of(context)
-        .size;
-
-    List<dynamic> challengeList = [
-      Challenge(
-          isPrivate: true,
-          privateCode: 'privateCode',
-          challengeName: '달리기',
-          challengeExplanation: 'challengeExplanation',
-          challengePeriod: '8주',
-          startDate: DateTime(2023, 3, 15).toString(),
-          certificationFrequency: '평일 매일',
-          certificationStartTime: 13,
-          certificationEndTime: '24',
-          certificationExplanation: 'certificationExplanation',
-          challengeImage1: File('assets/images/image.png'),
-          isGalleryPossible: true,
-          maximumPeople: 100,
-          participants: []),
-      Challenge(
-          isPrivate: false,
-          privateCode: 'privateCode',
-          challengeName: '걷기',
-          challengeImage1: File('assets/images/image.png'),
-          challengeExplanation: 'challengeExplanation',
-          challengePeriod: '2주',
-          startDate: DateTime(2023, 3, 16).toString(),
-          certificationFrequency: '주말 매일',
-          certificationStartTime: 13,
-          certificationEndTime: '13',
-          certificationExplanation: 'certificationExplanation',
-          isGalleryPossible: true,
-          maximumPeople: 110,
-          participants: []),
-      Challenge(
-          isPrivate: true,
-          challengeImage1: File('assets/images/image.png'),
-          privateCode: 'privateCode',
-          challengeName: '수영가기 매일매일',
-          challengeExplanation: 'challengeExplanation',
-          challengePeriod: '7주',
-          startDate: DateTime(2023, 3, 17).toString(),
-          certificationFrequency: '주 3일',
-          certificationStartTime: 13,
-          certificationEndTime: '22',
-          certificationExplanation: 'certificationExplanation',
-          isGalleryPossible: true,
-          maximumPeople: 10,
-          participants: []),
-      Challenge(
-          isPrivate: false,
-          privateCode: 'privateCode',
-          challengeName: '매일 코딩하기',
-          challengeImage1: File('assets/images/image.png'),
-          challengeExplanation: 'challengeExplanation',
-          challengePeriod: '3주',
-          startDate: DateTime(2023, 3, 18).toString(),
-          certificationFrequency: '주 5일',
-          certificationStartTime: 13,
-          certificationEndTime: '24',
-          certificationExplanation: 'certificationExplanation',
-          isGalleryPossible: true,
-          maximumPeople: 1,
-          participants: []),
-    ];
+    final screenSize = MediaQuery.of(context).size;
 
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -92,7 +60,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
             children: [
               GestureDetector(
                   onTap: () {
-                    Get.to(() => ChallengeSearchScreen());
+                    Get.to(() => const ChallengeSearchScreen());
                   },
                   child: const Text(
                     "챌린지 모아보기 >",
@@ -103,15 +71,29 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
                         fontSize: 15),
                   )),
               const SizedBox(height: 13),
-              SizedBox(
-                  height: screenSize.height * 0.3,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: List.generate(challengeList.length, (index) {
-                      return ChallengeItemCard(
-                          this_challenge: challengeList[index]);
-                    }),
-                  )),
+              FutureBuilder<List<ChallengeSimple>>(
+                future: getChallengeList(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text(snapshot.error.toString()));
+                  } else if (snapshot.hasData) {
+                    return SizedBox(
+                        height: screenSize.height * 0.3,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children:
+                              List.generate(snapshot.data!.length, (index) {
+                            return ChallengeItemCard(
+                                data: snapshot.data![index]);
+                          }),
+                        ));
+                  } else {
+                    return const Center(child: Text("진행중인 챌린지가 없습니다."));
+                  }
+                },
+              ),
               const SizedBox(height: 10),
             ]));
   }

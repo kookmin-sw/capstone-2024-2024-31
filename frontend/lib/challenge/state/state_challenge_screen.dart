@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:frontend/challenge/detail/detail_imageDetail_screen.dart';
+import 'package:frontend/challenge/detail/detail_image_detail_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
+import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:frontend/model/package/pie_chart/pie_chart.dart';
@@ -16,16 +12,16 @@ import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class ChallengeStateScreen extends StatelessWidget {
   final Challenge challenge;
-  ChallengeStateScreen({super.key, required this.challenge});
 
+  const ChallengeStateScreen({super.key, required this.challenge});
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final DateTime startDate = DateTime.parse(challenge.startDate);
+    final DateTime startDate = challenge.startDate;
     final int challengePeriod =
-        int.parse(challenge.challengePeriod); // Challenge 기간, ex: 주 단위
+        challenge.challengePeriod; // Challenge 기간, ex: 주 단위
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     initializeDateFormatting('ko_KR', 'en_US');
@@ -43,12 +39,14 @@ class ChallengeStateScreen extends StatelessWidget {
             Icons.arrow_back_ios,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Get.back();
+          },
         ),
         actions: [
           IconButton(
               onPressed: () {},
-              icon: Icon(
+              icon: const Icon(
                 Icons.ios_share,
                 color: Colors.white,
               )),
@@ -59,7 +57,8 @@ class ChallengeStateScreen extends StatelessWidget {
           children: [
             photoes(screenHeight),
             Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 child: information_challenge(startDate, endDate)),
             SvgPicture.asset(
               'assets/svgs/divider.svg',
@@ -146,7 +145,7 @@ class ChallengeStateScreen extends StatelessWidget {
           ChallengeExplanation(),
           const SizedBox(height: 5),
           Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               decoration: BoxDecoration(
                   color: Color(0xFFF5F5F5), // 배경색 설정
                   borderRadius: BorderRadius.circular(10)), // 컨테이너를 둥글게 만듭니다.
@@ -182,7 +181,8 @@ class ChallengeStateScreen extends StatelessWidget {
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text(
-                            "${DateFormat("yyyy년 M월 d일 (E)", "ko_KR").format(startDate)}",
+                            DateFormat("yyyy년 M월 d일 (E)", "ko_KR")
+                                .format(startDate),
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
@@ -200,7 +200,7 @@ class ChallengeStateScreen extends StatelessWidget {
                                   fontSize: 10,
                                   fontFamily: "Pretendard",
                                   fontWeight: FontWeight.w500)),
-                          Text("${challenge.certificationFrequency}",
+                          Text(challenge.certificationFrequency,
                               style: const TextStyle(
                                   color: Palette.grey300,
                                   fontSize: 10,
@@ -233,7 +233,7 @@ class ChallengeStateScreen extends StatelessWidget {
                                   fontSize: 10,
                                   fontFamily: "Pretendard",
                                   fontWeight: FontWeight.w500)),
-                          Text("${challenge.participants.length}명",
+                          Text("${challenge.totalParticipants}명",
                               style: const TextStyle(
                                   color: Palette.grey300,
                                   fontSize: 10,
@@ -295,22 +295,22 @@ class ChallengeStateScreen extends StatelessWidget {
           const SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(children: [
-              Text("${my_certification_number}회",
-                  style: TextStyle(
+              Text("$my_certification_number회",
+                  style: const TextStyle(
                       fontSize: 10,
                       color: Palette.purPle400,
                       fontFamily: "Pretendard",
                       fontWeight: FontWeight.w600)),
               Text(
                   " / ${entire_certification_number}회  |  남은 인증 : ${entire_certification_number - my_certification_number}회",
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 10,
                       color: Palette.grey300,
                       fontFamily: "Pretendard",
                       fontWeight: FontWeight.w600))
             ]),
             Text("실패 횟수 : ${fail_num}회",
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 9,
                     color: Palette.grey300,
                     fontFamily: "Pretendard",
@@ -379,20 +379,20 @@ class ChallengeStateScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Container(
+                decoration: BoxDecoration(
+                    color: Palette.grey500, // 배경색 설정
+                    borderRadius: BorderRadius.circular(5)),
                 child: ProgressBar(
                   width: screenWidth * 0.9,
                   height: 4,
                   value: double.parse(percent) * 0.01,
                   backgroundColor: Palette.grey50,
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [Palette.purPle200, Palette.mainPurple],
                   ),
                 ),
-                decoration: BoxDecoration(
-                    color: Palette.grey500, // 배경색 설정
-                    borderRadius: BorderRadius.circular(5)),
               ),
               const SizedBox(height: 5),
               const Text("예상 달성률 : 100%",
@@ -413,7 +413,7 @@ class ChallengeStateScreen extends StatelessWidget {
       Palette.purPle100,
     ];
     return Container(
-      padding: const EdgeInsets.only(top: 20, left :15, right: 15),
+      padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -426,14 +426,14 @@ class ChallengeStateScreen extends StatelessWidget {
           const SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(children: [
-              Text("총 참여인원 :",
+              const Text("총 참여인원 :",
                   style: TextStyle(
                       fontSize: 10,
                       color: Palette.grey300,
                       fontFamily: "Pretendard",
                       fontWeight: FontWeight.w600)),
               Text("  ${participant_number.toInt()}명",
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 11,
                       color: Palette.purPle400,
                       fontFamily: "Pretendard",
@@ -444,7 +444,7 @@ class ChallengeStateScreen extends StatelessWidget {
           certificationStateBar(screenWidth),
           const SizedBox(height: 15),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
             child: PieChart(
               dataMap: dataMap,
               chartType: ChartType.ring,
@@ -452,7 +452,7 @@ class ChallengeStateScreen extends StatelessWidget {
               chartRadius: screenWidth * 0.35,
               baseChartColor: Colors.grey[50]!.withOpacity(0.15),
               colorList: colorList,
-              chartValuesOptions: ChartValuesOptions(
+              chartValuesOptions: const ChartValuesOptions(
                 showChartValues: true,
                 showChartValuesInPercentage: true,
                 showChartValuesOutside: true,
@@ -464,7 +464,7 @@ class ChallengeStateScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600),
               ),
               totalValue: (participant_number),
-              legendOptions: LegendOptions(
+              legendOptions: const LegendOptions(
                 legendValueTextStyle: TextStyle(
                     fontSize: 10,
                     color: Palette.grey500,
@@ -480,7 +480,7 @@ class ChallengeStateScreen extends StatelessWidget {
                     fontFamily: "Pretendard",
                     fontWeight: FontWeight.w600),
               ),
-              centerWidget: Center(
+              centerWidget: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

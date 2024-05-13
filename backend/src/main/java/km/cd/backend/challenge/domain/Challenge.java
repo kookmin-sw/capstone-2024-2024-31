@@ -64,11 +64,14 @@ public class Challenge {
     @Builder.Default
     private Integer totalParticipants = 0;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private CertificationType certificationType;
+    private CertificationType certificationType = CertificationType.HAND_GESTURE;
 
     @Enumerated(EnumType.STRING)
-    private ChallengeCategory category;
+    private ChallengeCategory challengeCategory;
+    
+    private Integer totalCertificationCount;
     
     public void increaseNumOfParticipants() {
         totalParticipants += 1;

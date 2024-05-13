@@ -3,7 +3,6 @@ import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_li
 import 'package:frontend/main/bottom_tabs/home/home_components/home_top_stack_box.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_category_component.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_appBar.dart';
-import 'package:frontend/model/config/palette.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,10 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
           children: [
             const ChallengeTopStack(),
-            const SizedBox(height: 35),
+            const SizedBox(height: 10),
             Home_Category(),
             const SizedBox(height: 10),
-            ChallengeItemList()
+            const ChallengeItemList()
           ],
         )));
   }

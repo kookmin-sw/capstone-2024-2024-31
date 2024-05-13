@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:frontend/login/login_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
 import 'package:frontend/main/bottom_tabs/myRoutineUp/myRoutineUp_screen.dart';
 import 'package:frontend/main/bottom_tabs/mypage/mypage_screen.dart';
@@ -8,6 +10,7 @@ import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/env.dart';
 
@@ -19,8 +22,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
   late Future<User> _userDataFuture;
+  final logger = Logger();
+  int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
@@ -38,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final UserController userController = Get.find<UserController>();
     final String? accessToken = prefs.getString('access_token');
-    const String url = '${Env.serverUrl}/users/me';
+    final String url = '${Env.serverUrl}/users/me';
 
     final response = await http.get(
       Uri.parse(url),
@@ -53,16 +57,37 @@ class _MainScreenState extends State<MainScreen> {
           jsonDecode(utf8.decode(response.bodyBytes));
       final User user = User.fromJson(userMap);
       userController.saveUser(user);
+      logger.d("유저 조회 성공: ${user.name}");
       return user;
-    } else {
-      throw Exception('Failed to load user data');
     }
+
+    await prefs.remove("access_token");
+    return Future.error("유저 조회 실패");
   }
 
   @override
   void initState() {
     super.initState();
     _userDataFuture = _getUserData();
+  }
+
+  Widget _errorView(String errorMessage) {
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(errorMessage),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Get.to(() => const LoginScreen());
+              },
+              child: const Text("로그인 화면으로 이동"),
+            )
+          ],
+        )));
   }
 
   @override
@@ -74,7 +99,7 @@ class _MainScreenState extends State<MainScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
+            return _errorView(snapshot.error.toString());
           } else {
             return SafeArea(
               child: _widgetOptions.elementAt(_selectedIndex),

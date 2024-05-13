@@ -1,10 +1,17 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
+import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge_category.dart';
+import 'package:frontend/model/data/challenge_filter.dart';
+import 'package:frontend/model/data/challenge_simple.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChallengeSearchScreen extends StatefulWidget {
   const ChallengeSearchScreen({super.key});
@@ -14,101 +21,92 @@ class ChallengeSearchScreen extends StatefulWidget {
 }
 
 class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
-  String searchValue = '';
-  bool _isPrivate = false;
+  final logger = Logger();
 
-  List<String> categoryList = <String>[
-    '전체',
-    '운동',
-    '식습관',
-    '취미',
-    '환경',
-    '공부',
-  ];
+  List<String> categoryList =
+      ['전체'] + ChallengeCategory.values.map((e) => e.name).toList();
+  String searchValue = '';
   int selectedIndex = 0;
-  List<dynamic> challengeList = [
-    Challenge(
-        isPrivate: true,
-        privateCode: 'privateCode',
-        challengeName: '달리기',
-        challengeExplanation: 'challengeExplanation',
-        challengePeriod: '8주',
-        startDate: DateTime(2023, 3, 15).toString(),
-        certificationFrequency: '평일 매일',
-        certificationStartTime: 13,
-        certificationEndTime: '24',
-        certificationExplanation: 'certificationExplanation',
-        challengeImage1: File('assets/images/image.png'),
-        isGalleryPossible: true,
-        maximumPeople: 100,
-        participants: []),
-    Challenge(
-        isPrivate: false,
-        privateCode: 'privateCode',
-        challengeName: '걷기',
-        challengeImage1: File('assets/images/image.png'),
-        challengeExplanation: 'challengeExplanation',
-        challengePeriod: '2주',
-        startDate: DateTime(2023, 3, 16).toString(),
-        certificationFrequency: '주말 매일',
-        certificationStartTime: 13,
-        certificationEndTime: '13',
-        certificationExplanation: 'certificationExplanation',
-        isGalleryPossible: true,
-        maximumPeople: 110,
-        participants: []),
-    Challenge(
-        isPrivate: true,
-        challengeImage1: File('assets/images/image.png'),
-        privateCode: 'privateCode',
-        challengeName: '수영가기 매일매일',
-        challengeExplanation: 'challengeExplanation',
-        challengePeriod: '7주',
-        startDate: DateTime(2023, 3, 17).toString(),
-        certificationFrequency: '주 3일',
-        certificationStartTime: 13,
-        certificationEndTime: '22',
-        certificationExplanation: 'certificationExplanation',
-        isGalleryPossible: true,
-        maximumPeople: 10,
-        participants: []),
-    Challenge(
-        isPrivate: false,
-        privateCode: 'privateCode',
-        challengeName: '매일 코딩하기',
-        challengeImage1: File('assets/images/image.png'),
-        challengeExplanation: 'challengeExplanation',
-        challengePeriod: '3주',
-        startDate: DateTime(2023, 3, 18).toString(),
-        certificationFrequency: '주 5일',
-        certificationStartTime: 13,
-        certificationEndTime: '24',
-        certificationExplanation: 'certificationExplanation',
-        isGalleryPossible: true,
-        maximumPeople: 1,
-        participants: []),
-    Challenge(
-        isPrivate: false,
-        privateCode: 'privateCode',
-        challengeName: '매일 우왁굳하기',
-        challengeImage1: File('assets/images/image.png'),
-        challengeExplanation: 'challengeExplanation',
-        challengePeriod: '3주',
-        startDate: DateTime(2023, 3, 18).toString(),
-        certificationFrequency: '주 5일',
-        certificationStartTime: 13,
-        certificationEndTime: '24',
-        certificationExplanation: 'certificationExplanation',
-        isGalleryPossible: true,
-        maximumPeople: 1,
-        participants: []),
-  ];
+  bool _isPrivate = false;
+  List<ChallengeSimple> challengeList = [];
+
+  int currentCursor = 0;
+  final int pageSize = 10;
+  bool hasMoreData = true;
+  final ScrollController _scrollController = ScrollController();
+
+  void _getChallengeList() async {
+    if (!hasMoreData) return;
+
+    Dio dio = Dio();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    dio.options.headers['content-Type'] = 'application/json';
+    dio.options.headers['Authorization'] =
+        'Bearer ${prefs.getString('access_token')}';
+
+    try {
+      final filter = ChallengeFilter(
+              name: searchValue,
+              isPrivate: _isPrivate,
+              category: selectedIndex == 0
+                  ? null
+                  : ChallengeCategory.values[selectedIndex - 1])
+          .toJson();
+      logger.d("challenge filter: $filter");
+
+      final response = await dio.get('${Env.serverUrl}/challenges/list',
+          data: filter,
+          queryParameters: {
+            'cursor': currentCursor,
+            'size': pageSize,
+          });
+
+      if (response.statusCode == 200) {
+        logger.d(response.data);
+        List<ChallengeSimple> newData = (response.data as List)
+            .map((c) => ChallengeSimple.fromJson(c))
+            .toList();
+
+        setState(() {
+          if (newData.isNotEmpty) {
+            challengeList.addAll(newData);
+            currentCursor = challengeList.last.id;
+          } else {
+            hasMoreData = false;
+          }
+        });
+      } else {
+        throw Exception("Failed to load more data");
+      }
+    } catch (e) {
+      logger.d(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getChallengeList(); // 초기 데이터 로드
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _getChallengeList(); // 스크롤 끝에 도달할 때 추가 데이터 로드
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // 스크롤 컨트롤러 해제
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: EasySearchBar(
-          backgroundColor: Palette.purPle200,
+          backgroundColor: Palette.mainPurple,
           foregroundColor: Palette.white,
           searchTextStyle: const TextStyle(
             color: Palette.mainPurple,
@@ -117,7 +115,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
             fontWeight: FontWeight.bold,
           ),
           title: const Text(
-            "전체 챌린지",
+            "챌린지 모아보기",
             style: TextStyle(
               fontFamily: "Pretendard",
               fontSize: 14,
@@ -152,21 +150,28 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                       onChanged: (bool? value) {
                         setState(() {
                           _isPrivate = value ?? false;
+                          hasMoreData = true;
+                          currentCursor = 0;
+                          challengeList.clear();
+                          _getChallengeList();
                         });
                       },
                     ),
                   ]),
                   const SizedBox(height: 5),
                   Expanded(
-                      child: GridView.count(
-                          shrinkWrap: true,
-                          crossAxisCount: 2,
-                          childAspectRatio: 1 / 1.4,
-                          children:
-                              List.generate(challengeList.length, (index) {
-                            return ChallengeItemCard(
-                                this_challenge: challengeList[index]);
-                          })))
+                      child: GridView.builder(
+                    controller: _scrollController,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.4,
+                    ),
+                    itemCount: challengeList.length,
+                    itemBuilder: (context, index) {
+                      return ChallengeItemCard(data: challengeList[index]);
+                    },
+                  ))
                 ])));
   }
 
@@ -185,11 +190,14 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                         onPressed: () {
                           setState(() {
                             if (selectedIndex == index) {
-                              selectedIndex =
-                                  -1; // Deselect if already selected
+                              selectedIndex = 0; // Deselect if already selected
                             } else {
                               selectedIndex = index; // Select otherwise
                             }
+                            hasMoreData = true;
+                            currentCursor = 0;
+                            challengeList.clear();
+                            _getChallengeList();
                           });
                         },
                         style: ButtonStyle(
@@ -209,7 +217,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                           ),
                           backgroundColor: selectedIndex == index
                               ? MaterialStateProperty.all<Color>(
-                                  Palette.purPle300)
+                                  Palette.purPle400)
                               : null,
                         ),
                         child: Text(categoryList[index],

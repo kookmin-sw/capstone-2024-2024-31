@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
+import km.cd.backend.challenge.dto.request.ChallengeJoinRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInviteCodeResponse;
@@ -22,6 +23,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -32,21 +34,28 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ChallengeInformationResponse> createChallenge(
-            @ModelAttribute ChallengeCreateRequest challengeCreateRequest,
+    public ResponseEntity<Long> createChallenge(
+            @RequestPart(name = "json") ChallengeCreateRequest challengeCreateRequest,
+            @RequestPart(name = "images") List<MultipartFile> images,
+            @RequestPart(name = "successImage") MultipartFile successfulVerificationImage,
+            @RequestPart(name = "failedImage") MultipartFile failedVerificationImage,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Challenge saved = challengeService.createChallenge(principalDetails.getUserId(),
-            challengeCreateRequest);
-        ChallengeInformationResponse challenge = ChallengeMapper.INSTANCE.challengeToChallengeResponse(saved);
-        return ResponseEntity.ok(challenge);
+        Challenge saved = challengeService.createChallenge(
+            principalDetails.getUserId(),
+            challengeCreateRequest,
+            images,
+            successfulVerificationImage,
+            failedVerificationImage);
+        return ResponseEntity.ok(saved.getId());
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<ChallengeSimpleResponse>> getAllChallenge(
         @RequestParam(name = "cursorId", required = false, defaultValue = "0") Long cursorId,
+        @RequestParam(name = "size", required = false, defaultValue = "5") int size,
         @RequestBody ChallengeFilter filter
     ) {
-        List<ChallengeSimpleResponse> challenges = challengeService.getAllChallenge(cursorId, filter);
+        List<ChallengeSimpleResponse> challenges = challengeService.getAllChallenge(cursorId, size, filter);
         return ResponseEntity.ok(challenges);
     }
     
@@ -73,8 +82,9 @@ public class ChallengeController {
     @PostMapping("/{challengeId}/join")
     public ResponseEntity<String> joinChallenge(
             @PathVariable Long challengeId,
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        challengeService.joinChallenge(challengeId, principalDetails.getUserId());
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody ChallengeJoinRequest challengeJoinRequest) {
+        challengeService.joinChallenge(challengeId, principalDetails.getUserId(), challengeJoinRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

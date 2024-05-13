@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'dart:io';
 
 class BuildImageContainer extends StatelessWidget {
   final String path;
@@ -47,35 +46,26 @@ class BuildImageContainer extends StatelessWidget {
           ),
         const SizedBox(height: 5),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 3),
           decoration: BoxDecoration(
-            color: Palette.white,
-            borderRadius: BorderRadius.circular(33.0),
+            borderRadius: BorderRadius.circular(28.0),
             border: Border.all(
-              color: path != null ? color : Palette.greySoft,
+              color: color,
               width: 2.0,
             ),
           ),
           width: isJoinScreen ? screenSize.width * 0.9 : screenSize.width * 0.4,
-          height: isJoinScreen ? screenSize.height * 0.5 : screenSize.height * 0.25,
-          child: path != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(30.0),
-                  child: isJoinScreen
-                      ? Image.asset(
-                          path,
-                          fit: BoxFit.fitWidth,
-                        )
-                      : Image.file(
-                          File(path),
-                          fit: BoxFit.fitWidth,
-                        ),
-                )
-              : const Icon(
-                  Icons.image,
-                  size: 35,
-                  color: Palette.grey300,
-                ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30.0),
+            child: isJoinScreen
+                ? Image.asset(
+                    path,
+                    fit: BoxFit.fitWidth,
+                  )
+                : Image.network(
+                    path,
+                    fit: BoxFit.fitWidth,
+                  ),
+          ),
         ),
         const SizedBox(height: 5),
       ],

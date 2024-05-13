@@ -19,10 +19,8 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
 
   private final JPAQueryFactory queryFactory;
 
-  private static final int DEFAULT_PAGE_SIZE = 10;
-
   @Override
-  public List<Challenge> findByChallengeWithFilterAndPaging(Long cursorId, ChallengeFilter filter) {
+  public List<Challenge> findByChallengeWithFilterAndPaging(Long cursorId, int size, ChallengeFilter filter) {
     QChallenge challenge = QChallenge.challenge;
     BooleanExpression predicate = challenge.isNotNull();
 
@@ -37,13 +35,13 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
     predicate = predicate.and(challenge.isPrivate.eq(filter.isPrivate()));
 
     if (filter.category() != null) {
-      predicate = predicate.and(challenge.category.eq(filter.category()));
+      predicate = predicate.and(challenge.challengeCategory.eq(filter.category()));
     }
 
     return queryFactory
       .selectFrom(challenge)
       .where(predicate)
-      .limit(DEFAULT_PAGE_SIZE)
+      .limit(size)
       .fetch();
   }
   

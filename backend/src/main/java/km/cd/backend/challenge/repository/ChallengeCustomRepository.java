@@ -13,6 +13,6 @@ public interface ChallengeCustomRepository {
    * @param filter {@see ChallengeFilter} 검색 조건
    * @return 필터링 및 페이징 된 챌린지 목록
    */
-  List<Challenge> findByChallengeWithFilterAndPaging(Long cursorId, ChallengeFilter filter);
+  List<Challenge> findByChallengeWithFilterAndPaging(Long cursorId, int size, ChallengeFilter filter);
   
 }

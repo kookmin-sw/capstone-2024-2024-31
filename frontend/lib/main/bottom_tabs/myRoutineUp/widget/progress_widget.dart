@@ -12,15 +12,19 @@ class ChallengeProgressWidget extends StatelessWidget {
     List<String> progressLabelText = ['진행 전', '진행 중', '진행 완료'];
 
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
-            border: Border.all(),
+            border: Border.all(
+              color: Palette.greyBG,
+              width: 3
+            ),
             borderRadius: BorderRadius.circular(15),
-            color: Palette.mainPurple),
+            color: Palette.white),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children:
                 List.generate(challengeProgressNumberList.length, (index) {
+
               return Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -31,14 +35,18 @@ class ChallengeProgressWidget extends StatelessWidget {
                           alignment: Alignment.center,
                           height: 45,
                           width: 45,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Palette.mainPurple,
+                              width: 3
+                            ),
                             shape: BoxShape.circle,
                             color: Palette.white,
                           ),
                           child: Text(
                             challengeProgressNumberList[index].toString(),
                             style: const TextStyle(
-                                color: Palette.purPle300,
+                                color: Palette.grey300,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Pretender'),
@@ -48,9 +56,9 @@ class ChallengeProgressWidget extends StatelessWidget {
                         Text(
                           progressLabelText[index],
                           style: const TextStyle(
-                              color: Palette.white,
+                              color: Palette.grey300,
                               fontSize: 11,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                               fontFamily: 'Pretender'),
                         )
                       ]));

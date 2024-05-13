@@ -1,12 +1,7 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/challenge/complete/challenge_complete_screen.dart';
-import 'package:frontend/challenge/state/state_challenge_screen.dart';
+import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/community/tab_community_screen.dart';
-import 'package:frontend/model/config/image_from_file.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:get/get.dart';
@@ -15,24 +10,29 @@ import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class MyRoutineUpCard extends StatelessWidget {
   const MyRoutineUpCard(
-      {super.key, required this.isIng, required this.challenge});
+      {super.key,
+      required this.isIng,
+      required this.challenge,
+      required this.isStarted});
 
   final bool isIng;
   final Challenge challenge;
+  final bool isStarted;
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final DateTime startDate = DateTime.parse(challenge.startDate);
-    final int challengePeriod =
-        int.parse(challenge.challengePeriod); // Challenge 기간, ex: 주 단위
+    final DateTime startDate = challenge.startDate;
+    final int challengePeriod = challenge.challengePeriod;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     return GestureDetector(
         onTap: () {
-          isIng
-              ? Get.to(() => const TabCommunityScreen())
-              : Get.to(() => ChallengeCompleteScreen(challenge: challenge));
+          isStarted
+              ? isIng
+                  ? Get.to(() => const TabCommunityScreen())
+                  : Get.to(() => ChallengeCompleteScreen(challenge: challenge))
+              : Get.to(() => ChallengeDetailScreen(challengeId: challenge.id));
         },
         child: SizedBox(
             width: screenSize.width * 0.95,
