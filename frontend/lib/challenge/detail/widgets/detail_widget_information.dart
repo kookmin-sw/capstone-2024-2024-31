@@ -76,9 +76,9 @@ class InformationWidget extends StatelessWidget {
           ]),
           const SizedBox(height: 8),
           Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               decoration: BoxDecoration(
-                  color: Color(0xFFF5F5F5), // 배경색 설정
+                  color: const Color(0xFFF5F5F5), // 배경색 설정
                   borderRadius: BorderRadius.circular(10)), // 컨테이너를 둥글게 만듭니다.
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +112,8 @@ class InformationWidget extends StatelessWidget {
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text(
-                            "${DateFormat("yyyy년 M월 d일 (E)", "ko_KR").format(startDate)}",
+                            DateFormat("yyyy년 M월 d일 (E)", "ko_KR")
+                                .format(startDate),
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
@@ -130,7 +131,7 @@ class InformationWidget extends StatelessWidget {
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
-                        Text("${challenge.certificationFrequency}",
+                        Text(challenge.certificationFrequency,
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,

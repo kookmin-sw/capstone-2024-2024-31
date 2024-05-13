@@ -116,26 +116,11 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               child: InformationWidget(challenge: challenge)),
-          SvgPicture.asset(
-            'assets/svgs/divider.svg',
-            fit: BoxFit.contain,
-          ),
+          divider(),
           challengeExplanation(challenge),
           imageGridView(screenSize, challenge),
-          SvgPicture.asset(
-            'assets/svgs/divider.svg',
-            fit: BoxFit.contain,
-          ),
+          divider(),
           const SizedBox(height: 10),
-          const Text("인증 방식",
-              style: TextStyle(
-                  fontSize: 15,
-                  fontFamily: "Pretendard",
-                  fontWeight: FontWeight.w600)),
-          const SizedBox(height: 15),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: CertificationMethod(challenge: challenge)),
           certificationExplainPicture(screenSize, challenge)
         ],
       ),
@@ -157,7 +142,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           )),
       Positioned(
           top: 5,
-          left: 20,
+          left: 30,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             alignment: Alignment.center,
@@ -183,10 +168,9 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     final imagePaths = challenge.challengeImageUrls;
 
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        height: screenSize.height * 0.15 * 3.3,
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        height: screenSize.width * 0.5 * (imagePaths.length ~/ 2) + 30,
         child: GridView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 4),
           physics: const NeverScrollableScrollPhysics(),
           // 스크롤 불가능하게 설정
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -195,7 +179,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
             mainAxisSpacing: 4.0,
           ),
           itemCount: imagePaths.length,
-
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
@@ -211,10 +194,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
                 borderRadius: BorderRadius.circular(15.0),
                 child: Image.network(
                   imagePaths[index],
-                  height: screenSize.height * 0.15,
-                  // 이미지 높이 고정
-                  width: screenSize.width * 0.4,
-                  // 이미지 너비 고정                  imagePaths[index],
                   fit: BoxFit.cover,
                 ),
               ),
@@ -225,7 +204,8 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
 
   Widget challengeExplanation(Challenge challenge) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -251,12 +231,25 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     return Column(
       children: [
         Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            child: Text(challenge.certificationExplanation,
-                style: const TextStyle(
-                    fontSize: 10,
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w500))),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("인증 방식",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "Pretendard",
+                        fontWeight: FontWeight.w600)),
+                const SizedBox(height: 15),
+                CertificationMethod(challenge: challenge),
+                Text(challenge.certificationExplanation,
+                    style: const TextStyle(
+                        fontSize: 10,
+                        fontFamily: "Pretendard",
+                        fontWeight: FontWeight.w500))
+              ],
+            )),
         const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -275,6 +268,13 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget divider() {
+    return SvgPicture.asset(
+      'assets/svgs/divider.svg',
+      fit: BoxFit.contain,
     );
   }
 }
