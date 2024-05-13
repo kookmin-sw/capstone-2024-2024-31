@@ -22,12 +22,12 @@ class ChallengeWidget extends StatefulWidget {
 class _ChallengeWidgetState extends State<ChallengeWidget> {
   late List<Map<String, dynamic>> viewChallengeList;
   List<Map<String, dynamic>> ing_challengeList = [
-    // {'name': '매일 커밋하기', 'percent': '50', 'image': 'assets/images/image.png'},
-    // {'name': '매일 운동하기', 'percent': '10', 'image': 'assets/images/image.png'},
-    // {'name': '매일 먹기', 'percent': '30', 'image': 'assets/images/image.png'},
-    // {'name': '매일 커밋하기', 'percent': '50', 'image': 'assets/images/image.png'},
-    // {'name': '매일 운동하기', 'percent': '10', 'image': 'assets/images/image.png'},
-    // {'name': '매일 먹기', 'percent': '30', 'image': 'assets/images/image.png'},
+    {'name': '매일 커밋하기', 'percent': '50', 'image': 'assets/images/image.png'},
+    {'name': '매일 운동하기', 'percent': '10', 'image': 'assets/images/image.png'},
+    {'name': '매일 먹기', 'percent': '30', 'image': 'assets/images/image.png'},
+    {'name': '매일 커밋하기', 'percent': '50', 'image': 'assets/images/image.png'},
+    {'name': '매일 운동하기', 'percent': '10', 'image': 'assets/images/image.png'},
+    {'name': '매일 먹기', 'percent': '30', 'image': 'assets/images/image.png'},
   ];
 
   List<Map<String, dynamic>> complete_challengeList = [

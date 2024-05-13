@@ -6,10 +6,10 @@ import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
 import 'package:get/get.dart';
 
 class CommunityScreen extends StatefulWidget {
-  const CommunityScreen(
-      {super.key, this.isFromCreatePostingScreen=false});
+  const CommunityScreen({super.key, this.isFromCreatePostingScreen = false});
 
   final bool isFromCreatePostingScreen;
+
   @override
   State<CommunityScreen> createState() => _CommunityScreenState();
 }
@@ -59,78 +59,81 @@ class _CommunityScreenState extends State<CommunityScreen>
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
         appBar: AppBar(
-        backgroundColor: Palette.white,
-        leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios),
-    onPressed: () {
-    widget.isFromCreatePostingScreen
-    ? Get.back()
-        : Get.to(() => const HomeScreen());
-    },
-    ),
-    title: const Text(
-    "인증 커뮤니티",
-    style: TextStyle(
-    fontFamily: 'Pretendard',
-    fontWeight: FontWeight.bold,
-    fontSize: 16),
-    ),
-    ),
-    body: Column(
-      children: [
-        _buildSortButtons(),
-        Expanded(
-            child: ListView.builder(
-                itemCount: 30,
-                itemBuilder: (BuildContext context, int index) {
-                  return PostCard(
-                    number: index,
-                  );
-                }))
-      ],
-    ));
+          backgroundColor: Palette.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              widget.isFromCreatePostingScreen
+                  ? Get.back()
+                  : Get.to(() => const HomeScreen());
+            },
+          ),
+          title: const Text(
+            "인증 커뮤니티",
+            style: TextStyle(
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.bold,
+                fontSize: 16),
+          ),
+        ),
+        body: Column(
+          children: [
+            _buildSortButtons(),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: 30,
+                    itemBuilder: (BuildContext context, int index) {
+                      return PostCard(
+                        number: index,
+                      );
+                    }))
+          ],
+        ));
   }
 
   Widget _buildSortButtons() {
-    return Container(padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         color: Palette.white,
         child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _sortIndex = 0;
-            });
-          },
-          style:
-              _sortIndex == 0 ? _selectedButtonStyle : _unselectedButtonStyle,
-          child: const Text(
-            '최신순',
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Pretendard',
-                fontSize: 12),
-          ),
-        ),
-        const SizedBox(width: 10),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _sortIndex = 1;
-            });
-          },
-          style:
-              _sortIndex == 1 ? _selectedButtonStyle : _unselectedButtonStyle,
-          child: const Text('인기순',
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Pretendard',
-                  fontSize: 12)),
-        ),
-      ],
-    ));
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _sortIndex = 0;
+                });
+              },
+              style: _sortIndex == 0
+                  ? _selectedButtonStyle
+                  : _unselectedButtonStyle,
+              child: const Text(
+                '최신순',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Pretendard',
+                    fontSize: 12),
+              ),
+            ),
+            const SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _sortIndex = 1;
+                });
+              },
+              style: _sortIndex == 1
+                  ? _selectedButtonStyle
+                  : _unselectedButtonStyle,
+              child: const Text('인기순',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Pretendard',
+                      fontSize: 12)),
+            ),
+          ],
+        ));
   }
 }
