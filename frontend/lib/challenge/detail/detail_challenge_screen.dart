@@ -66,7 +66,7 @@ class ChallengeDetailScreen extends StatelessWidget {
                     color: Palette.grey300,
                   ),
                   onPressed: () {
-                    Get.offAll(() => const MainScreen());
+                    Get.offAll(() => MainScreen());
                   }),
           title: const Text("챌린지 자세히 보기",
               style: TextStyle(

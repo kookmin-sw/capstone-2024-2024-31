@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/community/widget/post_card.dart';
+import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
 import 'package:get/get.dart';
@@ -66,8 +67,8 @@ class _CommunityScreenState extends State<CommunityScreen>
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               widget.isFromCreatePostingScreen
-                  ? Get.back()
-                  : Get.to(() => const HomeScreen());
+                  ? Get.to(() => MainScreen())
+                  : Get.back();
             },
           ),
           title: const Text(

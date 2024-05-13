@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:frontend/community/post_report_bottomScreen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/community/widget/report_post_btn.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class PostDetailPage extends StatefulWidget {
@@ -15,6 +18,19 @@ class PostDetailPage extends StatefulWidget {
 }
 
 class _PostDetailPageState extends State<PostDetailPage> {
+  bool _isTapSendCommentBtn = false;
+  Timer? _timer;
+  final _commentFocusNode = FocusNode();
+
+  bool _isTapRecomment = false;
+
+  @override
+  void dispose() {
+    _commentFocusNode.dispose();
+    _isTapRecomment = false;
+    super.dispose();
+  }
+
   List<Map<String, dynamic>> comment_list = [
     {
       'index': 0,
@@ -132,11 +148,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Palette.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {},
+          onPressed: () {
+            Get.back();
+          },
         ),
         title: const Text(
           '게시글 자세히 보기',
@@ -146,19 +165,103 @@ class _PostDetailPageState extends State<PostDetailPage> {
             fontFamily: 'Pretendard',
           ),
         ),
-        actions: [IconButton(onPressed: (){
-          repostPostButtonPress(context, 1010, 1010);
-        }, icon: const Icon(Icons.report_problem_outlined, color: Palette.red,))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                repostPostButtonPress(context, 1010, 1010);
+              },
+              icon: const Icon(
+                Icons.report_problem_outlined,
+                color: Palette.red,
+              ))
+        ],
       ),
+      bottomNavigationBar: SafeArea(
+          child: Padding(
+              padding: EdgeInsets.only(
+                  left: 15,
+                  right: 15,
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: SizedBox(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: TextFormField(
+                      focusNode: _commentFocusNode,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 11,
+                          fontFamily: 'Pretender'),
+                      decoration: InputDecoration(
+                          hintText: _isTapRecomment ? "답글을 남겨보세요" : "댓글을 남겨보세요",
+                          hintStyle: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w300,
+                            color: Palette.grey200,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 10),
+                          filled: true,
+                          fillColor: Palette.greySoft,
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              borderSide:
+                                  const BorderSide(color: Palette.greySoft)),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: const BorderSide(
+                                color: Palette.grey50, width: 2),
+                          )),
+                      validator: (value) => value!.isEmpty
+                          ? _isTapRecomment
+                              ? "답글을 남겨보세요"
+                              : "댓글을 남겨보세요"
+                          : null,
+                      onEditingComplete: () {
+                        setState(() {
+                          _isTapRecomment = false;
+                        });
+                      },
+                    )),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: _isTapSendCommentBtn
+                                    ? Border.all(
+                                        color: Palette.grey50, width: 2.0)
+                                    : Border.all(
+                                        color: Palette.greyBG, width: 2.0)),
+                            child: SvgPicture.asset(
+                                "assets/svgs/comment_send_btn.svg")),
+                        onTap: () {
+                          setState(() {
+                            _isTapSendCommentBtn = true;
+                          });
+                          _timer?.cancel();
+                          _timer = Timer(const Duration(milliseconds: 300), () {
+                            setState(() {
+                              _isTapSendCommentBtn = false;
+                            });
+                          });
+
+                          _commentFocusNode.unfocus();
+                        })
+                  ],
+                ),
+              ))),
       body: SingleChildScrollView(
         child: Container(
             color: Palette.greyBG,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PostCard(number: 10),
+                PostCard(number: 10,  commentFocusNode: _commentFocusNode),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
                     child: Text(
                         "댓글 ${(comment_list.length + re_comment_list.length)}개",
                         style: const TextStyle(
@@ -173,7 +276,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
       ),
     );
   }
-
 
   Widget commentWidget() {
     Size size = MediaQuery.of(context).size;
@@ -229,7 +331,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     "$uploadTimeString | $beforeHours",
                                     style: date_textStyle,
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   Text(
                                     comment['text'],
                                     style: text_textStyle,
@@ -237,20 +339,25 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     maxLines: 3,
                                     overflow: TextOverflow.visible,
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   InkWell(
                                     splashColor: Palette.grey50,
                                     child: Text(
                                       "답글 달기",
                                       style: btn_textStyle,
                                     ),
-                                    onTap: () {},
+                                    onTap: () {
+                                      setState(() {
+                                        _isTapRecomment = true;
+                                      });
+                                      _commentFocusNode
+                                          .requestFocus(); // 포커스 요청
+                                    },
                                   ),
                                 ],
                               )),
                         ],
                       ),
-
                     ],
                   ),
                   const SizedBox(height: 5),
