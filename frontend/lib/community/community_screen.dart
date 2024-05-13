@@ -43,7 +43,7 @@ class _CommunityScreenState extends State<CommunityScreen>
       backgroundColor: Palette.purPle400,
       disabledBackgroundColor: Palette.greySoft,
       disabledForegroundColor: Colors.white,
-      minimumSize: Size(60, 36));
+      minimumSize: const Size(60, 36));
 
   final _unselectedButtonStyle = ElevatedButton.styleFrom(
     shape: RoundedRectangleBorder(
@@ -53,7 +53,7 @@ class _CommunityScreenState extends State<CommunityScreen>
     foregroundColor: Palette.grey200,
     backgroundColor: Palette.greySoft,
     shadowColor: Colors.transparent,
-    minimumSize: Size(60, 36),
+    minimumSize: const Size(60, 36),
 
     // padding: const EdgeInsets.symmetric(vertical: 12.0),
   );
