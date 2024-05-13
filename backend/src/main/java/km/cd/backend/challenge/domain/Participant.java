@@ -24,4 +24,10 @@ public class Participant {
     private User user;
 
     private boolean isOwner;
+    
+    private String targetName;
+    
+    private String receiverNumber;
+    
+    private String determination;
 }

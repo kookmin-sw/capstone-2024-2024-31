@@ -50,5 +50,4 @@ public class ChallengeCreateRequest {
 
     @Schema(description = "최대 모집 인원")
     private Integer maximumPeople;
-
 }

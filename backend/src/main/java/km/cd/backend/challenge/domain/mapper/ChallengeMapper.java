@@ -15,7 +15,9 @@ import km.cd.backend.challenge.dto.response.ChallengeStatusResponse;
 import km.cd.backend.challenge.dto.enums.ChallengeFrequency;
 import km.cd.backend.challenge.dto.request.ChallengeCreateRequest;
 import km.cd.backend.challenge.dto.response.ParticipantResponse;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -35,14 +37,11 @@ public interface ChallengeMapper {
     @Mapping(target = "certificationType", ignore = true)
     @Mapping(target = "isEnded", ignore = true)
     @Mapping(target = "totalParticipants", ignore = true)
+    @Mapping(target = "totalCertificationCount", expression = "java(calculateTotalCertificationCount(convertNumber(request.getChallengePeriod()), request.getCertificationFrequency()))")
     Challenge requestToEntity(ChallengeCreateRequest request);
     
     ChallengeInformationResponse challengeToChallengeResponse(Challenge challenge);
-
-    @Mappings({
-            @Mapping(target = "id", source = "challenge.id"),
-            @Mapping(target = "totalCertificationCount", expression = "java(calculateTotalCertificationCount(challenge.getChallengePeriod(), challenge.getCertificationFrequency()))"),
-    })
+    
     ChallengeStatusResponse toChallengeStatusResponse(Challenge challenge, Long numberOfCertifications);
     
     @Mappings({

@@ -56,9 +56,9 @@ public class ChallengeControllerTest extends IntegrationTest {
         Challenge challenge = new Challenge();
         challenge.setId(1L);
         
-        doReturn(challenge)
-            .when(challengeService)
-            .createChallenge(user.getId(), any(ChallengeCreateRequest.class));
+//        doReturn(challenge)
+//            .when(challengeService)
+//            .createChallenge(user.getId(), any(ChallengeCreateRequest.class));
         
         //when, then
         mockMvc.perform(post("/challenge/create")

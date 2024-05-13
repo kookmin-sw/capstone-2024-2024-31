@@ -7,6 +7,8 @@ import java.util.Optional;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.domain.Participant;
+import km.cd.backend.challenge.domain.mapper.ParticipantMapper;
+import km.cd.backend.challenge.dto.request.ChallengeJoinRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInviteCodeResponse;
@@ -23,6 +25,8 @@ import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.common.utils.RandomUtil;
 import km.cd.backend.common.utils.redis.RedisUtil;
 import km.cd.backend.common.utils.s3.S3Uploader;
+import km.cd.backend.common.utils.sms.SmsCertificationDao;
+import km.cd.backend.common.utils.sms.SmsUtil;
 import km.cd.backend.community.repository.PostRepository;
 import km.cd.backend.user.User;
 import km.cd.backend.user.UserRepository;
@@ -42,6 +46,7 @@ public class ChallengeService {
     private final PostRepository postRepository;
     private final S3Uploader s3Uploader;
     private final RedisUtil redisUtil;
+    private final SmsUtil smsUtil;
     
     final private static String INVITE_LINK_PREFIX = "challengeId=%d";
     
@@ -83,16 +88,25 @@ public class ChallengeService {
         return challengeRepository.save(challenge);
     }
     
-    public void joinChallenge(Long challengeId, Long userId) {
+    public void joinChallenge(Long challengeId, Long userId, ChallengeJoinRequest challengeJoinRequest) {
         Challenge challenge =validateExistChallenge(challengeId);
         User user = validateExistUser(userId);
         
         if (challenge.getParticipants().stream().anyMatch(p -> p.getUser().getId().equals(userId))) {
             throw new CustomException(ExceptionCode.ALREADY_JOINED_CHALLENGE);
         }
-        Participant participant = new Participant();
+        
+        Participant participant;
+        if (challengeJoinRequest != null){
+            participant = ParticipantMapper.INSTANCE.ChallengeJoinRequestToParticipant(challengeJoinRequest);
+        } else {
+            participant = new Participant();
+        }
+        
+        // 참여 설정
         participant.setChallenge(challenge);
         participant.setUser(user);
+        
         challenge.getParticipants().add(participant);
 
         challengeRepository.save(challenge);
@@ -104,7 +118,7 @@ public class ChallengeService {
         Optional<String> link = redisUtil.getData(INVITE_LINK_PREFIX.formatted(challengeId), String.class);
         if (link.isPresent()) {
             validateMatchLink(link.get(), request.code());
-            joinChallenge(challengeId, userId);
+            joinChallenge(challengeId, userId, null);
         } else {
             throw new CustomException(ExceptionCode.EXPIRED_INVITE_CODE);
         }
@@ -123,8 +137,23 @@ public class ChallengeService {
     }
     
     public void finishChallenge(Challenge challenge) {
+        // 참여자 성공/실패 결과 전송
+        Integer totalCount = challenge.getTotalCertificationCount();
+        List<Participant> participants = challenge.getParticipants();
+        for (Participant participant: participants) {
+            Long countCertifications = postRepository.countCertification(challenge.getId(), participant.getId());
+            boolean isSuccess = isOverNinetyPercent(totalCount, countCertifications);
+            
+            smsUtil.sendResult(participant, challenge.getChallengeName(), participant.getUser().getName(), isSuccess);
+        }
+        
+        // 챌린지 상태 변경
         challenge.finishChallenge();
         challengeRepository.save(challenge);
+    }
+    private boolean isOverNinetyPercent(Integer totalCount, Long countCertifications) {
+        double ratio = (double) countCertifications / totalCount;
+        return ratio >= 0.9;
     }
 
     public ChallengeInformationResponse getChallenge(Long challengeId) {

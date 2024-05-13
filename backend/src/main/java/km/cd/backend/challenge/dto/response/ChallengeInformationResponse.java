@@ -45,6 +45,6 @@ public class ChallengeInformationResponse {
     
     private Boolean isEnded;
     
-    private Integer totalParticipants ;
+    private Integer totalParticipants;
 }
 
