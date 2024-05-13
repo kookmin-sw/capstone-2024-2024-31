@@ -18,9 +18,9 @@ class ChallengeStateBox extends StatefulWidget {
 
 class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   List<Map<String, dynamic>> challengeList = [
-    // {'name': '매일 커밋하기', 'percent': '50', 'image': 'assets/images/image.png'},
-    // {'name': '매일 운동하기', 'percent': '10', 'image': 'assets/images/image.png'},
-    // {'name': '매일 먹기', 'percent': '30', 'image': 'assets/images/image.png'},
+    {'name': '매일 커밋하기', 'percent': '50', 'image': 'assets/images/image.png'},
+    {'name': '매일 운동하기', 'percent': '10', 'image': 'assets/images/image.png'},
+    {'name': '매일 먹기', 'percent': '30', 'image': 'assets/images/image.png'},
   ];
 
   Challenge challenge = Challenge(

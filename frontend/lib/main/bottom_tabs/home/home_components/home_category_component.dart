@@ -41,7 +41,7 @@ class Home_Category extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
