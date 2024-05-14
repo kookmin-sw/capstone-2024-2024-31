@@ -79,7 +79,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: widget.isFromMainScreen
+          leading: widget.isFromMainScreen || widget.isFromMypage
               ? IconButton(
                   icon: const Icon(
                     Icons.arrow_back_ios,
@@ -114,8 +114,8 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : buildChallengeDetailBody(context, challenge!),
-        bottomNavigationBar: widget.isFromMypage //마이루틴업 스크린에서 넘어온거면, 참가하기 버튼 비활성화(안보이게)
-            ? Container()
+        bottomNavigationBar: widget.isFromMypage || !widget.isFromMainScreen //마이루틴업 스크린에서 넘어온거면, 참가하기 버튼 비활성화(안보이게)
+            ? null
             : isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : buildChallengeDetailBottomNavigationBar(context, challenge!));
