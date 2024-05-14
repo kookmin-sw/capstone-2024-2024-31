@@ -117,7 +117,7 @@ class ChallengeItemCard extends StatelessWidget {
             height: imageWidth * (3 / 4),
           ),
         ),
-        isPrivate
+        data.isPrivate
             ? Positioned(
             bottom: 0,
             left: 0,
