@@ -212,7 +212,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
         width: screenWidth * 0.35,
         height: 4,
         value: percent * 0.01,
-        backgroundColor: Palette.grey50,
+        backgroundColor: CupertinoColors.systemGrey4,
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
