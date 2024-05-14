@@ -7,6 +7,7 @@ import 'package:frontend/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/challenge/detail/widgets/certification_method_widget.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
+import 'package:frontend/challenge/join/join_challenge_screen.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -19,9 +20,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ChallengeDetailScreen extends StatefulWidget {
   final int challengeId;
   final bool isFromMainScreen;
+  final bool isFromMypage;
 
   const ChallengeDetailScreen(
-      {super.key, required this.challengeId, this.isFromMainScreen=false});
+      {super.key,
+      required this.challengeId,
+      this.isFromMainScreen = false,
+      this.isFromMypage = false});
 
   @override
   State<ChallengeDetailScreen> createState() => _ChallengeDetailScreenState();
@@ -75,7 +80,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: widget.isFromMainScreen
+          leading: widget.isFromMainScreen || widget.isFromMypage
               ? IconButton(
                   icon: const Icon(
                     Icons.arrow_back_ios,
@@ -110,9 +115,11 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : buildChallengeDetailBody(context, challenge!),
-        bottomNavigationBar: isLoading
-            ? const SizedBox()
-            : buildChallengeDetailBottomNavigationBar(context, challenge!));
+        bottomNavigationBar: widget.isFromMypage || !widget.isFromMainScreen //마이루틴업 스크린에서 넘어온거면, 참가하기 버튼 비활성화(안보이게)
+            ? null
+            : isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : buildChallengeDetailBottomNavigationBar(context, challenge!));
   }
 
   Widget buildChallengeDetailBody(BuildContext context, Challenge challenge) {
@@ -140,7 +147,9 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   }
 
   Widget buildChallengeDetailBottomNavigationBar(
-      BuildContext context, Challenge challenge) {
+    BuildContext context,
+    Challenge challenge,
+  ) {
     return Stack(children: <Widget>[
       Container(
           alignment: Alignment.center,
@@ -149,7 +158,9 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           color: Colors.transparent,
           width: double.infinity,
           child: CustomButton(
-            onPressed: () => {},
+            onPressed: () {
+              Get.to(()=>JoinChallengeScreen(challenge: challenge));
+            },
             text: "참가하기",
           )),
       Positioned(
@@ -181,7 +192,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
 
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        height: screenSize.width * 0.5 * (imagePaths.length ~/ 2) + 30,
+        height: screenSize.width * 0.5 * (imagePaths.length ~/ 1.5) + 10,
         child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

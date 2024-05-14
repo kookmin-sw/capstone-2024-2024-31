@@ -26,7 +26,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
   final formKey = GlobalKey<FormState>();
   final controller = Get.find<ChallengeFormController>();
   final picker = ImagePicker();
-
+  bool isLoading = false;
   bool _canSetCapacity = false;
   final List<bool> _toggleSelections = [true, false];
   final TextEditingController _maxCapacityController = TextEditingController();
@@ -90,42 +90,51 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
           ),
         ),
         bottomNavigationBar: Container(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-            color: Colors.transparent,
-            width: double.infinity,
-            child: CustomButton(
-              text: "참가하기",
-              onPressed: () async {
-                if (formKey.currentState!.validate()) {
-                  logger
-                      .d('인증 방법: ${controller.form.certificationExplanation}');
-                  logger.d('인증 수단: ${controller.form.isGalleryPossible}');
-                  logger.d(
-                      '성공 이미지: ${controller.form.successfulVerificationImage}');
-                  logger
-                      .d('실패 이미지: ${controller.form.failedVerificationImage}');
-                  logger.d('최대 인원: ${controller.form.maximumPeople}');
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          color: Colors.transparent,
+          width: double.infinity,
+          child: isLoading
+              ? Center(
+            child: CircularProgressIndicator(), // Show loading indicator
+          )
+              : CustomButton(
+            text: "참가하기",
+            onPressed: () async {
+              if (formKey.currentState!.validate()) {
+                logger.d('인증 방법: ${controller.form.certificationExplanation}');
+                logger.d('인증 수단: ${controller.form.isGalleryPossible}');
+                logger.d('성공 이미지: ${controller.form.successfulVerificationImage}');
+                logger.d('실패 이미지: ${controller.form.failedVerificationImage}');
+                logger.d('최대 인원: ${controller.form.maximumPeople}');
 
-                  try {
-                    final int challengeId = await _postChallenge();
-                    logger.d('챌린지 생성 성공: $challengeId');
-                    Get.to(
-                        () => CreateCompleteScreen(challengeId: challengeId));
-                  } catch (err) {
-                    logger.d('챌린지 생성 실패: $err');
-                    Get.snackbar("챌린지 생성 실패", "다시 시도해주세요.");
-                  }
+                try {
+                  setState(() {
+                    isLoading = true; // Set isLoading to true when posting starts
+                  });
+                  final int challengeId = await _postChallenge();
+                  logger.d('챌린지 생성 성공: $challengeId');
+                  Get.to(() => CreateCompleteScreen(challengeId: challengeId));
+                } catch (err) {
+                  logger.d('챌린지 생성 실패: $err');
+                  Get.snackbar("챌린지 생성 실패", "다시 시도해주세요.");
+                } finally {
+                  setState(() {
+                    isLoading = false; // Set isLoading back to false when posting finishes
+                  });
                 }
-              },
-            )),
+              }
+            },
+          ),
+        ),
+
         body: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
             },
-            child:  SingleChildScrollView(
-                child: Form(
-                  key: formKey,
-                  child: Padding(
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,

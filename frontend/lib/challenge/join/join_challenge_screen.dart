@@ -8,6 +8,7 @@ import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen_sec.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:get/get.dart';
 
 class JoinChallengeScreen extends StatefulWidget {
   final Challenge challenge;
@@ -35,7 +36,9 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+            },
           ),
           title: const Text(
             '루틴업 참가하기',
@@ -55,17 +58,17 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                       screenHeight: screenSize.height,
                       imageUrl: widget.challenge.challengeImageUrls[0]),
                   InformationWidget(challenge: widget.challenge),
-                  Padding(
+                  const Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 10, horizontal: 2),
                       child: Divider(thickness: 10, color: Palette.grey50)),
                   ExampleMsg(screenSize),
-                  Padding(
+                  const Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 10, horizontal: 2),
                       child: Divider(thickness: 10, color: Palette.grey50)),
                   AgreeCheckWidget(),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -119,7 +122,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
 
   Widget ExampleMsg(Size _screenSize) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,10 +135,10 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   width: 30,
                 ),
                 const SizedBox(width: 5),
-                Text(
+                const Text(
                   "루틴업 성공 시",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'Pretendard',
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
@@ -144,9 +147,9 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
               ],
             ),
             const SizedBox(height: 10),
-            Text(
+            const Text(
               "나의 갓생을 자랑할 수 있어요!",
-              style: const TextStyle(
+              style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
@@ -169,10 +172,10 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   width: 30,
                 ),
                 const SizedBox(width: 5),
-                Text(
+                const Text(
                   "루틴업 실패 시",
                   textAlign: TextAlign.start,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'Pretendard',
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
@@ -181,9 +184,9 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
               ],
             ),
             const SizedBox(height: 10),
-            Text(
+            const Text(
               "실패 시 채찍의 한마디로 갓생을 향해 나아가요!",
-              style: const TextStyle(
+              style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
@@ -206,7 +209,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
         child: Form(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
+          const Text(
             "결과 알림 받을 전화번호 입력해 주세요.",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -214,7 +217,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 fontFamily: 'Pretendard',
                 color: Palette.grey300),
           ),
-          Text(
+          const Text(
             "(성공을 가장 알리고 싶은 or 실패를 가장 숨기고 싶은)",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -222,7 +225,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 fontFamily: 'Pretendard',
                 color: Palette.grey200),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -233,19 +236,19 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   // 휴대폰 번호는 보통 11자리입니다.
                   keyboardType: TextInputType.phone,
                   // 키보드 타입을 전화번호로 설정합니다.
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       fontSize: 11,
                       fontFamily: 'Pretendard'),
                   decoration: InputDecoration(
                       hintText: "010-1234-5678",
                       // 예시 번호를 힌트로 표시합니다.
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w300,
                         color: Palette.grey200,
                       ),
-                      counterStyle: TextStyle(
+                      counterStyle: const TextStyle(
                           fontSize: 9,
                           color: Palette.grey200,
                           fontFamily: 'Pretendard'),
@@ -259,7 +262,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide:
-                              BorderSide(color: Palette.mainPurple, width: 2))),
+                              const BorderSide(color: Palette.mainPurple, width: 2))),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return '휴대폰 번호를 입력하세요.';
@@ -303,7 +306,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(height: 5),
-            Text(
+            const Text(
               "패널티 휴대폰 인증",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -313,7 +316,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
               ),
             ),
             SizedBox(height: 3),
-            Text(
+            const Text(
               "인증 완료시, 본 전화번호 소유자 개인정보 수집에 동의합니다.",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -328,30 +331,30 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   width: screenSize.width * 0.4,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       fontSize: 11,
                       fontFamily: 'Pretendard',
                     ),
                     decoration: InputDecoration(
                       hintText: "4자리 입력",
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w300,
                         color: Palette.grey200,
                       ),
                       contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                       filled: true,
                       fillColor: Palette.white,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Palette.greySoft),
+                        borderSide: const BorderSide(color: Palette.greySoft),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                         borderSide:
-                            BorderSide(color: Palette.mainPurple, width: 2),
+                            const BorderSide(color: Palette.mainPurple, width: 2),
                       ),
                     ),
                     validator: (value) {
@@ -365,7 +368,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                     },
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -393,7 +396,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           "확인해주세요",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -426,12 +429,12 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   Widget checkBoxWidget(
       String text, bool isChecked, void Function(bool?) onChanged) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       width: double.infinity,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 10,
               fontFamily: 'Pretendard',
