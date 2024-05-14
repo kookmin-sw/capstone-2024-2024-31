@@ -49,8 +49,11 @@ public class User {
     @Builder.Default
     private int point = 0;
     
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private List<Friend> friends = new ArrayList<>();
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
+    private List<Friend> following = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
+    private List<Friend> follower = new ArrayList<>();
     
     public User(Long id, String email, String name) {
         this.id = id;
