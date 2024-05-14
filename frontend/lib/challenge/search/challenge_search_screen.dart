@@ -6,7 +6,6 @@ import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 import 'package:frontend/model/data/challenge/challenge_filter.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
@@ -35,7 +34,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   bool hasMoreData = true;
   final ScrollController _scrollController = ScrollController();
 
-  void _getChallengeList() async {
+  void _getFilteredChallengeList(bool isFiltered) async {
     if (!hasMoreData) return;
 
     Dio dio = Dio();
@@ -45,14 +44,33 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
     dio.options.headers['Authorization'] =
         'Bearer ${prefs.getString('access_token')}';
 
+    Map<String, dynamic> filter = {}; // Initialize filter with an empty map
+    Map<String, dynamic> trueFilter;
+    Map<String, dynamic> falseFilter;
+
     try {
-      final filter = ChallengeFilter(
-              name: searchValue,
-              isPrivate: _isPrivate,
-              category: selectedIndex == 0
-                  ? null
-                  : ChallengeCategory.values[selectedIndex - 1])
-          .toJson();
+      if (isFiltered) {
+        print("111111111111111111111111 $isFiltered");
+        filter = ChallengeFilter(
+                name: searchValue,
+                isPrivate: _isPrivate,
+                category: selectedIndex == 0
+                    ? null
+                    : ChallengeCategory.values[selectedIndex - 1])
+            .toJson();
+      } else {
+        filter = ChallengeFilter(
+                name: searchValue,
+                isPrivate: null,
+                category: selectedIndex == 0
+                    ? null
+                    : ChallengeCategory.values[selectedIndex - 1])
+            .toJson();
+
+        print("dadkdfjal");
+        print(filter);
+      }
+
       logger.d("challenge filter: $filter");
 
       final response = await dio.get('${Env.serverUrl}/challenges/list',
@@ -70,6 +88,10 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
 
         setState(() {
           if (newData.isNotEmpty) {
+            if (!_isPrivate) {
+              newData =
+                  newData.toList();
+            }
             challengeList.addAll(newData);
             currentCursor = challengeList.last.id;
           } else {
@@ -87,11 +109,11 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   @override
   void initState() {
     super.initState();
-    _getChallengeList(); // 초기 데이터 로드
+    _getFilteredChallengeList(false); // 초기 데이터 로드  viewFilter = false
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        _getChallengeList(); // 스크롤 끝에 도달할 때 추가 데이터 로드
+        _getFilteredChallengeList(false); // 스크롤 끝에 도달할 때 추가 데이터 로드
       }
     });
   }
@@ -149,11 +171,18 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                       activeColor: Palette.purPle300,
                       onChanged: (bool? value) {
                         setState(() {
+                          print(value);
+
                           _isPrivate = value ?? false;
                           hasMoreData = true;
                           currentCursor = 0;
                           challengeList.clear();
-                          _getChallengeList();
+
+                          if (challengeList.isEmpty && value!) {
+                            _getFilteredChallengeList(true);
+                          } else {
+                            _getFilteredChallengeList(false);
+                          }
                         });
                       },
                     ),
@@ -197,7 +226,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                             hasMoreData = true;
                             currentCursor = 0;
                             challengeList.clear();
-                            _getChallengeList();
+                            _getFilteredChallengeList(true);
                           });
                         },
                         style: ButtonStyle(
