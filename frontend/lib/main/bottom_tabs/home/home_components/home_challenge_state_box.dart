@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
@@ -127,7 +129,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(9),
+                            borderRadius: BorderRadius.circular(15),
                             child: Image.network(
                               challenges[index].imageUrl, // 이미지 경로
                               width: 60, // 이미지 너비
@@ -146,18 +148,22 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
+                                      Flexible(
+                                          child: Text(
                                         challenges[index]
                                             .challengeName, // 챌린지 이름
+                                        maxLines: 1,
+                                        overflow: TextOverflow.fade,
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Pretender",
                                           fontSize: 10,
                                         ),
-                                      ),
+                                      )),
                                       Text(
                                         '${getProgressPercent(index).toInt()}%',
                                         style: const TextStyle(
-                                            fontSize: 11), // 진행 상태
+                                            fontSize: 11, fontFamily: "Pretender"), // 진행 상태
                                       ),
                                     ],
                                   )),
