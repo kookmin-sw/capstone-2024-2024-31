@@ -30,6 +30,9 @@ public record ChallengeSimpleResponse(
         String imageUrl,
 
         @Schema(description = "챌린지 종료 여부")
-        boolean isEnded
+        boolean isEnded,
+
+        @Schema(description = "챌린지 비공개 여부")
+        boolean isPrivate
 ) {
 }
