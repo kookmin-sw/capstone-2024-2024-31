@@ -7,6 +7,7 @@ import 'package:frontend/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/challenge/detail/widgets/certification_method_widget.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
+import 'package:frontend/challenge/join/join_challenge_screen.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -157,7 +158,9 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           color: Colors.transparent,
           width: double.infinity,
           child: CustomButton(
-            onPressed: () => {},
+            onPressed: () {
+              Get.to(()=>JoinChallengeScreen(challenge: challenge));
+            },
             text: "참가하기",
           )),
       Positioned(
