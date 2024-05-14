@@ -25,7 +25,6 @@ import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.common.utils.RandomUtil;
 import km.cd.backend.common.utils.redis.RedisUtil;
 import km.cd.backend.common.utils.s3.S3Uploader;
-import km.cd.backend.common.utils.sms.SmsCertificationDao;
 import km.cd.backend.common.utils.sms.SmsUtil;
 import km.cd.backend.community.repository.PostRepository;
 import km.cd.backend.user.User;
@@ -144,12 +143,20 @@ public class ChallengeService {
             Long countCertifications = postRepository.countCertification(challenge.getId(), participant.getId());
             boolean isSuccess = isOverNinetyPercent(totalCount, countCertifications);
             
+            distributeRewards(isSuccess, countCertifications, participant.getUser());
             smsUtil.sendResult(participant, challenge.getChallengeName(), participant.getUser().getName(), isSuccess);
         }
         
         // 챌린지 상태 변경
         challenge.finishChallenge();
         challengeRepository.save(challenge);
+    }
+    private void distributeRewards(boolean isSuccess, Long countCertifications, User user) {
+        if (isSuccess) {
+            int challengePoint = (int) (countCertifications * 10);
+            user.setPoint(user.getPoint() + challengePoint);
+            userRepository.save(user);
+        }
     }
     private boolean isOverNinetyPercent(Integer totalCount, Long countCertifications) {
         double ratio = (double) countCertifications / totalCount;
