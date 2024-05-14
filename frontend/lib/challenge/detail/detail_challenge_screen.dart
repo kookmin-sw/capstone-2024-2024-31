@@ -189,7 +189,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
 
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        height: screenSize.width * 0.5 * (imagePaths.length ~/ 2) + 30,
+        height: screenSize.width * 0.5 * (imagePaths.length ~/ 1.5) + 10,
         child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
