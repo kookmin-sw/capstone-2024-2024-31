@@ -50,7 +50,6 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
 
     try {
       if (isFiltered) {
-        print("111111111111111111111111 $isFiltered");
         filter = ChallengeFilter(
                 name: searchValue,
                 isPrivate: _isPrivate,
@@ -67,10 +66,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                     : ChallengeCategory.values[selectedIndex - 1])
             .toJson();
 
-        print("dadkdfjal");
-        print(filter);
       }
-
       logger.d("challenge filter: $filter");
 
       final response = await dio.get('${Env.serverUrl}/challenges/list',
