@@ -2,12 +2,12 @@ import 'package:frontend/model/data/challenge/challenge_category.dart';
 
 class ChallengeFilter {
   late String? name;
-  late bool isPrivate;
+  late bool? isPrivate;
   late ChallengeCategory? category;
 
   ChallengeFilter({
     this.name,
-    required this.isPrivate,
+    this.isPrivate,
     this.category,
   });
 
