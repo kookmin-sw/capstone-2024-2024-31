@@ -103,6 +103,8 @@ flutter:
     - assets/images/login_btn/
     - assets/buttons/
     - assets/svgs/
+    - assets/ai/labels.txt
+    - assets/ai/hand_pose_recognizer.tflite
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
