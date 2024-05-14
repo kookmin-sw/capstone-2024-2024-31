@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
-import 'package:frontend/model/data/challenge_form.dart';
+import 'package:frontend/model/data/challenge/challenge_form.dart';
 import 'package:http_parser/http_parser.dart';
 
 class ChallengeFormController extends GetxController {

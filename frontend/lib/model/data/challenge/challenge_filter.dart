@@ -1,4 +1,4 @@
-import 'package:frontend/model/data/challenge_category.dart';
+import 'package:frontend/model/data/challenge/challenge_category.dart';
 
 class ChallengeFilter {
   late String? name;

@@ -6,10 +6,10 @@ import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
-import 'package:frontend/model/data/challenge_category.dart';
-import 'package:frontend/model/data/challenge_filter.dart';
-import 'package:frontend/model/data/challenge_simple.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge_category.dart';
+import 'package:frontend/model/data/challenge/challenge_filter.dart';
+import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
