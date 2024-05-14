@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/challenge/complete/challenge_complete_screen.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
@@ -75,13 +76,15 @@ class MyRoutineUpCard extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
+                                          Flexible(child: Text(
                                             challenge.challengeName, // 챌린지 이름
+                                            overflow: TextOverflow.fade,
+                                            maxLines: 1,
                                             style: const TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 10,
                                             ),
-                                          ),
+                                          )),
                                           Text(
                                             '${getProgressPercent().toInt()}%',
                                             style: const TextStyle(
