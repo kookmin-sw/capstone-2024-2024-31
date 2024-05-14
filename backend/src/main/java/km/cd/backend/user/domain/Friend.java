@@ -26,16 +26,14 @@ public class Friend {
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User users;
+    @JoinColumn(name = "from_user")
+    private User fromUser;
     
-    private String userEmail;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "to_user")
+    private User toUser;
+    
+    private String myEmail;
     private String friendEmail;
-    private FriendStatus status;
-    private Long counterpartId;
-    private boolean isFrom;
-    
-    public void acceptFriendRequest() {
-        status = FriendStatus.ACCEPT;
-    }
+    private String friendName;
 }
