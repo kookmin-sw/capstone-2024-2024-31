@@ -60,8 +60,12 @@ public class ChallengeController {
     
 
     @GetMapping("/{challengeId}")
-    public ResponseEntity<ChallengeInformationResponse> getChallenge(@PathVariable Long challengeId) {
-        ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId);
+    public ResponseEntity<ChallengeInformationResponse> getChallenge(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long challengeId,
+            @RequestParam(name = "code", required = false, defaultValue = "") String code
+    ) {
+        ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId, principalDetails.getUserId(), code);
         return ResponseEntity.ok(challengeInformationResponse);
     }
     
