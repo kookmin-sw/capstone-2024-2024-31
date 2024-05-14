@@ -59,6 +59,11 @@ dependencies:
   chat_bubbles: ^1.6.0
   dio: ^5.4.3+1
 
+  #AI 관련 디펜던시
+  tflite: ^1.1.2
+  camera: ^0.9.8+1
+  image: ^3.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
