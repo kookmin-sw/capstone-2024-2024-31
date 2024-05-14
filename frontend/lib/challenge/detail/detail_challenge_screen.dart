@@ -19,9 +19,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ChallengeDetailScreen extends StatefulWidget {
   final int challengeId;
   final bool isFromMainScreen;
+  final bool isFromMypage;
 
   const ChallengeDetailScreen(
-      {super.key, required this.challengeId, this.isFromMainScreen=false});
+      {super.key,
+      required this.challengeId,
+      this.isFromMainScreen = false,
+      this.isFromMypage = false});
 
   @override
   State<ChallengeDetailScreen> createState() => _ChallengeDetailScreenState();
@@ -110,9 +114,11 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : buildChallengeDetailBody(context, challenge!),
-        bottomNavigationBar: isLoading
-            ? const SizedBox()
-            : buildChallengeDetailBottomNavigationBar(context, challenge!));
+        bottomNavigationBar: widget.isFromMypage //마이루틴업 스크린에서 넘어온거면, 참가하기 버튼 비활성화(안보이게)
+            ? Container()
+            : isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : buildChallengeDetailBottomNavigationBar(context, challenge!));
   }
 
   Widget buildChallengeDetailBody(BuildContext context, Challenge challenge) {
@@ -140,7 +146,9 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   }
 
   Widget buildChallengeDetailBottomNavigationBar(
-      BuildContext context, Challenge challenge) {
+    BuildContext context,
+    Challenge challenge,
+  ) {
     return Stack(children: <Widget>[
       Container(
           alignment: Alignment.center,
