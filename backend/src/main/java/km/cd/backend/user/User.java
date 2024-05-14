@@ -15,7 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "users")
-@Getter
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
