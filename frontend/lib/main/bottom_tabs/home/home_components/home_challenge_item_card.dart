@@ -9,13 +9,15 @@ import 'package:logger/logger.dart';
 
 class ChallengeItemCard extends StatelessWidget {
   final ChallengeSimple data;
+  final bool isPrivate = true;
 
-  const ChallengeItemCard({super.key, required this.data});
+  const ChallengeItemCard({super.key, required this.data,});
 
   @override
   Widget build(BuildContext context) {
-    final logger = Logger();
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
 
     // 문자열을 DateTime 객체로 파싱
     DateTime date = DateTime.parse(data.startDate);
@@ -25,7 +27,9 @@ class ChallengeItemCard extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          Get.to(() => ChallengeDetailScreen(challengeId: data.id, isFromMainScreen: true));
+          Get.to(() =>
+              ChallengeDetailScreen(
+                  challengeId: data.id, isFromMainScreen: true));
         },
         child: SizedBox(
             width: screenSize.width * 0.45,
@@ -100,6 +104,7 @@ class ChallengeItemCard extends StatelessWidget {
   }
 
   Widget challengeImage(Size screenSize) {
+    double imageWidth = screenSize.width * 0.45;
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -108,16 +113,40 @@ class ChallengeItemCard extends StatelessWidget {
           child: Image.network(
             data.imageUrl,
             fit: BoxFit.cover,
-            width: screenSize.width * 0.45,
-            height: screenSize.width * 0.45 * (3 / 4),
+            width: imageWidth,
+            height: imageWidth * (3 / 4),
           ),
         ),
+        isPrivate
+            ? Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              width: imageWidth,
+              height: imageWidth * (3 / 4),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                // 투명도 조절 가능한 검은색 배경
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(10), // 상단 모서리는 안둥글게
+                  bottom: Radius.circular(10), // 하단 모서리만 둥글게
+                ),
+              ),
+              child: const Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                  size: 30
+              ),
+            ))
+            : Container(), // isPrivate가 false이면 빈 Container를 반환하여 자물쇠 아이콘을 표시하지 않음
         Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: Container(
-              width: screenSize.width * 0.45,
+              width: imageWidth,
               padding: const EdgeInsets.symmetric(vertical: 5),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.5),
