@@ -63,7 +63,7 @@ public class ChallengeController {
     public ResponseEntity<ChallengeInformationResponse> getChallenge(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long challengeId,
-            @RequestParam String code
+            @RequestParam(name = "code", required = false, defaultValue = "") String code
     ) {
         ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId, principalDetails.getUserId(), code);
         return ResponseEntity.ok(challengeInformationResponse);
