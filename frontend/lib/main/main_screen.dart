@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/login/login_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
-import 'package:frontend/main/bottom_tabs/myRoutineUp/myRoutineUp_screen.dart';
+import 'package:frontend/main/bottom_tabs/myRoutineUp/my_routine_up_screen.dart';
 import 'package:frontend/main/bottom_tabs/mypage/mypage_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
@@ -15,7 +16,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/env.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  int? tabNumber;
+
+  MainScreen({super.key, this.tabNumber});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -24,7 +27,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   late Future<User> _userDataFuture;
   final logger = Logger();
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
@@ -42,23 +45,31 @@ class _MainScreenState extends State<MainScreen> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final UserController userController = Get.find<UserController>();
     final String? accessToken = prefs.getString('access_token');
-    final String url = '${Env.serverUrl}/users/me';
 
-    final response = await http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
+    Dio dio = Dio();
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> userMap =
-          jsonDecode(utf8.decode(response.bodyBytes));
-      final User user = User.fromJson(userMap);
-      userController.saveUser(user);
-      logger.d("유저 조회 성공: ${user.name}");
-      return user;
+    dio.options.contentType = Headers.jsonContentType;
+    dio.options.headers["Authorization"] = "Bearer $accessToken";
+
+    try {
+      final response = await dio.get('${Env.serverUrl}/users/me');
+
+      if (response.statusCode == 200) {
+        logger.d("유저 조회 성공: ${response.data}");
+        final User user = User.fromJson(response.data);
+        userController.saveUser(user);
+
+        final responseMyChallenges =
+            await dio.get('${Env.serverUrl}/users/me/challenges');
+
+        if (responseMyChallenges.statusCode == 200) {
+          logger.d("나의 챌린지 조회 성공: ${responseMyChallenges.data}");
+          userController.updateMyChallenges(responseMyChallenges.data);
+        }
+        return userController.user;
+      }
+    } catch (err) {
+      logger.e("유저 조회 실패: $err");
     }
 
     await prefs.remove("access_token");
@@ -69,6 +80,12 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _userDataFuture = _getUserData();
+    if (widget.tabNumber != null) {
+      _selectedIndex = widget.tabNumber!;
+    }
+    else{
+      _selectedIndex = 0;
+    }
   }
 
   Widget _errorView(String errorMessage) {

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -10,7 +9,7 @@ class ChallengeRecommendBox extends StatelessWidget {
 
   ChallengeRecommendBox({required this.name, super.key});
 
-  List<Map<String, String>> categoryIconList = [
+  final List<Map<String, String>> categoryIconList = [
     {'category': '운동', 'svg_icon': 'assets/icons/category_icons/exercise.svg'},
     {'category': '식습관', 'svg_icon': 'assets/icons/category_icons/eating.svg'},
     {'category': '취미', 'svg_icon': 'assets/icons/category_icons/hobby.svg'},
@@ -26,14 +25,12 @@ class ChallengeRecommendBox extends StatelessWidget {
     // Get the randomly selected map
     Map<String, String> randomMap = categoryIconList[randomIndex];
 
-    return randomMap!;
+    return randomMap;
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, String> randomCategory = getRandomCategory(
-      categoryIconList
-    );
+    Map<String, String> randomCategory = getRandomCategory(categoryIconList);
     return Container(
       color: Palette.mainPurple,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -46,7 +43,7 @@ class ChallengeRecommendBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "$name 님 오늘은 ${randomCategory['category']} 관련 챌린지를 도전해 볼까요?",
+                  "$name님 오늘은 ${randomCategory['category']} 관련 챌린지를 도전해 볼까요?",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,

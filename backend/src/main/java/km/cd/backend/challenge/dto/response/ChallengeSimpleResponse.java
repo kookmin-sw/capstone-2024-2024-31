@@ -27,7 +27,9 @@ public record ChallengeSimpleResponse(
         int totalParticipants,
 
         @Schema(description = "챌린지 대표 이미지 url")
-        String imageUrl
+        String imageUrl,
 
+        @Schema(description = "챌린지 종료 여부")
+        boolean isEnded
 ) {
 }

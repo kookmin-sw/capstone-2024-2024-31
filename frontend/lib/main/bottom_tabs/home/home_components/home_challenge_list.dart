@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/search/challenge_search_screen.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge_filter.dart';
-import 'package:frontend/model/data/challenge_simple.dart';
+import 'package:frontend/model/data/challenge/challenge_filter.dart';
+import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
@@ -79,18 +80,20 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
                   } else if (snapshot.hasError) {
                     return Center(child: Text(snapshot.error.toString()));
                   } else if (snapshot.hasData) {
-                    return SizedBox(
-                        height: screenSize.height * 0.3,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children:
-                              List.generate(snapshot.data!.length, (index) {
-                            return ChallengeItemCard(
-                                data: snapshot.data![index]);
-                          }),
-                        ));
+                    return snapshot.data!.isNotEmpty
+                        ? SizedBox(
+                            height: screenSize.height * 0.3,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children:
+                                  List.generate(snapshot.data!.length, (index) {
+                                return ChallengeItemCard(
+                                    data: snapshot.data![index]);
+                              }),
+                            ))
+                        : SvgPicture.asset("assets/svgs/no_challenge_box.svg"); //"snapshot.data 가 [] 일 경우 진행중인 챌린지 없음 안내
                   } else {
-                    return const Center(child: Text("진행중인 챌린지가 없습니다."));
+                    return Container();
                   }
                 },
               ),

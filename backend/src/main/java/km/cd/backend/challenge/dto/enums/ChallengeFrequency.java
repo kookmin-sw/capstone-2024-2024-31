@@ -16,7 +16,7 @@ public enum ChallengeFrequency {
   
   private final String frequency;
   private final int daysPerWeek;
-  
+
   ChallengeFrequency(String frequency, int daysPerWeek) {
     this.frequency = frequency;
     this.daysPerWeek = daysPerWeek;

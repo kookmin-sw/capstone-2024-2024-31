@@ -2,20 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 
-class JoinChallengeScreen_sec extends StatefulWidget {
-  final Challenge challenge;
+class JoinChallengeSecScreen extends StatefulWidget {
+  final Challenge challenge = Challenge.getDummyData();
 
-  const JoinChallengeScreen_sec({Key? key, required this.challenge})
-      : super(key: key);
+  JoinChallengeSecScreen({super.key});
 
   @override
-  State<JoinChallengeScreen_sec> createState() =>
-      _JoinChallengeScreen_secState();
+  State<JoinChallengeSecScreen> createState() => _JoinChallengeSecScreenState();
 }
 
-class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
+class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
   bool isAllInput = false;
   List<bool> isInputList = [false, false, false, false];
 
@@ -126,8 +124,7 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
                   Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) =>
-                          ChallengeStateScreen(challenge: widget.challenge),
+                      builder: (context) => ChallengeStateScreen(),
                     ),
                   );
                 },
