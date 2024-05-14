@@ -3,7 +3,6 @@ import 'package:frontend/challenge/complete/widget/cerification_post_card.dart';
 import 'package:frontend/challenge/complete/widget/reward_card.dart';
 import 'package:frontend/challenge/detail/widgets/certification_method_widget.dart';
 import 'package:frontend/community/community_screen.dart';
-import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:frontend/model/data/post.dart';
@@ -55,7 +54,7 @@ class ChallengeCompleteScreen extends StatelessWidget {
         fontSize: fontSize,
       );
 
-  final bool _isSuccess = false;
+  bool _isSuccess = false;
   bool isEnded = false;
 
   @override

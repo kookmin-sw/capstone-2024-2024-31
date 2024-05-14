@@ -25,7 +25,7 @@ class ChallengeItemCard extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          Get.to(() => ChallengeDetailScreen(challengeId: data.id));
+          Get.to(() => ChallengeDetailScreen(challengeId: data.id, isFromMainScreen: true));
         },
         child: SizedBox(
             width: screenSize.width * 0.45,

@@ -8,6 +8,7 @@ import 'package:frontend/challenge/detail/widgets/certification_method_widget.da
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/env.dart';
+import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge.dart';
 import 'package:frontend/widgets/custom_button.dart';
@@ -17,8 +18,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ChallengeDetailScreen extends StatefulWidget {
   final int challengeId;
+  final bool isFromMainScreen;
 
-  const ChallengeDetailScreen({super.key, required this.challengeId});
+  const ChallengeDetailScreen(
+      {super.key, required this.challengeId, this.isFromMainScreen=false});
 
   @override
   State<ChallengeDetailScreen> createState() => _ChallengeDetailScreenState();
@@ -72,7 +75,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: isFromMainScreen
+          leading: widget.isFromMainScreen
               ? IconButton(
                   icon: const Icon(
                     Icons.arrow_back_ios,
