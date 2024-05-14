@@ -3,6 +3,7 @@ package km.cd.backend.user;
 import java.util.List;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import km.cd.backend.user.domain.User;
+import km.cd.backend.user.domain.mapper.UserMapper;
 import km.cd.backend.user.dto.UserResponse;
 import km.cd.backend.user.dto.FriendListResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,36 +32,38 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
     
-    @PostMapping("/friend/{targetEmail}")
-    public ResponseEntity<String> sendFriendRequest(
+    @PostMapping("/follow/{targetEmail}")
+    public ResponseEntity<String> followFriend(
         @PathVariable String targetEmail,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        userService.createFriend(targetEmail, principalDetails.getUserId());
+        userService.followFriend(targetEmail, principalDetails.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     
-    @GetMapping("/friend/received")
-    public ResponseEntity<List<FriendListResponse>> getWaitingFriendInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return ResponseEntity.ok(userService.getWaitingFriendList(principalDetails.getUserId()));
+    @GetMapping("/{targetEmail}/following")
+    public ResponseEntity<List<FriendListResponse>> getFollowingList(
+        @PathVariable String targetEmail,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseEntity.ok(userService.getFollowingList(targetEmail, principalDetails.getUserId()));
     }
     
-    @GetMapping("/friend")
-    public ResponseEntity<List<FriendListResponse>> getFriendInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return ResponseEntity.ok(userService.getFriendList(principalDetails.getUserId()));
+    @GetMapping("/{targetEmail}/follower")
+    public ResponseEntity<List<FriendListResponse>> getFollwerList(
+        @PathVariable String targetEmail,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseEntity.ok(userService.getFollwerList(targetEmail, principalDetails.getUserId()));
     }
     
-    @PostMapping("/friend/approve/{friendId}")
-    public ResponseEntity<String> approveFriendRequest(@PathVariable Long friendId) {
-        userService.approveFriendRequest(friendId);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-    
-    @DeleteMapping("/friend/reject/{friendId}")
-    public ResponseEntity<String> rejectFriendRequest(@PathVariable Long friendId) {
-        userService.rejectFriendRequest(friendId);
+    @DeleteMapping("/follow/{targetEmail}")
+    public ResponseEntity<String> removeFollow(
+        @PathVariable String targetEmail,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        userService.removeFollow(targetEmail, principalDetails.getUserId());
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
-    
     
 }
