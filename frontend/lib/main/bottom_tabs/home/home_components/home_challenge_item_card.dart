@@ -46,6 +46,8 @@ class ChallengeItemCard extends StatelessWidget {
                             horizontal: 10, vertical: 8),
                         child: Text(
                           data.challengeName,
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Palette.grey500,
