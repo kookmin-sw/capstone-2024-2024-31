@@ -90,7 +90,13 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
                           }),
                         ));
                   } else {
-                    return const Center(child: Text("진행중인 챌린지가 없습니다."));
+                    return const Center(
+                        child: Text("진행중인 챌린지가 없습니다.",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                color: Palette.grey500,
+                                fontFamily: 'Pretendard',
+                                fontSize: 10)));
                   }
                 },
               ),
