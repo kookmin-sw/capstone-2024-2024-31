@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             const ChallengeTopStack(),
             const SizedBox(height: 10),
-            Home_Category(),
+            HomeCategory(),
             const SizedBox(height: 10),
             const ChallengeItemList()
           ],

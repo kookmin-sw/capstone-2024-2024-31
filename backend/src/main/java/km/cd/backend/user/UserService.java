@@ -1,6 +1,10 @@
 package km.cd.backend.user;
 
-import java.util.List;
+import km.cd.backend.challenge.domain.Challenge;
+import km.cd.backend.challenge.domain.Participant;
+import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
+import km.cd.backend.challenge.dto.response.ChallengeSimpleResponse;
+import km.cd.backend.challenge.repository.ParticipantRepository;
 import km.cd.backend.common.error.CustomException;
 import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.user.domain.Friend;
@@ -13,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -20,6 +26,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
+    private final ParticipantRepository participantRepository;
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
@@ -68,4 +75,15 @@ public class UserService {
         friendRepository.deleteFriendByFromUserAndToUser(fromUser, toUser);
     }
     
+
+    public List<ChallengeSimpleResponse> getChallengesByUserId(Long userId) {
+        List<Participant> participants = participantRepository.findAllByUserId(userId);
+
+        return participants.stream().map(
+                participant -> {
+                    Challenge challenge = participant.getChallenge();
+                    return ChallengeMapper.INSTANCE.entityToSimpleResponse(challenge);
+                }
+        ).toList();
+    }
 }

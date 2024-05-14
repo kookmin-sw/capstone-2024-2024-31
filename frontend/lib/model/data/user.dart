@@ -1,3 +1,5 @@
+import 'package:frontend/model/data/challenge/challenge_simple.dart';
+
 class User {
   int id;
   String email;

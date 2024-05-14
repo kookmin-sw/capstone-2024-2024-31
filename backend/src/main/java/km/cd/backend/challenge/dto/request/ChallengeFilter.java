@@ -4,6 +4,6 @@ import km.cd.backend.challenge.domain.ChallengeCategory;
 
 public record ChallengeFilter(
   String name,
-  boolean isPrivate,
+  Boolean isPrivate,
   ChallengeCategory category
 ) {}

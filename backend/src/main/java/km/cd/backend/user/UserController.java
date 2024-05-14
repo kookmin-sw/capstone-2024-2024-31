@@ -1,6 +1,6 @@
 package km.cd.backend.user;
 
-import java.util.List;
+import km.cd.backend.challenge.dto.response.ChallengeSimpleResponse;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import km.cd.backend.user.domain.User;
 import km.cd.backend.user.domain.mapper.UserMapper;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -66,4 +68,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
     
+
+    @GetMapping("/me/challenges")
+    public ResponseEntity<List<ChallengeSimpleResponse>> myChallenges(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        Long userId = principalDetails.getUserId();
+        List<ChallengeSimpleResponse> challengeSimpleResponses = userService.getChallengesByUserId(userId);
+        return ResponseEntity.ok(challengeSimpleResponses);
+    }
+
 }

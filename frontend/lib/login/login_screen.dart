@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("access_token", accessToken);
       logger.d(' 구글 로그인 성공 👋');
-      Get.offAll(() => const MainScreen());
+      Get.offAll(() => MainScreen());
       return;
     }
 

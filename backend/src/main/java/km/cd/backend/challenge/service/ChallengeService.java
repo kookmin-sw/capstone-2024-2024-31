@@ -25,6 +25,7 @@ import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.common.utils.RandomUtil;
 import km.cd.backend.common.utils.redis.RedisUtil;
 import km.cd.backend.common.utils.s3.S3Uploader;
+import km.cd.backend.common.utils.sms.SmsCertificationDao;
 import km.cd.backend.common.utils.sms.SmsUtil;
 import km.cd.backend.community.repository.PostRepository;
 import km.cd.backend.user.domain.User;
@@ -163,15 +164,25 @@ public class ChallengeService {
         return ratio >= 0.9;
     }
 
-    public ChallengeInformationResponse getChallenge(Long challengeId) {
+    public ChallengeInformationResponse getChallenge(Long challengeId, Long userId, String code) {
         Challenge challenge = validateExistChallenge(challengeId);
+
+        Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.PARTICIPANT_NOT_FOUND_ERROR));
+
+        if (!participant.isOwner() &&
+                challenge.getIsPrivate() &&
+                !challenge.getPrivateCode().equals(code)) {
+            throw new CustomException(ExceptionCode.FORBIDDEN_ERROR);
+        }
+
         return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
     }
 
     public List<ChallengeSimpleResponse> getAllChallenge(Long cursorId, int size, ChallengeFilter filter) {
         List<Challenge> challenges = challengeRepository.findByChallengeWithFilterAndPaging(cursorId, size, filter);
 
-        return challenges.stream().map(challenge -> ChallengeMapper.INSTANCE.entityToSimpleResponse(challenge)).toList();
+        return challenges.stream().map(ChallengeMapper.INSTANCE::entityToSimpleResponse).toList();
     }
     
     public List<ParticipantResponse> getParticipant(Long challengeId) {

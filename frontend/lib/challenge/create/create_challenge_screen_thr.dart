@@ -112,6 +112,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                     Get.to(
                         () => CreateCompleteScreen(challengeId: challengeId));
                   } catch (err) {
+                    logger.d('챌린지 생성 실패: $err');
                     Get.snackbar("챌린지 생성 실패", "다시 시도해주세요.");
                   }
                 }

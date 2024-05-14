@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
-import 'package:frontend/model/data/challenge_simple.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
@@ -25,7 +25,7 @@ class ChallengeItemCard extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          Get.to(() => ChallengeDetailScreen(challengeId: data.id));
+          Get.to(() => ChallengeDetailScreen(challengeId: data.id, isFromMainScreen: true));
         },
         child: SizedBox(
             width: screenSize.width * 0.45,

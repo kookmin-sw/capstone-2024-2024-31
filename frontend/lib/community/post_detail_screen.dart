@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:frontend/community/post_report_bottomScreen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/community/widget/report_post_btn.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class PostDetailPage extends StatefulWidget {
@@ -15,6 +18,20 @@ class PostDetailPage extends StatefulWidget {
 }
 
 class _PostDetailPageState extends State<PostDetailPage> {
+  bool _isTapSendCommentBtn = false;
+  Timer? _timer;
+
+  final _commentFocusNode = FocusNode();
+  final TextEditingController _commentController = TextEditingController();
+
+  late String textFieldHintText;
+
+  @override
+  void dispose() {
+    _commentFocusNode.dispose();
+    super.dispose();
+  }
+
   List<Map<String, dynamic>> comment_list = [
     {
       'index': 0,
@@ -107,35 +124,44 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   TextStyle name_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
-      fontSize: 11,
+      fontSize: 10,
       fontWeight: FontWeight.w600,
       color: Palette.grey500);
 
   TextStyle date_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
-      fontSize: 11,
+      fontSize: 10,
       fontWeight: FontWeight.w300,
       color: Palette.grey300);
 
   TextStyle text_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 12,
-      fontWeight: FontWeight.w500,
-      color: Palette.grey500);
+      fontWeight: FontWeight.bold,
+      color: Palette.grey300);
 
   TextStyle btn_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 12,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       color: Palette.grey200);
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    textFieldHintText = "댓글을 남겨보세요";
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        backgroundColor: Palette.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {},
+          onPressed: () {
+            Get.back();
+          },
         ),
         title: const Text(
           '게시글 자세히 보기',
@@ -145,34 +171,109 @@ class _PostDetailPageState extends State<PostDetailPage> {
             fontFamily: 'Pretendard',
           ),
         ),
-        actions: [IconButton(onPressed: (){
-          repostPostButtonPress(context, 1010, 1010);
-        }, icon: const Icon(Icons.report_problem_outlined, color: Palette.red,))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                repostPostButtonPress(context, 1010, 1010);
+              },
+              icon: const Icon(
+                Icons.report_problem_outlined,
+                color: Palette.red,
+              ))
+        ],
       ),
+      bottomNavigationBar: SafeArea(
+          child: Padding(
+              padding: EdgeInsets.only(
+                  left: 15,
+                  right: 15,
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: SizedBox(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: TextFormField(
+                      controller: _commentController,
+                      focusNode: _commentFocusNode,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 11,
+                          fontFamily: 'Pretender'),
+                      decoration: InputDecoration(
+                          hintText: textFieldHintText,
+                          hintStyle: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w300,
+                            color: Palette.grey200,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 10),
+                          filled: true,
+                          fillColor: Palette.greySoft,
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              borderSide:
+                                  const BorderSide(color: Palette.greySoft)),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: const BorderSide(
+                                color: Palette.grey50, width: 2),
+                          )),
+                      validator: (value) => value!.isEmpty ? textFieldHintText : null,
+                    )),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: _isTapSendCommentBtn
+                                    ? Border.all(
+                                        color: Palette.grey50, width: 2.0)
+                                    : Border.all(
+                                        color: Palette.greyBG, width: 2.0)),
+                            child: SvgPicture.asset(
+                                "assets/svgs/comment_send_btn.svg")),
+                        onTap: () {
+                          setState(() {
+                            _isTapSendCommentBtn = true;
+                          });
+                          _timer?.cancel();
+                          _timer = Timer(const Duration(milliseconds: 300), () {
+                            setState(() {
+                              _isTapSendCommentBtn = false;
+                            });
+                          });
+                          _commentController.clear();
+                          _commentFocusNode.unfocus();
+                        })
+                  ],
+                ),
+              ))),
       body: SingleChildScrollView(
         child: Container(
-            color: Palette.greySoft,
+            color: Palette.greyBG,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PostCard(number: 10),
+                PostCard(number: 10, commentFocusNode: _commentFocusNode),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
                     child: Text(
                         "댓글 ${(comment_list.length + re_comment_list.length)}개",
                         style: const TextStyle(
-                            fontWeight: FontWeight.w400,
+                            fontWeight: FontWeight.w500,
                             fontFamily: 'Pretendard',
                             fontSize: 15))),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: commentWidget())
               ],
             )),
       ),
     );
   }
-
 
   Widget commentWidget() {
     Size size = MediaQuery.of(context).size;
@@ -185,10 +286,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
         // Add the main comment
         commentAndReplies.add(
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: Container(
               width: size.width,
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20.0),
@@ -206,14 +307,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           CircleAvatar(
                             radius: 20,
                             backgroundImage: AssetImage(
                               comment['image'],
                             ),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           SizedBox(
                               width: size.width * 0.6,
                               child: Column(
@@ -228,7 +329,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     "$uploadTimeString | $beforeHours",
                                     style: date_textStyle,
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   Text(
                                     comment['text'],
                                     style: text_textStyle,
@@ -236,43 +337,46 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     maxLines: 3,
                                     overflow: TextOverflow.visible,
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   InkWell(
                                     splashColor: Palette.grey50,
                                     child: Text(
                                       "답글 달기",
                                       style: btn_textStyle,
                                     ),
-                                    onTap: () {},
+                                    onTap: () {
+                                      _commentController.clear();
+                                      _commentFocusNode
+                                          .requestFocus(); // 포커스 요청
+                                    },
                                   ),
                                 ],
                               )),
                         ],
                       ),
-
                     ],
                   ),
+                  const SizedBox(height: 5),
                   ...re_comment_list
                       .where((reply) => reply['index'] == comment['index'])
                       .map((reply) {
                     String reUploadTimeString = formatDate(reply['dateTime']);
                     String reBeforeHours =
                         calculateBeforeHours(reply['dateTime']);
-
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(width: 50),
+                          const SizedBox(width: 50),
                           CircleAvatar(
                             radius: 20,
                             backgroundImage: AssetImage(
                               reply['image'],
                             ),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           SizedBox(
                               width: size.width * 0.5,
                               child: Column(
@@ -287,6 +391,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     "$reUploadTimeString | $reBeforeHours",
                                     style: date_textStyle,
                                   ),
+                                  const SizedBox(height: 5),
                                   Text(
                                     reply['text'],
                                     softWrap: true,
@@ -299,7 +404,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),

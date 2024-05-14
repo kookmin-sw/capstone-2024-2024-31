@@ -4,10 +4,11 @@ import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/community/create_posting_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/controller/user_controller.dart';
+import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
-import 'dart:io';
 
 class ChallengeStateBox extends StatefulWidget {
   const ChallengeStateBox({super.key});
@@ -17,13 +18,32 @@ class ChallengeStateBox extends StatefulWidget {
 }
 
 class _ChallengeStateBoxState extends State<ChallengeStateBox> {
-  List<Map<String, dynamic>> challengeList = [
-    {'name': '매일 커밋하기', 'percent': '50', 'image': 'assets/images/image.png'},
-    {'name': '매일 운동하기', 'percent': '10', 'image': 'assets/images/image.png'},
-    {'name': '매일 먹기', 'percent': '30', 'image': 'assets/images/image.png'},
-  ];
+  final logger = Logger();
+  final controller = Get.find<UserController>();
+  final List<ChallengeSimple> challenges = [];
 
-  Challenge challenge = Challenge.getDummyData();
+  double getProgressPercent(int index) {
+    DateTime now = DateTime.now();
+    DateTime start = DateTime.parse(challenges[index].startDate);
+    DateTime end =
+        start.add(Duration(days: challenges[index].challengePeriod * 7));
+    return now.difference(start).inDays / end.difference(start).inDays * 100;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      challenges.clear();
+      challenges.addAll(controller.myChallenges
+          .where(
+            (c) =>
+                DateTime.parse(c.startDate).isBefore(DateTime.now()) &&
+                !c.isEnded,
+          )
+          .toList());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +66,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
               padding: EdgeInsets.zero, // 내부 패딩을 없앰
               splashFactory: NoSplash.splashFactory,
             ),
-            child: const Text("내 챌린지 현황 >",
+            child: const Text("내 진행중인 챌린지 >",
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w500,
@@ -64,11 +84,11 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                 color: Colors.grey),
           ),
           const SizedBox(height: 10),
-          challengeList.isEmpty
+          challenges.isEmpty
               ? SvgPicture.asset("assets/svgs/no_challenge_state_card.svg")
               : Expanded(
                   child: Swiper(
-                    itemCount: challengeList.length,
+                    itemCount: challenges.length,
                     pagination: const SwiperPagination(
                       alignment: Alignment.bottomCenter,
                       builder: DotSwiperPaginationBuilder(
@@ -94,9 +114,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   Widget challengeStateCard(double screenWidth, int index) {
     return GestureDetector(
         onTap: () {
-          Get.to(() => ChallengeStateScreen(
-                challenge: challenge,
-              ));
+          Get.to(() => ChallengeStateScreen());
         },
         child: SizedBox(
             width: screenWidth * 0.95,
@@ -109,11 +127,12 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              challengeList[index]['image'], // 이미지 경로
-                              width: 50, // 이미지 너비
-                              height: 50, // 이미지 높이
+                            borderRadius: BorderRadius.circular(9),
+                            child: Image.network(
+                              challenges[index].imageUrl, // 이미지 경로
+                              width: 60, // 이미지 너비
+                              height: 60, // 이미지 높이
+                              fit: BoxFit.fitWidth,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -128,14 +147,15 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        challengeList[index]['name'], // 챌린지 이름
+                                        challenges[index]
+                                            .challengeName, // 챌린지 이름
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 10,
                                         ),
                                       ),
                                       Text(
-                                        '${challengeList[index]['percent']}%',
+                                        '${getProgressPercent(index).toInt()}%',
                                         style: const TextStyle(
                                             fontSize: 11), // 진행 상태
                                       ),
@@ -144,8 +164,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                               const SizedBox(
                                 height: 8,
                               ),
-                              stateBar(screenWidth,
-                                  double.parse(challengeList[index]['percent']))
+                              stateBar(screenWidth, getProgressPercent(index))
                             ],
                           ),
                           const SizedBox(width: 10),
@@ -157,9 +176,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                           const SizedBox(width: 5),
                           ElevatedButton(
                             onPressed: () {
-                              print('Button pressed');
-                              //TODO : Create 스크린이 아닌 Camera 스크린으로
-                              Get.to(() => CreatePostingScreen());
+                              Get.to(() => const CreatePostingScreen());
                             },
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(40, 40),

@@ -8,8 +8,9 @@ import 'package:frontend/challenge/detail/widgets/certification_method_widget.da
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/env.dart';
+import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/widgets/custom_button.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -17,8 +18,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ChallengeDetailScreen extends StatefulWidget {
   final int challengeId;
+  final bool isFromMainScreen;
 
-  const ChallengeDetailScreen({super.key, required this.challengeId});
+  const ChallengeDetailScreen(
+      {super.key, required this.challengeId, this.isFromMainScreen=false});
 
   @override
   State<ChallengeDetailScreen> createState() => _ChallengeDetailScreenState();
@@ -72,14 +75,23 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Palette.grey300,
-              ),
-              onPressed: () {
-                Get.back();
-              }),
+          leading: widget.isFromMainScreen
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Palette.grey300,
+                  ),
+                  onPressed: () {
+                    Get.back();
+                  })
+              : IconButton(
+                  icon: const Icon(
+                    Icons.home,
+                    color: Palette.grey300,
+                  ),
+                  onPressed: () {
+                    Get.offAll(() => MainScreen());
+                  }),
           title: const Text("챌린지 자세히 보기",
               style: TextStyle(
                   color: Palette.grey300,
@@ -172,7 +184,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         height: screenSize.width * 0.5 * (imagePaths.length ~/ 2) + 30,
         child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          // 스크롤 불가능하게 설정
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 4.0,

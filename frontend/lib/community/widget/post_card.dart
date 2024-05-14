@@ -15,8 +15,12 @@ class PostCard extends StatefulWidget {
   static String userName = '챌린지장인';
   static String postText = "ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ래서 지금 이게 5줄이 넘을지 모르겟쯘올ㅇ";
   static String authImage = 'assets/images/challenge_image.png';
+  final FocusNode? commentFocusNode;
 
-  PostCard({required this.number, super.key});
+  PostCard(
+      {required this.number,
+      super.key,
+      this.commentFocusNode});
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -30,13 +34,9 @@ class _PostCardState extends State<PostCard> {
     return InkWell(
       onTap: () {
         // 게시물 상세 정보 페이지로 이동하는 코드 추가
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                PostDetailPage(), // PostDetailPage는 상세 정보 페이지의 이름입니다.
-          ),
-        );
+        widget.commentFocusNode != null
+            ? null
+            : Get.to(() => const PostDetailPage());
       },
       child: Column(
         children: [
@@ -52,13 +52,25 @@ class _PostCardState extends State<PostCard> {
                 const SizedBox(height: 17),
                 post_image(PostCard.authImage),
                 const SizedBox(height: 20),
-                PostBtnWidget(
-                    likeNum: PostCard.likeNum, commentNum: PostCard.commentNum),
+                widget.commentFocusNode == null
+                    ? PostBtnWidget(
+                        likeNum: PostCard.likeNum,
+                        commentNum: PostCard.commentNum,
+                     )
+                    : PostBtnWidget(
+                        likeNum: PostCard.likeNum,
+                        commentNum: PostCard.commentNum,
+                        commentFocusNode: widget.commentFocusNode),
                 const SizedBox(height: 15),
               ],
             ),
           ),
-          const Divider(height: 0, thickness: 7, color: Palette.greySoft, indent: 0, endIndent: 0),
+          const Divider(
+              height: 0,
+              thickness: 7,
+              color: Palette.greySoft,
+              indent: 0,
+              endIndent: 0),
         ],
       ),
     );
@@ -79,7 +91,8 @@ Widget post_top(String image, String name, DateTime uploadTime) {
             radius: 25,
             backgroundImage: AssetImage(image),
           ),
-          const SizedBox(width: 13), // Add some space between the image and text
+          const SizedBox(width: 13),
+          // Add some space between the image and text
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
               name,
