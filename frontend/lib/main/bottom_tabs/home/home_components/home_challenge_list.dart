@@ -30,17 +30,22 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
         'Bearer ${prefs.getString('access_token')}';
 
     try {
-      final response = await dio.get('${Env.serverUrl}/challenges/list',
+      final responseIsprivateFalse = await dio.get('${Env.serverUrl}/challenges/list',
           data: ChallengeFilter(isPrivate: false).toJson(),
           queryParameters: {
             'size': 2,
           });
+      final responseIsprivateTrue = await dio.get('${Env.serverUrl}/challenges/list',
+          data: ChallengeFilter(isPrivate: true).toJson(),
+          queryParameters: {
+            'size': 2,
+          });
 
-      if (response.statusCode == 200) {
-        logger.d(response.data);
-        return (response.data as List)
-            .map((c) => ChallengeSimple.fromJson(c))
-            .toList();
+      if ((responseIsprivateFalse.statusCode == 200) &&(responseIsprivateTrue.statusCode == 200)) {
+        final List<dynamic> combinedData = [...responseIsprivateFalse.data as List, ...responseIsprivateTrue.data as List];
+        logger.d(combinedData);
+
+        return combinedData.map((c) => ChallengeSimple.fromJson(c)).toList();
       }
       throw Exception("Failed to load challenges");
     } catch (e) {
