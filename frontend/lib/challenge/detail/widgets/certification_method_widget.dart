@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 
 class CertificationMethod extends StatelessWidget {
   final Challenge challenge;

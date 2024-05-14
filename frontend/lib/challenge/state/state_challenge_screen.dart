@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/challenge/detail/detail_image_detail_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -11,9 +11,9 @@ import 'package:frontend/model/package/pie_chart/pie_chart.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class ChallengeStateScreen extends StatelessWidget {
-  final Challenge challenge;
+  final Challenge challenge = Challenge.getDummyData();
 
-  const ChallengeStateScreen({super.key, required this.challenge});
+  ChallengeStateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

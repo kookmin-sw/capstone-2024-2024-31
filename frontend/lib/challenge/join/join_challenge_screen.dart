@@ -7,7 +7,7 @@ import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen_sec.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 
 class JoinChallengeScreen extends StatefulWidget {
   final Challenge challenge;
@@ -78,8 +78,8 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => JoinChallengeScreen_sec(
-                                      challenge: widget.challenge),
+                                  builder: (context) =>
+                                      JoinChallengeSecScreen(),
                                 ),
                               );
                             },
