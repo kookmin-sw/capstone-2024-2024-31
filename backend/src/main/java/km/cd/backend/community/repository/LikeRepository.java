@@ -2,7 +2,7 @@ package km.cd.backend.community.repository;
 
 import km.cd.backend.community.domain.Like;
 import km.cd.backend.community.domain.Post;
-import km.cd.backend.user.User;
+import km.cd.backend.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

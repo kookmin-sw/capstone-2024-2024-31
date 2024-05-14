@@ -1,7 +1,7 @@
 package km.cd.backend.challenge.fixture;
 
 
-import km.cd.backend.user.User;
+import km.cd.backend.user.domain.User;
 
 public class UserFixture {
     

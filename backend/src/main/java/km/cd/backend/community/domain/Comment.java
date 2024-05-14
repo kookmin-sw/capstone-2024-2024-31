@@ -1,7 +1,7 @@
 package km.cd.backend.community.domain;
 
 import jakarta.persistence.*;
-import km.cd.backend.user.User;
+import km.cd.backend.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
