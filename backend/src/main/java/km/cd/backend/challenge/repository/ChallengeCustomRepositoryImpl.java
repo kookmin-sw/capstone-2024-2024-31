@@ -32,7 +32,9 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
       predicate = challenge.challengeName.startsWith(filter.name());
     }
 
-    predicate = predicate.and(challenge.isPrivate.eq(filter.isPrivate()));
+    if (filter.isPrivate() != null) {
+      predicate = predicate.and(challenge.isPrivate.eq(filter.isPrivate()));
+    }
 
     if (filter.category() != null) {
       predicate = predicate.and(challenge.challengeCategory.eq(filter.category()));

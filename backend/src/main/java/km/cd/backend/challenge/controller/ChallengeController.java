@@ -3,7 +3,6 @@ package km.cd.backend.challenge.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
-import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.dto.request.ChallengeJoinRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
@@ -71,6 +70,7 @@ public class ChallengeController {
         List<ParticipantResponse> participants =  challengeService.getParticipant(challengeId);
         return ResponseEntity.ok(participants);
     }
+
     @GetMapping("/{challengeId}/status")
     public ResponseEntity<ChallengeStatusResponse> checkChallengeStatus(
             @PathVariable(name = "challengeId") Long challengeId,
