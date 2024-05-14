@@ -13,7 +13,7 @@ public enum ChallengeFrequency {
   EVERY_4TH_WEEK("주 4회",4),
   EVERY_5TH_WEEK("주 5회",5),
   EVERY_6TH_WEEK("주 6회",6);
-  
+
   private final String frequency;
   private final int daysPerWeek;
 

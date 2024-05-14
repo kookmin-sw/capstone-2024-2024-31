@@ -3,7 +3,7 @@ package km.cd.backend.community.domain;
 import jakarta.persistence.*;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.common.domain.BaseTimeEntity;
-import km.cd.backend.user.User;
+import km.cd.backend.user.domain.User;
 import lombok.*;
 
 import java.util.ArrayList;

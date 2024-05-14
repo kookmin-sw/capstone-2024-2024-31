@@ -43,6 +43,10 @@ public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태
     NOT_VALID_ERROR(404, "G011", "Validation Exception 발생"),
     INTERNAL_SERVER_ERROR(500, "SERVER_001", "서버 내부 오류가 발생했습니다."),
     
+    FRIEND_REQUEST_NOT_FOUND(404, "FR_001", "친구 요청이 없습니다."),
+    CANNOT_FOLLOW_YOURSELF(404, "FR_002", "본인을 팔로우할 수 없습니다."),
+    ALREADY_FOLLOWING(404, "FR_003", "이미 팔로우 하셨습니다."),
+    
     WRONG_AUTHENTICATION_CODE(400, "SMS_001", "인증번호가 일치하지 않습니다.");
     
     

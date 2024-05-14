@@ -9,7 +9,7 @@ import km.cd.backend.community.dto.CommentResponse;
 import km.cd.backend.community.dto.PostRequest;
 import km.cd.backend.community.dto.PostDetailResponse;
 import km.cd.backend.community.dto.PostSimpleResponse;
-import km.cd.backend.user.User;
+import km.cd.backend.user.domain.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
