@@ -45,7 +45,7 @@ class MyRoutineUpCard extends StatelessWidget {
         child: SizedBox(
             width: screenSize.width * 0.95,
             child: Card(
-                color: Colors.grey[90],
+                color:isIng ? Colors.white : Colors.grey[80],
                 child: Opacity(
                     opacity: isIng ? 1.0 : 0.5, // 불투명도 조절
                     child: Padding(
@@ -80,9 +80,11 @@ class MyRoutineUpCard extends StatelessWidget {
                                             challenge.challengeName, // 챌린지 이름
                                             overflow: TextOverflow.fade,
                                             maxLines: 1,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w500,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 10,
+                                              fontFamily: "Pretender",
+                                              color: isIng ?Palette.mainPurple :Palette.purPle200
                                             ),
                                           )),
                                           Text(
