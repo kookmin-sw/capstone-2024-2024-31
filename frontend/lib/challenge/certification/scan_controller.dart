@@ -1,7 +1,9 @@
+import 'dart:io'; // 파일 관련 패키지 추가
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart'; // 경로 관련 패키지 추가
 import 'package:tflite_v2/tflite_v2.dart';
 
 class ScanController extends GetxController {
@@ -65,11 +67,17 @@ class ScanController extends GetxController {
       // Convert the resized image to Uint8List (JPEG format)
       Uint8List jpg = Uint8List.fromList(img.encodeJpg(resizedImage));
 
+      // Get temporary directory
+      Directory tempDir = await getTemporaryDirectory();
+      String tempPath = tempDir.path;
+      File tempFile = File('$tempPath/temp_image.jpg');
+
+      // Write the image as a file
+      await tempFile.writeAsBytes(jpg);
+
       // Run TFLite model on the resized image
       var recognitions = await Tflite.runModelOnImage(
-        bytes: jpg,
-        imageHeight: 224,
-        imageWidth: 224,
+        path: tempFile.path, // 파일 경로 사용
         imageMean: 127.5,
         imageStd: 127.5,
         numResults: 6,
