@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/community/community_screen.dart';
-import 'package:frontend/community/tab_community_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
