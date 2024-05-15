@@ -61,7 +61,7 @@ class _FollowerCardState extends State<FollowerCard> {
                     children: [
               Text(
                 widget.nickName,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.bold,
