@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import km.cd.backend.challenge.domain.ChallengeCategory;
 import km.cd.backend.common.oauth2.attributes.OAuth2Attributes;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -49,13 +52,15 @@ public class User {
     @Builder.Default
     private int point = 0;
     
-    private String profileImage;
-    
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
     private List<Friend> following = new ArrayList<>();
     
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
     private List<Friend> follower = new ArrayList<>();
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<ChallengeCategory> categories = new HashSet<>();
     
     public User(Long id, String email, String name) {
         this.id = id;
