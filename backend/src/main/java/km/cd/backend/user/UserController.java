@@ -4,6 +4,8 @@ import km.cd.backend.challenge.dto.response.ChallengeSimpleResponse;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import km.cd.backend.user.domain.User;
 import km.cd.backend.user.domain.mapper.UserMapper;
+import km.cd.backend.user.dto.UserCategoryRequest;
+import km.cd.backend.user.dto.UserDetailResponse;
 import km.cd.backend.user.dto.UserResponse;
 import km.cd.backend.user.dto.FriendListResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -108,4 +111,13 @@ public class UserController {
     ) {
         return ResponseEntity.ok(userService.getProfileImage(principalDetails.getUserId()));
     }
+    
+    @PostMapping("/category")
+    public ResponseEntity<UserDetailResponse> setCategory(
+        @RequestBody UserCategoryRequest userCategoryRequest,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseEntity.ok(userService.setCategories(userCategoryRequest, principalDetails.getUserId()));
+    }
+    
 }
