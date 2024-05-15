@@ -148,7 +148,8 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             ),
             const SizedBox(height: 10),
             const Text(
-              "나의 갓생을 자랑할 수 있어요!",
+              "수신자에게 나의 성공 소식이 전해져요.\n나의 갓생을 자랑할 수 있어요!",
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 11,
@@ -158,9 +159,9 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             const SizedBox(height: 10),
             BuildImageContainer(
               path: 'assets/images/success_msg.jpg',
-              color: Palette.green,
+              color: Palette.white,
               isSuccess: true,
-              screenSize: _screenSize,
+              screenSize: _screenSize * 0.7,
               isJoinScreen: true,
             ),
             const SizedBox(height: 20),
@@ -174,7 +175,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 const SizedBox(width: 5),
                 const Text(
                   "루틴업 실패 시",
-                  textAlign: TextAlign.start,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       fontFamily: 'Pretendard',
                       fontSize: 17,
@@ -185,7 +186,8 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             ),
             const SizedBox(height: 10),
             const Text(
-              "실패 시 채찍의 한마디로 갓생을 향해 나아가요!",
+              "수신자에게 나의 실패 소식이 전해져요.\n채찍의 한마디로 갓생을 향해 나아가요!",
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 11,
@@ -195,9 +197,9 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             const SizedBox(height: 10),
             BuildImageContainer(
                 path: 'assets/images/fail_msg.jpg',
-                color: Palette.red,
+                color: Palette.white,
                 isSuccess: false,
-                screenSize: _screenSize,
+                screenSize: _screenSize * 0.7,
                 isJoinScreen: true),
           ],
         ));
@@ -261,8 +263,8 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                           borderSide: BorderSide(color: Palette.greySoft)),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide:
-                              const BorderSide(color: Palette.mainPurple, width: 2))),
+                          borderSide: const BorderSide(
+                              color: Palette.mainPurple, width: 2))),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return '휴대폰 번호를 입력하세요.';
@@ -343,8 +345,8 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                         fontWeight: FontWeight.w300,
                         color: Palette.grey200,
                       ),
-                      contentPadding:
-                          const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 10),
                       filled: true,
                       fillColor: Palette.white,
                       enabledBorder: OutlineInputBorder(
@@ -353,8 +355,8 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
-                        borderSide:
-                            const BorderSide(color: Palette.mainPurple, width: 2),
+                        borderSide: const BorderSide(
+                            color: Palette.mainPurple, width: 2),
                       ),
                     ),
                     validator: (value) {
