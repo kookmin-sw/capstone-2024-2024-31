@@ -25,7 +25,6 @@ import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.common.utils.RandomUtil;
 import km.cd.backend.common.utils.redis.RedisUtil;
 import km.cd.backend.common.utils.s3.S3Uploader;
-import km.cd.backend.common.utils.sms.SmsCertificationDao;
 import km.cd.backend.common.utils.sms.SmsUtil;
 import km.cd.backend.community.repository.PostRepository;
 import km.cd.backend.user.domain.User;
@@ -74,9 +73,8 @@ public class ChallengeService {
         List<String> imagePaths = images.stream().map(
             image -> s3Uploader.uploadFileToS3(image, FilePathEnum.CHALLENGES.getPath())
             ).toList();
-            challenge.setChallengeImagePaths(imagePaths);
-            
-
+        challenge.setChallengeImagePaths(imagePaths);
+        
         // 인증 성공 이미지 업로드
         String successImagePath = s3Uploader.uploadFileToS3(successfulVerificationImage, FilePathEnum.CHALLENGES.getPath());
         challenge.setSuccessfulVerificationImage(successImagePath);

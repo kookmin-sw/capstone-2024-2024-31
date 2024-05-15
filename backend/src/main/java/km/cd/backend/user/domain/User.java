@@ -49,6 +49,8 @@ public class User {
     @Builder.Default
     private int point = 0;
     
+    private String profileImage;
+    
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
     private List<Friend> following = new ArrayList<>();
     

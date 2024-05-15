@@ -9,4 +9,5 @@ public class FriendListResponse {
     private Long friendId;
     private String friendEmail;
     private String friendName;
+    private String friendImage;
 }
