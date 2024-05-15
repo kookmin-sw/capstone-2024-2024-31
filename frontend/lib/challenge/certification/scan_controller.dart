@@ -1,9 +1,10 @@
-import 'package:get/get_state_manager/get_state_manager.dart';
+//import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:camera/camera.dart';
 import 'package:get/state_manager.dart';
 
 class ScanController extends GetxController {
 
-  final RxBool isInitialized = RxBool(false);
+  final RxBool _isInitialized = RxBool(false);
   late CameraController _cameraController;
   late List<CameraDescription> _cameras;
 
@@ -15,23 +16,22 @@ class ScanController extends GetxController {
     _cameras = await availableCameras();
     _cameraController = CameraController(_cameras[0], ResolutionPreset.max);
     _cameraController.initialize().then ((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
+      _isInitialized.value = true;
     
+
+
     }).catchError((Object e) {
         if (e is CameraException)  {
           switch (e.code){
             case 'CameraAccessDenied':
-              print('User denied camera access');
+              //print('User denied camera access');
               break;
             default:
-              print('Handle other errors.');
+              //print('Handle other errors.');
               break;    
             }
         }
-    })
+    });
   }
 
 

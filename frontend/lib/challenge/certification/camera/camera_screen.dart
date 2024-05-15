@@ -1,20 +1,20 @@
-import 'package: flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:camera/camera.dart';
+import '../scan_controller.dart';
+import './camera_viewer.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart'; 
 
 
-class CameraScreen extends GetView<ScanController> {
+class CameraScreen extends StatelessWidget {
     const CameraScreen({Key? key}) : super(key: key);
 
     @override
     Widget build(BuildContext context) {
-        return getX<ScanController>(builder: (controller) { 
-            if(!controller.isInitialized) {
-                return Container();
-            }
-            return Sizedbox(
-                height: Get.height,
-                width: Get.width,
-                child: CameraPreview(controller.cameraController));
-        });
+        return Stack(
+            alignment: Alignment.center,
+            children: const[
+                CameraViewer(),
+            ],
+        );
     }
 }
