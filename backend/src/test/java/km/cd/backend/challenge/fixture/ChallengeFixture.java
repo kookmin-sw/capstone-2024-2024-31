@@ -33,7 +33,7 @@ public class ChallengeFixture {
 
     public static Challenge challengeWithCategory(ChallengeCategory category) {
         Challenge challenge = challenge();
-        challenge.setCategory(category);
+        challenge.setChallengeCategory(category);
         return challenge;
     }
     
