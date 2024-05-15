@@ -1,5 +1,6 @@
 package km.cd.backend.user;
 
+import java.util.ArrayList;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
@@ -58,20 +59,30 @@ public class UserService {
         friendRepository.save(follow);
     }
     
-    public List<FriendListResponse> getFollowingList(String targetEmail, Long userId) {
+    public List<FriendListResponse> getFollowingList(String targetEmail) {
         User selectedUser = findByEmail(targetEmail);
-        User requestUser = findById(userId);
-        
         List<Friend> friendList = friendRepository.findByFromUser(selectedUser);
-        return FriendMapper.INSTANCE.FRIEND_LIST_RESPONSE_LIST(friendList, true);
+        
+        ArrayList<FriendListResponse> resultList = new ArrayList<>();
+        for (Friend friend : friendList) {
+            String friendImage = findByEmail(friend.getMyEmail()).getProfileImage();
+            resultList.add(FriendMapper.INSTANCE.FRIEND_LIST_RESPONSE(friend, true, friendImage));
+        }
+        
+        return resultList;
     }
     
-    public List<FriendListResponse> getFollwerList(String targetEmail, Long userId) {
+    public List<FriendListResponse> getFollwerList(String targetEmail) {
         User selectedUser = findByEmail(targetEmail);
-        User requestUser = findById(userId);
-        
         List<Friend> friendList = friendRepository.findByToUser(selectedUser);
-        return FriendMapper.INSTANCE.FRIEND_LIST_RESPONSE_LIST(friendList, false);
+        
+        ArrayList<FriendListResponse> resultList = new ArrayList<>();
+        for (Friend friend : friendList) {
+            String friendImage = findByEmail(friend.getMyEmail()).getProfileImage();
+            resultList.add(FriendMapper.INSTANCE.FRIEND_LIST_RESPONSE(friend, false, friendImage));
+        }
+        
+        return resultList;
     }
     
     public void removeFollow(String targetEmail, Long userId) {
