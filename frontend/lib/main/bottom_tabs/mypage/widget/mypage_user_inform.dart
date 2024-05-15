@@ -9,14 +9,11 @@ import 'package:frontend/model/data/user.dart';
 import 'package:get/get.dart';
 
 class UserInformation extends StatelessWidget {
-  UserInformation({super.key});
+  UserInformation({super.key}) ;
+
 
   final UserController userController = Get.find<UserController>();
 
-  final int followingNum = 10;
-  final int followerNum = 1;
-  final int level = 1;
-  final String imgUrl = '';
   final tagTextStyle = const TextStyle(
       fontFamily: 'Pretender',
       fontWeight: FontWeight.w600,
@@ -84,21 +81,25 @@ class UserInformation extends StatelessWidget {
         width: 90,
         height: 90,
         child: Stack(children: [
-          CircleAvatar(
+          userController.user.avatar != null ? CircleAvatar(
             radius: 70,
-            backgroundImage: NetworkImage(userController.user.avatar),
+            backgroundImage: NetworkImage(userController.user.avatar!),
+          ) :  CircleAvatar(
+            radius: 70,
+            backgroundColor: Colors.grey[200],
+            child: const Icon(Icons.person, size: 70, color: Palette.purPle200),
           ),
           Positioned(
               left: 65,
               top: 65,
               child: SvgPicture.asset('assets/svgs/level_stack.svg')),
-          Positioned(
+          const Positioned(
               left: 75,
               top: 67,
               child: Text(
-                level.toString(),
+                "1",
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Pretendard',
