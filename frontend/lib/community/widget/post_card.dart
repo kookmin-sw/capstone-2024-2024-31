@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/community/post_detail_screen.dart';
+import 'package:frontend/community/widget/follow_btn.dart';
 import 'package:frontend/community/widget/post_button_widget.dart';
+import 'package:frontend/community/widget/post_top.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 
@@ -17,16 +19,21 @@ class PostCard extends StatefulWidget {
   static String authImage = 'assets/images/challenge_image.png';
   final FocusNode? commentFocusNode;
 
-  PostCard(
-      {required this.number,
-      super.key,
-      this.commentFocusNode});
+  PostCard({required this.number, super.key, this.commentFocusNode});
 
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
+  bool isFollowing = false;
+
+  void handleFollowingChanged(bool newFollowingStatus) {
+    setState(() {
+      isFollowing = newFollowingStatus;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -45,8 +52,13 @@ class _PostCardState extends State<PostCard> {
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             child: Column(
               children: [
-                post_top(PostCard.imageUrl, PostCard.userName,
-                    DateTime(2024, 4, 4, 9, 23, 40)),
+                PostTopWidget(
+                  image: PostCard.imageUrl,
+                  name: PostCard.userName,
+                  uploadTime: DateTime(2024, 5, 15),
+                  isInitiallyFollowing: isFollowing,
+                  onFollowingChanged: handleFollowingChanged,
+                ),
                 const SizedBox(height: 10),
                 post_text(PostCard.postText),
                 const SizedBox(height: 17),
@@ -56,7 +68,7 @@ class _PostCardState extends State<PostCard> {
                     ? PostBtnWidget(
                         likeNum: PostCard.likeNum,
                         commentNum: PostCard.commentNum,
-                     )
+                      )
                     : PostBtnWidget(
                         likeNum: PostCard.likeNum,
                         commentNum: PostCard.commentNum,
@@ -77,57 +89,13 @@ class _PostCardState extends State<PostCard> {
   }
 }
 
-Widget post_top(String image, String name, DateTime uploadTime) {
-  String uploadTimeString = formatDate(uploadTime);
-  String BeforeHours = calculateBeforeHours(uploadTime);
-
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Row(
-        children: [
-          CircleAvatar(
-            radius: 25,
-            backgroundImage: AssetImage(image),
-          ),
-          const SizedBox(width: 13),
-          // Add some space between the image and text
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              name,
-              style: const TextStyle(
-                  fontFamily: 'Pretender',
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600),
-            ),
-            Text(
-              uploadTimeString,
-              style: const TextStyle(
-                  fontFamily: 'Pretender',
-                  fontSize: 11,
-                  color: Palette.grey200),
-            ),
-          ]),
-        ],
-      ),
-      Text(
-        '${BeforeHours}',
-        style: const TextStyle(
-            fontFamily: 'Pretender', fontSize: 10, color: Palette.grey200),
-      ),
-    ],
-  );
-}
-
 Widget post_text(String post_text) {
   return Text(
     post_text,
     maxLines: 5,
     textAlign: TextAlign.left,
     overflow: TextOverflow.ellipsis,
-    style: TextStyle(
+    style: const TextStyle(
       fontFamily: 'Pretendard', fontSize: 12, height: 1.3, // 줄간격 조정
     ),
   );
