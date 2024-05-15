@@ -1,7 +1,10 @@
 package km.cd.backend.user;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.stream.Collectors;
 import km.cd.backend.challenge.domain.Challenge;
+import km.cd.backend.challenge.domain.ChallengeCategory;
 import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.dto.enums.FilePathEnum;
@@ -15,6 +18,8 @@ import km.cd.backend.user.domain.User;
 import km.cd.backend.user.domain.mapper.FriendMapper;
 import km.cd.backend.user.domain.mapper.UserMapper;
 import km.cd.backend.user.dto.FriendListResponse;
+import km.cd.backend.user.dto.UserCategoryRequest;
+import km.cd.backend.user.dto.UserDetailResponse;
 import km.cd.backend.user.dto.UserResponse;
 import km.cd.backend.user.repository.FriendRepository;
 import km.cd.backend.user.repository.UserRepository;
@@ -65,7 +70,7 @@ public class UserService {
         
         ArrayList<FriendListResponse> resultList = new ArrayList<>();
         for (Friend friend : friendList) {
-            String friendImage = findByEmail(friend.getMyEmail()).getProfileImage();
+            String friendImage = findByEmail(friend.getMyEmail()).getAvatar();
             resultList.add(FriendMapper.INSTANCE.FRIEND_LIST_RESPONSE(friend, true, friendImage));
         }
         
@@ -78,7 +83,7 @@ public class UserService {
         
         ArrayList<FriendListResponse> resultList = new ArrayList<>();
         for (Friend friend : friendList) {
-            String friendImage = findByEmail(friend.getMyEmail()).getProfileImage();
+            String friendImage = findByEmail(friend.getMyEmail()).getAvatar();
             resultList.add(FriendMapper.INSTANCE.FRIEND_LIST_RESPONSE(friend, false, friendImage));
         }
         
@@ -107,7 +112,7 @@ public class UserService {
     public UserResponse uploadProfileImage(MultipartFile profileImage, Long userId) {
         User user = findById(userId);
         String profileImageUrl = s3Uploader.uploadFileToS3(profileImage, FilePathEnum.USER.getPath());
-        user.setProfileImage(profileImageUrl);
+        user.setAvatar(profileImageUrl);
         userRepository.save(user);
         
         return UserMapper.INSTANCE.userToUserResponse(user);
@@ -115,10 +120,10 @@ public class UserService {
     
     public UserResponse updateProfileImage(MultipartFile profileImage, Long userId){
         User user = findById(userId);
-        s3Uploader.deleteS3(user.getProfileImage());
+        s3Uploader.deleteS3(user.getAvatar());
         
         String profileImageUrl = s3Uploader.uploadFileToS3(profileImage, FilePathEnum.USER.getPath());
-        user.setProfileImage(profileImageUrl);
+        user.setAvatar(profileImageUrl);
         userRepository.save(user);
         
         return UserMapper.INSTANCE.userToUserResponse(user);
@@ -126,15 +131,30 @@ public class UserService {
     
     public UserResponse deleteProfileImage(Long userId) {
         User user = findById(userId);
-        s3Uploader.deleteS3(user.getProfileImage());
-        user.setProfileImage(null);
+        s3Uploader.deleteS3(user.getAvatar());
+        user.setAvatar(null);
         userRepository.save(user);
         
         return UserMapper.INSTANCE.userToUserResponse(user);
     }
     
     public String getProfileImage(Long userId) {
-        return findById(userId).getProfileImage();
+        return findById(userId).getAvatar();
+    }
+    
+    public UserDetailResponse setCategories(UserCategoryRequest userCategoryRequest, Long userId) {
+        User user = findById(userId);
+        List<String> categories = userCategoryRequest.getCategories();
+        
+        Set<ChallengeCategory> challengeCategories = categories.stream()
+            .map(ChallengeCategory::fromString)
+            .filter(category -> category != null)
+            .collect(Collectors.toSet());
+        
+        user.setCategories(challengeCategories);
+        userRepository.save(user);
+        
+        return UserMapper.INSTANCE.userToUserDetailResponse(user);
     }
     
 }
