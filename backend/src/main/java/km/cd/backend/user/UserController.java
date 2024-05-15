@@ -49,18 +49,16 @@ public class UserController {
     
     @GetMapping("/{targetEmail}/following")
     public ResponseEntity<List<FriendListResponse>> getFollowingList(
-        @PathVariable String targetEmail,
-        @AuthenticationPrincipal PrincipalDetails principalDetails
+        @PathVariable String targetEmail
     ) {
-        return ResponseEntity.ok(userService.getFollowingList(targetEmail, principalDetails.getUserId()));
+        return ResponseEntity.ok(userService.getFollowingList(targetEmail));
     }
     
     @GetMapping("/{targetEmail}/follower")
     public ResponseEntity<List<FriendListResponse>> getFollwerList(
-        @PathVariable String targetEmail,
-        @AuthenticationPrincipal PrincipalDetails principalDetails
+        @PathVariable String targetEmail
     ) {
-        return ResponseEntity.ok(userService.getFollwerList(targetEmail, principalDetails.getUserId()));
+        return ResponseEntity.ok(userService.getFollwerList(targetEmail));
     }
     
     @DeleteMapping("/follow/{targetEmail}")
