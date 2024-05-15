@@ -5,6 +5,5 @@ public record UserResponse(
         String email,
         String avatar,
         String name,
-        int point,
-        String profileImage
+        int point
 ){ }
