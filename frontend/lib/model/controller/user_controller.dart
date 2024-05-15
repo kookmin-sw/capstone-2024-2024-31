@@ -4,15 +4,19 @@ import 'package:frontend/model/data/user.dart';
 
 class UserController extends GetxController {
   final _user = User(
-    id: 0,
-    email: "",
-    avatar: "",
-    name: "",
-    point: 0,
-  ).obs;
+      id: 0,
+      email: "",
+      avatar: "",
+      provider: "",
+      providerId: "",
+      name: "",
+      createdDate: DateTime(0),
+      following: [],
+      followers: []).obs;
   final _myChallenges = <ChallengeSimple>[].obs;
 
   User get user => _user.value;
+
   List<ChallengeSimple> get myChallenges => _myChallenges;
 
   void saveUser(User user) {
