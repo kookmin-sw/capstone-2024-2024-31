@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum FilePathEnum {
   CHALLENGES("challenges"),
   PARTICIPANTS("participants"),
+  USER("user"),
   COMMUNITY("community");
   
   private final String path;
