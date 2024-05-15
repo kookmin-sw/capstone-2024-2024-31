@@ -62,6 +62,7 @@ dependencies:
   #AI 관련 디펜던시
   camera: ^0.9.8+1
   image: ^3.2.0
+  tflite_v2: ^1.0.0
 
 dev_dependencies:
   flutter_test:
