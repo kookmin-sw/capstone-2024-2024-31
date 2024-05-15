@@ -4,6 +4,8 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import km.cd.backend.common.error.CustomException;
+import km.cd.backend.common.error.ExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +49,6 @@ public class S3Uploader {
     return uploadImageUrl;
   }
 
-
   /**
    * S3로 업로드
    * @param uploadFile : 업로드할 파일
@@ -65,9 +66,9 @@ public class S3Uploader {
    * S3에 있는 파일 삭제
    * 영어 파일만 삭제 가능 -> 한글 이름 파일은 안됨
    */
-  public void deleteS3(String filePath) throws Exception {
+  public void deleteS3(String filePath){
     try{
-      String key = filePath.substring(56); // 폴더/파일.확장자
+      String key = filePath.substring(53); // 폴더/파일.확장자
 
       try {
         amazonS3Client.deleteObject(bucket, key);
@@ -77,6 +78,7 @@ public class S3Uploader {
 
     } catch (Exception exception) {
       log.info(exception.getMessage());
+      throw new CustomException(ExceptionCode.IMAGE_DELETION_ERROR);
     }
     log.info("[S3Uploader] : S3에 있는 파일 삭제");
   }
