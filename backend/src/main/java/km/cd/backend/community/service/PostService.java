@@ -10,6 +10,7 @@ import km.cd.backend.community.domain.Post;
 import km.cd.backend.community.dto.PostDetailResponse;
 import km.cd.backend.community.dto.PostRequest;
 import km.cd.backend.community.dto.PostSimpleResponse;
+import km.cd.backend.community.dto.ReportResponse;
 import km.cd.backend.community.mapper.PostMapper;
 import km.cd.backend.community.repository.PostRepository;
 import km.cd.backend.user.domain.User;
@@ -56,6 +57,7 @@ public class PostService {
   public List<PostSimpleResponse> findAllByChallengeId(Long challengeId) {
     List<Post> posts = postRepository.findAllByChallengeId(challengeId);
     return posts.stream()
+            .filter(post -> !post.getIsRejected())
             .map(PostMapper.INSTANCE::entityToSimpleResponse)
             .toList();
   }
@@ -77,5 +79,22 @@ public class PostService {
             .orElseThrow(() -> new CustomException(ExceptionCode.POST_NOT_FOUND));
 
     return PostMapper.INSTANCE.entityToDetailResponse(post);
+  }
+  
+  public ReportResponse reportPost(Long userId, Long postId) {
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new CustomException(ExceptionCode.POST_NOT_FOUND));
+    Long authorId = post.getAuthor().getId();
+    List<Long> reportingUser = post.getReport();
+    
+    if (userId.equals(authorId)) throw new CustomException(ExceptionCode.POST_NOT_FOUND);
+    if (reportingUser.contains(userId)) throw new CustomException(ExceptionCode.POST_NOT_FOUND);
+    
+    reportingUser.add(userId);
+    
+    if (reportingUser.size() >= 5) post.rejectCertification();
+    postRepository.save(post);
+    
+    return PostMapper.INSTANCE.postToReportResponse(post);
   }
 }
