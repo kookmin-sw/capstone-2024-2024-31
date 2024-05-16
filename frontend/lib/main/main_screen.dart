@@ -46,11 +46,6 @@ class _MainScreenState extends State<MainScreen> {
     final UserController userController = Get.find<UserController>();
     final String? accessToken = prefs.getString('access_token');
 
-    if (accessToken == null) {
-      logger.e("Access token is null");
-      return Future.error("Access token is missing");
-    }
-
     Dio dio = Dio();
 
     dio.options.contentType = Headers.jsonContentType;
@@ -64,33 +59,23 @@ class _MainScreenState extends State<MainScreen> {
         final User user = User.fromJson(response.data);
         userController.saveUser(user);
 
+        final responseMyChallenges =
+        await dio.get('${Env.serverUrl}/users/me/challenges');
+
+        if (responseMyChallenges.statusCode == 200) {
+          logger.d("나의 챌린지 조회 성공: ${responseMyChallenges.data}");
+          userController.updateMyChallenges(responseMyChallenges.data);
+        }
         return userController.user;
-      } else {
-        logger.e("유저 조회 실패 statusCode : ${response.statusCode}");
       }
     } catch (err) {
-      logger.e("유저 조회 실패 err : $err");
+      logger.e("유저 조회 실패: $err");
     }
-
-
-    try {
-      final responseMyChallenges =
-          await dio.get('${Env.serverUrl}/users/me/challenges');
-
-      if (responseMyChallenges.statusCode == 200) {
-        logger.d("나의 챌린지 조회 성공: ${responseMyChallenges.data}");
-        userController.updateMyChallenges(responseMyChallenges.data);
-      } else {
-        logger.e("나의 챌린지 조회 실패: ${responseMyChallenges.statusCode}");
-      }
-    } catch (err) {
-      logger.e("나의 챌린지 조회 실패: ${err}");
-    }
-
 
     await prefs.remove("access_token");
     return Future.error("유저 조회 실패");
   }
+
 
   @override
   void initState() {
