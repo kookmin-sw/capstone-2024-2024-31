@@ -2,10 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:frontend/model/config/category_list.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:get/get.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:logger/logger.dart';
+import 'package:frontend/model/data/challenge/challenge_category.dart';
+import 'package:frontend/model/config/category_list.dart';
+import 'dart:convert';
+import '../../../../env.dart';
 
 class CategoryBottomSheet extends StatefulWidget {
   const CategoryBottomSheet({super.key});
@@ -15,12 +21,10 @@ class CategoryBottomSheet extends StatefulWidget {
 }
 
 class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
+  final logger = Logger();
   late UserController userController;
-
-  String selectedCategoryText = '';
-  List<String> selectedCategories =
-      []; // 이미 선택되어있는 카테고리 == userController.user.categories
-  bool isSelected = false;
+  bool isLoading = false;
+  List<ChallengeCategory> selectedCategories = [];
 
   TextStyle titleStyle = const TextStyle(
       fontFamily: 'Pretender',
@@ -51,10 +55,62 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
     );
   }
 
+  Future<Object> _saveCategoriesToServer(List<ChallengeCategory> categories) async {
+    // JSON 문자열 배열로 변환
+    List<String> jsonCategories = categories.map((category) => category.name).toList();
+
+    // 서버가 기대하는 형식으로 JSON 객체 생성
+    Map<String, dynamic> requestPayload = {
+      'categories': jsonCategories,
+    };
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dio.Dio dioInstance = dio.Dio();
+
+    // 서버에 저장하기 위해 HTTP 요청 보내기
+    dioInstance.options.contentType = 'application/json';
+    dioInstance.options.headers['Authorization'] =
+    'Bearer ${prefs.getString('access_token')}';
+
+    Logger logger = Logger();
+    logger.d("Request payload: $requestPayload"); // 디버깅용 로그
+
+    try {
+      final response = await dioInstance.post(
+        '${Env.serverUrl}/users/category',
+        data: jsonEncode(requestPayload), // JSON 문자열을 전달
+      );
+
+      // 서버 응답이 JSON 객체라고 가정하고 파싱
+      if (response.statusCode == 200) {
+        final responseData = response.data is String ? jsonDecode(response.data) : response.data;
+        logger.d("responseData : $responseData");
+        return responseData['id']; // 적절한 키로 값을 추출하여 반환
+      } else {
+        throw Exception('Failed to post categories');
+      }
+    } on dio.DioError catch (e) {
+      logger.e('DioError: ${e.message}');
+      if (e.response != null) {
+        logger.d('Response status code: ${e.response?.statusCode}');
+        logger.d('Response data: ${e.response?.data}');
+        logger.d('Request options: ${e.response?.requestOptions}');
+      } else {
+        logger.e('Error sending request: ${e.requestOptions}');
+      }
+      return Future.error(e.toString());
+    } catch (err) {
+      return Future.error(err.toString());
+    }
+
+
+  }
+
   @override
   void initState() {
     super.initState();
     userController = Get.find<UserController>();
+    selectedCategories = [];
   }
 
   @override
@@ -75,7 +131,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(CategoryList.length - 2, (categoryIndex) {
+              children: List.generate(categoryList.length - 2, (categoryIndex) {
                 return Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -86,7 +142,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children:
-                  List.generate(CategoryList.length ~/ 2, (categoryIndex) {
+                  List.generate(categoryList.length ~/ 2, (categoryIndex) {
                 return Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -96,13 +152,21 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
             const SizedBox(height: 15),
             Center(
                 child: ElevatedButton(
-              onPressed: () {
-                _closeModalAndNavigateBack(context);
+              onPressed: () async {
+                setState(() {
+                  isLoading = true;
+                });
+                await _saveCategoriesToServer(selectedCategories).then((value) {
+                  isLoading = false;
+                  _closeModalAndNavigateBack(context);
+                });
               },
-              child: Text(
-                '저장하기',
-                style: titleStyle,
-              ),
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : Text(
+                      '저장하기',
+                      style: titleStyle,
+                    ),
             ))
           ],
         ));
@@ -122,36 +186,33 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
   }
 
   Widget buildCategoryButton(int categoryIndex) {
+    ChallengeCategory category = categoryList[categoryIndex]['category'];
     return ElevatedButton(
       onPressed: () {
         setState(() {
-          String categoryText = CategoryList[categoryIndex]['category'];
-          if (selectedCategories.contains(categoryText)) {
-            selectedCategories
-                .remove(categoryText); // Deselect if already selected
+          if (selectedCategories.contains(category)) {
+            selectedCategories.remove(category); // 이미 선택된 경우 제거
           } else {
-            selectedCategories.add(categoryText); // Select otherwise
+            selectedCategories.add(category); // 선택되지 않은 경우 추가
           }
         });
       },
-      style: getCategoryButtonStyle(
-          selectedCategories.contains(CategoryList[categoryIndex]['category'])),
+      style: getCategoryButtonStyle(selectedCategories.contains(category)),
       child: Center(
         child: Column(
           children: [
-            Container(
-              child: CategoryList[categoryIndex]['icon'],
+            SizedBox(
+              child: categoryList[categoryIndex]['icon'],
               width: 45,
               height: 45,
             ),
             const SizedBox(height: 10),
             Text(
-              CategoryList[categoryIndex]['category'],
+              category.name,
               style: TextStyle(
                 fontSize: 13.0,
                 fontWeight: FontWeight.w500,
-                color: selectedCategories
-                        .contains(CategoryList[categoryIndex]['category'])
+                color: selectedCategories.contains(category)
                     ? Colors.white
                     : Colors.black,
               ),

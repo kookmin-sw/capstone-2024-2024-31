@@ -10,10 +10,10 @@ class User {
   final String? avatar;
   final String role;
   final DateTime? createdDate;
-  final int point;
-  final List<Friend> following;
-  final List<Friend> followers;
-  final Set<ChallengeCategory> categories;
+  int point;
+  List<Friend> following;
+  List<Friend> followers;
+  List<ChallengeCategory> categories;
 
   User({
     required this.id,
@@ -41,11 +41,20 @@ class User {
       name: json['name'] ?? '',
       avatar: json['avatar'],
       role: json['role'] ?? 'ROLE_USER',
-      createdDate: json['createdDate'] != null ? DateTime.parse(json['createdDate']) : null,
+      createdDate: json['createdDate'] != null
+          ? DateTime.parse(json['createdDate'])
+          : null,
       point: json['point'] ?? 0,
-      following: json['following'] != null ? List<Friend>.from(json['following'].map((x) => Friend.fromJson(x))) : [],
-      followers: json['followers'] != null ? List<Friend>.from(json['followers'].map((x) => Friend.fromJson(x))) : [],
-      categories: json['categories'] != null ? (json['categories'] as List).map((e) => ChallengeCategory.values.firstWhere((element) => element.toString() == 'ChallengeCategory.$e')).toSet() : {},
+      following: json['following'] != null
+          ? List<Friend>.from(json['following'].map((x) => Friend.fromJson(x)))
+          : [],
+      followers: json['followers'] != null
+          ? List<Friend>.from(json['followers'].map((x) => Friend.fromJson(x)))
+          : [],
+      categories: json['categories'] != null
+          ? List<ChallengeCategory>.from(
+              json['categories'].map((x) => ChallengeCategory.fromJson(x)))
+          : [],
     );
   }
 
@@ -63,10 +72,11 @@ class User {
       'point': point,
       'following': following.map((e) => e.toJson()).toList(),
       'followers': followers.map((e) => e.toJson()).toList(),
-      'categories': categories.map((e) => e.toString().split('.').last).toList(),
+      'categories': categories.map((e) => e.toJson()).toList(),
     };
   }
 }
+
 class Friend {
   final int id;
   final String name;

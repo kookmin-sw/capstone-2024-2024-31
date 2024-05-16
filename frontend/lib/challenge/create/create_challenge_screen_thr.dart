@@ -49,9 +49,10 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
 
     dioInstance.options.contentType = 'multipart/form-data';
     dioInstance.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
+    'Bearer ${prefs.getString('access_token')}';
 
     dio.FormData formData = controller.toFormData();
+    controller.printFormData();
 
     try {
       final response = await dioInstance.post(
@@ -60,6 +61,16 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
       );
 
       return response.data as int;
+    } on dio.DioError catch (e) {
+      logger.d('DioError: ${e.message}');
+      if (e.response != null) {
+        logger.d('Response status code: ${e.response?.statusCode}');
+        logger.d('Response data: ${e.response?.data}');
+        logger.d('Request options: ${e.response?.requestOptions}');
+      } else {
+        logger.d('Error sending request: ${e.requestOptions}');
+      }
+      return Future.error(e.toString());
     } catch (err) {
       return Future.error(err.toString());
     }
@@ -210,7 +221,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
               ),
               validator: (value) => value!.isEmpty ? "내용을 입력해주세요." : null,
               onChanged: (value) =>
-                  controller.updateCertificationExplanation(value),
+                  controller.updateCertificationExplanation(value.trim()),
             ),
           ],
         ));

@@ -90,6 +90,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                         "설정된 챌린지 인증 시작 시간: ${controller.form.certificationStartTime}");
                     logger.d(
                         "설정된 챌린지 인증 종료 시간: ${controller.form.certificationEndTime}");
+
+
                     Get.to(() => const CreateChallengeThr());
                   }
                 })),
@@ -174,7 +176,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                           const BorderSide(color: Palette.mainPurple, width: 2),
                     )),
                 validator: (value) => value!.isEmpty ? '챌린지 이름을 입력해주세요.' : null,
-                onChanged: (value) => controller.updateChallengeName(value),
+                onChanged: (value) => controller.updateChallengeName(value.trim()),
               ))
         ])));
   }
@@ -229,7 +231,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                     )),
                 validator: (value) => value!.isEmpty ? '챌린지 소개를 입력해주세요.' : null,
                 onChanged: (value) =>
-                    controller.updateChallengeExplanation(value),
+                    controller.updateChallengeExplanation(value.trim()),
               )),
         ])));
   }
@@ -495,17 +497,17 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: List.generate(CategoryList.length, (categoryIndex) {
+              children: List.generate(categoryList.length, (categoryIndex) {
                 return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: ElevatedButton(
                       onPressed: () {
                         if (controller.form.challengeCategory ==
-                            CategoryList[categoryIndex]['category']) {
+                            categoryList[categoryIndex]['category'].name.toString()) {
                           controller.updateChallengeCategory('');
                         } else {
                           controller.updateChallengeCategory(
-                              CategoryList[categoryIndex]['category']);
+                            categoryList[categoryIndex]['category'].name.toString());
                         }
                       },
                       style: ButtonStyle(
@@ -525,25 +527,26 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                           ),
                         ),
                         backgroundColor: controller.form.challengeCategory ==
-                                CategoryList[categoryIndex]['category']
+                                categoryList[categoryIndex]['category'].name.toString()
                             ? MaterialStateProperty.all<Color>(
                                 Palette.mainPurple)
-                            : null,
+                            : MaterialStateProperty.all<Color>(
+                            Palette.white)
                       ),
                       child: Row(
                         children: [
                           SizedBox(
-                            child: CategoryList[categoryIndex]['icon'],
+                            child: categoryList[categoryIndex]['icon'],
                             width: 30,
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            CategoryList[categoryIndex]['category'],
+                            categoryList[categoryIndex]['category'].name.toString(),
                             style: TextStyle(
                               fontSize: 11.0,
                               fontWeight: FontWeight.w500,
                               color: controller.form.challengeCategory ==
-                                      CategoryList[categoryIndex]['category']
+                                  categoryList[categoryIndex]['category'].name.toString()
                                   ? Colors.white
                                   : Colors.black, // 선택된 항목은 진한 파란색으로 설정
                             ),
@@ -587,17 +590,22 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
             changeDay: (value) => setState(() {
               var today = DateTime.now();
               today = DateTime(today.year, today.month, today.day);
+
               if (value.isBefore(today)) {
-                Get.snackbar("알림", "오늘 이후의 날짜를 선택해주세요.",
-                    backgroundColor: Palette.purPle300,
-                    colorText: Colors.white,
-                    snackPosition: SnackPosition.BOTTOM,
-                    margin: const EdgeInsets.all(8));
+                Get.snackbar(
+                  "알림",
+                  "오늘 이후의 날짜를 선택해주세요.",
+                  backgroundColor: Colors.purple[300], // Palette.purPle300을 대체
+                  colorText: Colors.white,
+                  snackPosition: SnackPosition.BOTTOM,
+                  margin: const EdgeInsets.all(8),
+                );
                 return;
               }
+
               selectedDay = value;
-              final DateFormat formatter = DateFormat('yyyy-MM-dd');
-              controller.updateStartDate(formatter.format(value));
+              final String formattedDate = DateFormat('yyyy-MM-dd').format(value);
+              controller.updateStartDate(formattedDate);
             }),
             enableWeeknumberText: false,
             weeknumberColor: Palette.grey200,
