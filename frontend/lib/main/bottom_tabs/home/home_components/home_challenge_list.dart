@@ -40,12 +40,15 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
 
     try {
       // Build the query parameters
+      //isPrivate == False , True 모두 조회
+
       Map<String, dynamic> queryParametersFalse = {
         'isPrivate': false,
         'size': 2,
         'name': searchValue,
         'category': selectedIndex == 0 ? null : ChallengeCategory.values[selectedIndex - 1].toString().split('.').last,
       };
+
       queryParametersFalse.removeWhere((key, value) => value == null); // Remove null values
 
       Map<String, dynamic> queryParametersTrue = {
@@ -55,6 +58,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
         'category': selectedIndex == 0 ? null : ChallengeCategory.values[selectedIndex - 1].toString().split('.').last,
       };
       queryParametersTrue.removeWhere((key, value) => value == null); // Remove null values
+
 
       final responseIsprivateFalse = await dio.get(
         '${Env.serverUrl}/challenges/list',
