@@ -11,6 +11,8 @@ public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태
     PARTICIPANT_NOT_FOUND_ERROR(404, "PARTICIPANT_001", "해당되는 참가자를 찾을 수 없습니다."),
     
     POST_NOT_FOUND(404, "POST_001", "해당되는 id 의 글을 찾을 수 없습니다."),
+    SAME_REPORTED_USER_ID(400, "POST_001", "사용자 ID와 작성자 ID가 동일합니다."),
+    ALREADY_REPORTED(400, "POST_002", "이미 신고한 사용자입니다."),
     
     REPLY_NOT_FOUND(404, "COMMENT_001", "해당되는 id의 댓글을 찾을 수 없습니다."),
     PARENT_COMMENT_NOT_FOUND(400, "COMMENT_002", "상위 댓글을 찾을 수 없습니다."),

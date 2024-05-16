@@ -33,13 +33,16 @@ public class Post extends BaseTimeEntity {
   @Setter
   private String image;
 
-  private Boolean isRejected;
+  private Boolean isRejected = false;
 
   @OneToMany(mappedBy = "post", orphanRemoval = true)
   private final List<Comment> comments = new ArrayList<>();
 
   @OneToMany(mappedBy = "post", orphanRemoval = true)
   private final List<Like> likes = new ArrayList<>();
+  
+  @ElementCollection(fetch = FetchType.LAZY)
+  private List<Long> report = new ArrayList<>();
 
   @Builder
   public Post(String title, String content, Challenge challenge, User author) {
