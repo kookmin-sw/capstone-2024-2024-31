@@ -55,28 +55,3 @@ class ChallengeSimple {
   }
 }
 
-void main() {
-  // JSON 데이터 예시
-  String jsonData = '''
-  {
-    "id": 1,
-    "challengeName": "Sample Challenge",
-    "startDate": "2024-05-16",
-    "challengePeriod": 30,
-    "certificationFrequency": "daily",
-    "totalParticipants": 100,
-    "imageUrl": "http://example.com/image.jpg",
-    "status": "ongoing",
-    "isPrivate": false
-  }
-  ''';
-
-  // JSON을 객체로 변환
-  Map<String, dynamic> jsonMap = jsonDecode(jsonData);
-  ChallengeSimple challenge = ChallengeSimple.fromJson(jsonMap);
-
-  // 객체를 JSON으로 변환
-  String jsonString = jsonEncode(challenge.toJson());
-
-  print(jsonString);
-}

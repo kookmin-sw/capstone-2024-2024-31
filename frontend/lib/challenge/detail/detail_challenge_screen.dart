@@ -40,6 +40,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   Future<Challenge> _fetchChallenge() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Dio dio = Dio();
+
     dio.options.headers['content-Type'] = 'application/json';
     dio.options.headers['Authorization'] =
     'Bearer ${prefs.getString('access_token')}';

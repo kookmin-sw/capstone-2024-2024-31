@@ -28,8 +28,7 @@ class _MyRoutineUpScreenState extends State<MyRoutineUpScreen> {
   void initState() {
     super.initState();
     for (var challenge in controller.myChallenges) {
-      DateTime now = DateTime.now();
-      DateTime startDate = challenge.startDate;
+
       if (challenge.status == "진행전") {
         beforeChallenge.add(challenge);
       } else if (challenge.status == "진행중") {

@@ -10,10 +10,10 @@ class User {
   final String? avatar;
   final String role;
   final DateTime? createdDate;
-  final int point;
-  final List<Friend> following;
-  final List<Friend> followers;
-  final List<ChallengeCategory> categories;
+  int point;
+  List<Friend> following;
+  List<Friend> followers;
+  List<ChallengeCategory> categories;
 
   User({
     required this.id,

@@ -83,7 +83,6 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
 
       // 서버 응답이 JSON 객체라고 가정하고 파싱
       if (response.statusCode == 200) {
-        print(1111111);
         final responseData = response.data is String ? jsonDecode(response.data) : response.data;
         logger.d("responseData : $responseData");
         return responseData['id']; // 적절한 키로 값을 추출하여 반환
@@ -101,7 +100,6 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
       }
       return Future.error(e.toString());
     } catch (err) {
-      print(3333333333);
       return Future.error(err.toString());
     }
 
