@@ -151,6 +151,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     super.initState();
     textFieldHintText = "댓글을 남겨보세요";
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
