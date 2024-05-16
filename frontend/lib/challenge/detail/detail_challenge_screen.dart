@@ -129,7 +129,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         children: [
           PhotoesWidget(
             screenHeight: screenSize.height,
-            imageUrl: challenge.challengeImageUrls[0],
+            imageUrl: challenge.challengeImagePaths![0],
           ),
           // screenHeight를 전달합니다.
           Container(
@@ -188,11 +188,11 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   }
 
   Widget imageGridView(Size screenSize, Challenge challenge) {
-    final imagePaths = challenge.challengeImageUrls;
+    final imagePaths = challenge.challengeImagePaths;
 
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        height: screenSize.width * 0.5 * (imagePaths.length ~/ 1.5) + 10,
+        height: screenSize.width * 0.5 * (imagePaths!.length ~/ 1.5) + 10,
         child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -238,7 +238,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
                   fontWeight: FontWeight.w600)),
           const SizedBox(height: 15),
           Text(
-            challenge.challengeExplanation,
+            challenge.challengeExplanation!,
             style: const TextStyle(
                 fontSize: 10,
                 fontFamily: "Pretendard",
@@ -265,7 +265,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
                         fontWeight: FontWeight.w600)),
                 const SizedBox(height: 15),
                 CertificationMethod(challenge: challenge),
-                Text(challenge.certificationExplanation,
+                Text(challenge.certificationExplanation!,
                     style: const TextStyle(
                         fontSize: 10,
                         fontFamily: "Pretendard",
@@ -277,13 +277,13 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             BuildImageContainer(
-                path: challenge.successfulVerificationImageUrl,
+                path: challenge.successfulVerificationImage!,
                 color: Palette.green,
                 isSuccess: true,
                 screenSize: screenSize),
             const SizedBox(width: 10),
             BuildImageContainer(
-                path: challenge.failedVerificationImageUrl,
+                path: challenge.failedVerificationImage!,
                 color: Palette.red,
                 isSuccess: false,
                 screenSize: screenSize),

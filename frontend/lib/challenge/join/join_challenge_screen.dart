@@ -56,7 +56,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 children: [
                   PhotoesWidget(
                       screenHeight: screenSize.height,
-                      imageUrl: widget.challenge.challengeImageUrls[0]),
+                      imageUrl: widget.challenge.challengeImagePaths![0]),
                   InformationWidget(challenge: widget.challenge),
                   const Padding(
                       padding:

@@ -49,9 +49,10 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
 
     dioInstance.options.contentType = 'multipart/form-data';
     dioInstance.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
+    'Bearer ${prefs.getString('access_token')}';
 
     dio.FormData formData = controller.toFormData();
+    controller.printFormData();
 
     try {
       final response = await dioInstance.post(
@@ -60,6 +61,16 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
       );
 
       return response.data as int;
+    } on dio.DioError catch (e) {
+      print('DioError: ${e.message}');
+      if (e.response != null) {
+        print('Response status code: ${e.response?.statusCode}');
+        print('Response data: ${e.response?.data}');
+        print('Request options: ${e.response?.requestOptions}');
+      } else {
+        print('Error sending request: ${e.requestOptions}');
+      }
+      return Future.error(e.toString());
     } catch (err) {
       return Future.error(err.toString());
     }
