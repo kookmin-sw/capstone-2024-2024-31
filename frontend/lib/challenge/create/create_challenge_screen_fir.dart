@@ -118,7 +118,7 @@ class _CreateChallengeFirState extends State<CreateChallengeFir> {
                                       ? '암호는 6자 이상이어야 합니다.'
                                       : null,
                               onChanged: (value) {
-                                controller.updatePrivateCode(value);
+                                controller.updatePrivateCode(value.trim());
                               },
                             ),
                           ),

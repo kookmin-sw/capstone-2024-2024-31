@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Challenge {
   final int id;
   final bool? isPrivate;
@@ -27,7 +25,7 @@ class Challenge {
 
   Challenge({
     required this.id,
-    required this.isPrivate,
+    this.isPrivate,
     this.privateCode,
     required this.challengeName,
     this.challengeExplanation,
@@ -54,35 +52,32 @@ class Challenge {
   factory Challenge.fromJson(Map<String, dynamic> json) {
     return Challenge(
       id: json['id'] ?? 0,
-      isPrivate: json['isPrivate'],
-      privateCode: json['privateCode'],
+      isPrivate: json['isPrivate'] as bool?,
+      privateCode: json['privateCode'] as String?,
       challengeName: json['challengeName'] ?? '',
-      challengeExplanation: json['challengeExplanation'],
-      challengePeriod: json['challengePeriod'],
+      challengeExplanation: json['challengeExplanation'] as String?,
+      challengePeriod: json['challengePeriod'] as int?,
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
-      certificationFrequency: json['certificationFrequency'],
-      certificationStartTime: json['certificationStartTime'],
-      certificationEndTime: json['certificationEndTime'],
-      certificationExplanation: json['certificationExplanation'],
-      isGalleryPossible: json['isGalleryPossible'],
-      maximumPeople: json['maximumPeople'],
+      certificationFrequency: json['certificationFrequency'] as String?,
+      certificationStartTime: json['certificationStartTime'] as int?,
+      certificationEndTime: json['certificationEndTime'] as int?,
+      certificationExplanation: json['certificationExplanation'] as String?,
+      isGalleryPossible: json['isGalleryPossible'] as bool?,
+      maximumPeople: json['maximumPeople'] as int?,
       participants: (json['participants'] as List<dynamic>?)
-          ?.map((e) => Participant.fromJson(e))
-          .toList() ??
-          [],
+          ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
+          .toList() ?? [],
       challengeImagePaths: (json['challengeImagePaths'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      failedVerificationImage: json['failedVerificationImage'],
-      successfulVerificationImage: json['successfulVerificationImage'],
-      status: json['status'],
+      failedVerificationImage: json['failedVerificationImage'] as String?,
+      successfulVerificationImage: json['successfulVerificationImage'] as String?,
+      status: json['status'] as String?,
       totalParticipants: json['totalParticipants'] ?? 0,
-      certificationType:
-      CertificationTypeExtension.fromJson(json['certificationType']),
-      challengeCategory:
-      ChallengeCategoryExtension.fromJson(json['challengeCategory']),
-      totalCertificationCount: json['totalCertificationCount'],
+      certificationType: CertificationTypeExtension.fromJson(json['certificationType'] as String? ?? 'HAND_GESTURE'),
+      challengeCategory: ChallengeCategoryExtension.fromJson(json['challengeCategory'] as String?),
+      totalCertificationCount: json['totalCertificationCount'] as int?,
     );
   }
 
@@ -114,6 +109,7 @@ class Challenge {
     };
   }
 
+  // Dummy data generator
   static Challenge getDummyData() {
     return Challenge(
       id: 1,

@@ -45,15 +45,23 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     'Bearer ${prefs.getString('access_token')}';
 
     try {
-      final response =
-      await dio.get('${Env.serverUrl}/challenges/${widget.challengeId}');
+      final response = await dio.get('${Env.serverUrl}/challenges/${widget.challengeId}');
       if (response.statusCode == 200) {
         logger.d('챌린지 디테일 조회 성공');
         logger.d(response.data);
-        return Challenge.fromJson(response.data);
+        final challenge = Challenge.fromJson(response.data);
+
+        // Print each field to check for null values
+        logger.d('Challenge Name: ${challenge.challengeName}');
+        logger.d('Challenge Explanation: ${challenge.challengeExplanation}');
+        logger.d('Challenge Image Paths: ${challenge.challengeImagePaths}');
+        logger.d('Successful Verification Image: ${challenge.successfulVerificationImage}');
+        logger.d('Failed Verification Image: ${challenge.failedVerificationImage}');
+        // Add more fields as necessary
+
+        return challenge;
       } else {
-        return Future.error(
-            "서버 응답 상태 코드: ${response.statusCode}, ${response.data}");
+        return Future.error("서버 응답 상태 코드: ${response.statusCode}, ${response.data}");
       }
     } catch (e) {
       logger.e(e);

@@ -176,7 +176,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                           const BorderSide(color: Palette.mainPurple, width: 2),
                     )),
                 validator: (value) => value!.isEmpty ? '챌린지 이름을 입력해주세요.' : null,
-                onChanged: (value) => controller.updateChallengeName(value),
+                onChanged: (value) => controller.updateChallengeName(value.trim()),
               ))
         ])));
   }
@@ -231,7 +231,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                     )),
                 validator: (value) => value!.isEmpty ? '챌린지 소개를 입력해주세요.' : null,
                 onChanged: (value) =>
-                    controller.updateChallengeExplanation(value),
+                    controller.updateChallengeExplanation(value.trim()),
               )),
         ])));
   }

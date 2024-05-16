@@ -42,35 +42,51 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
       // Build the query parameters
       //isPrivate == False , True 모두 조회
 
-      Map<String, dynamic> queryParametersFalse = {
+      Map<String, dynamic> dataFalse = {
         'isPrivate': false,
-        'size': 2,
         'name': searchValue,
-        'category': selectedIndex == 0 ? null : ChallengeCategory.values[selectedIndex - 1].toString().split('.').last,
+        'category': selectedIndex == 0 ? null : ChallengeCategory
+            .values[selectedIndex - 1]
+            .toString()
+            .split('.')
+            .last,
       };
 
-      queryParametersFalse.removeWhere((key, value) => value == null); // Remove null values
+      dataFalse.removeWhere((key, value) =>
+      value == null); // Remove null values
 
-      Map<String, dynamic> queryParametersTrue = {
+      Map<String, dynamic> dataTrue = {
         'isPrivate': true,
-        'size': 2,
         'name': searchValue,
-        'category': selectedIndex == 0 ? null : ChallengeCategory.values[selectedIndex - 1].toString().split('.').last,
+        'category': selectedIndex == 0 ? null : ChallengeCategory
+            .values[selectedIndex - 1]
+            .toString()
+            .split('.')
+            .last,
       };
-      queryParametersTrue.removeWhere((key, value) => value == null); // Remove null values
+      dataTrue.removeWhere((key, value) => value == null); // Remove null values
 
 
-      final responseIsprivateFalse = await dio.get(
-        '${Env.serverUrl}/challenges/list',
-        queryParameters: queryParametersFalse,
+      final responseIsprivateFalse = await dio.post(
+          '${Env.serverUrl}/challenges/list',
+          queryParameters: {
+            'cursorId': 0,
+            'size': 5,
+          },
+          data: dataFalse
       );
 
-      final responseIsprivateTrue = await dio.get(
-        '${Env.serverUrl}/challenges/list',
-        queryParameters: queryParametersTrue,
+      final responseIsprivateTrue = await dio.post(
+          '${Env.serverUrl}/challenges/list',
+          queryParameters: {
+            'cursorId': 0,
+            'size': 5,
+          },
+          data:dataTrue
       );
 
-      if (responseIsprivateFalse.statusCode == 200 && responseIsprivateTrue.statusCode == 200) {
+      if (responseIsprivateFalse.statusCode == 200 &&
+          responseIsprivateTrue.statusCode == 200) {
         final List<dynamic> combinedData = [
           ...responseIsprivateFalse.data as List,
           ...responseIsprivateTrue.data as List
@@ -91,7 +107,9 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -133,7 +151,8 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
                     }),
                   ),
                 )
-                    : SvgPicture.asset("assets/svgs/no_challenge_box.svg"); // "snapshot.data 가 [] 일 경우 진행중인 챌린지 없음 안내
+                    : SvgPicture.asset(
+                    "assets/svgs/no_challenge_box.svg"); // "snapshot.data 가 [] 일 경우 진행중인 챌린지 없음 안내
               } else {
                 return Container();
               }

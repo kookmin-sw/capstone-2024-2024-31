@@ -221,7 +221,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
               ),
               validator: (value) => value!.isEmpty ? "내용을 입력해주세요." : null,
               onChanged: (value) =>
-                  controller.updateCertificationExplanation(value),
+                  controller.updateCertificationExplanation(value.trim()),
             ),
           ],
         ));
