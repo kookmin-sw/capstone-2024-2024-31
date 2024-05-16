@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class ChallengeSimple {
   final int id;
   final String challengeName;
@@ -13,8 +11,8 @@ class ChallengeSimple {
 
   ChallengeSimple({
     required this.id,
-    required this.challengeName,
     required this.startDate,
+    required this.challengeName,
     required this.challengePeriod,
     required this.certificationFrequency,
     required this.totalParticipants,
@@ -27,8 +25,9 @@ class ChallengeSimple {
   factory ChallengeSimple.fromJson(Map<String, dynamic> json) {
     return ChallengeSimple(
       id: json['id'],
+      startDate: json['startDate'],
       challengeName: json['challengeName'],
-      startDate: DateTime.parse(json['startDate']),
+      startDate: json['startDate'],
       challengePeriod: json['challengePeriod'],
       certificationFrequency: json['certificationFrequency'],
       totalParticipants: json['totalParticipants'],
