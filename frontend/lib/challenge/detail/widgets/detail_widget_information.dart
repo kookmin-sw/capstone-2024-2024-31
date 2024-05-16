@@ -11,8 +11,8 @@ class InformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime startDate = challenge.startDate;
-    final int challengePeriod = challenge.challengePeriod;
+    final DateTime startDate = challenge.startDate!;
+    final int challengePeriod = challenge.challengePeriod!;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     return Column(
@@ -131,7 +131,7 @@ class InformationWidget extends StatelessWidget {
                                 fontSize: 10,
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
-                        Text(challenge.certificationFrequency,
+                        Text(challenge.certificationFrequency!,
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,

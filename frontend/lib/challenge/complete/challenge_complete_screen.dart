@@ -121,14 +121,14 @@ class ChallengeCompleteScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            if (challenge.challengeImageUrls.isNotEmpty)
+            if (challenge.challengeImagePaths!.isNotEmpty)
               SizedBox(
                   width: 100,
                   height: 75,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(
-                      challenge.challengeImageUrls[0],
+                      challenge.challengeImagePaths![0],
                       fit: BoxFit.cover,
                       // You can set other properties like width, height, etc. here
                     ),
