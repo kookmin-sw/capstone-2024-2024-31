@@ -2,17 +2,18 @@ import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
 import 'package:frontend/model/data/user.dart';
 
+import '../data/challenge/challenge_category.dart';
+
 class UserController extends GetxController {
   final _user = User(
-      id: 0,
-      email: "",
-      avatar: "",
-      provider: "",
-      providerId: "",
-      name: "",
-      createdDate: DateTime(0),
-      following: [],
-      followers: []).obs;
+    id: 1,
+    email: 'example@example.com',
+    name: 'John Doe',
+    following: [],
+    followers: [],
+    categories: {},
+  ).obs;
+
   final _myChallenges = <ChallengeSimple>[].obs;
 
   User get user => _user.value;
