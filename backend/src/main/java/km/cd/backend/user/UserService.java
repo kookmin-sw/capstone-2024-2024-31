@@ -146,10 +146,10 @@ public class UserService {
         User user = findById(userId);
         List<String> categories = userCategoryRequest.getCategories();
         
-        Set<ChallengeCategory> challengeCategories = categories.stream()
+        List<ChallengeCategory> challengeCategories = categories.stream()
             .map(ChallengeCategory::fromString)
             .filter(category -> category != null)
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
         
         user.setCategories(challengeCategories);
         userRepository.save(user);
