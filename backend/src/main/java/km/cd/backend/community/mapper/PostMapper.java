@@ -10,6 +10,7 @@ import km.cd.backend.community.dto.PostRequest;
 import km.cd.backend.community.dto.PostDetailResponse;
 import km.cd.backend.community.dto.PostSimpleResponse;
 import km.cd.backend.user.domain.User;
+import km.cd.backend.user.domain.mapper.UserMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -34,11 +35,13 @@ public interface PostMapper {
   @Named("mapComments")
   default List<CommentResponse> mapComments(List<Comment> comments) {
     return comments.stream()
+        .filter(comment -> !comment.hasParent())
         .map(comment -> new CommentResponse(
             comment.getId(),
             comment.getAuthor().getName(),
             comment.isDeleted() ? CONTENT_DELETE : comment.getContent(),
-            comment.hasParent() ? mapComments(comment.getChildren()) : new ArrayList<>()))
+            CommentMapper.INSTANCE.COMMENT_RESPONSE_LIST(comment.getChildren()),
+            UserMapper.INSTANCE.userToUserResponse(comment.getAuthor())))
         .collect(Collectors.toList());
   }
 

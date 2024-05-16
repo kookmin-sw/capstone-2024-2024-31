@@ -41,6 +41,7 @@ public class CommentService {
             Comment parent = commentRepository.findById(parentId)
                     .orElseThrow(() -> new CustomException(ExceptionCode.PARENT_COMMENT_NOT_FOUND));
             comment.setParent(parent);
+            parent.getChildren().add(comment);
         }
         commentRepository.save(comment);
         return CommentMapper.INSTANCE.entityToResponse(comment);

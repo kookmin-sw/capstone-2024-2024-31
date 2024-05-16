@@ -4,6 +4,7 @@ import km.cd.backend.community.dto.PostSimpleResponse;
 import km.cd.backend.community.dto.PostDetailResponse;
 import km.cd.backend.community.service.LikeService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import km.cd.backend.common.jwt.PrincipalDetails;
@@ -25,7 +26,7 @@ public class PostController {
   private final PostService postService;
   private final LikeService likeService;
 
-  @PostMapping("")
+  @PostMapping(path = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<PostDetailResponse> createPost(
       @PathVariable(name = "challengeId") Long challengeId,
