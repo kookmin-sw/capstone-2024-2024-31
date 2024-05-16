@@ -22,11 +22,11 @@ class ChallengeDetailScreen extends StatefulWidget {
   final bool isFromMypage;
 
   const ChallengeDetailScreen({
-    Key? key,
+    super.key,
     required this.challengeId,
     this.isFromMainScreen = false,
     this.isFromMypage = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ChallengeDetailScreen> createState() => _ChallengeDetailScreenState();
@@ -43,10 +43,13 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
 
     dio.options.headers['content-Type'] = 'application/json';
     dio.options.headers['Authorization'] =
-    'Bearer ${prefs.getString('access_token')}';
+        'Bearer ${prefs.getString('access_token')}';
 
     try {
-      final response = await dio.get('${Env.serverUrl}/challenges/${widget.challengeId}');
+      logger.d(widget.challengeId);
+      final response = await dio.get(
+          '${Env.serverUrl}/challenges/${widget.challengeId}',
+          queryParameters: {"code": ""});
       if (response.statusCode == 200) {
         logger.d('챌린지 디테일 조회 성공');
         logger.d(response.data);
@@ -56,13 +59,16 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         logger.d('Challenge Name: ${challenge.challengeName}');
         logger.d('Challenge Explanation: ${challenge.challengeExplanation}');
         logger.d('Challenge Image Paths: ${challenge.challengeImagePaths}');
-        logger.d('Successful Verification Image: ${challenge.successfulVerificationImage}');
-        logger.d('Failed Verification Image: ${challenge.failedVerificationImage}');
+        logger.d(
+            'Successful Verification Image: ${challenge.successfulVerificationImage}');
+        logger.d(
+            'Failed Verification Image: ${challenge.failedVerificationImage}');
         // Add more fields as necessary
 
         return challenge;
       } else {
-        return Future.error("서버 응답 상태 코드: ${response.statusCode}, ${response.data}");
+        return Future.error(
+            "서버 응답 상태 코드: ${response.statusCode}, ${response.data}");
       }
     } catch (e) {
       logger.e(e);
@@ -97,21 +103,21 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
       appBar: AppBar(
         leading: widget.isFromMainScreen || widget.isFromMypage
             ? IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Palette.grey300,
-            ),
-            onPressed: () {
-              Get.back();
-            })
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Palette.grey300,
+                ),
+                onPressed: () {
+                  Get.back();
+                })
             : IconButton(
-            icon: const Icon(
-              Icons.home,
-              color: Palette.grey300,
-            ),
-            onPressed: () {
-              Get.offAll(() =>  MainScreen());
-            }),
+                icon: const Icon(
+                  Icons.home,
+                  color: Palette.grey300,
+                ),
+                onPressed: () {
+                  Get.offAll(() => MainScreen());
+                }),
         title: const Text(
           "챌린지 자세히 보기",
           style: TextStyle(
@@ -133,13 +139,13 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : challenge != null
-          ? buildChallengeDetailBody(context, challenge!)
-          : const Center(child: Text('챌린지 정보를 불러오지 못했습니다.')),
+              ? buildChallengeDetailBody(context, challenge!)
+              : const Center(child: Text('챌린지 정보를 불러오지 못했습니다.')),
       bottomNavigationBar: widget.isFromMypage || !widget.isFromMainScreen
           ? null
           : isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : buildChallengeDetailBottomNavigationBar(context, challenge!),
+              ? const Center(child: CircularProgressIndicator())
+              : buildChallengeDetailBottomNavigationBar(context, challenge!),
     );
   }
 
@@ -169,9 +175,9 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   }
 
   Widget buildChallengeDetailBottomNavigationBar(
-      BuildContext context,
-      Challenge challenge,
-      ) {
+    BuildContext context,
+    Challenge challenge,
+  ) {
     return Stack(
       children: <Widget>[
         Container(
