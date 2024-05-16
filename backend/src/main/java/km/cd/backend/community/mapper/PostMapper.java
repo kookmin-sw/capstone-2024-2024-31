@@ -9,6 +9,7 @@ import km.cd.backend.community.dto.CommentResponse;
 import km.cd.backend.community.dto.PostRequest;
 import km.cd.backend.community.dto.PostDetailResponse;
 import km.cd.backend.community.dto.PostSimpleResponse;
+import km.cd.backend.community.dto.ReportResponse;
 import km.cd.backend.user.domain.User;
 import km.cd.backend.user.domain.mapper.UserMapper;
 import org.mapstruct.Mapper;
@@ -47,4 +48,12 @@ public interface PostMapper {
 
   @Mapping(target = "author", source = "post.author.name")
   PostSimpleResponse entityToSimpleResponse(Post post);
+  
+  @Mapping(target = "reportingCount", source = "post", qualifiedByName = "countReports")
+  ReportResponse postToReportResponse(Post post);
+  
+  @Named("countReports")
+  default int countReports(Post post) {
+    return post.getReport().size();
+  }
 }
