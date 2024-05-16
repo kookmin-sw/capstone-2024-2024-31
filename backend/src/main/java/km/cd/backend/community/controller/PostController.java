@@ -2,6 +2,7 @@ package km.cd.backend.community.controller;
 
 import km.cd.backend.community.dto.PostSimpleResponse;
 import km.cd.backend.community.dto.PostDetailResponse;
+import km.cd.backend.community.dto.ReportResponse;
 import km.cd.backend.community.service.LikeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -80,5 +81,12 @@ public class PostController {
     likeService.unlikePost(principalDetails.getUserId(), postId);
     return ResponseEntity.ok(null);
   }
-
+  
+  @PostMapping("/{postId}/report")
+  public ResponseEntity<ReportResponse> reportPost(
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
+      @PathVariable(name = "postId") Long postId
+  ) {
+    return ResponseEntity.ok(postService.reportPost(principalDetails.getUserId(), postId));
+  }
 }
