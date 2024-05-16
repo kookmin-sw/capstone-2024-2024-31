@@ -497,17 +497,17 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: List.generate(CategoryList.length, (categoryIndex) {
+              children: List.generate(categoryList.length, (categoryIndex) {
                 return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: ElevatedButton(
                       onPressed: () {
                         if (controller.form.challengeCategory ==
-                            CategoryList[categoryIndex]['category']) {
+                            categoryList[categoryIndex]['category'].name.toString()) {
                           controller.updateChallengeCategory('');
                         } else {
                           controller.updateChallengeCategory(
-                              CategoryList[categoryIndex]['category']);
+                            categoryList[categoryIndex]['category'].name.toString());
                         }
                       },
                       style: ButtonStyle(
@@ -527,25 +527,26 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                           ),
                         ),
                         backgroundColor: controller.form.challengeCategory ==
-                                CategoryList[categoryIndex]['category']
+                                categoryList[categoryIndex]['category'].name.toString()
                             ? MaterialStateProperty.all<Color>(
                                 Palette.mainPurple)
-                            : null,
+                            : MaterialStateProperty.all<Color>(
+                            Palette.white)
                       ),
                       child: Row(
                         children: [
                           SizedBox(
-                            child: CategoryList[categoryIndex]['icon'],
+                            child: categoryList[categoryIndex]['icon'],
                             width: 30,
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            CategoryList[categoryIndex]['category'],
+                            categoryList[categoryIndex]['category'].name.toString(),
                             style: TextStyle(
                               fontSize: 11.0,
                               fontWeight: FontWeight.w500,
                               color: controller.form.challengeCategory ==
-                                      CategoryList[categoryIndex]['category']
+                                  categoryList[categoryIndex]['category'].name.toString()
                                   ? Colors.white
                                   : Colors.black, // 선택된 항목은 진한 파란색으로 설정
                             ),

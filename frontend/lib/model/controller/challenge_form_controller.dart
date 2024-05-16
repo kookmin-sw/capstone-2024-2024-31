@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 class ChallengeFormController extends GetxController {
   final _form = ChallengeForm(
     isPrivate: false,
-    privateCode: "",
     challengeName: "",
     challengeExplanation: "",
     challengeImages: [],

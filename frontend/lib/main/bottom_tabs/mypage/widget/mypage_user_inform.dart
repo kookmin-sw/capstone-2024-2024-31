@@ -5,12 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/main/bottom_tabs/mypage/widget/categoryButtonPress.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
-import 'package:frontend/model/data/user.dart';
 import 'package:get/get.dart';
+import 'package:frontend/model/data/challenge/challenge_category.dart';
+
 
 class UserInformation extends StatelessWidget {
-  UserInformation({super.key}) ;
-
+  UserInformation({super.key});
 
   final UserController userController = Get.find<UserController>();
 
@@ -20,12 +20,11 @@ class UserInformation extends StatelessWidget {
       fontSize: 11,
       color: Palette.purPle500);
 
-  List<String> categoryList = [];
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
+    // List<ChallengeCategory> categoryList = userController.user.categories;
+  print(userController.user.categories);
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
         child: Row(
@@ -37,7 +36,7 @@ class UserInformation extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 nameText(screenSize),
                 const SizedBox(height: 4),
-                if (categoryList.isNotEmpty)
+                if (userController.user.categories.isNotEmpty)
                   Column(
                     children: [
                       const Text(
@@ -53,16 +52,15 @@ class UserInformation extends StatelessWidget {
                             CategoryButtonPress(context);
                           },
                           child: Row(
-                              children:
-                                  List.generate(categoryList.length, (index) {
-                            return Padding(
-                                padding:
+                              children: List.generate(userController.user.categories.length, (index) {
+                                return Padding(
+                                    padding:
                                     const EdgeInsets.symmetric(horizontal: 4),
-                                child: Text(
-                                  "#${categoryList[index]}",
-                                  style: tagTextStyle,
-                                ));
-                          })))
+                                    child: Text(
+                                      "#${userController.user.categories[index].name}",
+                                      style: tagTextStyle,
+                                    ));
+                              }).toList()))
                     ],
                   )
                 else
@@ -81,10 +79,12 @@ class UserInformation extends StatelessWidget {
         width: 90,
         height: 90,
         child: Stack(children: [
-          userController.user.avatar != null ? CircleAvatar(
+          userController.user.avatar != null
+              ? CircleAvatar(
             radius: 70,
             backgroundImage: NetworkImage(userController.user.avatar!),
-          ) :  CircleAvatar(
+          )
+              : CircleAvatar(
             radius: 70,
             backgroundColor: Colors.grey[200],
             child: const Icon(Icons.person, size: 70, color: Palette.purPle200),

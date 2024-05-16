@@ -62,13 +62,13 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
 
       return response.data as int;
     } on dio.DioError catch (e) {
-      print('DioError: ${e.message}');
+      logger.d('DioError: ${e.message}');
       if (e.response != null) {
-        print('Response status code: ${e.response?.statusCode}');
-        print('Response data: ${e.response?.data}');
-        print('Request options: ${e.response?.requestOptions}');
+        logger.d('Response status code: ${e.response?.statusCode}');
+        logger.d('Response data: ${e.response?.data}');
+        logger.d('Request options: ${e.response?.requestOptions}');
       } else {
-        print('Error sending request: ${e.requestOptions}');
+        logger.d('Error sending request: ${e.requestOptions}');
       }
       return Future.error(e.toString());
     } catch (err) {

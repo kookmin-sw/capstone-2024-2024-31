@@ -1,26 +1,27 @@
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/model/data/challenge/challenge_category.dart';
 
-List<Map<String, dynamic>> CategoryList = [
+List<Map<String, dynamic>> categoryList = [
   {
-    'category': '식습관',
+    'category':  ChallengeCategory.eating,
     'icon': SvgPicture.asset(
       'assets/icons/category_icons/eating.svg',
     )
   },
   {
-    'category': '운동',
+    'category':  ChallengeCategory.exercise,
     'icon': SvgPicture.asset('assets/icons/category_icons/exercise.svg')
   },
   {
-    'category': '취미',
+    'category':  ChallengeCategory.hobby,
     'icon': SvgPicture.asset('assets/icons/category_icons/hobby.svg')
   },
   {
-    'category': '환경',
+    'category':  ChallengeCategory.nature,
     'icon': SvgPicture.asset('assets/icons/category_icons/nature.svg')
   },
   {
-    'category': '공부',
+    'category':  ChallengeCategory.study,
     'icon': SvgPicture.asset('assets/icons/category_icons/study.svg')
   }
 ];

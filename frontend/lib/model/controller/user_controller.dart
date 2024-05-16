@@ -1,7 +1,6 @@
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
 import 'package:frontend/model/data/user.dart';
-
 import '../data/challenge/challenge_category.dart';
 
 class UserController extends GetxController {
@@ -11,7 +10,7 @@ class UserController extends GetxController {
     name: 'John Doe',
     following: [],
     followers: [],
-    categories: {},
+    categories: [],
   ).obs;
 
   final _myChallenges = <ChallengeSimple>[].obs;
