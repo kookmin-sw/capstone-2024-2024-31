@@ -23,8 +23,8 @@ class UserInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    // List<ChallengeCategory> categoryList = userController.user.categories;
-  print(userController.user.categories);
+    final List<ChallengeCategory> categoryList = userController.user.categories; // Set을 List로 변환
+
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
         child: Row(
@@ -36,7 +36,7 @@ class UserInformation extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 nameText(screenSize),
                 const SizedBox(height: 4),
-                if (userController.user.categories.isNotEmpty)
+                if (categoryList.isNotEmpty)
                   Column(
                     children: [
                       const Text(
@@ -52,12 +52,12 @@ class UserInformation extends StatelessWidget {
                             CategoryButtonPress(context);
                           },
                           child: Row(
-                              children: List.generate(userController.user.categories.length, (index) {
+                              children: List.generate(categoryList.length, (index) {
                                 return Padding(
                                     padding:
                                     const EdgeInsets.symmetric(horizontal: 4),
                                     child: Text(
-                                      "#${userController.user.categories[index].name}",
+                                      "#${categoryList[index].name}",
                                       style: tagTextStyle,
                                     ));
                               }).toList()))
