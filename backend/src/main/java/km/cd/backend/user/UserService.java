@@ -18,6 +18,7 @@ import km.cd.backend.user.domain.User;
 import km.cd.backend.user.domain.mapper.FriendMapper;
 import km.cd.backend.user.domain.mapper.UserMapper;
 import km.cd.backend.user.dto.FriendListResponse;
+import km.cd.backend.user.dto.GithubUsernameRequest;
 import km.cd.backend.user.dto.UserCategoryRequest;
 import km.cd.backend.user.dto.UserDetailResponse;
 import km.cd.backend.user.dto.UserResponse;
@@ -146,15 +147,21 @@ public class UserService {
         User user = findById(userId);
         List<String> categories = userCategoryRequest.getCategories();
         
-        Set<ChallengeCategory> challengeCategories = categories.stream()
+        List<ChallengeCategory> challengeCategories = categories.stream()
             .map(ChallengeCategory::fromString)
             .filter(category -> category != null)
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
         
         user.setCategories(challengeCategories);
         userRepository.save(user);
         
         return UserMapper.INSTANCE.userToUserDetailResponse(user);
+    }
+    
+    public void setGithubUsername(GithubUsernameRequest githubUsernameRequest, Long userId) {
+        User user = findById(userId);
+        user.setGithubUsername(githubUsernameRequest.username());
+        userRepository.save(user);
     }
     
 }
