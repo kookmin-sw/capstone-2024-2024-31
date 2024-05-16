@@ -94,7 +94,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
           color: Colors.transparent,
           width: double.infinity,
           child: isLoading
-              ? Center(
+              ? const Center(
             child: CircularProgressIndicator(), // Show loading indicator
           )
               : CustomButton(

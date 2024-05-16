@@ -68,7 +68,7 @@ class ChallengeRecommendBox extends StatelessWidget {
                     style: TextStyle(
                       color: Palette.mainPurple,
                       fontSize: 13,
-                      fontFamily: 'Pretendard',
+                      fontFamily: 'Pretender',
                       fontWeight: FontWeight.bold,
                     ),
                   ),
