@@ -72,7 +72,7 @@ class CertificationMethod extends StatelessWidget {
                                     fontFamily: "Pretendard",
                                     fontWeight: FontWeight.w500)),
                             Text(
-                                challenge.isGalleryPossible ? "카메라+갤러리" : "카메라",
+                                challenge.isGalleryPossible! ? "카메라+갤러리" : "카메라",
                                 style: const TextStyle(
                                     color: Palette.grey300,
                                     fontSize: 10,

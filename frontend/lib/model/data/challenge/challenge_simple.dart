@@ -18,7 +18,7 @@ class ChallengeSimple {
     required this.totalParticipants,
     required this.imageUrl,
     required this.isEnded,
-    required this.isPrivate
+    required this.isPrivate,
   });
 
   factory ChallengeSimple.fromJson(Map<String, dynamic> json) {

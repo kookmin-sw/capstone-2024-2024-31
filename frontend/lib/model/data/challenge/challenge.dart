@@ -2,18 +2,18 @@ import 'dart:convert';
 
 class Challenge {
   final int id;
-  final bool isPrivate;
+  final bool? isPrivate;
   final String? privateCode;
   final String challengeName;
   final String? challengeExplanation;
   final int? challengePeriod;
-  final DateTime? startDate;
-  final DateTime? endDate;
+  final DateTime startDate;
+  final DateTime endDate;
   final String? certificationFrequency;
   final int? certificationStartTime;
   final int? certificationEndTime;
   final String? certificationExplanation;
-  final bool isGalleryPossible;
+  final bool? isGalleryPossible;
   final int? maximumPeople;
   final List<Participant> participants;
   final List<String>? challengeImagePaths;
@@ -32,15 +32,15 @@ class Challenge {
     required this.challengeName,
     this.challengeExplanation,
     this.challengePeriod,
-    this.startDate,
-    this.endDate,
+    required this.startDate,
+    required this.endDate,
     this.certificationFrequency,
     this.certificationStartTime,
     this.certificationEndTime,
     this.certificationExplanation,
-    required this.isGalleryPossible,
+    this.isGalleryPossible,
     this.maximumPeople,
-    required this.participants,
+    this.participants = const [],
     this.challengeImagePaths,
     this.failedVerificationImage,
     this.successfulVerificationImage,
@@ -54,27 +54,34 @@ class Challenge {
   factory Challenge.fromJson(Map<String, dynamic> json) {
     return Challenge(
       id: json['id'] ?? 0,
-      isPrivate: json['isPrivate'] ?? false,
+      isPrivate: json['isPrivate'],
       privateCode: json['privateCode'],
       challengeName: json['challengeName'] ?? '',
       challengeExplanation: json['challengeExplanation'],
       challengePeriod: json['challengePeriod'],
-      startDate: json['startDate'] != null ? DateTime.parse(json['startDate']) : null,
-      endDate: json['endDate'] != null ? DateTime.parse(json['endDate']) : null,
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
       certificationFrequency: json['certificationFrequency'],
       certificationStartTime: json['certificationStartTime'],
       certificationEndTime: json['certificationEndTime'],
       certificationExplanation: json['certificationExplanation'],
-      isGalleryPossible: json['isGalleryPossible'] ?? false,
+      isGalleryPossible: json['isGalleryPossible'],
       maximumPeople: json['maximumPeople'],
-      participants: (json['participants'] as List<dynamic>).map((e) => Participant.fromJson(e)).toList(),
-      challengeImagePaths: (json['challengeImagePaths'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      participants: (json['participants'] as List<dynamic>?)
+          ?.map((e) => Participant.fromJson(e))
+          .toList() ??
+          [],
+      challengeImagePaths: (json['challengeImagePaths'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       failedVerificationImage: json['failedVerificationImage'],
       successfulVerificationImage: json['successfulVerificationImage'],
       status: json['status'],
       totalParticipants: json['totalParticipants'] ?? 0,
-      certificationType: CertificationTypeExtension.fromJson(json['certificationType']),
-      challengeCategory: ChallengeCategoryExtension.fromJson(json['challengeCategory']),
+      certificationType:
+      CertificationTypeExtension.fromJson(json['certificationType']),
+      challengeCategory:
+      ChallengeCategoryExtension.fromJson(json['challengeCategory']),
       totalCertificationCount: json['totalCertificationCount'],
     );
   }
@@ -87,8 +94,8 @@ class Challenge {
       'challengeName': challengeName,
       'challengeExplanation': challengeExplanation,
       'challengePeriod': challengePeriod,
-      'startDate': startDate?.toString(),
-      'endDate': endDate?.toString(),
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
       'certificationFrequency': certificationFrequency,
       'certificationStartTime': certificationStartTime,
       'certificationEndTime': certificationEndTime,
@@ -107,89 +114,36 @@ class Challenge {
     };
   }
 
-  static Challenge getDummyData(){
-    return   Challenge(
+  static Challenge getDummyData() {
+    return Challenge(
       id: 1,
       isPrivate: false,
-      privateCode: null,
-      challengeName: 'Fitness Challenge',
-      challengeExplanation: 'A challenge to stay fit',
+      privateCode: "123456",
+      challengeName: "Dummy Challenge",
+      challengeExplanation: "This is a dummy challenge for testing purposes.",
       challengePeriod: 30,
       startDate: DateTime.now(),
       endDate: DateTime.now().add(Duration(days: 30)),
-      certificationFrequency: 'daily',
+      certificationFrequency: "daily",
       certificationStartTime: 6,
       certificationEndTime: 22,
-      certificationExplanation: 'Upload your fitness activity',
+      certificationExplanation: "Please upload your daily certification.",
       isGalleryPossible: true,
       maximumPeople: 100,
-      participants: [Participant(id: 1, name: 'John Doe')],
-      challengeImagePaths: ['path/to/image1.jpg', 'path/to/image2.jpg'],
-      failedVerificationImage: 'path/to/failed_image.jpg',
-      successfulVerificationImage: 'path/to/successful_image.jpg',
-      status: 'active',
-      totalParticipants: 10,
+      participants: [
+        Participant(id: 1, name: "John Doe"),
+        Participant(id: 2, name: "Jane Doe")
+      ],
+      challengeImagePaths: ["path/to/image1.jpg", "path/to/image2.jpg"],
+      failedVerificationImage: "path/to/failed_image.jpg",
+      successfulVerificationImage: "path/to/successful_image.jpg",
+      status: "active",
+      totalParticipants: 2,
       certificationType: CertificationType.HAND_GESTURE,
       challengeCategory: ChallengeCategory.CATEGORY_ONE,
-      totalCertificationCount: 10,
+      totalCertificationCount: 30,
     );
   }
-
-  static List<Challenge> getDummyDataList() {
-    return [
-      Challenge(
-        id: 1,
-        isPrivate: false,
-        privateCode: null,
-        challengeName: 'Fitness Challenge',
-        challengeExplanation: 'A challenge to stay fit',
-        challengePeriod: 30,
-        startDate: DateTime.now(),
-        endDate: DateTime.now().add(Duration(days: 30)),
-        certificationFrequency: 'daily',
-        certificationStartTime: 6,
-        certificationEndTime: 22,
-        certificationExplanation: 'Upload your fitness activity',
-        isGalleryPossible: true,
-        maximumPeople: 100,
-        participants: [Participant(id: 1, name: 'John Doe')],
-        challengeImagePaths: ['path/to/image1.jpg', 'path/to/image2.jpg'],
-        failedVerificationImage: 'path/to/failed_image.jpg',
-        successfulVerificationImage: 'path/to/successful_image.jpg',
-        status: 'active',
-        totalParticipants: 10,
-        certificationType: CertificationType.HAND_GESTURE,
-        challengeCategory: ChallengeCategory.CATEGORY_ONE,
-        totalCertificationCount: 10,
-      ),
-      Challenge(
-        id: 2,
-        isPrivate: true,
-        privateCode: '123ABC',
-        challengeName: 'Reading Challenge',
-        challengeExplanation: 'Read a book every week',
-        challengePeriod: 60,
-        startDate: DateTime.now(),
-        endDate: DateTime.now().add(Duration(days: 60)),
-        certificationFrequency: 'weekly',
-        certificationStartTime: 8,
-        certificationEndTime: 20,
-        certificationExplanation: 'Upload a picture of the book',
-        isGalleryPossible: false,
-        maximumPeople: 50,
-        participants: [Participant(id: 2, name: 'Jane Doe')],
-        challengeImagePaths: ['path/to/image3.jpg'],
-        failedVerificationImage: 'path/to/failed_reading.jpg',
-        successfulVerificationImage: 'path/to/successful_reading.jpg',
-        status: 'active',
-        totalParticipants: 5,
-        certificationType: CertificationType.PHOTO,
-        challengeCategory: ChallengeCategory.CATEGORY_TWO,
-        totalCertificationCount: 8,
-      ),
-    ];
-  }
-
 }
 
 class Participant {
