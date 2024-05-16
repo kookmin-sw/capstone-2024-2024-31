@@ -53,7 +53,7 @@ class CertificationMethod extends StatelessWidget {
                                     fontSize: 10,
                                     fontFamily: "Pretendard",
                                     fontWeight: FontWeight.w500)),
-                            Text(challenge.certificationFrequency,
+                            Text(challenge.certificationFrequency!,
                                 style: const TextStyle(
                                     color: Palette.grey300,
                                     fontSize: 10,

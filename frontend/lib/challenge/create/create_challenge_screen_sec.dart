@@ -90,6 +90,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                         "설정된 챌린지 인증 시작 시간: ${controller.form.certificationStartTime}");
                     logger.d(
                         "설정된 챌린지 인증 종료 시간: ${controller.form.certificationEndTime}");
+
+
                     Get.to(() => const CreateChallengeThr());
                   }
                 })),
@@ -587,17 +589,22 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
             changeDay: (value) => setState(() {
               var today = DateTime.now();
               today = DateTime(today.year, today.month, today.day);
+
               if (value.isBefore(today)) {
-                Get.snackbar("알림", "오늘 이후의 날짜를 선택해주세요.",
-                    backgroundColor: Palette.purPle300,
-                    colorText: Colors.white,
-                    snackPosition: SnackPosition.BOTTOM,
-                    margin: const EdgeInsets.all(8));
+                Get.snackbar(
+                  "알림",
+                  "오늘 이후의 날짜를 선택해주세요.",
+                  backgroundColor: Colors.purple[300], // Palette.purPle300을 대체
+                  colorText: Colors.white,
+                  snackPosition: SnackPosition.BOTTOM,
+                  margin: const EdgeInsets.all(8),
+                );
                 return;
               }
+
               selectedDay = value;
-              final DateFormat formatter = DateFormat('yyyy-MM-dd');
-              controller.updateStartDate(formatter.format(value));
+              final String formattedDate = DateFormat('yyyy-MM-dd').format(value);
+              controller.updateStartDate(formattedDate);
             }),
             enableWeeknumberText: false,
             weeknumberColor: Palette.grey200,
