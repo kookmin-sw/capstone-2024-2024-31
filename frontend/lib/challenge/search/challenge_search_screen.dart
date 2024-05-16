@@ -34,6 +34,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   bool hasMoreData = true;
   final ScrollController _scrollController = ScrollController();
 
+
   void _getFilteredChallengeList(bool isFiltered) async {
     if (!hasMoreData) return;
 
@@ -42,39 +43,37 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
 
     dio.options.headers['content-Type'] = 'application/json';
     dio.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
+    'Bearer ${prefs.getString('access_token')}';
 
-    Map<String, dynamic> filter = {}; // Initialize filter with an empty map
-    Map<String, dynamic> trueFilter;
-    Map<String, dynamic> falseFilter;
+    Map<String, dynamic> filter = {};
 
     try {
       if (isFiltered) {
         filter = ChallengeFilter(
-                name: searchValue,
-                isPrivate: _isPrivate,
-                category: selectedIndex == 0
-                    ? null
-                    : ChallengeCategory.values[selectedIndex - 1])
+            name: searchValue,
+            isPrivate: _isPrivate,
+            category: selectedIndex == 0
+                ? null
+                : ChallengeCategory.values[selectedIndex - 1])
             .toJson();
       } else {
         filter = ChallengeFilter(
-                name: searchValue,
-                isPrivate: null,
-                category: selectedIndex == 0
-                    ? null
-                    : ChallengeCategory.values[selectedIndex - 1])
+            name: searchValue,
+            category: selectedIndex == 0
+                ? null
+                : ChallengeCategory.values[selectedIndex - 1])
             .toJson();
-
       }
       logger.d("challenge filter: $filter");
 
-      final response = await dio.get('${Env.serverUrl}/challenges/list',
-          data: filter,
-          queryParameters: {
-            'cursor': currentCursor,
-            'size': pageSize,
-          });
+      final response = await dio.get(
+        '${Env.serverUrl}/challenges/list',
+        queryParameters: {
+          'cursor': currentCursor,
+          'size': pageSize,
+          ...filter, // Add filter parameters to query parameters
+        },
+      );
 
       if (response.statusCode == 200) {
         logger.d(response.data);
@@ -84,10 +83,6 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
 
         setState(() {
           if (newData.isNotEmpty) {
-            if (!_isPrivate) {
-              newData =
-                  newData.toList();
-            }
             challengeList.addAll(newData);
             currentCursor = challengeList.last.id;
           } else {
@@ -101,6 +96,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
       logger.d(e.toString());
     }
   }
+
 
   @override
   void initState() {
