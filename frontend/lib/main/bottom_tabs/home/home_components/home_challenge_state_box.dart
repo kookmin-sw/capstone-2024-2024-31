@@ -26,7 +26,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
 
   double getProgressPercent(int index) {
     DateTime now = DateTime.now();
-    DateTime start = DateTime.parse(challenges[index].startDate);
+    DateTime start = challenges[index].startDate;
     DateTime end =
         start.add(Duration(days: challenges[index].challengePeriod * 7));
     return now.difference(start).inDays / end.difference(start).inDays * 100;
@@ -37,13 +37,8 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
     super.initState();
     setState(() {
       challenges.clear();
-      challenges.addAll(controller.myChallenges
-          .where(
-            (c) =>
-                DateTime.parse(c.startDate).isBefore(DateTime.now()) &&
-                !c.isEnded,
-          )
-          .toList());
+      challenges.addAll(
+          controller.myChallenges.where((c) => c.status == "진행중").toList());
     });
   }
 
@@ -163,7 +158,8 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                                       Text(
                                         '${getProgressPercent(index).toInt()}%',
                                         style: const TextStyle(
-                                            fontSize: 11, fontFamily: "Pretender"), // 진행 상태
+                                            fontSize: 11,
+                                            fontFamily: "Pretender"), // 진행 상태
                                       ),
                                     ],
                                   )),

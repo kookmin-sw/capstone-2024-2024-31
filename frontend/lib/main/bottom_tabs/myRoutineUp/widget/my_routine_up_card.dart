@@ -24,12 +24,12 @@ class MyRoutineUpCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final int challengePeriod = challenge.challengePeriod;
-    final DateTime startDate = DateTime.parse(challenge.startDate);
+    final DateTime startDate = challenge.startDate;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     double getProgressPercent() {
       DateTime now = DateTime.now();
-      DateTime start = DateTime.parse(challenge.startDate);
+      DateTime start = challenge.startDate;
       DateTime end = start.add(Duration(days: challengePeriod * 7));
       return now.difference(start).inDays / end.difference(start).inDays * 100;
     }
