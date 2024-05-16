@@ -1,9 +1,9 @@
 class ChallengeSimple {
   final int id;
+  final String startDate;
   final String challengeName;
-  final DateTime startDate;
-  final int challengePeriod;
   final String certificationFrequency;
+  final int challengePeriod;
   final int totalParticipants;
   final String imageUrl;
   final String status;
@@ -13,23 +13,21 @@ class ChallengeSimple {
     required this.id,
     required this.startDate,
     required this.challengeName,
-    required this.challengePeriod,
     required this.certificationFrequency,
+    required this.challengePeriod,
     required this.totalParticipants,
     required this.imageUrl,
     required this.status,
     required this.isPrivate,
   });
 
-  // JSON에서 객체로 변환
   factory ChallengeSimple.fromJson(Map<String, dynamic> json) {
     return ChallengeSimple(
       id: json['id'],
       startDate: json['startDate'],
       challengeName: json['challengeName'],
-      startDate: json['startDate'],
-      challengePeriod: json['challengePeriod'],
       certificationFrequency: json['certificationFrequency'],
+      challengePeriod: json['challengePeriod'],
       totalParticipants: json['totalParticipants'],
       imageUrl: json['imageUrl'],
       status: json['status'],
