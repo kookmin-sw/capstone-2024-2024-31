@@ -60,7 +60,9 @@ public class User {
     
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Set<ChallengeCategory> categories = new HashSet<>();
+    private List<ChallengeCategory> categories = new ArrayList<>();
+    
+    private String githubUsername;
     
     public User(Long id, String email, String name) {
         this.id = id;
