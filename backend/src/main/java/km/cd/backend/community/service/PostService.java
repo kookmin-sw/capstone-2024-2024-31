@@ -87,8 +87,8 @@ public class PostService {
     Long authorId = post.getAuthor().getId();
     List<Long> reportingUser = post.getReport();
     
-    if (userId.equals(authorId)) throw new CustomException(ExceptionCode.POST_NOT_FOUND);
-    if (reportingUser.contains(userId)) throw new CustomException(ExceptionCode.POST_NOT_FOUND);
+    if (userId.equals(authorId)) throw new CustomException(ExceptionCode.SAME_REPORTED_USER_ID);
+    if (reportingUser.contains(userId)) throw new CustomException(ExceptionCode.ALREADY_REPORTED);
     
     reportingUser.add(userId);
     
