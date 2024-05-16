@@ -1,8 +1,8 @@
 package km.cd.backend.challenge.dto.response;
 
+import java.time.LocalDate;
 import lombok.Data;
 
-import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -21,9 +21,9 @@ public class ChallengeInformationResponse {
     
     private Integer challengePeriod;
     
-    private Date startDate;
+    private LocalDate startDate;
     
-    private Date endDate;
+    private LocalDate endDate;
     
     private String certificationFrequency;
     
@@ -43,7 +43,7 @@ public class ChallengeInformationResponse {
     
     private String successfulVerificationImage;
     
-    private Boolean isEnded;
+    private String status;
     
     private Integer totalParticipants;
 }

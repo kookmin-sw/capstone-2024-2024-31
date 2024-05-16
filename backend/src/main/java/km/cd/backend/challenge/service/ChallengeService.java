@@ -1,6 +1,6 @@
 package km.cd.backend.challenge.service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import java.util.Optional;
@@ -8,6 +8,7 @@ import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.domain.mapper.ParticipantMapper;
+import km.cd.backend.challenge.dto.enums.ChallengeStatus;
 import km.cd.backend.challenge.dto.request.ChallengeJoinRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
@@ -58,6 +59,13 @@ public class ChallengeService {
 
         // 프론트로부터 넘겨받은 챌린지 데이터
         Challenge challenge = ChallengeMapper.INSTANCE.requestToEntity(challengeCreateRequest);
+        
+        // 챌린지 상태 설정
+        challenge.setStatus(
+            challenge.getStartDate().isBefore(LocalDate.now()) ?
+                ChallengeStatus.IN_PROGRESS.getDescription() :
+                ChallengeStatus.NOT_STARTED.getDescription()
+        );
 
         // participant 생성
         Participant creator = new Participant();
@@ -129,11 +137,6 @@ public class ChallengeService {
 
         return ChallengeMapper.INSTANCE.toChallengeStatusResponse(challenge, countCertifications);
     }
-
-    public List<Challenge> findChallengesByEndDate(Date endDate) {
-        return challengeRepository.findByEndDate(endDate);
-    }
-    
     public void finishChallenge(Challenge challenge) {
         // 참여자 성공/실패 결과 전송
         Integer totalCount = challenge.getTotalCertificationCount();
@@ -147,7 +150,12 @@ public class ChallengeService {
         }
         
         // 챌린지 상태 변경
-        challenge.finishChallenge();
+        challenge.setStatus(ChallengeStatus.COMPLETED.getDescription());
+        challengeRepository.save(challenge);
+    }
+    
+    public void startChallenge(Challenge challenge) {
+        challenge.setStatus(ChallengeStatus.IN_PROGRESS.getDescription());
         challengeRepository.save(challenge);
     }
     private void distributeRewards(boolean isSuccess, Long countCertifications, User user) {
