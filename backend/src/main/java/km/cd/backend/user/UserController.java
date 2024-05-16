@@ -4,6 +4,7 @@ import km.cd.backend.challenge.dto.response.ChallengeSimpleResponse;
 import km.cd.backend.common.jwt.PrincipalDetails;
 import km.cd.backend.user.domain.User;
 import km.cd.backend.user.domain.mapper.UserMapper;
+import km.cd.backend.user.dto.GithubUsernameRequest;
 import km.cd.backend.user.dto.UserCategoryRequest;
 import km.cd.backend.user.dto.UserDetailResponse;
 import km.cd.backend.user.dto.UserResponse;
@@ -118,6 +119,15 @@ public class UserController {
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
         return ResponseEntity.ok(userService.setCategories(userCategoryRequest, principalDetails.getUserId()));
+    }
+    
+    @PostMapping("/github-username")
+    public ResponseEntity<?> setGithubUsername(
+        @RequestBody GithubUsernameRequest githubUsername,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        userService.setGithubUsername(githubUsername, principalDetails.getUserId());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
     
 }
