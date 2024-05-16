@@ -48,7 +48,7 @@ public class ChallengeController {
         return ResponseEntity.ok(saved.getId());
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<List<ChallengeSimpleResponse>> getAllChallenge(
         @RequestParam(name = "cursorId", required = false, defaultValue = "0") Long cursorId,
         @RequestParam(name = "size", required = false, defaultValue = "5") int size,
