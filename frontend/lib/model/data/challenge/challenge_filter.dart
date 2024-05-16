@@ -20,7 +20,7 @@ class ChallengeFilter {
     );
   }
 
-  // 객체에서 JSON으로 변환
+
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -28,4 +28,5 @@ class ChallengeFilter {
       'category': category?.toJson(),
     };
   }
+
 }

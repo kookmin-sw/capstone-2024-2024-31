@@ -91,7 +91,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
           ...responseIsprivateFalse.data as List,
           ...responseIsprivateTrue.data as List
         ];
-        logger.d(combinedData);
+        logger.d("홈챌린지 리스트 : $combinedData");
 
         return combinedData.map((c) => ChallengeSimple.fromJson(c)).toList();
       }

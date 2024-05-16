@@ -5,6 +5,7 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 class MyRoutineUpScreen extends StatefulWidget {
   const MyRoutineUpScreen({super.key});
@@ -20,6 +21,8 @@ class _MyRoutineUpScreenState extends State<MyRoutineUpScreen> {
   List<ChallengeSimple> ingChallenge = [];
   List<ChallengeSimple> endChallenge = [];
 
+  Logger logger = Logger();
+
   List<int> _getProgressNumber() {
     return [beforeChallenge.length, ingChallenge.length, endChallenge.length];
   }
@@ -27,8 +30,12 @@ class _MyRoutineUpScreenState extends State<MyRoutineUpScreen> {
   @override
   void initState() {
     super.initState();
-    for (var challenge in controller.myChallenges) {
+    logger.d("controller : ${controller}");
 
+    logger.d("controller.myChallenges : ${controller.myChallenges}");
+
+
+    for (var challenge in controller.myChallenges) {
       if (challenge.status == "진행전") {
         beforeChallenge.add(challenge);
       } else if (challenge.status == "진행중") {
