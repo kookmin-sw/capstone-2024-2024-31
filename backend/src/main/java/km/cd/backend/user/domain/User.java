@@ -62,6 +62,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private List<ChallengeCategory> categories = new ArrayList<>();
     
+    private String githubUsername;
+    
     public User(Long id, String email, String name) {
         this.id = id;
         this.email = email;
