@@ -18,7 +18,7 @@ class ChallengeItemCard extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
 
     // 문자열을 DateTime 객체로 파싱
-    DateTime date = DateTime.parse(data.startDate);
+    DateTime date = data.startDate as DateTime;
 
     // 날짜 형식 변경
     String modifiedString = '${date.month}월 ${date.day}일부터 시작';

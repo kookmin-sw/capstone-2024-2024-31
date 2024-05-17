@@ -42,34 +42,32 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
 
     dio.options.headers['content-Type'] = 'application/json';
     dio.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
+    'Bearer ${prefs.getString('access_token')}';
 
     Map<String, dynamic> filter = {}; // Initialize filter with an empty map
-    Map<String, dynamic> trueFilter;
-    Map<String, dynamic> falseFilter;
 
     try {
       if (isFiltered) {
         filter = ChallengeFilter(
-                name: searchValue,
-                isPrivate: _isPrivate,
-                category: selectedIndex == 0
-                    ? null
-                    : ChallengeCategory.values[selectedIndex - 1])
+            name: searchValue,
+            isPrivate: _isPrivate,
+            category: selectedIndex == 0
+                ? null
+                : ChallengeCategory.values[selectedIndex - 1])
             .toJson();
       } else {
         filter = ChallengeFilter(
-                name: searchValue,
-                isPrivate: null,
-                category: selectedIndex == 0
-                    ? null
-                    : ChallengeCategory.values[selectedIndex - 1])
+            name: searchValue,
+            isPrivate: null,
+            category: selectedIndex == 0
+                ? null
+                : ChallengeCategory.values[selectedIndex - 1])
             .toJson();
 
       }
       logger.d("challenge filter: $filter");
 
-      final response = await dio.get('${Env.serverUrl}/challenges/list',
+      final response = await dio.post('${Env.serverUrl}/challenges/list',
           data: filter,
           queryParameters: {
             'cursor': currentCursor,
@@ -186,17 +184,17 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                   const SizedBox(height: 5),
                   Expanded(
                       child: GridView.builder(
-                    controller: _scrollController,
-                    gridDelegate:
+                        controller: _scrollController,
+                        gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1 / 1.4,
-                    ),
-                    itemCount: challengeList.length,
-                    itemBuilder: (context, index) {
-                      return ChallengeItemCard(data: challengeList[index]);
-                    },
-                  ))
+                          crossAxisCount: 2,
+                          childAspectRatio: 1 / 1.4,
+                        ),
+                        itemCount: challengeList.length,
+                        itemBuilder: (context, index) {
+                          return ChallengeItemCard(data: challengeList[index]);
+                        },
+                      ))
                 ])));
   }
 
@@ -209,7 +207,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(
                   categoryList.length,
-                  (index) => Padding(
+                      (index) => Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: ElevatedButton(
                         onPressed: () {
@@ -227,7 +225,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                         },
                         style: ButtonStyle(
                           padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry?>(
+                          MaterialStateProperty.all<EdgeInsetsGeometry?>(
                             const EdgeInsets.symmetric(horizontal: 15),
                           ),
                           maximumSize: MaterialStateProperty.all<Size>(
@@ -242,7 +240,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                           ),
                           backgroundColor: selectedIndex == index
                               ? MaterialStateProperty.all<Color>(
-                                  Palette.purPle400)
+                              Palette.purPle400)
                               : null,
                         ),
                         child: Text(categoryList[index],

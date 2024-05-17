@@ -32,6 +32,7 @@ class _PasswordInputDialogState extends State<PasswordInputDialog> {
       color: color);
 
   Future<bool> _fetchChallenge(String inputCode) async {
+    bool canAccess = false;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Dio dio = Dio();
     dio.options.headers['content-Type'] = 'application/json';
@@ -46,17 +47,17 @@ class _PasswordInputDialogState extends State<PasswordInputDialog> {
       if (response.statusCode == 200) {
         logger.d('$inputCode : ${response.data}코드 일치');
         logger.d(response.data);
-        isPossibleJoin = true;
-      } else if (response.statusCode == 403) {
+        canAccess = true;
+      } else if (response.statusCode == 404) {
         logger.d('코드 불일치');
         logger.d(response.data);
-        isPossibleJoin = false;
+        canAccess = false;
       }
     } catch (e) {
       logger.e(e);
     }
 
-    return isPossibleJoin;
+    return canAccess;
   }
 
   @override
@@ -64,6 +65,12 @@ class _PasswordInputDialogState extends State<PasswordInputDialog> {
     super.initState();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
+
+    _fetchChallenge("아무거나101010101").then((value) => setState(() {
+      Get.snackbar("챌린지 생성자", "암호코드 없이 입장");
+      Get.to(() => ChallengeDetailScreen(
+          challengeId: widget.challengeId, isFromMainScreen: true));
+    })); //c챌린지 생성자인지 확인 용.
   }
 
   @override

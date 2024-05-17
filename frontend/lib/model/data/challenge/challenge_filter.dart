@@ -1,9 +1,9 @@
-import 'package:frontend/model/data/challenge/challenge_category.dart';
+import 'challenge_category.dart';
 
 class ChallengeFilter {
-  late String? name;
-  late bool? isPrivate;
-  late ChallengeCategory? category;
+  String? name;
+  bool? isPrivate;
+  ChallengeCategory? category;
 
   ChallengeFilter({
     this.name,
@@ -11,11 +11,22 @@ class ChallengeFilter {
     this.category,
   });
 
+  // JSON에서 객체로 변환
+  factory ChallengeFilter.fromJson(Map<String, dynamic> json) {
+    return ChallengeFilter(
+      name: json['name'],
+      isPrivate: json['isPrivate'],
+      category: json['category'] != null ? ChallengeCategory.fromJson(json['category']) : null,
+    );
+  }
+
+
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'isPrivate': isPrivate,
-      'category': category?.name,
+      'category': category?.toJson(),
     };
   }
+
 }

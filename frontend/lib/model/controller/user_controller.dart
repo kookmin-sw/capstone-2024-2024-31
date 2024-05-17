@@ -1,7 +1,6 @@
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
 import 'package:frontend/model/data/user.dart';
-
 import '../data/challenge/challenge_category.dart';
 
 class UserController extends GetxController {
@@ -11,7 +10,7 @@ class UserController extends GetxController {
     name: 'John Doe',
     following: [],
     followers: [],
-    categories: {},
+    categories: [],
   ).obs;
 
   final _myChallenges = <ChallengeSimple>[].obs;
@@ -29,5 +28,11 @@ class UserController extends GetxController {
     challenges.forEach((challenge) {
       _myChallenges.add(ChallengeSimple.fromJson(challenge));
     });
+  }
+
+  // 카테고리를 업데이트하는 메서드
+  void updateCategories(List<ChallengeCategory> newCategories) {
+    user.categories = newCategories;
+    update(); // 상태를 업데이트하여 UI를 리프레시
   }
 }
