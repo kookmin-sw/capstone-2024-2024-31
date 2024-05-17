@@ -58,6 +58,11 @@ public class ChallengeController {
         return ResponseEntity.ok(challenges);
     }
     
+    @GetMapping("/list")
+    public ResponseEntity<List<ChallengeInformationResponse>> getAllChallenge() {
+        return ResponseEntity.ok(challengeService.getAllChallenge());
+    }
+    
 
     @GetMapping("/{challengeId}")
     public ResponseEntity<ChallengeInformationResponse> getChallenge(
