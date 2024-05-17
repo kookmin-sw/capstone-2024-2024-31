@@ -50,7 +50,7 @@ public class SmsUtil {
         
         message.setFrom(caller);
         message.setTo(to.replaceAll("-",""));
-        message.setText("[루틴업] 아래의 인증번호를 입력해주세요\n" + verificationCode);
+        message.setText("[루틴업]\n아래의 인증번호를 입력해주세요\n" + verificationCode);
         
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
         return response;
