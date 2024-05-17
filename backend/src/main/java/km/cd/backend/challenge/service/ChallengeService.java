@@ -61,8 +61,9 @@ public class ChallengeService {
         Challenge challenge = ChallengeMapper.INSTANCE.requestToEntity(challengeCreateRequest);
         
         // 챌린지 상태 설정
+        boolean isProgress = challenge.getStartDate().isEqual(LocalDate.now()) || challenge.getStartDate().isBefore(LocalDate.now());
         challenge.setStatus(
-            challenge.getStartDate().isBefore(LocalDate.now()) ?
+            isProgress ?
                 ChallengeStatus.IN_PROGRESS.getDescription() :
                 ChallengeStatus.NOT_STARTED.getDescription()
         );
