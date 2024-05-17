@@ -171,21 +171,27 @@ public class ChallengeService {
         double ratio = (double) countCertifications / totalCount;
         return ratio >= 0.9;
     }
-
+    
     public ChallengeInformationResponse getChallenge(Long challengeId, Long userId, String code) {
+        // 1. 도전 과제의 존재 여부를 확인합니다.
         Challenge challenge = validateExistChallenge(challengeId);
-
+        
+        // 2. 참가자 정보를 가져옵니다.
         Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
-                .orElseThrow(() -> new CustomException(ExceptionCode.PARTICIPANT_NOT_FOUND_ERROR));
-
-        if (!participant.isOwner() &&
-                challenge.getIsPrivate() &&
-                !challenge.getPrivateCode().equals(code)) {
-            throw new CustomException(ExceptionCode.FORBIDDEN_ERROR);
+            .orElse(null);
+        
+        // 3. 참가자가 없거나, 참가자가 소유자가 아니고 도전 과제가 비공개이며 올바른 코드가 아닌 경우
+        if (participant == null || (!participant.isOwner() && challenge.getIsPrivate() && !challenge.getPrivateCode().equals(code))) {
+            // 4. 도전 과제가 비공개이고 올바른 코드가 아닌 경우 예외를 발생시킵니다. <- participant가 null 일 때 추가 검증
+            if (challenge.getIsPrivate() && !challenge.getPrivateCode().equals(code)) {
+                throw new CustomException(ExceptionCode.FORBIDDEN_ERROR);
+            }
         }
-
+        
+        // 5. 도전 과제 정보를 응답으로 반환합니다.
         return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
     }
+    
     
     public ChallengeInformationResponse getChallenge(Long challengeId) {
         Challenge challenge = validateExistChallenge(challengeId);
