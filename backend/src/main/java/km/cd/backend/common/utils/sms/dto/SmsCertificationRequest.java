@@ -1,4 +1,4 @@
-package km.cd.backend.common.utils.sms;
+package km.cd.backend.common.utils.sms.dto;
 
 import lombok.Getter;
 
