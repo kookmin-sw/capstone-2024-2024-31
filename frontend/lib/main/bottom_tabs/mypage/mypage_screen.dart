@@ -17,7 +17,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.white,
             // AppBar를 투명하게 설정
             elevation: 0,
             // 그림자 없애기

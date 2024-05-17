@@ -1,19 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/main/bottom_tabs/mypage/widget/categoryButtonPress.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
+import 'package:logger/logger.dart';
 
 
 class UserInformation extends StatelessWidget {
   UserInformation({super.key});
 
   final UserController userController = Get.find<UserController>();
-
+  Logger logger = Logger();
   final tagTextStyle = const TextStyle(
       fontFamily: 'Pretender',
       fontWeight: FontWeight.w600,
@@ -24,7 +23,7 @@ class UserInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final List<ChallengeCategory> categoryList = userController.user.categories; // Set을 List로 변환
-
+    logger.d("유저 카테고리 : $categoryList");
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
         child: Row(
@@ -38,6 +37,7 @@ class UserInformation extends StatelessWidget {
                 const SizedBox(height: 4),
                 if (categoryList.isNotEmpty)
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         "루티너님의 관심사는",
@@ -59,6 +59,7 @@ class UserInformation extends StatelessWidget {
                                     child: Text(
                                       "#${categoryList[index].name}",
                                       style: tagTextStyle,
+                                      textAlign: TextAlign.start,
                                     ));
                               }).toList()))
                     ],
