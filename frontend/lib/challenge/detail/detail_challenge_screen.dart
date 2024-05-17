@@ -48,7 +48,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     try {
       logger.d(widget.challengeId);
       final response = await dio.get(
-          '${Env.serverUrl}/challenges/${widget.challengeId}/detail',
+          '${Env.serverUrl}/challenges/${widget.challengeId}',
       );
       if (response.statusCode == 200) {
         logger.d('챌린지 디테일 조회 성공');
@@ -145,7 +145,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           ? null
           : isLoading
               ? const Center(child: CircularProgressIndicator())
-              : buildChallengeDetailBottomNavigationBar(context, challenge!),
+              : buildChallengeDetailBottomNavigationBar(context, challenge ?? Challenge.getDummyData()),
     );
   }
 

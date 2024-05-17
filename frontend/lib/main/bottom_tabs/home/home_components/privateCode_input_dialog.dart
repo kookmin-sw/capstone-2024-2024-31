@@ -48,7 +48,7 @@ class _PasswordInputDialogState extends State<PasswordInputDialog> {
         logger.d('$inputCode : ${response.data}코드 일치');
         logger.d(response.data);
         canAccess = true;
-      } else if (response.statusCode == 404) {
+      } else if (response.statusCode == 403) {
         logger.d('코드 불일치');
         logger.d(response.data);
         canAccess = false;
@@ -66,11 +66,15 @@ class _PasswordInputDialogState extends State<PasswordInputDialog> {
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
 
-    _fetchChallenge("아무거나101010101").then((value) => setState(() {
-      Get.snackbar("챌린지 생성자", "암호코드 없이 입장");
-      Get.to(() => ChallengeDetailScreen(
-          challengeId: widget.challengeId, isFromMainScreen: true));
-    })); //c챌린지 생성자인지 확인 용.
+    _fetchChallenge("아무거나101010101").then((value) {
+      if (value == true) {
+        setState(() {
+          Get.snackbar("챌린지 생성자", "암호코드 없이 입장");
+          Get.to(() => ChallengeDetailScreen(
+              challengeId: widget.challengeId, isFromMainScreen: true));
+        });
+      }
+    }); //c챌린지 생성자인지 확인 용.
   }
 
   @override
