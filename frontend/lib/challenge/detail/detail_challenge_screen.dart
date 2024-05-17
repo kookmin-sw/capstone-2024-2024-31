@@ -48,8 +48,8 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     try {
       logger.d(widget.challengeId);
       final response = await dio.get(
-          '${Env.serverUrl}/challenges/${widget.challengeId}',
-          queryParameters: {"code": ""});
+          '${Env.serverUrl}/challenges/${widget.challengeId}/detail',
+      );
       if (response.statusCode == 200) {
         logger.d('챌린지 디테일 조회 성공');
         logger.d(response.data);

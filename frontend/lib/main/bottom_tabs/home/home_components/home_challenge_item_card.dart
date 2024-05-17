@@ -16,7 +16,7 @@ class ChallengeItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
+    Logger logger =  Logger();
     // 문자열을 DateTime 객체로 파싱
     DateTime date = data.startDate as DateTime;
 
@@ -26,6 +26,8 @@ class ChallengeItemCard extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           if (data.isPrivate) {
+            logger.d(data.id);
+
             showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -33,6 +35,8 @@ class ChallengeItemCard extends StatelessWidget {
               },
             );
           } else {
+
+          logger.d(data.isPrivate);
             Get.to(() => ChallengeDetailScreen(
               challengeId: data.id,
               isFromMainScreen: true,
