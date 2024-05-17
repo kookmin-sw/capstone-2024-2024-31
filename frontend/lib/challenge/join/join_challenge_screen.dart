@@ -22,10 +22,6 @@ class JoinChallengeScreen extends StatefulWidget {
 class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   bool showVerificationInput = false;
   bool isCheckedAll = false;
-  bool _isCheckChallengeInform = false;
-  bool _isCheckPersonalInform = false;
-  bool _isCheckJoin = false;
-
   List<bool> isCheckList = [false, false, false];
 
   @override
@@ -51,7 +47,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: Column(
                 children: [
                   PhotoesWidget(
