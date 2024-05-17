@@ -186,6 +186,11 @@ public class ChallengeService {
 
         return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
     }
+    
+    public ChallengeInformationResponse getChallenge(Long challengeId) {
+        Challenge challenge = validateExistChallenge(challengeId);
+        return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
+    }
 
     public List<ChallengeSimpleResponse> getAllChallenge(Long cursorId, int size, ChallengeFilter filter) {
         List<Challenge> challenges = challengeRepository.findByChallengeWithFilterAndPaging(cursorId, size, filter);

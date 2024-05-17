@@ -74,6 +74,14 @@ public class ChallengeController {
         return ResponseEntity.ok(challengeInformationResponse);
     }
     
+    @GetMapping("/{challengeId}/detail")
+    public ResponseEntity<ChallengeInformationResponse> getChallenge(
+        @PathVariable Long challengeId
+    ) {
+        ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId);
+        return ResponseEntity.ok(challengeInformationResponse);
+    }
+    
     @GetMapping(value = "/{challengeId}/participant")
     public ResponseEntity<List<ParticipantResponse>> getParticipant(@PathVariable Long challengeId) {
         List<ParticipantResponse> participants =  challengeService.getParticipant(challengeId);
