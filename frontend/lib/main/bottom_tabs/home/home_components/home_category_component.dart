@@ -7,9 +7,7 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/config/category_card_list.dart';
 import 'package:get/get.dart';
 
-
 class HomeCategory extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -62,11 +60,10 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          print("$name 카테고리 클릭됨");
-          int index = categoryList.indexWhere((category) => category['name'] == name);
+          int index =
+              categoryList.indexWhere((category) => category['name'] == name);
 
-          Get.to(ChallengeSearchScreen(enterSelectIndex: index+1));
-
+          Get.to(ChallengeSearchScreen(enterSelectIndex: index + 1));
         },
         child: Container(
             padding: const EdgeInsets.all(0),
