@@ -7,6 +7,7 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/config/category_card_list.dart';
 import 'package:get/get.dart';
 
+
 class HomeCategory extends StatelessWidget {
 
   @override
