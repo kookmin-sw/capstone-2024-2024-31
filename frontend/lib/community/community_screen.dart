@@ -5,6 +5,12 @@ import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
 import 'package:get/get.dart';
+import 'dart:io';
+import 'package:frontend/model/data/post.dart';
+import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key, this.isFromCreatePostingScreen = false});
@@ -17,10 +23,40 @@ class CommunityScreen extends StatefulWidget {
 
 class _CommunityScreenState extends State<CommunityScreen>
     with TickerProviderStateMixin {
+  final logger = Logger();
+
   int _selectedIndex = 0; // 탭 인덱스
   int _sortIndex = 0; // 정렬 방식 인덱스
 
   late TabController _tabController;
+
+  Future<List<SimplePost>> getPostsForChallenge(int challengeId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dio.Dio dioInstance = dio.Dio();
+
+    dioInstance.options.headers['Authorization'] =
+    'Bearer ${prefs.getString('access_token')}';
+
+    try {
+      final response = await dioInstance.get('/challenges/$challengeId/posts');
+
+      if (response.statusCode == 200) {
+        List<SimplePost> posts = (response.data as List)
+            .map((post) => SimplePost.fromJson(post))
+            .toList();
+        return posts;
+      } else if (response.statusCode == 404) {
+        // 404 Not Found 에러 처리
+        throw Exception("해당 챌린지의 게시물을 찾을 수 없습니다.");
+      } else {
+        // 기타 에러 처리
+        throw Exception("게시물 가져오기 실패: ${response.statusCode}");
+      }
+    } catch (e) {
+      logger.e("게시물 가져오는 중 에러 발생: $e");
+      rethrow;
+    }
+  }
 
   @override
   void initState() {

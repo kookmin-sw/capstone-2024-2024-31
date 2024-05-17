@@ -1,6 +1,7 @@
 package km.cd.backend.challenge.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -190,6 +191,17 @@ public class ChallengeService {
         List<Challenge> challenges = challengeRepository.findByChallengeWithFilterAndPaging(cursorId, size, filter);
 
         return challenges.stream().map(ChallengeMapper.INSTANCE::entityToSimpleResponse).toList();
+    }
+    
+    public List<ChallengeInformationResponse> getAllChallenge() {
+        Iterable<Challenge> challenges = challengeRepository.findAll();
+        List<ChallengeInformationResponse> responses = new ArrayList<>();
+        
+        for (Challenge challenge : challenges) {
+            responses.add(ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge));
+        }
+        
+        return responses;
     }
     
     public List<ParticipantResponse> getParticipant(Long challengeId) {
