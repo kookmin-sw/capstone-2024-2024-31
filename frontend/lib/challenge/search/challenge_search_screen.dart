@@ -13,7 +13,9 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChallengeSearchScreen extends StatefulWidget {
-  const ChallengeSearchScreen({super.key});
+  const ChallengeSearchScreen({super.key, this.enterSelectIndex});
+
+  final int? enterSelectIndex;
 
   @override
   State<ChallengeSearchScreen> createState() => _ChallengeSearchScreenState();
@@ -25,9 +27,9 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   List<String> categoryList =
       ['전체'] + ChallengeCategory.values.map((e) => e.name).toList();
   String searchValue = '';
-  int selectedIndex = 0;
   bool _isPrivate = false;
   List<ChallengeSimple> challengeList = [];
+  late int selectedIndex;
 
   int currentCursor = 0;
   final int pageSize = 10;
@@ -42,28 +44,27 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
 
     dio.options.headers['content-Type'] = 'application/json';
     dio.options.headers['Authorization'] =
-    'Bearer ${prefs.getString('access_token')}';
+        'Bearer ${prefs.getString('access_token')}';
 
     Map<String, dynamic> filter = {}; // Initialize filter with an empty map
 
     try {
       if (isFiltered) {
         filter = ChallengeFilter(
-            name: searchValue,
-            isPrivate: _isPrivate,
-            category: selectedIndex == 0
-                ? null
-                : ChallengeCategory.values[selectedIndex - 1])
+                name: searchValue,
+                isPrivate: _isPrivate,
+                category: selectedIndex == 0
+                    ? null
+                    : ChallengeCategory.values[selectedIndex - 1])
             .toJson();
       } else {
         filter = ChallengeFilter(
-            name: searchValue,
-            isPrivate: null,
-            category: selectedIndex == 0
-                ? null
-                : ChallengeCategory.values[selectedIndex - 1])
+                name: searchValue,
+                isPrivate: null,
+                category: selectedIndex == 0
+                    ? null
+                    : ChallengeCategory.values[selectedIndex - 1])
             .toJson();
-
       }
       logger.d("challenge filter: $filter");
 
@@ -83,8 +84,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
         setState(() {
           if (newData.isNotEmpty) {
             if (!_isPrivate) {
-              newData =
-                  newData.toList();
+              newData = newData.toList();
             }
             challengeList.addAll(newData);
             currentCursor = challengeList.last.id;
@@ -103,6 +103,9 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   @override
   void initState() {
     super.initState();
+
+    selectedIndex = widget.enterSelectIndex ?? 0;
+
     _getFilteredChallengeList(false); // 초기 데이터 로드  viewFilter = false
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -184,17 +187,17 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                   const SizedBox(height: 5),
                   Expanded(
                       child: GridView.builder(
-                        controller: _scrollController,
-                        gridDelegate:
+                    controller: _scrollController,
+                    gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1 / 1.4,
-                        ),
-                        itemCount: challengeList.length,
-                        itemBuilder: (context, index) {
-                          return ChallengeItemCard(data: challengeList[index]);
-                        },
-                      ))
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.4,
+                    ),
+                    itemCount: challengeList.length,
+                    itemBuilder: (context, index) {
+                      return ChallengeItemCard(data: challengeList[index]);
+                    },
+                  ))
                 ])));
   }
 
@@ -207,7 +210,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(
                   categoryList.length,
-                      (index) => Padding(
+                  (index) => Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: ElevatedButton(
                         onPressed: () {
@@ -225,7 +228,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                         },
                         style: ButtonStyle(
                           padding:
-                          MaterialStateProperty.all<EdgeInsetsGeometry?>(
+                              MaterialStateProperty.all<EdgeInsetsGeometry?>(
                             const EdgeInsets.symmetric(horizontal: 15),
                           ),
                           maximumSize: MaterialStateProperty.all<Size>(
@@ -240,7 +243,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
                           ),
                           backgroundColor: selectedIndex == index
                               ? MaterialStateProperty.all<Color>(
-                              Palette.purPle400)
+                                  Palette.purPle400)
                               : null,
                         ),
                         child: Text(categoryList[index],
