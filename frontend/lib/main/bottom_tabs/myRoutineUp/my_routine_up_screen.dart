@@ -51,12 +51,13 @@ class _MyRoutineUpScreenState extends State<MyRoutineUpScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Palette.white,
+        backgroundColor: Palette.mainPurple,
         title: const Text(
           '나의 루틴업 현황',
           style: TextStyle(
               fontFamily: 'Pretendard',
               fontSize: 16,
+              color: Palette.white,
               fontWeight: FontWeight.w600),
         ),
       ),
@@ -64,11 +65,12 @@ class _MyRoutineUpScreenState extends State<MyRoutineUpScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 10),
             ChallengeProgressWidget(
                 challengeProgressNumberList: _getProgressNumber()),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: ChallengeWidget(
+              child: ChallengeWidget( //진행중 챌린지
                   isIng: true, isStarted: true, challenges: ingChallenge),
             ),
             const Divider(
