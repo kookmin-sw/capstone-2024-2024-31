@@ -30,6 +30,17 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
   int selectedIndex = 0;
   bool _isPrivate = false;
 
+  void sortCombinedDataByStartDate(List<dynamic> data) {
+    data.sort((a, b) {
+      // 'startDate' 문자열을 DateTime 객체로 변환하여 비교
+      DateTime startDateA = DateTime.parse(a['startDate']);
+      DateTime startDateB = DateTime.parse(b['startDate']);
+
+      // 최신순으로 정렬하기 위해 startDateB와 startDateA를 비교
+      return startDateB.compareTo(startDateA);
+    });
+  }
+
   Future<List<ChallengeSimple>> getChallengeList() async {
     Dio dio = Dio();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -91,6 +102,9 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
           ...responseIsprivateFalse.data as List,
           ...responseIsprivateTrue.data as List
         ];
+
+        sortCombinedDataByStartDate(combinedData);
+
         logger.d("홈챌린지 리스트 : $combinedData");
 
         return combinedData.map((c) => ChallengeSimple.fromJson(c)).toList();
