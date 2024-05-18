@@ -24,7 +24,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   final controller = Get.find<UserController>();
   final List<ChallengeSimple> challenges = [];
 
-  double getProgressPercent(int index) {
+  double getProgressPercent(int index){
     DateTime now = DateTime.now();
     DateTime start = challenges[index].startDate;
     DateTime end =
@@ -88,7 +88,6 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                     loop: false,
                     itemCount: challenges.length,
                     pagination: const SwiperPagination(
-
                       alignment: Alignment.bottomCenter,
                       margin: EdgeInsets.all(1.0),
                       builder: DotSwiperPaginationBuilder(
@@ -114,7 +113,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   Widget challengeStateCard(double screenWidth, int index) {
     return GestureDetector(
         onTap: () {
-          Get.to(() => ChallengeStateScreen());
+          Get.to(() => ChallengeStateScreen(isFromJoinScreen: false, challengeSimple: challenges[index]));
         },
         child: SizedBox(
             width: screenWidth * 0.95,
