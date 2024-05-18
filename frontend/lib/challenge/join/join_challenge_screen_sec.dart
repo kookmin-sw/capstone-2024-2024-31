@@ -201,7 +201,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                     });
 
                     if (value) {
-                      Get.offAll(() => ChallengeStateScreen(challenge: widget.challenge));
+                      Get.offAll(() => ChallengeStateScreen(isFromJoinScreen: true, challenge: widget.challenge));
                     }
                   }).catchError((err) {
                     setState(() {
