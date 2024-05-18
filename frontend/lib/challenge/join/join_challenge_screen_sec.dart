@@ -14,9 +14,9 @@ import '../../env.dart';
 import '../../model/controller/challenge_form_controller.dart';
 
 class JoinChallengeSecScreen extends StatefulWidget {
-  final int challengeId;
+  final Challenge challenge;
 
-  const JoinChallengeSecScreen({super.key, required this.challengeId});
+  const JoinChallengeSecScreen({super.key, required this.challenge});
 
   @override
   State<JoinChallengeSecScreen> createState() => _JoinChallengeSecScreenState();
@@ -82,19 +82,27 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
 
     try {
       final response = await dioInstance.post(
-          '${Env.serverUrl}/challenges/${widget.challengeId}/join',
-          data: {
-            "targetName": _targetName,
-            "receiverNumber": _receiverNumber,
-            "determination": _determination
-          });
+        '${Env.serverUrl}/challenges/${widget.challenge.id}/join',
+        data: {
+          "targetName": _targetName,
+          "receiverNumber": _receiverNumber,
+          "determination": _determination,
+        },
+      );
+
       if (response.statusCode == 200) {
-        logger.d('Response status code: ${response?.statusCode}');
-        logger.d('Response data: ${response?.data}');
-        logger.d('Request options: ${response?.requestOptions}');
-
+        logger.d('Response status code: ${response.statusCode}');
+        logger.d('Response data: ${response.data}');
+        logger.d('Request options: ${response.requestOptions}');
         return true;
-
+      } else if (response.statusCode == 404) {
+        logger.e('Response status code: ${response.statusCode}');
+        logger.e('Response data: ${response.data}');
+        logger.e('Request options: ${response.requestOptions}');
+      } else {
+        logger.e('Response status code: ${response.statusCode}');
+        logger.e('Response data: ${response.data}');
+        logger.e('Request options: ${response.requestOptions}');
       }
     } on dio.DioError catch (e) {
       logger.e('DioError: ${e.message}');
@@ -103,12 +111,13 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
         logger.e('Response data: ${e.response?.data}');
         logger.e('Request options: ${e.response?.requestOptions}');
       } else {
-        logger.d('Error sending request: ${e.requestOptions}');
+        logger.e('Error sending request: ${e.requestOptions}');
       }
       return Future.error(e.toString());
     } catch (err) {
       return Future.error(err.toString());
     }
+
     return false;
   }
 
@@ -138,40 +147,44 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
             // 다른 곳을 탭하면 포커스 해제
             FocusScope.of(context).unfocus();
           },
-          child: SingleChildScrollView(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Form(
-                  key: _formKey, // Add the form key here
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 15),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        child: Text(
-                          "\"결과를 누구에게 전송할까요?\"",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                            fontFamily: 'Pretendard',
-                            color: Palette.grey500,
-                          ),
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(color: Palette.mainPurple),
+                )
+              : SingleChildScrollView(
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Form(
+                        key: _formKey, // Add the form key here
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 15),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              child: Text(
+                                "\"결과를 누구에게 전송할까요?\"",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15,
+                                  fontFamily: 'Pretendard',
+                                  color: Palette.grey500,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            inputPenaltyName(screenSize),
+                            const SizedBox(height: 15),
+                            inputPenaltyNumber(screenSize),
+                            const SizedBox(height: 5),
+                            verificationInput(screenSize),
+                            const SizedBox(height: 25),
+                            inputResultText(screenSize),
+                            const SizedBox(height: 10),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      inputPenaltyName(screenSize),
-                      const SizedBox(height: 15),
-                      inputPenaltyNumber(screenSize),
-                      const SizedBox(height: 5),
-                      verificationInput(screenSize),
-                      const SizedBox(height: 25),
-                      inputResultText(screenSize),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
+                      )),
                 )),
-          )),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         color: Colors.transparent,
@@ -183,16 +196,12 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                     isLoading = true;
                   });
                   _postJoinData().then((value) {
+                    setState(() {
+                      isLoading = false;
+                    });
+
                     if (value) {
-                      setState(() {
-                        isLoading = false;
-                      });
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ChallengeStateScreen(),
-                        ),
-                      );
+                      Get.offAll(() => ChallengeStateScreen(challenge: widget.challenge));
                     }
                   }).catchError((err) {
                     setState(() {
@@ -200,20 +209,15 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                     });
                     Get.snackbar(
                       "오류",
-                      err.toString(),
+                      "이미 챌린지에 가입되어 있습니다.",
                       backgroundColor: Colors.red,
                       colorText: Colors.white,
                     );
                   });
                 },
-          child: isLoading
-              ? const Center(
-            child: CircularProgressIndicator(color: Palette.mainPurple),
-          )
-              : SvgPicture.asset(
-            'assets/svgs/join_able_btn.svg',
-          ),
-        )
+                child: SvgPicture.asset(
+                  'assets/svgs/join_able_btn.svg',
+                ))
             : SvgPicture.asset(
                 'assets/svgs/join_disable_btn.svg',
               ),
@@ -369,6 +373,11 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
               child: InkWell(
                 onTap: () {
                   setState(() {});
+                  Get.snackbar(
+                    "인증번호",
+                    "4자리 인증번호를 하단에 입력하세요.",
+                    backgroundColor: Palette.softPurPle,
+                      duration: const Duration(seconds: 1));
                 },
                 child: SvgPicture.asset(
                   'assets/svgs/number_auth_btn.svg',
@@ -389,25 +398,18 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
             // border: Palette.greySoft, // 배경색 설정
             borderRadius: BorderRadius.circular(10)),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset("assets/svgs/horizonal_bar.svg"),
-                const Text(
-                  "인증번호",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    fontFamily: 'Pretendard',
-                    color: Palette.grey300,
-                  ),
-                ),
-                SvgPicture.asset("assets/svgs/horizonal_bar.svg"),
-              ],
+            const Text(
+              "인증번호",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+                fontFamily: 'Pretendard',
+                color: Palette.grey300,
+              ),
             ),
             const SizedBox(height: 3),
             const Text(
@@ -420,7 +422,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
             ),
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   width: screenSize.width * 0.4,
@@ -461,10 +463,6 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                     },
                     onChanged: (value) {
                       authInputNumber = value.toString();
-                      if (authNumber == authInputNumber) {
-                        isInputList[2] = true;
-                        _updateButtonState();
-                      }
                     },
                     focusNode: _authFocusNode,
                   ),
@@ -476,7 +474,13 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      setState(() {});
+                      if (authNumber == authInputNumber) {
+                        isInputList[2] = true;
+                        _updateButtonState();
+                        Get.snackbar("인증완료", "수신자 개인 정보 제공에 동의합니다.",
+                            colorText: Palette.white,
+                            backgroundColor: Palette.purPle200, duration: const Duration(seconds: 1));
+                      }
                     },
                     child: SvgPicture.asset(
                       'assets/svgs/auth_check_btn.svg',
@@ -532,7 +536,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                     color: Palette.grey200,
                     fontFamily: 'Pretendard'),
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                 filled: true,
                 fillColor: Palette.greySoft,
                 enabledBorder: OutlineInputBorder(

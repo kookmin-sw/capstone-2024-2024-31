@@ -114,7 +114,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   Widget challengeStateCard(double screenWidth, int index) {
     return GestureDetector(
         onTap: () {
-          Get.to(() => ChallengeStateScreen());
+          Get.to(() => ChallengeStateScreen(challengeId: challenges[index].id));
         },
         child: SizedBox(
             width: screenWidth * 0.95,

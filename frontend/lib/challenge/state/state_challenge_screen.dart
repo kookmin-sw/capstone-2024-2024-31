@@ -1,28 +1,108 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:frontend/challenge/detail/detail_image_detail_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:frontend/model/package/pie_chart/pie_chart.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
+import '../../env.dart';
+import '../../model/package/pie_chart/src/chart_values_options.dart';
+import '../../model/package/pie_chart/src/legend_options.dart';
+import '../../model/package/pie_chart/src/pie_chart.dart';
 
-class ChallengeStateScreen extends StatelessWidget {
-  final Challenge challenge = Challenge.getDummyData();
+class ChallengeStateScreen extends StatefulWidget {
+  final Challenge? challenge;
+  final int? challengeId;
 
-  ChallengeStateScreen({super.key});
+  const ChallengeStateScreen({super.key, this.challenge, this.challengeId});
+
+  @override
+  _ChallengeStateScreenState createState() => _ChallengeStateScreenState();
+}
+
+class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
+  final Logger logger = Logger();
+  late Future<Challenge> challengeFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(widget.challenge == null){
+    challengeFuture = _fetchChallenge(); }
+    else{
+      challengeFuture = widget.challenge as Future<Challenge>;
+    }
+  }
+
+  Future<Challenge> _fetchChallenge() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Dio dio = Dio();
+
+    dio.options.headers['content-Type'] = 'application/json';
+    dio.options.headers['Authorization'] =
+        'Bearer ${prefs.getString('access_token')}';
+    //
+    // try {
+      final response =
+          await dio.get('${Env.serverUrl}/challenges/${widget.challengeId}');
+
+      if (response.statusCode == 200) {
+        final challenge = Challenge.fromJson(response.data);
+        return challenge;
+      } else {
+        logger.e(response.data);
+        return Future.error(
+            "서버 응답 상태 코드: ${response.statusCode}, ${response.data}");
+      }
+    // } catch (e) {
+    //   logger.e(e);
+    //   return Future.error("챌린지 정보를 불러오는데 실패했습니다.");
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<Challenge>(
+      future: challengeFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Text('오류: ${snapshot.error}'),
+            ),
+          );
+        } else if (snapshot.hasData) {
+          final thisChallenge = snapshot.data!;
+          return buildChallengeScreen(context, thisChallenge);
+        } else {
+          return const Scaffold(
+            body: Center(
+              child: Text('챌린지 데이터를 불러올 수 없습니다.'),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget buildChallengeScreen(BuildContext context, Challenge thisChallenge) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final DateTime? startDate = challenge.startDate;
-    final int? challengePeriod =
-        challenge.challengePeriod; // Challenge 기간, ex: 주 단위
-    final DateTime? endDate = startDate?.add(Duration(days: challengePeriod! * 7));
+    final DateTime? startDate = thisChallenge.startDate;
+    final int? challengePeriod = thisChallenge.challengePeriod;
+    final DateTime? endDate =
+        startDate?.add(Duration(days: challengePeriod! * 7));
 
     initializeDateFormatting('ko_KR', 'en_US');
 
@@ -31,9 +111,7 @@ class ChallengeStateScreen extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        // AppBar를 투명하게 설정
         elevation: 0,
-        // 그림자 없애기
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
@@ -55,21 +133,22 @@ class ChallengeStateScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            photoes(screenHeight),
+            photoes(screenHeight, thisChallenge),
             Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: information_challenge(startDate!, endDate!)),
+                child:
+                    information_challenge(startDate!, endDate!, thisChallenge)),
             SvgPicture.asset(
               'assets/svgs/divider.svg',
               fit: BoxFit.contain,
             ),
-            certificationState(screenWidth, screenHeight),
+            certificationState(screenWidth, screenHeight, thisChallenge),
             SvgPicture.asset(
               'assets/svgs/divider.svg',
               fit: BoxFit.contain,
             ),
-            EntireCertificationStatus(screenWidth, screenHeight)
+            EntireCertificationStatus(screenWidth, screenHeight, thisChallenge)
           ],
         ),
       ),
@@ -89,7 +168,7 @@ class ChallengeStateScreen extends StatelessWidget {
     ));
   }
 
-  Widget photoes(double screenHeight) {
+  Widget photoes(double screenHeight, Challenge thisChallenge) {
     return Stack(children: <Widget>[
       Container(
         height: screenHeight * 0.3,
@@ -105,9 +184,9 @@ class ChallengeStateScreen extends StatelessWidget {
           left: 10,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            FrequeuncyAndPeriod(),
+            FrequeuncyAndPeriod(thisChallenge),
             const SizedBox(height: 3),
-            Text(challenge.challengeName,
+            Text(thisChallenge.challengeName,
                 style: const TextStyle(
                     fontSize: 19,
                     fontFamily: "Pretendard",
@@ -117,18 +196,16 @@ class ChallengeStateScreen extends StatelessWidget {
     ]);
   }
 
-  Widget FrequeuncyAndPeriod() {
+  Widget FrequeuncyAndPeriod(Challenge thisChallenge) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Palette.purPle700,
-          // 배경색 설정
           borderRadius: BorderRadius.circular(4),
-          // 테두리를 둥글게 설정
         ),
         child: Text(
-          " ${challenge.certificationFrequency} | ${challenge.challengePeriod}주 ",
+          " ${thisChallenge.certificationFrequency} | ${thisChallenge.challengePeriod}주 ",
           style: const TextStyle(
               fontSize: 10,
               fontFamily: "Pretendard",
@@ -137,18 +214,19 @@ class ChallengeStateScreen extends StatelessWidget {
         ));
   }
 
-  Widget information_challenge(DateTime startDate, DateTime endDate) {
+  Widget information_challenge(
+      DateTime startDate, DateTime endDate, Challenge thisChallenge) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ChallengeExplanation(),
+          ChallengeExplanation(thisChallenge),
           const SizedBox(height: 5),
           Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               decoration: BoxDecoration(
-                  color: Color(0xFFF5F5F5), // 배경색 설정
-                  borderRadius: BorderRadius.circular(10)), // 컨테이너를 둥글게 만듭니다.
+                  color: const Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(10)),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -162,7 +240,7 @@ class ChallengeStateScreen extends StatelessWidget {
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text(
-                            "${DateFormat("M월 d일(E)", "ko_KR").format(startDate)}-${DateFormat("M월 d일(E)", "ko_KR").format(endDate)}  ${challenge.challengePeriod}주",
+                            "${DateFormat("M월 d일(E)", "ko_KR").format(startDate)}-${DateFormat("M월 d일(E)", "ko_KR").format(endDate)}  ${thisChallenge.challengePeriod}주",
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,
@@ -200,7 +278,8 @@ class ChallengeStateScreen extends StatelessWidget {
                                   fontSize: 10,
                                   fontFamily: "Pretendard",
                                   fontWeight: FontWeight.w500)),
-                          Text(challenge.certificationFrequency ?? "-",                              style: const TextStyle(
+                          Text(thisChallenge.certificationFrequency ?? "-",
+                              style: const TextStyle(
                                   color: Palette.grey300,
                                   fontSize: 10,
                                   fontFamily: "Pretendard",
@@ -216,7 +295,7 @@ class ChallengeStateScreen extends StatelessWidget {
                                   fontFamily: "Pretendard",
                                   fontWeight: FontWeight.w500)),
                           Text(
-                              "${challenge.certificationStartTime}시 ~ ${challenge.certificationEndTime}",
+                              "${thisChallenge.certificationStartTime}시 ~ ${thisChallenge.certificationEndTime}",
                               style: const TextStyle(
                                   color: Palette.grey300,
                                   fontSize: 10,
@@ -232,7 +311,7 @@ class ChallengeStateScreen extends StatelessWidget {
                                   fontSize: 10,
                                   fontFamily: "Pretendard",
                                   fontWeight: FontWeight.w500)),
-                          Text("${challenge.totalParticipants}명",
+                          Text("${thisChallenge.totalParticipants}명",
                               style: const TextStyle(
                                   color: Palette.grey300,
                                   fontSize: 10,
@@ -243,7 +322,7 @@ class ChallengeStateScreen extends StatelessWidget {
         ]);
   }
 
-  Widget ChallengeExplanation() {
+  Widget ChallengeExplanation(Challenge thisChallenge) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -259,7 +338,7 @@ class ChallengeStateScreen extends StatelessWidget {
                   fontWeight: FontWeight.w600)),
           const SizedBox(height: 5),
           Text(
-            challenge.challengeName,
+            thisChallenge.challengeName,
             style: const TextStyle(
                 fontSize: 12,
                 fontFamily: "Pretendard",
@@ -271,7 +350,8 @@ class ChallengeStateScreen extends StatelessWidget {
     );
   }
 
-  Widget certificationState(double screenWidth, double screenHeight) {
+  Widget certificationState(
+      double screenWidth, double screenHeight, Challenge thisChallenge) {
     int my_certification_number = 13;
     int entire_certification_number = 15;
     int fail_num = 0;
@@ -316,7 +396,7 @@ class ChallengeStateScreen extends StatelessWidget {
                     fontWeight: FontWeight.w400))
           ]),
           const SizedBox(height: 20),
-          certificationStateBar(screenWidth),
+          certificationStateBar(screenWidth, thisChallenge),
           const SizedBox(height: 15),
           Container(
             alignment: Alignment.center,
@@ -335,25 +415,16 @@ class ChallengeStateScreen extends StatelessWidget {
     );
   }
 
-  Widget certificationStateBar(double screenWidth) {
+  Widget certificationStateBar(double screenWidth, Challenge thisChallenge) {
     int my_certification_number = 13;
-    int entire_certification_number = 15;
     String percent =
-        (my_certification_number / entire_certification_number * 100)
+        (my_certification_number / thisChallenge.totalCertificationCount! * 100)
             .toStringAsFixed(1);
-
-    print(percent);
-    int fail_num = 0;
-    int participant_number = 1000;
-    int participant_100 = 100;
-    int participant_80 = 300;
-    int participant_under = 600;
 
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
-            color: Color(0xFFF5F5F5), // 배경색 설정
-            borderRadius: BorderRadius.circular(10)), // 컨테이너를 둥글게 만듭니다.
+            color: Color(0xFFF5F5F5), borderRadius: BorderRadius.circular(10)),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -368,7 +439,7 @@ class ChallengeStateScreen extends StatelessWidget {
                           fontFamily: "Pretendard",
                           fontWeight: FontWeight.w500)),
                   Text(
-                      "${(my_certification_number / entire_certification_number * 100).toStringAsFixed(1)} %",
+                      "${(my_certification_number / thisChallenge.totalCertificationCount! * 100).toStringAsFixed(1)} %",
                       style: const TextStyle(
                           color: Palette.grey500,
                           fontSize: 10,
@@ -379,7 +450,7 @@ class ChallengeStateScreen extends StatelessWidget {
               const SizedBox(height: 10),
               Container(
                 decoration: BoxDecoration(
-                    color: Palette.grey500, // 배경색 설정
+                    color: Palette.grey500,
                     borderRadius: BorderRadius.circular(5)),
                 child: ProgressBar(
                   width: screenWidth * 0.9,
@@ -403,8 +474,8 @@ class ChallengeStateScreen extends StatelessWidget {
             ]));
   }
 
-  Widget EntireCertificationStatus(double screenWidth, double screenHeight) {
-    double participant_number = 1000;
+  Widget EntireCertificationStatus(
+      double screenWidth, double screenHeight, Challenge thisChallenge) {
     final dataMap = <String, double>{"100%": 100, "80% 이상": 300, "80% 미만": 600};
     final colorList = <Color>[
       Palette.purPle500,
@@ -431,7 +502,7 @@ class ChallengeStateScreen extends StatelessWidget {
                       color: Palette.grey300,
                       fontFamily: "Pretendard",
                       fontWeight: FontWeight.w600)),
-              Text("  ${participant_number.toInt()}명",
+              Text("  ${thisChallenge.totalParticipants}명",
                   style: const TextStyle(
                       fontSize: 11,
                       color: Palette.purPle400,
@@ -440,7 +511,7 @@ class ChallengeStateScreen extends StatelessWidget {
             ]),
           ]),
           const SizedBox(height: 20),
-          certificationStateBar(screenWidth),
+          certificationStateBar(screenWidth, thisChallenge),
           const SizedBox(height: 15),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
@@ -462,7 +533,7 @@ class ChallengeStateScreen extends StatelessWidget {
                     fontFamily: "Pretendard",
                     fontWeight: FontWeight.w600),
               ),
-              totalValue: (participant_number),
+              totalValue: thisChallenge.totalParticipants.toDouble(),
               legendOptions: const LegendOptions(
                 legendValueTextStyle: TextStyle(
                     fontSize: 10,
