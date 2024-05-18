@@ -10,6 +10,7 @@ import 'package:frontend/challenge/join/join_challenge_screen.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/data/challenge/ChallengeService.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/widgets/custom_button.dart';
 import 'package:get/get.dart';
@@ -44,45 +45,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   late UserController userController;
   late bool _isMyChallenge;
 
-  Future<Challenge> _fetchChallenge() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    Dio dio = Dio();
-
-    dio.options.headers['content-Type'] = 'application/json';
-    dio.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
-
-    try {
-      logger.d("detail_screen 49번 라인 ) ${widget.challengeId}");
-      final response = await dio.get(
-        '${Env.serverUrl}/challenges/${widget.challengeId}',
-      );
-      if (response.statusCode == 200) {
-        logger.d('챌린지 디테일 조회 성공');
-        logger.d(response.data);
-        final challenge = Challenge.fromJson(response.data);
-
-        // Print each field to check for null values
-        // logger.d('Challenge Name: ${challenge.challengeName}');
-        // logger.d('Challenge Explanation: ${challenge.challengeExplanation}');
-        // logger.d('Challenge Image Paths: ${challenge.challengeImagePaths}');
-        // logger.d(
-        //     'Successful Verification Image: ${challenge.successfulVerificationImage}');
-        // logger.d(
-        //     'Failed Verification Image: ${challenge.failedVerificationImage}');
-        // // Add more fields as necessary
-
-        return challenge;
-      } else {
-        return Future.error(
-            "서버 응답 상태 코드: ${response.statusCode}, ${response.data}");
-      }
-    } catch (e) {
-      logger.e(e);
-      return Future.error("챌린지 정보를 불러오는데 실패했습니다.");
-    }
-  }
-
   void isMyChallenges() {
     userController = Get.find<UserController>();
     logger.d("controller.myChallenges : ${userController.myChallenges}");
@@ -106,7 +68,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     }
     //공개 챌린지 첫 입장시,
     else {
-      _fetchChallenge().then((value) {
+      ChallengeService.fetchChallenge(widget.challengeId, logger).then((value) {
         logger.d("detail_screen initState() : $value");
 
         setState(() {
