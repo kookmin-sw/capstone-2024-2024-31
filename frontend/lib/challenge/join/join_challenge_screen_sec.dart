@@ -14,23 +14,24 @@ import '../../env.dart';
 import '../../model/controller/challenge_form_controller.dart';
 
 class JoinChallengeSecScreen extends StatefulWidget {
-  final Challenge challenge = Challenge.getDummyData();
+  final int challengeId;
 
-  JoinChallengeSecScreen({super.key});
+  const JoinChallengeSecScreen({super.key, required this.challengeId});
 
   @override
   State<JoinChallengeSecScreen> createState() => _JoinChallengeSecScreenState();
 }
 
 class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
+  bool isLoading = false;
   bool isAllInput = false;
   List<bool> isInputList = [false, false, false, false];
 
-  late String receiverName;
-  late String receiverNumber;
+  late String _targetName;
+  late String _receiverNumber;
   String authNumber = '1010';
   late String authInputNumber = '';
-  late String toReceiverText;
+  late String _determination;
 
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _numberFocusNode = FocusNode();
@@ -71,29 +72,36 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
     return isInputList.every((element) => element);
   }
 
-  Future<int> _submitData() async {
+  Future<bool> _postJoinData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     dio.Dio dioInstance = dio.Dio();
 
-    dioInstance.options.contentType = 'multipart/form-data';
+    dioInstance.options.contentType = 'application/json';
     dioInstance.options.headers['Authorization'] =
         'Bearer ${prefs.getString('access_token')}';
 
-    // dio.FormData formData = controller.toFormData();
-    // controller.printFormData();
-
     try {
       final response = await dioInstance.post(
-        '${Env.serverUrl}/challenges/create',
-      );
+          '${Env.serverUrl}/challenges/${widget.challengeId}/join',
+          data: {
+            "targetName": _targetName,
+            "receiverNumber": _receiverNumber,
+            "determination": _determination
+          });
+      if (response.statusCode == 200) {
+        logger.d('Response status code: ${response?.statusCode}');
+        logger.d('Response data: ${response?.data}');
+        logger.d('Request options: ${response?.requestOptions}');
 
-      return response.data as int;
+        return true;
+
+      }
     } on dio.DioError catch (e) {
-      logger.d('DioError: ${e.message}');
+      logger.e('DioError: ${e.message}');
       if (e.response != null) {
-        logger.d('Response status code: ${e.response?.statusCode}');
-        logger.d('Response data: ${e.response?.data}');
-        logger.d('Request options: ${e.response?.requestOptions}');
+        logger.e('Response status code: ${e.response?.statusCode}');
+        logger.e('Response data: ${e.response?.data}');
+        logger.e('Request options: ${e.response?.requestOptions}');
       } else {
         logger.d('Error sending request: ${e.requestOptions}');
       }
@@ -101,6 +109,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
     } catch (err) {
       return Future.error(err.toString());
     }
+    return false;
   }
 
   @override
@@ -170,17 +179,41 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
         child: isAllInput
             ? InkWell(
                 onTap: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ChallengeStateScreen(),
-                    ),
-                  );
+                  setState(() {
+                    isLoading = true;
+                  });
+                  _postJoinData().then((value) {
+                    if (value) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ChallengeStateScreen(),
+                        ),
+                      );
+                    }
+                  }).catchError((err) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    Get.snackbar(
+                      "오류",
+                      err.toString(),
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                  });
                 },
-                child: SvgPicture.asset(
-                  'assets/svgs/join_able_btn.svg',
-                ),
-              )
+          child: isLoading
+              ? const Center(
+            child: CircularProgressIndicator(color: Palette.mainPurple),
+          )
+              : SvgPicture.asset(
+            'assets/svgs/join_able_btn.svg',
+          ),
+        )
             : SvgPicture.asset(
                 'assets/svgs/join_disable_btn.svg',
               ),
@@ -191,7 +224,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
   Widget inputPenaltyName(Size screenSize) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Text(
-        "이름을 입력해주세요",
+        "결과를 수신할 분의 이름을 입력해주세요",
         style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 13,
@@ -199,7 +232,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
             color: Palette.grey300),
       ),
       const Text(
-        "ex) 부모님, 친구, 연인",
+        "ex) 울 자기, 신혠, 지영이어머니",
         style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 11,
@@ -246,7 +279,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
               return null;
             },
             onChanged: (value) {
-              receiverName = value.toString();
+              _targetName = value.toString();
               isInputList[0] = true;
               _updateButtonState();
               print(isInputList);
@@ -324,7 +357,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                 return null;
               },
               onChanged: (value) {
-                receiverNumber = value.toString();
+                _receiverNumber = value.toString();
                 isInputList[1] = true;
                 _updateButtonState();
               },
@@ -516,7 +549,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
               return null;
             },
             onChanged: (value) {
-              toReceiverText = value.toString();
+              _determination = value.toString();
               isInputList[3] = true;
               _updateButtonState();
             },

@@ -78,7 +78,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      JoinChallengeSecScreen(),
+                                      JoinChallengeSecScreen(challengeId: widget.challenge.id),
                                 ),
                               );
                             },

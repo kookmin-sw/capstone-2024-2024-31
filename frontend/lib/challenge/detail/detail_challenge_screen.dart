@@ -16,6 +16,8 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../model/controller/user_controller.dart';
+
 class ChallengeDetailScreen extends StatefulWidget {
   final int challengeId;
   final bool isFromMainScreen;
@@ -23,15 +25,13 @@ class ChallengeDetailScreen extends StatefulWidget {
   final bool isFromPrivateCodeDialog;
   final Map<String, dynamic>? challengeData;
 
-
-  const ChallengeDetailScreen({
-    super.key,
-    required this.challengeId,
-    this.challengeData,
-    this.isFromMainScreen = false,
-    this.isFromMypage = false,
-    this.isFromPrivateCodeDialog = false
-  });
+  const ChallengeDetailScreen(
+      {super.key,
+      required this.challengeId,
+      this.challengeData,
+      this.isFromMainScreen = false,
+      this.isFromMypage = false,
+      this.isFromPrivateCodeDialog = false});
 
   @override
   State<ChallengeDetailScreen> createState() => _ChallengeDetailScreenState();
@@ -41,6 +41,8 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   final logger = Logger();
   Challenge? challenge;
   bool isLoading = true;
+  late UserController userController;
+  late bool _isMyChallenge;
 
   Future<Challenge> _fetchChallenge() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,7 +50,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
 
     dio.options.headers['content-Type'] = 'application/json';
     dio.options.headers['Authorization'] =
-    'Bearer ${prefs.getString('access_token')}';
+        'Bearer ${prefs.getString('access_token')}';
 
     try {
       logger.d("detail_screen 49번 라인 ) ${widget.challengeId}");
@@ -81,9 +83,17 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     }
   }
 
+  void isMyChallenges() {
+    userController = Get.find<UserController>();
+    logger.d("controller.myChallenges : ${userController.myChallenges}");
+    _isMyChallenge = userController.myChallenges
+        .any((challenge) => challenge.id == widget.challengeId);
+  }
+
   @override
   void initState() {
     super.initState();
+    isMyChallenges(); //이미 챌린지 참여 중이면 참가하기 버튼 없애기
 
     if (widget.isFromPrivateCodeDialog) {
       logger.d("detail_screen 89번 라인 ) ${widget.isFromPrivateCodeDialog}");
@@ -123,21 +133,21 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
       appBar: AppBar(
         leading: widget.isFromMainScreen || widget.isFromMypage
             ? IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Palette.grey300,
-            ),
-            onPressed: () {
-              Get.back();
-            })
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Palette.grey300,
+                ),
+                onPressed: () {
+                  Get.back();
+                })
             : IconButton(
-            icon: const Icon(
-              Icons.home,
-              color: Palette.grey300,
-            ),
-            onPressed: () {
-              Get.offAll(() => MainScreen());
-            }),
+                icon: const Icon(
+                  Icons.home,
+                  color: Palette.grey300,
+                ),
+                onPressed: () {
+                  Get.offAll(() => MainScreen());
+                }),
         title: const Text(
           "챌린지 자세히 보기",
           style: TextStyle(
@@ -159,21 +169,19 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : challenge != null
-          ? buildChallengeDetailBody(context, challenge!)
-          : const Center(child: Text('챌린지 정보를 불러오지 못했습니다.')),
-      bottomNavigationBar: widget.isFromMypage || !widget.isFromMainScreen
+              ? buildChallengeDetailBody(context, challenge!)
+              : const Center(child: Text('챌린지 정보를 불러오지 못했습니다.')),
+      bottomNavigationBar: _isMyChallenge
           ? null
           : isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : buildChallengeDetailBottomNavigationBar(
-          context, challenge ?? Challenge.getDummyData()),
+              ? const Center(child: CircularProgressIndicator())
+              : buildChallengeDetailBottomNavigationBar(
+                  context, challenge ?? Challenge.getDummyData()),
     );
   }
 
   Widget buildChallengeDetailBody(BuildContext context, Challenge challenge) {
-    final screenSize = MediaQuery
-        .of(context)
-        .size;
+    final screenSize = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -197,8 +205,10 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     );
   }
 
-  Widget buildChallengeDetailBottomNavigationBar(BuildContext context,
-      Challenge challenge,) {
+  Widget buildChallengeDetailBottomNavigationBar(
+    BuildContext context,
+    Challenge challenge,
+  ) {
     return Stack(
       children: <Widget>[
         Container(
@@ -225,8 +235,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
-              " ${challenge.certificationFrequency} | ${challenge
-                  .challengePeriod ?? 0}주 ",
+              " ${challenge.certificationFrequency} | ${challenge.challengePeriod ?? 0}주 ",
               style: const TextStyle(
                 fontSize: 11,
                 fontFamily: "Pretendard",

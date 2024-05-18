@@ -85,12 +85,15 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
               ? SvgPicture.asset("assets/svgs/no_challenge_state_card.svg")
               : Expanded(
                   child: Swiper(
+                    loop: false,
                     itemCount: challenges.length,
                     pagination: const SwiperPagination(
+
                       alignment: Alignment.bottomCenter,
+                      margin: EdgeInsets.all(1.0),
                       builder: DotSwiperPaginationBuilder(
                           space: 3,
-                          size: 8,
+                          size: 9,
                           activeSize: 9,
                           color: Palette.softPurPle,
                           activeColor: Palette.purPle300),
@@ -164,7 +167,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                                     ],
                                   )),
                               const SizedBox(
-                                height: 8,
+                                height: 5,
                               ),
                               stateBar(screenWidth, getProgressPercent(index))
                             ],

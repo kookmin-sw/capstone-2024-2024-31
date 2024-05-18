@@ -8,6 +8,8 @@ import 'package:frontend/model/config/category_card_list.dart';
 import 'package:get/get.dart';
 
 class HomeCategory extends StatelessWidget {
+  const HomeCategory({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
