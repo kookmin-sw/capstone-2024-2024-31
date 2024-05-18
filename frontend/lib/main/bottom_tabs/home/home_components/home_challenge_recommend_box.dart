@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/challenge/search/challenge_search_screen.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:get/get.dart';
 
 class ChallengeRecommendBox extends StatelessWidget {
   final String name;
@@ -16,11 +18,12 @@ class ChallengeRecommendBox extends StatelessWidget {
     {'category': '환경', 'svg_icon': 'assets/icons/category_icons/nature.svg'},
     {'category': '공부', 'svg_icon': 'assets/icons/category_icons/study.svg'}
   ];
+  int randomIndex = 0 ;
 
   Map<String, String> getRandomCategory(
       List<Map<String, String>> categoryIconList) {
     // Generate a random index
-    int randomIndex = Random().nextInt(categoryIconList.length);
+    randomIndex = Random().nextInt(categoryIconList.length);
 
     // Get the randomly selected map
     Map<String, String> randomMap = categoryIconList[randomIndex];
@@ -43,7 +46,7 @@ class ChallengeRecommendBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "$name님 오늘은 ${randomCategory['category']} 관련 챌린지를 도전해 볼까요?",
+                  "$name님 오늘은 ${randomCategory['category']}\n관련 챌린지를 도전해 볼까요?",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,
@@ -53,7 +56,10 @@ class ChallengeRecommendBox extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(ChallengeSearchScreen(enterSelectIndex: randomIndex+1));
+
+                  },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(

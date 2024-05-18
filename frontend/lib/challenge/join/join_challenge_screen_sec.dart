@@ -1,9 +1,17 @@
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+
+import '../../env.dart';
+import '../../model/controller/challenge_form_controller.dart';
 
 class JoinChallengeSecScreen extends StatefulWidget {
   final Challenge challenge = Challenge.getDummyData();
@@ -30,6 +38,10 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
   final FocusNode _resultFocusNode = FocusNode();
 
   // 나머지 코드는 유지됩니다.
+  final GlobalKey<FormState> _formKey =
+      GlobalKey<FormState>(); // Add a GlobalKey for the form
+  final logger = Logger();
+  final UserController user = UserController();
 
   @override
   void dispose() {
@@ -59,12 +71,45 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
     return isInputList.every((element) => element);
   }
 
+  Future<int> _submitData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dio.Dio dioInstance = dio.Dio();
+
+    dioInstance.options.contentType = 'multipart/form-data';
+    dioInstance.options.headers['Authorization'] =
+        'Bearer ${prefs.getString('access_token')}';
+
+    // dio.FormData formData = controller.toFormData();
+    // controller.printFormData();
+
+    try {
+      final response = await dioInstance.post(
+        '${Env.serverUrl}/challenges/create',
+      );
+
+      return response.data as int;
+    } on dio.DioError catch (e) {
+      logger.d('DioError: ${e.message}');
+      if (e.response != null) {
+        logger.d('Response status code: ${e.response?.statusCode}');
+        logger.d('Response data: ${e.response?.data}');
+        logger.d('Request options: ${e.response?.requestOptions}');
+      } else {
+        logger.d('Error sending request: ${e.requestOptions}');
+      }
+      return Future.error(e.toString());
+    } catch (err) {
+      return Future.error(err.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white, // 배경색 설정
+      backgroundColor: Colors.white,
+      // 배경색 설정
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
@@ -75,7 +120,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Pretendard',
+            fontFamily: 'Pretender',
           ),
         ),
       ),
@@ -86,34 +131,37 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
           },
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  const SizedBox(height: 15),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Text(
-                      "\"결과를 누구에게 전송할까요?\"",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        fontFamily: 'Pretendard',
-                        color: Palette.grey500,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Form(
+                  key: _formKey, // Add the form key here
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 15),
+                      const Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        child: Text(
+                          "\"결과를 누구에게 전송할까요?\"",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            color: Palette.grey500,
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 20),
+                      inputPenaltyName(screenSize),
+                      const SizedBox(height: 15),
+                      inputPenaltyNumber(screenSize),
+                      const SizedBox(height: 5),
+                      verificationInput(screenSize),
+                      const SizedBox(height: 25),
+                      inputResultText(screenSize),
+                      const SizedBox(height: 10),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                  inputPenaltyName(screenSize),
-                  const SizedBox(height: 15),
-                  inputPenaltyNumber(screenSize),
-                  const SizedBox(height: 5),
-                  verificationInput(screenSize),
-                  const SizedBox(height: 25),
-                  inputResultText(screenSize),
-                  const SizedBox(height: 10),
-                ],
-              ),
-            ),
+                )),
           )),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
@@ -141,8 +189,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
   }
 
   Widget inputPenaltyName(Size screenSize) {
-    return Form(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Text(
         "이름을 입력해주세요",
         style: TextStyle(
@@ -169,7 +216,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
             style: const TextStyle(
                 fontWeight: FontWeight.w300,
                 fontSize: 11,
-                fontFamily: 'Pretendard'),
+                fontFamily: 'Pretender'),
             decoration: InputDecoration(
                 hintText: "김혁주",
                 hintStyle: const TextStyle(
@@ -182,7 +229,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                     color: Palette.grey200,
                     fontFamily: 'Pretendard'),
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 filled: true,
                 fillColor: Palette.greySoft,
                 enabledBorder: OutlineInputBorder(
@@ -206,18 +253,17 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
             },
             focusNode: _nameFocusNode,
           )),
-    ]));
+    ]);
   }
 
   Widget inputPenaltyNumber(Size screenSize) {
-    return Form(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Text(
         "전화번호 입력해주세요.",
         style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 13,
-            fontFamily: 'Pretendard',
+            fontFamily: 'Pretender',
             color: Palette.grey300),
       ),
       const Text(
@@ -225,7 +271,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
         style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 10,
-            fontFamily: 'Pretendard',
+            fontFamily: 'Pretender',
             color: Palette.grey200),
       ),
       const SizedBox(height: 15),
@@ -237,11 +283,13 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                 child: TextFormField(
               maxLength: 11,
               // 휴대폰 번호는 보통 11자리입니다.
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(11), // Limit to 11 characters
-                  ],              // 키보드 타입을 전화번호로 설정합니다.
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(11),
+                // Limit to 11 characters
+              ],
+              // 키보드 타입을 전화번호로 설정합니다.
               style: const TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 11,
@@ -267,8 +315,8 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                       borderSide: const BorderSide(color: Palette.greySoft)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide:
-                          const BorderSide(color: Palette.mainPurple, width: 2))),
+                      borderSide: const BorderSide(
+                          color: Palette.mainPurple, width: 2))),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return '휴대폰 번호를 입력하세요.';
@@ -297,7 +345,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
               ),
             )
           ])
-    ]));
+    ]);
   }
 
   Widget verificationInput(Size screenSize) {
@@ -328,7 +376,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                 SvgPicture.asset("assets/svgs/horizonal_bar.svg"),
               ],
             ),
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
             const Text(
               "완료시, 본 전화번호 소유자 개인정보 수집에 동의합니다.",
               style: TextStyle(
@@ -337,7 +385,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                   fontFamily: 'Pretendard',
                   color: Palette.grey200),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -358,8 +406,8 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                         fontWeight: FontWeight.w300,
                         color: Palette.grey200,
                       ),
-                      contentPadding:
-                          const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 10),
                       filled: true,
                       fillColor: Palette.white,
                       enabledBorder: OutlineInputBorder(
@@ -368,8 +416,8 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
-                        borderSide:
-                            const BorderSide(color: Palette.mainPurple, width: 2),
+                        borderSide: const BorderSide(
+                            color: Palette.mainPurple, width: 2),
                       ),
                     ),
                     validator: (value) {
@@ -411,8 +459,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
   }
 
   Widget inputResultText(Size screenSize) {
-    return Form(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Text(
         "각오 한마디를 입력해주세요",
         style: TextStyle(
@@ -475,6 +522,6 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
             },
             focusNode: _resultFocusNode,
           )),
-    ]));
+    ]);
   }
 }

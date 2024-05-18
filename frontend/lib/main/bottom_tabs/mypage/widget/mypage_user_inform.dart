@@ -38,6 +38,7 @@ class UserInformation extends StatelessWidget {
                 const SizedBox(height: 4),
                 if (categoryList.isNotEmpty)
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         "루티너님의 관심사는",
