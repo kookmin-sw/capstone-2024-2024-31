@@ -66,10 +66,7 @@ class CategoryCard extends StatelessWidget {
               categoryList.indexWhere((category) => category['name'] == name);
 
           Get.to(ChallengeSearchScreen(enterSelectIndex: index + 1));
-          int index = categoryList.indexWhere((category) => category['name'] == name);
-
-          Get.to(ChallengeSearchScreen(enterSelectIndex: index+1));
-        },
+          },
         child: Container(
             padding: const EdgeInsets.all(0),
             width: 120, // Set the width of the card

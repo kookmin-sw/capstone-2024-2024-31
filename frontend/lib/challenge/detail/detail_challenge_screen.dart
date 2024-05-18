@@ -20,12 +20,17 @@ class ChallengeDetailScreen extends StatefulWidget {
   final int challengeId;
   final bool isFromMainScreen;
   final bool isFromMypage;
+  final bool isFromPrivateCodeDialog;
+  final Map<String, dynamic>? challengeData;
+
 
   const ChallengeDetailScreen({
     super.key,
     required this.challengeId,
+    this.challengeData,
     this.isFromMainScreen = false,
     this.isFromMypage = false,
+    this.isFromPrivateCodeDialog = false
   });
 
   @override
@@ -43,12 +48,12 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
 
     dio.options.headers['content-Type'] = 'application/json';
     dio.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
+    'Bearer ${prefs.getString('access_token')}';
 
     try {
-      logger.d(widget.challengeId);
+      logger.d("detail_screen 49번 라인 ) ${widget.challengeId}");
       final response = await dio.get(
-          '${Env.serverUrl}/challenges/${widget.challengeId}',
+        '${Env.serverUrl}/challenges/${widget.challengeId}',
       );
       if (response.statusCode == 200) {
         logger.d('챌린지 디테일 조회 성공');
@@ -56,14 +61,14 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         final challenge = Challenge.fromJson(response.data);
 
         // Print each field to check for null values
-        logger.d('Challenge Name: ${challenge.challengeName}');
-        logger.d('Challenge Explanation: ${challenge.challengeExplanation}');
-        logger.d('Challenge Image Paths: ${challenge.challengeImagePaths}');
-        logger.d(
-            'Successful Verification Image: ${challenge.successfulVerificationImage}');
-        logger.d(
-            'Failed Verification Image: ${challenge.failedVerificationImage}');
-        // Add more fields as necessary
+        // logger.d('Challenge Name: ${challenge.challengeName}');
+        // logger.d('Challenge Explanation: ${challenge.challengeExplanation}');
+        // logger.d('Challenge Image Paths: ${challenge.challengeImagePaths}');
+        // logger.d(
+        //     'Successful Verification Image: ${challenge.successfulVerificationImage}');
+        // logger.d(
+        //     'Failed Verification Image: ${challenge.failedVerificationImage}');
+        // // Add more fields as necessary
 
         return challenge;
       } else {
@@ -79,22 +84,37 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchChallenge().then((value) {
+
+    if (widget.isFromPrivateCodeDialog) {
+      logger.d("detail_screen 89번 라인 ) ${widget.isFromPrivateCodeDialog}");
+      logger.d("detail_screen 89번 라인 ) ${widget.challengeData!}");
+
+      challenge = Challenge.fromJson(widget.challengeData!);
       setState(() {
-        challenge = value;
         isLoading = false;
       });
-    }).catchError((err) {
-      setState(() {
-        isLoading = false;
+    }
+    //공개 챌린지 첫 입장시,
+    else {
+      _fetchChallenge().then((value) {
+        logger.d("detail_screen initState() : $value");
+
+        setState(() {
+          challenge = value;
+          isLoading = false;
+        });
+      }).catchError((err) {
+        setState(() {
+          isLoading = false;
+        });
+        Get.snackbar(
+          "오류",
+          err.toString(),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       });
-      Get.snackbar(
-        "오류",
-        err.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    });
+    }
   }
 
   @override
@@ -103,21 +123,21 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
       appBar: AppBar(
         leading: widget.isFromMainScreen || widget.isFromMypage
             ? IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Palette.grey300,
-                ),
-                onPressed: () {
-                  Get.back();
-                })
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Palette.grey300,
+            ),
+            onPressed: () {
+              Get.back();
+            })
             : IconButton(
-                icon: const Icon(
-                  Icons.home,
-                  color: Palette.grey300,
-                ),
-                onPressed: () {
-                  Get.offAll(() => MainScreen());
-                }),
+            icon: const Icon(
+              Icons.home,
+              color: Palette.grey300,
+            ),
+            onPressed: () {
+              Get.offAll(() => MainScreen());
+            }),
         title: const Text(
           "챌린지 자세히 보기",
           style: TextStyle(
@@ -139,18 +159,21 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : challenge != null
-              ? buildChallengeDetailBody(context, challenge!)
-              : const Center(child: Text('챌린지 정보를 불러오지 못했습니다.')),
+          ? buildChallengeDetailBody(context, challenge!)
+          : const Center(child: Text('챌린지 정보를 불러오지 못했습니다.')),
       bottomNavigationBar: widget.isFromMypage || !widget.isFromMainScreen
           ? null
           : isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : buildChallengeDetailBottomNavigationBar(context, challenge ?? Challenge.getDummyData()),
+          ? const Center(child: CircularProgressIndicator())
+          : buildChallengeDetailBottomNavigationBar(
+          context, challenge ?? Challenge.getDummyData()),
     );
   }
 
   Widget buildChallengeDetailBody(BuildContext context, Challenge challenge) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -174,10 +197,8 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     );
   }
 
-  Widget buildChallengeDetailBottomNavigationBar(
-    BuildContext context,
-    Challenge challenge,
-  ) {
+  Widget buildChallengeDetailBottomNavigationBar(BuildContext context,
+      Challenge challenge,) {
     return Stack(
       children: <Widget>[
         Container(
@@ -204,7 +225,8 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
-              " ${challenge.certificationFrequency} | ${challenge.challengePeriod ?? 0}주 ",
+              " ${challenge.certificationFrequency} | ${challenge
+                  .challengePeriod ?? 0}주 ",
               style: const TextStyle(
                 fontSize: 11,
                 fontFamily: "Pretendard",

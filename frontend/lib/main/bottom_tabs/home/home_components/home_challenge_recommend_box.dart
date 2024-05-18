@@ -46,7 +46,7 @@ class ChallengeRecommendBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "$name님 오늘은 ${randomCategory['category']} 관련 챌린지를 도전해 볼까요?",
+                  "$name님 오늘은 ${randomCategory['category']}\n관련 챌린지를 도전해 볼까요?",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,
