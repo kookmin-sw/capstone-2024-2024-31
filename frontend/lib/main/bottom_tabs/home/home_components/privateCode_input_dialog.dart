@@ -73,7 +73,6 @@ class _PasswordInputDialogState extends State<PasswordInputDialog> {
     super.initState();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
-
     //아무거나 입력해봐서 통과되면 챌린지 생성자
     _checkInputCode("아무거나101010101").then((value) {
       logger.d("dialog initState() : $value");
