@@ -1,13 +1,18 @@
 package km.cd.backend.community.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 import java.util.List;
-import km.cd.backend.user.domain.User;
-import km.cd.backend.user.dto.UserResponse;
 
 public record CommentResponse(
-    Long id,
-    String author,
-    String content,
-    List<CommentResponse> children,
-    UserResponse userResponse) {
+        Long id,
+        String author,
+        String avatar,
+        String content,
+
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime createdDate,
+        List<CommentResponse> children
+) {
 }

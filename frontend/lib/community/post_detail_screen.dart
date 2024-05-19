@@ -8,8 +8,12 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../model/data/post/post.dart';
+
 class PostDetailScreen extends StatefulWidget {
-  const PostDetailScreen({super.key});
+  const PostDetailScreen({super.key, required this.post});
+
+  final Post post;
 
   @override
   State<PostDetailScreen> createState() => _PostDetailScreenState();
@@ -23,102 +27,20 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   final TextEditingController _commentController = TextEditingController();
 
   late String textFieldHintText;
+  late Post post;
+
+  @override
+  void initState() {
+    super.initState();
+    post = widget.post;
+    textFieldHintText = "댓글을 남겨보세요";
+  }
 
   @override
   void dispose() {
     _commentFocusNode.dispose();
     super.dispose();
   }
-
-  List<Map<String, dynamic>> comment_list = [
-    {
-      'index': 0,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕감자통자',
-      'dateTime': DateTime(2024, 4, 6, 13, 40),
-      'text': '대단합니다.'
-    },
-    {
-      'index': 1,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕감자13통자',
-      'dateTime': DateTime(2024, 4, 6, 13, 40),
-      'text': '대단합니다2342.'
-    },
-    {
-      'index': 2,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕통자',
-      'dateTime': DateTime(2024, 4, 9, 13, 40),
-      'text': '대단합니다. 어쩌면ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ'
-    },
-    {
-      'index': 3,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕감자',
-      'dateTime': DateTime(2024, 4, 13, 17, 40),
-      'text': '대단합니다ㅇㅁㄴㄹㄹ.'
-    },
-    {
-      'index': 4,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕감통자',
-      'dateTime': DateTime(2024, 3, 6, 13, 40),
-      'text': '대단ㅁㄴㅁㄴㄻㄴㅇㄻㄴㅇㄹ합니다.'
-    },
-    {
-      'index': 5,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '자통자',
-      'dateTime': DateTime(2024, 4, 6, 20, 40),
-      'text': '대단합ㅁㄴㅇㄻㅇㄴㄹ니다.'
-    },
-  ];
-
-  List<Map<String, dynamic>> re_comment_list = [
-    {
-      'index': 0,
-      'image': 'assets/images/image.png',
-      'nickname': '너비아니',
-      'dateTime': DateTime(2024, 4, 6, 18, 40),
-      'text': 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ.'
-    },
-    {
-      'index': 1,
-      'image': 'assets/images/image.png',
-      'nickname': '너비아니22222',
-      'dateTime': DateTime(2024, 4, 7, 13, 40),
-      'text': '대단합니다2342.'
-    },
-    {
-      'index': 1,
-      'image': 'assets/images/image.png',
-      'nickname': '왕너비아니통slslslls자',
-      'dateTime': DateTime(2024, 4, 10, 13, 40),
-      'text': '대단합니다. 어쩌면ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ'
-    },
-    {
-      'index': 1,
-      'image': 'assets/images/image.png',
-      'nickname': '왕감너비아니자',
-      'dateTime': DateTime(2024, 4, 23, 17, 40),
-      'text': '대단합니다ㅇㅁㄴㄹㄹ.'
-    },
-    {
-      'index': 4,
-      'image': 'assets/images/image.png',
-      'nickname': '왕감통자너비아니',
-      'dateTime': DateTime(2024, 3, 6, 13, 40),
-      'text': '대단ㅁㄴㅁㄴㄻㄴㅇㄻㄴㅇㄹ합니다.'
-    },
-    {
-      'index': 5,
-      'image': 'assets/images/image.png',
-      'nickname': '너비아니자통자',
-      'dateTime': DateTime(2024, 4, 6, 20, 40),
-      'text': '대단합ㅁㄴㅇㄻㅇㄴㄹ니다.'
-    },
-  ];
 
   TextStyle name_textStyle = const TextStyle(
       fontFamily: 'Pretendard',
@@ -143,11 +65,15 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       fontSize: 12,
       fontWeight: FontWeight.w500,
       color: Palette.grey200);
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    textFieldHintText = "댓글을 남겨보세요";
+
+  int _calculateCommentLength(List<Comment> comments) {
+    int result = comments.length;
+    for (final comment in comments) {
+      if (comment.children.isNotEmpty) {
+        result += _calculateCommentLength(comment.children);
+      }
+    }
+    return result;
   }
 
   @override
@@ -256,12 +182,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PostCard(number: 10, commentFocusNode: _commentFocusNode),
+                PostCard(post: post, commentFocusNode: _commentFocusNode),
                 Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                    child: Text(
-                        "댓글 ${(comment_list.length + re_comment_list.length)}개",
+                    child: Text("댓글 ${_calculateCommentLength(post.comments)}개",
                         style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontFamily: 'Pretendard',
@@ -278,10 +203,10 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   Widget commentWidget() {
     Size size = MediaQuery.of(context).size;
     return Column(
-      children: comment_list.map((comment) {
+      children: post.comments.map((comment) {
         List<Widget> commentAndReplies = [];
-        String uploadTimeString = formatDate(comment['dateTime']);
-        String beforeHours = calculateBeforeHours(comment['dateTime']);
+        String uploadTimeString = comment.createdDate;
+        String beforeHours = calculateBeforeHours(comment.createdDate);
 
         // Add the main comment
         commentAndReplies.add(
@@ -310,9 +235,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                           const SizedBox(width: 10),
                           CircleAvatar(
                             radius: 20,
-                            backgroundImage: AssetImage(
-                              comment['image'],
-                            ),
+                            backgroundImage: NetworkImage(comment.avatar),
                           ),
                           const SizedBox(width: 12),
                           SizedBox(
@@ -322,7 +245,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    comment['nickname'],
+                                    comment.author,
                                     style: name_textStyle,
                                   ),
                                   Text(
@@ -331,7 +254,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    comment['text'],
+                                    comment.content,
                                     style: text_textStyle,
                                     softWrap: true,
                                     maxLines: 3,
@@ -357,54 +280,52 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ],
                   ),
                   const SizedBox(height: 5),
-                  ...re_comment_list
-                      .where((reply) => reply['index'] == comment['index'])
-                      .map((reply) {
-                    String reUploadTimeString = formatDate(reply['dateTime']);
-                    String reBeforeHours =
-                        calculateBeforeHours(reply['dateTime']);
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(width: 50),
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage(
-                              reply['image'],
+                  if (comment.children.isNotEmpty)
+                    ...comment.children.map<Widget>((childComment) {
+                      String childUploadTimeString = childComment.createdDate;
+                      String childBeforeHours =
+                          calculateBeforeHours(childUploadTimeString);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(width: 50),
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundImage:
+                                  NetworkImage(childComment.avatar),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          SizedBox(
-                              width: size.width * 0.5,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    reply['nickname'],
-                                    style: name_textStyle,
-                                  ),
-                                  Text(
-                                    "$reUploadTimeString | $reBeforeHours",
-                                    style: date_textStyle,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    reply['text'],
-                                    softWrap: true,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.visible,
-                                    style: text_textStyle,
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    );
-                  }),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: size.width * 0.5,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      childComment.author,
+                                      style: name_textStyle,
+                                    ),
+                                    Text(
+                                      "$childUploadTimeString | $childBeforeHours",
+                                      style: date_textStyle,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      childComment.content,
+                                      softWrap: true,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.visible,
+                                      style: text_textStyle,
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      );
+                    }),
                 ],
               ),
             ),
@@ -417,11 +338,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     );
   }
 
-  String formatDate(DateTime dateTime) {
-    return DateFormat('yyyy.MM.dd').format(dateTime);
-  }
-
-  String calculateBeforeHours(DateTime dateTime) {
+  String calculateBeforeHours(String dateTimeStr) {
+    DateTime dateTime = DateTime.parse(dateTimeStr);
     Duration difference = DateTime.now().difference(dateTime);
     if (difference.inDays > 0) {
       return '${difference.inDays}일 전';

@@ -17,7 +17,7 @@ class PostBtnWidget extends StatefulWidget {
   });
 
   @override
-  _PostBtnWidgetState createState() => _PostBtnWidgetState();
+  State<PostBtnWidget> createState() => _PostBtnWidgetState();
 }
 
 class _PostBtnWidgetState extends State<PostBtnWidget> {
@@ -50,9 +50,9 @@ class _PostBtnWidgetState extends State<PostBtnWidget> {
             svgPicturePath: "assets/svgs/icon_comment.svg",
             text: widget.commentNum.toString(),
             onPressed: () {
-              widget.commentFocusNode == null
-                  ? Get.to(() => const PostDetailScreen())
-                  : widget.commentFocusNode?.requestFocus();
+              // widget.commentFocusNode == null
+              //     ? Get.to(() => const PostDetailScreen())
+              //     : widget.commentFocusNode?.requestFocus();
             },
           ),
           _buildButtonWithText(

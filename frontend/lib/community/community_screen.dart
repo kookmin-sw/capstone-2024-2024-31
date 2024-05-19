@@ -71,7 +71,6 @@ class _CommunityScreenState extends State<CommunityScreen>
         posts = fetchedPosts;
         _sortPosts(); // Sort posts initially based on the default sort index
         logger.d("posts: ${posts.toString()}");
-
       });
     } catch (e) {
       logger.e('Failed to load posts: $e');
@@ -85,7 +84,7 @@ class _CommunityScreenState extends State<CommunityScreen>
 
   void _sortPosts() {
     if (_sortIndex == 0) {
-        posts.sort((a, b) => b.createdDate.compareTo(a.createdDate));
+      posts.sort((a, b) => b.createdDate.compareTo(a.createdDate));
     } else if (_sortIndex == 1) {
       posts.sort((a, b) => b.likes.length.compareTo(a.likes.length));
     }
@@ -143,16 +142,13 @@ class _CommunityScreenState extends State<CommunityScreen>
           : Column(
               children: [
                 _buildSortButtons(),
-                // Expanded(
-                //   child: ListView.builder(
-                //       itemCount: posts.length,
-                //       itemBuilder: (BuildContext context, int index) {
-                //         return PostCard(
-                //           data: posts[index],
-                //           number: 1,
-                //         );
-                //       }),
-                // ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: posts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return PostCard(post: posts[index]);
+                      }),
+                ),
               ],
             ),
     );

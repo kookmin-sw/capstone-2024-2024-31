@@ -16,11 +16,6 @@ public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
     @Mapping(target = "author", source = "author.name")
-    @Mapping(target = "userResponse", source = "author")
+    @Mapping(target = "avatar", source = "author.avatar")
     CommentResponse entityToResponse(Comment comment);
-    
-    List<CommentResponse> COMMENT_RESPONSE_LIST(List<Comment> comments);
-    default UserResponse USER_RESPONSE(User user) {
-        return UserMapper.INSTANCE.userToUserResponse(user);
-    }
 }

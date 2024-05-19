@@ -22,8 +22,8 @@ class PostItemCard extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          print("${article.title} 챌린지 클릭됨");
-          Get.put(() => const PostDetailScreen());
+          // print("${article.title} 챌린지 클릭됨");
+          // Get.put(() => const PostDetailScreen());
         },
         child: Container(
             // color: Palette.grey300,

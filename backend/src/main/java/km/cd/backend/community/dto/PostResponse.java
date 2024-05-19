@@ -1,7 +1,6 @@
 package km.cd.backend.community.dto;
 
-import km.cd.backend.community.domain.Like;
-import km.cd.backend.user.dto.UserResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,8 +9,11 @@ public record PostResponse(
         Long id,
         String title,
         String content,
-        UserResponse author,
+        String author,
+        String avatar,
         String image,
+
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdDate,
         List<LikeResponse> likes,
         List<CommentResponse> comments) {
