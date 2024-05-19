@@ -99,22 +99,23 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
             children: [
               ChallengeWidgets.photoes(screenHeight, thisChallenge),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 child: ChallengeWidgets.informationChallenge(
-                    startDate, endDate, thisChallenge),
+                    startDate, endDate, thisChallenge, challengeStatus),
               ),
               SvgPicture.asset(
                 'assets/svgs/divider.svg',
                 fit: BoxFit.contain,
               ),
               ChallengeWidgets.certificationState(
-                  screenWidth, screenHeight, thisChallenge, challengeStatus),
+                  screenWidth, screenHeight,  challengeStatus),
               SvgPicture.asset(
                 'assets/svgs/divider.svg',
                 fit: BoxFit.contain,
               ),
               ChallengeWidgets.entireCertificationStatus(
-                  screenWidth, screenHeight, thisChallenge, challengeStatus),
+                  screenWidth, screenHeight, challengeStatus),
             ],
           ),
         ),
