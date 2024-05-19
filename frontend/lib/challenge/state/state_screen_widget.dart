@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/main/main_screen.dart';
 import 'package:get/get.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:intl/intl.dart';
@@ -11,19 +12,26 @@ import '../../model/package/pie_chart/src/legend_options.dart';
 import '../../model/package/pie_chart/src/pie_chart.dart';
 
 class ChallengeWidgets {
-  static AppBar buildAppBar() {
+  static AppBar buildAppBar(final bool isFromJoinScreen) {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Get.back();
-        },
-      ),
+      leading: isFromJoinScreen
+          ? IconButton(
+              onPressed: () => Get.offAll(MainScreen()),
+              icon: const Icon(
+                Icons.home,
+                color: Colors.white,
+              ))
+          : IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Get.back();
+              },
+            ),
       actions: [
         IconButton(
           onPressed: () {},
@@ -431,12 +439,11 @@ class ChallengeWidgets {
   }
 
   static Widget entireCertificationStatus(
-      double screenWidth, double screenHeight, Challenge thisChallenge, ChallengeStatus challengeStatus) {
-    final dataMap = <String, double>{
-      "100%": 100,
-      "80% 이상": 300,
-      "80% 미만": 600
-    };
+      double screenWidth,
+      double screenHeight,
+      Challenge thisChallenge,
+      ChallengeStatus challengeStatus) {
+    final dataMap = <String, double>{"100%": 100, "80% 이상": 300, "80% 미만": 600};
     final colorList = <Color>[
       Palette.purPle500,
       Palette.purPle300,

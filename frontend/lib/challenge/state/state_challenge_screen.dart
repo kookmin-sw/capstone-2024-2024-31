@@ -11,15 +11,14 @@ import '../../model/data/challenge/ChallengeService.dart';
 
 class ChallengeStateScreen extends StatefulWidget {
   final bool isFromJoinScreen;
-  final Challenge? challenge;
-  final ChallengeSimple? challengeSimple;
+  final int challengeId;
+  Challenge? challenge;
 
-  const ChallengeStateScreen({
-    super.key,
-    required this.isFromJoinScreen,
-    this.challenge,
-    this.challengeSimple,
-  });
+  ChallengeStateScreen(
+      {super.key,
+      required this.isFromJoinScreen,
+      required this.challengeId,
+      this.challenge});
 
   @override
   _ChallengeStateScreenState createState() => _ChallengeStateScreenState();
@@ -27,8 +26,8 @@ class ChallengeStateScreen extends StatefulWidget {
 
 class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
   final Logger logger = Logger();
-  Challenge? thisChallenge;
   bool isLoading = true;
+  late Challenge thisChallenge;
   late ChallengeStatus challengeStatus;
 
   @override
@@ -46,20 +45,36 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
   }
 
   Future<bool> _fetchChallenge() async {
-    if (widget.challenge == null) {
-      thisChallenge = await ChallengeService.fetchChallenge(
-          widget.challengeSimple!.id, logger);
-      return thisChallenge != null;
-    } else {
-      thisChallenge = widget.challenge!;
+    if (widget.challenge != null) {
+      setState(() {
+        thisChallenge = widget.challenge!;
+      });
       return true;
+    }
+
+    Challenge? tmpChallenge =
+        await ChallengeService.fetchChallenge(widget.challengeId, logger);
+    if (tmpChallenge != null) {
+      setState(() {
+        thisChallenge = tmpChallenge;
+      });
+      return true;
+    } else {
+      return false;
     }
   }
 
   Future<bool> _fetchChallengeStatus() async {
-    challengeStatus = (await ChallengeService.fetchChallengeStatus(
-        widget.challengeSimple!.id, logger))!;
-    return challengeStatus != null;
+    ChallengeStatus? tmpChallengeStatus =
+        await ChallengeService.fetchChallengeStatus(widget.challengeId, logger);
+    if (tmpChallengeStatus != null) {
+      setState(() {
+        challengeStatus = tmpChallengeStatus;
+      });
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -70,14 +85,8 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
           child: CircularProgressIndicator(),
         ),
       );
-    } else if (thisChallenge == null) {
-      return const Scaffold(
-        body: Center(
-          child: Text('챌린지 데이터를 불러올 수 없습니다.'),
-        ),
-      );
     } else {
-      return buildChallengeScreen(context, thisChallenge!);
+      return buildChallengeScreen(context, thisChallenge);
     }
   }
 
@@ -93,13 +102,14 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: ChallengeWidgets.buildAppBar(),
+        appBar: ChallengeWidgets.buildAppBar(widget.isFromJoinScreen),
         body: SingleChildScrollView(
           child: Column(
             children: [
               ChallengeWidgets.photoes(screenHeight, thisChallenge),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 child: ChallengeWidgets.informationChallenge(
                     startDate, endDate, thisChallenge),
               ),
