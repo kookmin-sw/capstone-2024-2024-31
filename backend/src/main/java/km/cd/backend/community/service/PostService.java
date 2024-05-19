@@ -7,9 +7,8 @@ import km.cd.backend.common.error.CustomException;
 import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.common.utils.s3.S3Uploader;
 import km.cd.backend.community.domain.Post;
-import km.cd.backend.community.dto.PostDetailResponse;
+import km.cd.backend.community.dto.PostResponse;
 import km.cd.backend.community.dto.PostRequest;
-import km.cd.backend.community.dto.PostSimpleResponse;
 import km.cd.backend.community.dto.ReportResponse;
 import km.cd.backend.community.mapper.PostMapper;
 import km.cd.backend.community.repository.PostRepository;
@@ -33,7 +32,7 @@ public class PostService {
   private final S3Uploader s3Uploader;
 
   @Transactional
-  public PostDetailResponse createPost(Long userId, Long challengeId, PostRequest postRequest, MultipartFile image) {
+  public PostResponse createPost(Long userId, Long challengeId, PostRequest postRequest, MultipartFile image) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
 
@@ -51,14 +50,14 @@ public class PostService {
     post.setImage(imagePath);
     postRepository.save(post);
 
-    return postMapper.entityToDetailResponse(post);
+    return postMapper.entityToResponse(post);
   }
 
-  public List<PostSimpleResponse> findAllByChallengeId(Long challengeId) {
+  public List<PostResponse> findAllByChallengeId(Long challengeId) {
     List<Post> posts = postRepository.findAllByChallengeId(challengeId);
     return posts.stream()
             .filter(post -> !post.getIsRejected())
-            .map(PostMapper.INSTANCE::entityToSimpleResponse)
+            .map(PostMapper.INSTANCE::entityToResponse)
             .toList();
   }
 
@@ -74,11 +73,11 @@ public class PostService {
     postRepository.delete(post);
   }
 
-  public PostDetailResponse findByPostId(Long postId) {
+  public PostResponse findByPostId(Long postId) {
     Post post = postRepository.findByIdWithComment(postId)
             .orElseThrow(() -> new CustomException(ExceptionCode.POST_NOT_FOUND));
 
-    return PostMapper.INSTANCE.entityToDetailResponse(post);
+    return PostMapper.INSTANCE.entityToResponse(post);
   }
   
   public ReportResponse reportPost(Long userId, Long postId) {
