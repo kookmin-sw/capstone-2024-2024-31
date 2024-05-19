@@ -35,20 +35,16 @@ class _RunModelByImageDemoState extends State<RunModelByImageDemo> {
   Future loadModel() async {
     String pathImageModel = "assets/models/model_classification.pt";
     //String pathCustomModel = "assets/models/custom_model.ptl";
-    String pathObjectDetectionModel = "assets/models/yolov5s.torchscript";
-    String pathObjectDetectionModelYolov8 = "assets/models/yolov8s.torchscript";
+    String pathObjectDetectionModel = "assets/ai/model_objectDetection.torchscript";
+    //String pathObjectDetectionModelYolov8 = "assets/models/yolov8s.torchscript";
     try {
       _imageModel = await PytorchLite.loadClassificationModel(
           pathImageModel, 224, 224, 1000,
           labelPath: "assets/labels/label_classification_imageNet.txt");
       //_customModel = await PytorchLite.loadCustomModel(pathCustomModel);
       _objectModel = await PytorchLite.loadObjectDetectionModel(
-          pathObjectDetectionModel, 80, 640, 640,
-          labelPath: "assets/labels/labels_objectDetection_Coco.txt");
-      _objectModelYoloV8 = await PytorchLite.loadObjectDetectionModel(
-          pathObjectDetectionModelYolov8, 80, 640, 640,
-          labelPath: "assets/labels/labels_objectDetection_Coco.txt",
-          objectDetectionModelType: ObjectDetectionModelType.yolov8);
+          pathObjectDetectionModel, 7, 640, 640,
+          labelPath: "assets/ai/labels_objectDetection.txt");
     } catch (e) {
       if (e is PlatformException) {
         print("only supported for android, Error is $e");
@@ -219,7 +215,7 @@ class _RunModelByImageDemoState extends State<RunModelByImageDemo> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Run model with Image'),
+          title: const Text('갤러리'),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -227,10 +223,10 @@ class _RunModelByImageDemoState extends State<RunModelByImageDemo> {
             Expanded(
               child: objDetect.isNotEmpty
                   ? _image == null
-                      ? const Text('No image selected.')
+                      ? const Text('이미지 없음')
                       : _objectModel.renderBoxesOnImage(_image!, objDetect)
                   : _image == null
-                      ? const Text('No image selected.')
+                      ? const Text('이미지 없음')
                       : Image.file(_image!),
             ),
             Center(
