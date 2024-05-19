@@ -39,8 +39,8 @@ class MyRoutineUpCard extends StatelessWidget {
           isStarted
               ? isIng
                   ? Get.to(() => CommunityScreen(challengeId: challengeId))
-                  : Get.to(() => ChallengeCompleteScreen())
-              : Get.to(() => ChallengeDetailScreen(challengeId: challenge.id, isFromMypage: true));
+                  : Get.to(() => ChallengeCompleteScreen(challengeId: challengeId,))
+              : Get.to(() => ChallengeDetailScreen(challengeId: challengeId, isFromMypage: true));
         },
         child: SizedBox(
             width: screenSize.width * 0.95,
