@@ -1,7 +1,6 @@
 package km.cd.backend.community.controller;
 
-import km.cd.backend.community.dto.PostSimpleResponse;
-import km.cd.backend.community.dto.PostDetailResponse;
+import km.cd.backend.community.dto.PostResponse;
 import km.cd.backend.community.dto.ReportResponse;
 import km.cd.backend.community.service.LikeService;
 import org.springframework.http.HttpStatus;
@@ -29,31 +28,31 @@ public class PostController {
 
   @PostMapping(path = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<PostDetailResponse> createPost(
+  public ResponseEntity<PostResponse> createPost(
       @PathVariable(name = "challengeId") Long challengeId,
       @RequestPart(value = "data") PostRequest postRequest,
       @RequestPart(value = "image") MultipartFile image,
       @AuthenticationPrincipal PrincipalDetails principalDetails) {
-    PostDetailResponse postResponse = postService.createPost(principalDetails.getUserId(), challengeId, postRequest, image);
+    PostResponse postResponse = postService.createPost(principalDetails.getUserId(), challengeId, postRequest, image);
     return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(postResponse);
   }
 
   @GetMapping("")
-  public ResponseEntity<List<PostSimpleResponse>> getAllPost(
+  public ResponseEntity<List<PostResponse>> getAllPost(
           @PathVariable(name = "challengeId") Long challengeId
   ) {
-    List<PostSimpleResponse> postSimpleResponses = postService.findAllByChallengeId(challengeId);
-    return ResponseEntity.ok(postSimpleResponses);
+    List<PostResponse> postResponses = postService.findAllByChallengeId(challengeId);
+    return ResponseEntity.ok(postResponses);
   }
 
   @GetMapping("/{postId}")
-  public ResponseEntity<PostDetailResponse> getPost(
+  public ResponseEntity<PostResponse> getPost(
           @PathVariable(name = "postId") Long postId
   ) {
-    PostDetailResponse postDetailResponse = postService.findByPostId(postId);
-    return ResponseEntity.ok(postDetailResponse);
+    PostResponse postResponse = postService.findByPostId(postId);
+    return ResponseEntity.ok(postResponse);
   }
 
   @DeleteMapping("/{postId}")
