@@ -126,7 +126,7 @@ class ChallengeServiceTest extends IntegrationTest {
     @DisplayName("[성공] 챌린지와 인증 횟수가 주어지면 챌린지 진행 현황 조회는 성공한다.")
     void checkChallengeStatus_챌린지와_인증_횟수가_주어지면_챌린지_진행_현황_조회는_성공() {
         // 반환값 설정
-        ChallengeStatusResponse expectedResponseDto = ChallengeMapper.INSTANCE.toChallengeStatusResponse(challenge, 0L);
+        ChallengeStatusResponse expectedResponseDto = ChallengeMapper.INSTANCE.toChallengeStatusResponse(challenge, 0L, 0, 0 ,0,0.0);
         
         // Mock behavior
         when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));

@@ -1,6 +1,7 @@
 package km.cd.backend.challenge.service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,10 +135,57 @@ public class ChallengeService {
     
     public ChallengeStatusResponse checkChallengeStatus(Long challengeId, Long userId) {
         Challenge challenge = validateExistChallenge(challengeId);
-
+        List<Participant> participants = challenge.getParticipants();
         Long countCertifications = postRepository.countCertification(challengeId, userId);
+        
+        int fullAchievementCount = 0;
+        int highAchievementCount = 0;
+        int lowAchievementCount = 0;
+        int overallAverageAchievement = 0;
+        
+        for (Participant participant : participants) {
+            Long participantUserId = participant.getUser().getId();
+            Long counts = postRepository.countCertification(challengeId, participantUserId);
+            double percentage = (double) counts / challenge.getTotalCertificationCount() * 100;
+            
+            if (percentage == 100.0) {
+                fullAchievementCount += 1;
+            } else if (percentage >= 80.0) {
+                highAchievementCount += 1;
+            } else {
+                lowAchievementCount += 1;
+            }
+            
+            if (willAchieveTarget(challenge, countCertifications)) {
+                overallAverageAchievement += 1;
+            }
+        }
+        double overallAverageAchievementRate = (double) overallAverageAchievement / participants.size() * 100;
+        overallAverageAchievementRate = Math.ceil(overallAverageAchievementRate * 10) / 10.0;
 
-        return ChallengeMapper.INSTANCE.toChallengeStatusResponse(challenge, countCertifications);
+        return ChallengeMapper.INSTANCE.toChallengeStatusResponse(
+            challenge,
+            countCertifications,
+            fullAchievementCount,
+            highAchievementCount,
+            lowAchievementCount,
+            overallAverageAchievementRate
+        );
+    }
+    
+    private boolean willAchieveTarget(Challenge challenge, Long countCertifications) {
+        int requiredCount = (int) Math.ceil((90.0 / 100) * challenge.getTotalCertificationCount());
+        int challengeFrequency = challenge.getTotalCertificationCount() / challenge.getChallengePeriod();
+        int futureCount = countCertifications.intValue() + (challengeFrequency * calculateRemainingWeeks(challenge.getEndDate()));
+        return futureCount >= requiredCount;
+    }
+    
+    private int calculateRemainingWeeks(LocalDate endDate) {
+        LocalDate currentDate = LocalDate.now();
+        if (currentDate.isAfter(endDate)) {
+            return 0;
+        }
+        return (int) ChronoUnit.WEEKS.between(currentDate, endDate);
     }
     public void finishChallenge(Challenge challenge) {
         // 참여자 성공/실패 결과 전송
