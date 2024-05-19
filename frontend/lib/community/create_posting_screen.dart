@@ -16,10 +16,10 @@ import 'package:http_parser/http_parser.dart';
 import '../model/data/post/post_form.dart';
 
 class CreatePostingScreen extends StatefulWidget {
-  const CreatePostingScreen({super.key, required this.challengeId});
+  const CreatePostingScreen({super.key, required this.challengeId, required this.isPossibleGallery});
 
   final int challengeId;
-
+  final bool isPossibleGallery;
   @override
   State<CreatePostingScreen> createState() => _CreatePostingScreenState();
 }

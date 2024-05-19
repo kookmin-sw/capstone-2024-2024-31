@@ -36,6 +36,7 @@ class UserController extends GetxController {
     update(); // 상태를 업데이트하여 UI를 리프레시
   }
 
+
   // 카테고리를 업데이트하는 메서드
   void updateFollowing(List<ChallengeCategory> newCategories) {
     user.categories = newCategories;

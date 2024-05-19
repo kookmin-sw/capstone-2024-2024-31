@@ -182,6 +182,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                             onPressed: () {
                               Get.to(() => CreatePostingScreen(
                                     challengeId: challenges[index].id,
+                                isPossibleGallery: challenges[index].isGalleryPossible,
                                   ));
                             },
                             style: ElevatedButton.styleFrom(
