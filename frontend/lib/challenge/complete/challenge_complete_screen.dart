@@ -6,8 +6,9 @@ import 'package:frontend/community/community_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/model/data/post.dart';
-import 'package:frontend/model/data/sms.dart';
 import 'package:get/get.dart';
+
+import '../../model/data/sms/sms.dart';
 
 class ChallengeCompleteScreen extends StatelessWidget {
   final Map<String, dynamic> postData;

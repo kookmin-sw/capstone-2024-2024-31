@@ -6,7 +6,6 @@ import 'package:frontend/model/controller/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 
-
 class UserInformation extends StatelessWidget {
   UserInformation({super.key});
 
@@ -21,7 +20,8 @@ class UserInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final List<ChallengeCategory> categoryList = userController.user.categories; // Set을 List로 변환
+    final List<ChallengeCategory> categoryList =
+        userController.user.categories; // Set을 List로 변환
 
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
@@ -51,15 +51,16 @@ class UserInformation extends StatelessWidget {
                             CategoryButtonPress(context);
                           },
                           child: Row(
-                              children: List.generate(categoryList.length, (index) {
-                                return Padding(
-                                    padding:
+                              children:
+                                  List.generate(categoryList.length, (index) {
+                            return Padding(
+                                padding:
                                     const EdgeInsets.symmetric(horizontal: 4),
-                                    child: Text(
-                                      "#${categoryList[index].name}",
-                                      style: tagTextStyle,
-                                    ));
-                              }).toList()))
+                                child: Text(
+                                  "#${categoryList[index].name}",
+                                  style: tagTextStyle,
+                                ));
+                          }).toList()))
                     ],
                   )
                 else
@@ -80,14 +81,15 @@ class UserInformation extends StatelessWidget {
         child: Stack(children: [
           userController.user.avatar != null
               ? CircleAvatar(
-            radius: 70,
-            backgroundImage: NetworkImage(userController.user.avatar!),
-          )
+                  radius: 70,
+                  backgroundImage: NetworkImage(userController.user.avatar!),
+                )
               : CircleAvatar(
-            radius: 70,
-            backgroundColor: Colors.grey[200],
-            child: const Icon(Icons.person, size: 70, color: Palette.purPle200),
-          ),
+                  radius: 70,
+                  backgroundColor: Colors.grey[200],
+                  child: const Icon(Icons.person,
+                      size: 70, color: Palette.purPle200),
+                ),
           Positioned(
               left: 65,
               top: 65,
@@ -108,7 +110,7 @@ class UserInformation extends StatelessWidget {
   }
 
   Widget nameText(Size screenSize) {
-    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       SizedBox(
           width: userController.user.name.length * 25,
           height: 35,

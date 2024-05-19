@@ -5,12 +5,14 @@ class RtuButton extends StatelessWidget {
   final Function onPressed;
   final String text;
   bool disabled;
+  Color color;
 
   RtuButton(
       {super.key,
       required this.onPressed,
       required this.text,
-      this.disabled = false});
+      this.disabled = false,
+      this.color = Palette.mainPurple});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,7 @@ class RtuButton extends StatelessWidget {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  disabled == false ? Palette.mainPurple : Palette.greySoft,
+              backgroundColor: disabled == false ? color : Palette.greySoft,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -34,9 +35,9 @@ class RtuButton extends StatelessWidget {
             ),
             child: Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white,
+                  color: disabled == false ? Colors.white : Colors.grey,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.bold),
             ),

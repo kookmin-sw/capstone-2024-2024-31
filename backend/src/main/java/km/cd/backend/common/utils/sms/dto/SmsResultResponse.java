@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SmsResultResponse {
     
-    private Boolean isSuccesed;
+    private Boolean isSuccess;
     
     private String message;
     
     public SmsResultResponse(boolean success, String message) {
-        this.isSuccesed = success;
+        this.isSuccess = success;
         this.message = message;
     }
 }
