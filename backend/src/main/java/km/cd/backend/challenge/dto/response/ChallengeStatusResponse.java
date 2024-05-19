@@ -43,4 +43,14 @@ public class ChallengeStatusResponse {
     
     @Schema(description = "전체 인증 횟수")
     private int totalCertificationCount;
+    
+    private Double currentAchievementRate;
+    
+    private Integer fullAchievementCount;
+    
+    private Integer highAchievementCount;
+    
+    private Integer lowAchievementCount;
+    
+    private Double overallAverageAchievementRate;
 }

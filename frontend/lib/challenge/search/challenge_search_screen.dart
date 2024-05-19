@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
+import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 import 'package:frontend/model/data/challenge/challenge_filter.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
@@ -24,8 +25,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   final logger = Logger();
   final ScrollController _scrollController = ScrollController();
   List<ChallengeSimple> challengeList = [];
-  List<String> categoryList =
-      ['전체'] + ChallengeCategory.values.map((e) => e.name).toList();
+  List<String> categoryList = ['전체'] + ChallengeCategory.values.map((e) => e.name).toList();
 
   String searchValue = '';
   bool _isPrivate = false;
@@ -33,6 +33,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   int currentCursor = 0;
   final int pageSize = 10;
   bool hasMoreData = true;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -49,28 +50,28 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && hasMoreData && !isLoading) {
       _getFilteredChallengeList(false);
     }
   }
 
   Future<void> _getFilteredChallengeList(bool isFiltered) async {
-    if (!hasMoreData) return;
+    if (!hasMoreData || isLoading) return;
+
+    setState(() {
+      isLoading = true;
+    });
 
     try {
       final dio = Dio();
       final prefs = await SharedPreferences.getInstance();
       dio.options.headers['content-Type'] = 'application/json';
-      dio.options.headers['Authorization'] =
-          'Bearer ${prefs.getString('access_token')}';
+      dio.options.headers['Authorization'] = 'Bearer ${prefs.getString('access_token')}';
 
       final filter = ChallengeFilter(
         name: searchValue,
-        isPrivate: isFiltered ? _isPrivate : null,
-        category: selectedIndex == 0
-            ? null
-            : ChallengeCategory.values[selectedIndex - 1],
+        isPrivate: _isPrivate ? _isPrivate : null,
+        category: selectedIndex == 0 ? null : ChallengeCategory.values[selectedIndex - 1],
       ).toJson();
 
       logger.d("challenge filter: $filter");
@@ -83,13 +84,15 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
 
       if (response.statusCode == 200) {
         logger.d(response.data);
-        List<ChallengeSimple> newData = (response.data as List)
-            .map((c) => ChallengeSimple.fromJson(c))
-            .toList();
+        List<ChallengeSimple> newData = (response.data as List).map((c) => ChallengeSimple.fromJson(c)).toList();
 
         setState(() {
           if (newData.isNotEmpty) {
-            challengeList.addAll(newData);
+            newData.forEach((newChallenge) {
+              if (!challengeList.any((existingChallenge) => existingChallenge.id == newChallenge.id)) {
+                challengeList.add(newChallenge);
+              }
+            });
             currentCursor = challengeList.last.id;
           } else {
             hasMoreData = false;
@@ -100,7 +103,21 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
       }
     } catch (e) {
       logger.d(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
+  }
+
+  void _onSearch(String value) {
+    setState(() {
+      searchValue = value;
+      hasMoreData = true;
+      currentCursor = 0;
+      challengeList.clear();
+      _getFilteredChallengeList(true);
+    });
   }
 
   void _onCategorySelected(int index) {
@@ -127,18 +144,23 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 80,
+        backgroundColor: Palette.mainPurple,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios, color: Palette.white),
           onPressed: () {
             Get.back();
           },
         ),
-        title: const Text(
-          '챌린지 모아보기',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Pretender',
+        title: Container(
+          height: 60,
+          padding: const EdgeInsets.all(5.0),
+          child: SearchBar(
+            onSubmitted: (value) {
+              _onSearch(value);
+            },
+            padding: const MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
+            trailing: const [Icon(Icons.search)],
           ),
         ),
       ),
@@ -157,16 +179,29 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
             ),
             const SizedBox(height: 5),
             Expanded(
-              child: GridView.builder(
-                controller: _scrollController,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1 / 1.4,
-                ),
-                itemCount: challengeList.length,
-                itemBuilder: (context, index) {
-                  return ChallengeItemCard(data: challengeList[index]);
-                },
+              child: Stack(
+                children: [
+                  GridView.builder(
+                    controller: _scrollController,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.4,
+                    ),
+                    itemCount: challengeList.length,
+                    itemBuilder: (context, index) {
+                      return ChallengeItemCard(data: challengeList[index]);
+                    },
+                  ),
+                  if (isLoading)
+                    const Positioned(
+                      bottom: 10,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                ],
               ),
             ),
           ],

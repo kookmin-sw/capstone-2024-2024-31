@@ -39,7 +39,8 @@ public interface ChallengeMapper {
     
     ChallengeInformationResponse challengeToChallengeResponse(Challenge challenge);
     
-    ChallengeStatusResponse toChallengeStatusResponse(Challenge challenge, Long numberOfCertifications);
+    @Mapping(target = "currentAchievementRate", expression = "java(getCurrentAchievementRate(numberOfCertifications, challenge.getTotalCertificationCount()))")
+    ChallengeStatusResponse toChallengeStatusResponse(Challenge challenge, Long numberOfCertifications, Integer fullAchievementCount, Integer highAchievementCount,Integer lowAchievementCount, Double overallAverageAchievementRate);
     
     @Mappings({
         @Mapping(target = "challengeId", source = "participant.challenge.id"),
@@ -51,6 +52,14 @@ public interface ChallengeMapper {
 
     @Mapping(target = "imageUrl", expression = "java(challenge.getChallengeImagePaths().get(0))")
     ChallengeSimpleResponse entityToSimpleResponse(Challenge challenge);
+    
+    default Double getCurrentAchievementRate(Long numberOfCertifications, int totalCertificationCount){
+        if (totalCertificationCount == 0) {
+            throw new IllegalArgumentException();
+        }
+        double rate = (double) numberOfCertifications / totalCertificationCount * 100;
+        return Math.round(rate * 10) / 10.0;
+    }
 
     default int calculateTotalCertificationCount(Integer challengePeriod, String certificationFrequency) {
         return challengePeriod * ChallengeFrequency.findByFrequency(certificationFrequency).getDaysPerWeek();
