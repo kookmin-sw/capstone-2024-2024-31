@@ -8,14 +8,14 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class PostDetailPage extends StatefulWidget {
-  const PostDetailPage({super.key});
+class PostDetailScreen extends StatefulWidget {
+  const PostDetailScreen({super.key});
 
   @override
-  State<PostDetailPage> createState() => _PostDetailPageState();
+  State<PostDetailScreen> createState() => _PostDetailScreenState();
 }
 
-class _PostDetailPageState extends State<PostDetailPage> {
+class _PostDetailScreenState extends State<PostDetailScreen> {
   bool _isTapSendCommentBtn = false;
   Timer? _timer;
 
@@ -143,7 +143,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       fontSize: 12,
       fontWeight: FontWeight.w500,
       color: Palette.grey200);
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -219,7 +219,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             borderSide: const BorderSide(
                                 color: Palette.grey50, width: 2),
                           )),
-                      validator: (value) => value!.isEmpty ? textFieldHintText : null,
+                      validator: (value) =>
+                          value!.isEmpty ? textFieldHintText : null,
                     )),
                     const SizedBox(width: 10),
                     GestureDetector(

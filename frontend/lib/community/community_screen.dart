@@ -24,7 +24,6 @@ class _CommunityScreenState extends State<CommunityScreen>
   final int _selectedIndex = 0; // 탭 인덱스
   int _sortIndex = 0; // 정렬 방식 인덱스
 
-
   @override
   void initState() {
     super.initState();
@@ -34,18 +33,7 @@ class _CommunityScreenState extends State<CommunityScreen>
   void dispose() {
     super.dispose();
   }
-  // void _sortPosts(List<SimplePost> posts) {
-  //   setState(() {
-  //     if (_sortIndex == 0) {
-  //       // 최신순 정렬
-  //       posts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-  //     } else {
-  //       // 인기순 정렬
-  //       posts.sort((a, b) => b.likes.compareTo(a.likes));
-  //     }
-  //   });
-  // }
-  // 버튼 스타일 정의
+
   final _selectedButtonStyle = ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(26.0),
@@ -80,7 +68,6 @@ class _CommunityScreenState extends State<CommunityScreen>
               widget.isFromCreatePostingScreen
                   ? Get.to(() => MainScreen())
                   : Get.back();
-
             },
           ),
           title: const Text(

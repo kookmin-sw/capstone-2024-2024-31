@@ -30,8 +30,8 @@ public class PostController {
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<PostResponse> createPost(
       @PathVariable(name = "challengeId") Long challengeId,
-      @RequestPart(value = "data") PostRequest postRequest,
-      @RequestPart(value = "image") MultipartFile image,
+      @RequestPart(name = "data") PostRequest postRequest,
+      @RequestPart(name = "image") MultipartFile image,
       @AuthenticationPrincipal PrincipalDetails principalDetails) {
     PostResponse postResponse = postService.createPost(principalDetails.getUserId(), challengeId, postRequest, image);
     return ResponseEntity

@@ -50,8 +50,8 @@ class _PostBtnWidgetState extends State<PostBtnWidget> {
             svgPicturePath: "assets/svgs/icon_comment.svg",
             text: widget.commentNum.toString(),
             onPressed: () {
-             widget.commentFocusNode == null
-                  ? Get.to(() => const PostDetailPage())
+              widget.commentFocusNode == null
+                  ? Get.to(() => const PostDetailScreen())
                   : widget.commentFocusNode?.requestFocus();
             },
           ),

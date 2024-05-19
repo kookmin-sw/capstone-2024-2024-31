@@ -40,7 +40,7 @@ class _PostCardState extends State<PostCard> {
         // 게시물 상세 정보 페이지로 이동하는 코드 추가
         widget.commentFocusNode != null
             ? null
-            : Get.to(() => const PostDetailPage());
+            : Get.to(() => const PostDetailScreen());
       },
       child: Column(
         children: [
