@@ -1,33 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/community/post_detail_screen.dart';
 import 'package:frontend/community/widget/post_button_widget.dart';
 import 'package:frontend/community/widget/post_top.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/controller/user_controller.dart';
+import 'package:frontend/model/data/post/post.dart';
 import 'package:get/get.dart';
 
 class PostCard extends StatefulWidget {
-  int number;
-  static bool isLiked = false;
-  static int likeNum = 19;
-  static int commentNum = 1;
-  static String imageUrl = 'assets/images/image.png';
-  static String userName = '챌린지장인';
-  static String postText = "ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ래서 지금 이게 5줄이 넘을지 모르겟쯘올ㅇ";
-  static String authImage = 'assets/images/challenge_image.png';
   final FocusNode? commentFocusNode;
+  final Post post;
 
-  PostCard({required this.number, super.key, this.commentFocusNode});
+  const PostCard({super.key, required this.post, this.commentFocusNode});
 
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
+  late Post post;
   bool isFollowing = false;
 
-  void handleFollowingChanged(bool newFollowingStatus) {
+  final controller = Get.find<UserController>();
+
+  @override
+  void initState() {
+    super.initState();
+    post = widget.post;
+    for (final user in controller.user.following) {
+      if (user.friendName == post.author) {
+        isFollowing = true;
+        break;
+      }
+    }
+  }
+
+  void handleFollowingChanged(bool isFollowing) {
     setState(() {
-      isFollowing = newFollowingStatus;
+      this.isFollowing = isFollowing;
     });
   }
 
@@ -37,12 +46,13 @@ class _PostCardState extends State<PostCard> {
 
     return InkWell(
       onTap: () {
-        // 게시물 상세 정보 페이지로 이동하는 코드 추가
-        widget.commentFocusNode != null
-            ? null
-            : Get.to(() => const PostDetailScreen());
+
+        // widget.commentFocusNode != null
+        //     ? null
+        //     : Get.to(() => const PostDetailScreen());
       },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             color: Colors.white,
@@ -50,25 +60,25 @@ class _PostCardState extends State<PostCard> {
             child: Column(
               children: [
                 PostTopWidget(
-                  image: PostCard.imageUrl,
-                  name: PostCard.userName,
-                  uploadTime: DateTime(2024, 5, 15),
+                  image: post.image,
+                  name: post.author,
+                  createdAt: post.createdDate,
                   isInitiallyFollowing: isFollowing,
                   onFollowingChanged: handleFollowingChanged,
                 ),
                 const SizedBox(height: 10),
-                post_text(PostCard.postText),
+                post_text(post.content),
                 const SizedBox(height: 17),
-                post_image(PostCard.authImage),
+                post_image(post.image),
                 const SizedBox(height: 20),
                 widget.commentFocusNode == null
                     ? PostBtnWidget(
-                        likeNum: PostCard.likeNum,
-                        commentNum: PostCard.commentNum,
+                        likeNum: post.likes.length,
+                        commentNum: post.comments.length,
                       )
                     : PostBtnWidget(
-                        likeNum: PostCard.likeNum,
-                        commentNum: PostCard.commentNum,
+                        likeNum: post.likes.length,
+                        commentNum: post.comments.length,
                         commentFocusNode: widget.commentFocusNode),
                 const SizedBox(height: 15),
               ],
@@ -87,15 +97,18 @@ class _PostCardState extends State<PostCard> {
 }
 
 Widget post_text(String postText) {
-  return Text(
-    postText,
-    maxLines: 5,
-    textAlign: TextAlign.left,
-    overflow: TextOverflow.ellipsis,
-    style: const TextStyle(
-      fontFamily: 'Pretendard', fontSize: 12, height: 1.3, // 줄간격 조정
-    ),
-  );
+  return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(
+        postText,
+        maxLines: 5,
+        textAlign: TextAlign.left,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          fontFamily: 'Pretendard', fontSize: 12, height: 1.3, // 줄간격 조정
+        ),
+      ));
 }
 
 Widget post_image(String image) {
@@ -104,7 +117,7 @@ Widget post_image(String image) {
     child: Container(
       width: double.infinity,
       color: Colors.grey[200], // 테두리 색상
-      child: Image.asset(
+      child: Image.network(
         image,
         fit: BoxFit.fitWidth,
       ),

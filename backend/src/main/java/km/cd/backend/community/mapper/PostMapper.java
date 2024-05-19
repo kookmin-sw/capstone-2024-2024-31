@@ -1,5 +1,8 @@
 package km.cd.backend.community.mapper;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,8 @@ public interface PostMapper {
 
   String CONTENT_DELETE = "삭제된 댓글입니다.";
 
+  @Mapping(target = "author", source = "post.author.name")
+  @Mapping(target = "avatar", source = "post.author.avatar")
   @Mapping(target = "likes", source = "likes", qualifiedByName = "mapLikes")
   @Mapping(target = "comments", source = "comments", qualifiedByName = "mapComments")
   PostResponse entityToResponse(Post post);
@@ -37,10 +42,11 @@ public interface PostMapper {
         .map(comment -> new CommentResponse(
             comment.getId(),
             comment.getAuthor().getName(),
+            comment.getAuthor().getAvatar(),
             comment.isDeleted() ? CONTENT_DELETE : comment.getContent(),
-            CommentMapper.INSTANCE.COMMENT_RESPONSE_LIST(comment.getChildren()),
-            UserMapper.INSTANCE.userToUserResponse(comment.getAuthor())))
-        .collect(Collectors.toList());
+            comment.getCreatedDate(),
+            mapComments(comment.getChildren())))
+        .toList();
   }
 
   @Named("mapLikes")

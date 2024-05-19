@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/community/community_screen.dart';
 import 'package:frontend/community/post_detail_screen.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -11,15 +9,17 @@ import 'package:logger/logger.dart';
 import 'dart:io';
 import 'package:dio/dio.dart' as dio;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http_parser/http_parser.dart';
-
 import '../model/data/post/post_form.dart';
+import 'package:frontend/model/data/post/post.dart';
+import 'package:frontend/model/data/post/post_form.dart';
 
 class CreatePostingScreen extends StatefulWidget {
-  const CreatePostingScreen({super.key, required this.challengeId, required this.isPossibleGallery});
+  const CreatePostingScreen(
+      {super.key, required this.challengeId, required this.isPossibleGallery});
 
   final int challengeId;
   final bool isPossibleGallery;
+
   @override
   State<CreatePostingScreen> createState() => _CreatePostingScreenState();
 }
@@ -38,6 +38,9 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
   File image = File('');
   bool showImage = false;
   bool hoverImage = false;
+  String _inputTitle = '';
+  String _inputContent = '';
+  File _inputImage = File('');
 
   Future<void> _createPost() async {
     final prefs = await SharedPreferences.getInstance();
@@ -48,9 +51,9 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
         'Bearer ${prefs.getString('access_token')}';
 
     final formData = dio.FormData.fromMap(PostForm(
-      title: "title",
-      content: "content",
-      image: image,
+      title: _inputTitle,
+      content: _inputContent,
+      image: _inputImage,
     ).toFormData());
 
     try {
@@ -60,7 +63,9 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
 
       if (response.statusCode == 201) {
         logger.d('게시물 생성 성공: ${response.data}');
-        Get.off(() => const PostDetailScreen());
+
+        final Post post = Post.fromJson(response.data);
+        Get.off(() => PostDetailScreen(post: post));
       } else {
         throw Exception('게시물 생성 실패: ${response.statusCode}: ${response.data}');
       }
@@ -75,7 +80,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
         source: isGallery ? ImageSource.gallery : ImageSource.camera);
     if (image != null) {
       setState(() {
-        this.image = File(image.path);
+        _inputImage = File(image.path);
         showImage = true;
       });
     }
@@ -175,7 +180,9 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                               )),
                           validator: (value) =>
                               value!.isEmpty ? '제목을 입력해주세요.' : null,
-                          // onChanged: (value) => controller.updateChallengeName(value),
+                          onChanged: (value) => setState(() {
+                            _inputTitle = value;
+                          }),
                         )),
                     const SizedBox(height: 10),
                     Text("📢 루틴업 한마디",
@@ -208,7 +215,9 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                           )),
                       validator: (value) =>
                           value!.isEmpty ? "오늘의 루틴업 한마디를 작성해주세요." : null,
-                      // onChanged: (value) => controller.updateChallengeName(value),
+                      onChanged: (value) => setState(() {
+                        _inputContent = value;
+                      }),
                     )
                   ]),
             )));
@@ -240,7 +249,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
               child: Visibility(
                   visible: showImage,
                   child: Image.file(
-                    image,
+                    _inputImage,
                     fit: BoxFit.fitHeight,
                   )),
             ),
@@ -250,21 +259,21 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
 
   Widget shadowBtn(final IconData iconData, bool isGallery) {
     return Expanded(
-        child: Container(
-            decoration: BoxDecoration(
-              color: Palette.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3), // changes position of shadow
+        child: GestureDetector(
+            onTap: () => getimage(isGallery),
+            child: Container(
+                decoration: BoxDecoration(
+                  color: Palette.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: GestureDetector(
-                onTap: () => getimage(isGallery),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Center(

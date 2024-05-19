@@ -26,6 +26,7 @@ class PostItemCard extends StatelessWidget {
         onTap: () {
           print("${post.title} 챌린지 클릭됨");
           Get.put(() => const PostDetailScreen());
+
         },
         child: Container(
             // color: Palette.grey300,
@@ -54,7 +55,7 @@ class PostItemCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      userInform(post.avatar, post.author.name),
+                      // userInform(post.avatar, post.author.name), //Todo : post image
                       const SizedBox(height: 2),
                       articleInform(),
                       Text(

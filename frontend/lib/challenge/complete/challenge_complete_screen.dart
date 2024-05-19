@@ -80,62 +80,63 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
       ),
       body: isLoading
           ? const CircularProgressIndicator(
-              color: Palette.mainPurple,
-            )
+        color: Palette.mainPurple,
+      )
           : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _isSuccess ? "챌린지를 성공했어요! 👍" : "챌린지를 실패했어요 😭",
-                      style: titleStyle(21.0),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "당신의 갓생을 루틴업이 응원합니다!",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Pretender',
-                        fontSize: 11,
-                        color: Palette.purPle200,
-                      ),
-                    ),
-                    const SizedBox(height: 25),
-                    challengeInform(),
-                    const SizedBox(height: 15),
-                    const Divider(
-                      indent: 20,
-                      endIndent: 20,
-                      height: 10,
-                      thickness: 1.5,
-                      color: Palette.grey50,
-                    ),
-                    const SizedBox(height: 10),
-                    CertificationMethod(challenge: challenge),
-                    const SizedBox(height: 10),
-                    GestureDetector(
-                      child: Text("인증 게시글 모음 > ", style: titleStyle(15.0)),
-                      onTap: () => Get.to(() =>
-                          CommunityScreen(challengeId: widget.challengeId)),
-                    ),
-                    const SizedBox(height: 10),
-                    certificationPostList(),
-                    const SizedBox(height: 15),
-                    const Divider(
-                      indent: 20,
-                      endIndent: 20,
-                      height: 10,
-                      thickness: 1.5,
-                      color: Palette.grey50,
-                    ),
-                    const SizedBox(height: 15),
-                    RewardCard(isSuccess: _isSuccess, sms: _sms),
-                  ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _isSuccess ? "챌린지를 성공했어요! 👍" : "챌린지를 실패했어요 😭",
+                style: titleStyle(21.0),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "당신의 갓생을 루틴업이 응원합니다!",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Pretender',
+                  fontSize: 11,
+                  color: Palette.purPle200,
                 ),
               ),
-            ),
+              const SizedBox(height: 25),
+              challengeInform(),
+              const SizedBox(height: 15),
+              const Divider(
+                indent: 20,
+                endIndent: 20,
+                height: 10,
+                thickness: 1.5,
+                color: Palette.grey50,
+              ),
+              const SizedBox(height: 10),
+              CertificationMethod(challenge: challenge),
+              const SizedBox(height: 10),
+              GestureDetector(
+                child: Text("인증 게시글 모음 > ", style: titleStyle(15.0)),
+                onTap: () =>
+                    Get.to(() =>
+                        CommunityScreen(challengeId: widget.challengeId)),
+              ),
+              const SizedBox(height: 10),
+              certificationPostList(),
+              const SizedBox(height: 15),
+              const Divider(
+                indent: 20,
+                endIndent: 20,
+                height: 10,
+                thickness: 1.5,
+                color: Palette.grey50,
+              ),
+              const SizedBox(height: 15),
+              RewardCard(isSuccess: _isSuccess, sms: _sms),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
