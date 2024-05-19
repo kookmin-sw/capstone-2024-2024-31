@@ -35,11 +35,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long userId = principalDetails.getUserId();
-        User user = userService.findById(userId);
-        UserResponse userResponse = UserMapper.INSTANCE.userToUserResponse(user);
-        return ResponseEntity.ok(userResponse);
+    public ResponseEntity<UserDetailResponse> me(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ResponseEntity.ok(userService.getMyInfo(principalDetails.getUserId()));
     }
     
     @PostMapping("/follow/{targetEmail}")
@@ -114,7 +111,7 @@ public class UserController {
     }
     
     @PostMapping("/category")
-    public ResponseEntity<UserDetailResponse> setCategory(
+    public ResponseEntity<UserResponse> setCategory(
         @RequestBody UserCategoryRequest userCategoryRequest,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {

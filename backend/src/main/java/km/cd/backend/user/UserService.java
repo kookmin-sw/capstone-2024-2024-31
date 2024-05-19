@@ -49,6 +49,11 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
     }
     
+    public UserDetailResponse getMyInfo(Long userId) {
+        User user = findById(userId);
+        return UserMapper.INSTANCE.userToUserDetailResponse(user, getFollowingList(user.getEmail()), getFollwerList(user.getEmail()));
+    }
+    
     public void followFriend(String targetEmail, Long userId) {
         User fromUser = findById(userId);
         User toUser = findByEmail(targetEmail);
@@ -143,7 +148,7 @@ public class UserService {
         return findById(userId).getAvatar();
     }
     
-    public UserDetailResponse setCategories(UserCategoryRequest userCategoryRequest, Long userId) {
+    public UserResponse setCategories(UserCategoryRequest userCategoryRequest, Long userId) {
         User user = findById(userId);
         List<String> categories = userCategoryRequest.getCategories();
         
@@ -155,7 +160,7 @@ public class UserService {
         user.setCategories(challengeCategories);
         userRepository.save(user);
         
-        return UserMapper.INSTANCE.userToUserDetailResponse(user);
+        return UserMapper.INSTANCE.userToUserResponse(user);
     }
     
     public void setGithubUsername(GithubUsernameRequest githubUsernameRequest, Long userId) {
