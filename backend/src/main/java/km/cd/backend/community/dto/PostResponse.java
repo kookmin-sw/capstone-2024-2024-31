@@ -13,6 +13,6 @@ public record PostResponse(
         UserResponse author,
         String image,
         LocalDateTime createdDate,
-        List<Like> likes,
+        List<LikeResponse> likes,
         List<CommentResponse> comments) {
 }

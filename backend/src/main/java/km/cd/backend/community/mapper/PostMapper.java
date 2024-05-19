@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import km.cd.backend.challenge.domain.Challenge;
-import km.cd.backend.community.dto.CommentResponse;
-import km.cd.backend.community.dto.PostRequest;
-import km.cd.backend.community.dto.PostResponse;
-import km.cd.backend.community.dto.ReportResponse;
+import km.cd.backend.community.domain.Like;
+import km.cd.backend.community.dto.*;
 import km.cd.backend.user.domain.User;
 import km.cd.backend.user.domain.mapper.UserMapper;
 import org.mapstruct.Mapper;
@@ -25,6 +23,7 @@ public interface PostMapper {
 
   String CONTENT_DELETE = "삭제된 댓글입니다.";
 
+  @Mapping(target = "likes", source = "likes", qualifiedByName = "mapLikes")
   @Mapping(target = "comments", source = "comments", qualifiedByName = "mapComments")
   PostResponse entityToResponse(Post post);
 
@@ -42,6 +41,15 @@ public interface PostMapper {
             CommentMapper.INSTANCE.COMMENT_RESPONSE_LIST(comment.getChildren()),
             UserMapper.INSTANCE.userToUserResponse(comment.getAuthor())))
         .collect(Collectors.toList());
+  }
+
+  @Named("mapLikes")
+  default List<LikeResponse> mapLikes(List<Like> likes) {
+    return likes.stream()
+            .map(like -> new LikeResponse(
+                    like.getId()
+            ))
+            .toList();
   }
 
   @Mapping(target = "reportingCount", source = "post", qualifiedByName = "countReports")
