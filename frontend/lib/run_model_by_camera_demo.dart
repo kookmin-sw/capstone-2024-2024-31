@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pytorch_lite/pytorch_lite.dart';
 import 'ui/box_widget.dart';
-
 import 'ui/camera_view.dart';
 
-/// [RunModelByCameraDemo] stacks [CameraView] and [BoxWidget]s with bottom sheet for stats
 class RunModelByCameraDemo extends StatefulWidget {
   const RunModelByCameraDemo({Key? key}) : super(key: key);
 
@@ -19,8 +17,8 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
   String? classification;
   Duration? classificationInferenceTime;
 
-  /// Scaffold Key
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  GlobalKey<CameraViewState> cameraViewKey = GlobalKey<CameraViewState>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,30 +27,8 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
       backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
-          // Camera View
-          CameraView(resultsCallback, resultsCallbackClassification),
-
-          // Bounding boxes
+          CameraView(resultsCallback, resultsCallbackClassification, key: cameraViewKey),
           boundingBoxes2(results),
-
-          // Heading
-          // Align(
-          //   alignment: Alignment.topLeft,
-          //   child: Container(
-          //     padding: EdgeInsets.only(top: 20),
-          //     child: Text(
-          //       'Object Detection Flutter',
-          //       textAlign: TextAlign.left,
-          //       style: TextStyle(
-          //         fontSize: 28,
-          //         fontWeight: FontWeight.bold,
-          //         color: Colors.deepOrangeAccent.withOpacity(0.6),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
-          //Bottom Sheet
           Align(
             alignment: Alignment.bottomCenter,
             child: DraggableScrollableSheet(
@@ -72,15 +48,19 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.keyboard_arrow_up,
-                            size: 48, color: Colors.orange),
+                        const Icon(Icons.keyboard_arrow_up, size: 48, color: Colors.orange),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
                               if (objectDetectionInferenceTime != null)
-                                StatsRow('Object Detection Inference time:',
-                                    '${objectDetectionInferenceTime?.inMilliseconds} ms'),
+                                StatsRow('Object Detection Inference time:', '${objectDetectionInferenceTime?.inMilliseconds} ms'),
+                              ElevatedButton(
+                                onPressed: () {
+                                  cameraViewKey.currentState?.switchCamera();
+                                },
+                                child: const Text('Switch Camera'),
+                              ),
                             ],
                           ),
                         )
@@ -96,7 +76,6 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
     );
   }
 
-  /// Returns Stack of bounding boxes
   Widget boundingBoxes2(List<ResultObjectDetection>? results) {
     if (results == null) {
       return Container();
@@ -106,8 +85,7 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
     );
   }
 
-  void resultsCallback(
-      List<ResultObjectDetection> results, Duration inferenceTime) {
+  void resultsCallback(List<ResultObjectDetection> results, Duration inferenceTime) {
     if (!mounted) {
       return;
     }
@@ -129,8 +107,7 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
     });
   }
 
-  void resultsCallbackClassification(
-      String classification, Duration inferenceTime) {
+  void resultsCallbackClassification(String classification, Duration inferenceTime) {
     if (!mounted) {
       return;
     }
@@ -139,13 +116,8 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
       classificationInferenceTime = inferenceTime;
     });
   }
-
-  // static const BOTTOM_SHEET_RADIUS = Radius.circular(24.0);
-  // static const BORDER_RADIUS_BOTTOM_SHEET = BorderRadius.only(
-  //     topLeft: BOTTOM_SHEET_RADIUS, topRight: BOTTOM_SHEET_RADIUS);
 }
 
-/// Row for one Stats field
 class StatsRow extends StatelessWidget {
   final String title;
   final String value;
@@ -157,7 +129,6 @@ class StatsRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title,
