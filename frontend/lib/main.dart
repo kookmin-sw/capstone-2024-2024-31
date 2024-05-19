@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                 'create_challenge': (context) => const CreateChallengeFir(),
                 'detail_challenge': (context) =>
                     ChallengeDetailScreen(challengeId: Get.arguments),
-                'community': (context) => const CommunityScreen(),
+                // 'community': (context) => const CommunityScreen(),
                 'camera2': (context) => const CameraAwesomeApp(),
               });
         });
