@@ -19,7 +19,7 @@ class _ChooseDemoState extends State<ChooseDemo> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Pytorch Mobile Example'),
+          title: const Text('정해진 자세를 취해주세요!'),
         ),
         body: Builder(builder: (context) {
           return Center(
@@ -37,7 +37,7 @@ class _ChooseDemoState extends State<ChooseDemo> {
                     backgroundColor: Colors.blue,
                   ),
                   child: const Text(
-                    "Run Model with Camera",
+                    "카메라",
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -55,7 +55,7 @@ class _ChooseDemoState extends State<ChooseDemo> {
                     backgroundColor: Colors.blue,
                   ),
                   child: const Text(
-                    "Run Model with Image",
+                    "갤러리",
                     style: TextStyle(
                       color: Colors.white,
                     ),
