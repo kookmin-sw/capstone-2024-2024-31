@@ -99,7 +99,7 @@ class ChallengeCompleteScreen extends StatelessWidget {
               const SizedBox(height: 10),
               GestureDetector(
                   child: Text("인증 게시글 모음 > ", style: titleStyle(15.0)),
-                  onTap: () => Get.to(() => const CommunityScreen())),
+                  onTap: () => Get.to(() => const CommunityScreen(challengeId: 3))),
               const SizedBox(height: 10),
               certificationPostList(),
               const SizedBox(height: 15),

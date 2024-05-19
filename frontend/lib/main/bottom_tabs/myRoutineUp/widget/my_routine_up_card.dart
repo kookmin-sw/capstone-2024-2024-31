@@ -24,6 +24,7 @@ class MyRoutineUpCard extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     final int challengePeriod = challenge.challengePeriod;
     final DateTime startDate = challenge.startDate;
+    final int challengeId = challenge.id;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     double getProgressPercent() {
@@ -37,7 +38,7 @@ class MyRoutineUpCard extends StatelessWidget {
         onTap: () {
           isStarted
               ? isIng
-                  ? Get.to(() => const CommunityScreen())
+                  ? Get.to(() => CommunityScreen(challengeId: challengeId))
                   : Get.to(() => ChallengeCompleteScreen())
               : Get.to(() => ChallengeDetailScreen(challengeId: challenge.id, isFromMypage: true));
         },
