@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 import '../../env.dart';
-import '../../model/controller/challenge_form_controller.dart';
 
 class JoinChallengeSecScreen extends StatefulWidget {
   final Challenge challenge;
@@ -201,7 +200,8 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                     });
 
                     if (value) {
-                      Get.offAll(() => ChallengeStateScreen(isFromJoinScreen: true, challenge: widget.challenge));
+                      Get.offAll(() => ChallengeStateScreen(
+                          isFromJoinScreen: true, challenge: widget.challenge));
                     }
                   }).catchError((err) {
                     setState(() {
@@ -248,7 +248,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
           padding: EdgeInsets.only(right: screenSize.width * 0.4),
           // width: screenSize.width * 0.4,
           child: TextFormField(
-            maxLength: 5,
+            maxLength: 8,
             keyboardType: TextInputType.name,
             style: const TextStyle(
                 fontWeight: FontWeight.w300,
@@ -373,10 +373,8 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
               child: InkWell(
                 onTap: () {
                   setState(() {});
-                  Get.snackbar(
-                    "인증번호",
-                    "4자리 인증번호를 하단에 입력하세요.",
-                    backgroundColor: Palette.softPurPle,
+                  Get.snackbar("인증번호", "4자리 인증번호를 하단에 입력하세요.",
+                      backgroundColor: Palette.softPurPle,
                       duration: const Duration(seconds: 1));
                 },
                 child: SvgPicture.asset(
@@ -479,7 +477,8 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                         _updateButtonState();
                         Get.snackbar("인증완료", "수신자 개인 정보 제공에 동의합니다.",
                             colorText: Palette.white,
-                            backgroundColor: Palette.purPle200, duration: const Duration(seconds: 1));
+                            backgroundColor: Palette.purPle200,
+                            duration: const Duration(seconds: 1));
                       }
                     },
                     child: SvgPicture.asset(

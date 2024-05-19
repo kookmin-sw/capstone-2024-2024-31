@@ -30,7 +30,7 @@ class _MyRoutineUpScreenState extends State<MyRoutineUpScreen> {
   @override
   void initState() {
     super.initState();
-    logger.d("controller : ${controller}");
+    logger.d("controller : $controller");
 
     logger.d("controller.myChallenges : ${controller.myChallenges}");
 

@@ -11,7 +11,7 @@ class InformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime startDate = challenge.startDate!;
+    final DateTime startDate = challenge.startDate;
     final int challengePeriod = challenge.challengePeriod!;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 

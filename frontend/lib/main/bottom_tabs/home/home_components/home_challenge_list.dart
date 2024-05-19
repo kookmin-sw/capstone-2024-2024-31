@@ -4,7 +4,6 @@ import 'package:frontend/challenge/search/challenge_search_screen.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge/challenge_filter.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
@@ -28,7 +27,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
   List<ChallengeSimple> challengeList = [];
   String searchValue = '';
   int selectedIndex = 0;
-  bool _isPrivate = false;
+  final bool _isPrivate = false;
 
   void sortCombinedDataByStartDate(List<dynamic> data) {
     data.sort((a, b) {

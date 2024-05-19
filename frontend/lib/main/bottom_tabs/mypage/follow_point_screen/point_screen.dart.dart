@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/point_history_card.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';

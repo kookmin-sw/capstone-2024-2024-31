@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -29,23 +28,23 @@ class FollowerCard extends StatefulWidget {
   bool isFollowing;
 
   FollowerCard({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.nickName,
     required this.isFollowing,
-  }) : super(key: key);
+  });
 
   @override
   _FollowerCardState createState() => _FollowerCardState();
 }
 
 class _FollowerCardState extends State<FollowerCard> {
-  bool _isFollowing = false;
+  final bool _isFollowing = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
         width: double.infinity,
         height: 80,
         child: Row(
@@ -54,14 +53,14 @@ class _FollowerCardState extends State<FollowerCard> {
               radius: 25,
               backgroundImage: AssetImage(widget.imageUrl),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         widget.nickName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.bold,

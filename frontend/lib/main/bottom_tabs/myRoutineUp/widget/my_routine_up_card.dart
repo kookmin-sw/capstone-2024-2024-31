@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/challenge/complete/challenge_complete_screen.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';

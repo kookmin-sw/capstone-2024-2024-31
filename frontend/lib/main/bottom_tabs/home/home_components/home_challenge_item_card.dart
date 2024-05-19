@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/privateCode_input_dialog.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -18,7 +17,7 @@ class ChallengeItemCard extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     Logger logger = Logger();
     // 문자열을 DateTime 객체로 파싱
-    DateTime date = data.startDate as DateTime;
+    DateTime date = data.startDate;
 
     // 날짜 형식 변경
     String modifiedString = '${date.month}월 ${date.day}일부터 시작';

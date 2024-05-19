@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/state/state_screen_widget.dart';
-import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 
-import '../../env.dart';
-import '../../model/config/palette.dart';
 import '../../model/data/challenge/challenge.dart';
 import '../../model/data/challenge/challenge_simple.dart';
 import '../../model/data/challenge/challenge_status.dart';
 import '../../model/data/challenge/ChallengeService.dart';
-import '../../model/data/challenge/ChallengeService.dart';
-import 'state_screen_widget.dart';
 
 class ChallengeStateScreen extends StatefulWidget {
   final bool isFromJoinScreen;

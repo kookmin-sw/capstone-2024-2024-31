@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/model/config/palette.dart';
 
-class CustomButton extends StatelessWidget {
+class RtuButton extends StatelessWidget {
   final Function onPressed;
   final String text;
-  bool? disabled;
+  bool disabled;
 
-  CustomButton(
-      {super.key, required this.onPressed, required this.text, this.disabled});
+  RtuButton(
+      {super.key,
+      required this.onPressed,
+      required this.text,
+      this.disabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +18,13 @@ class CustomButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          if (disabled == null || disabled == false) {
+          if (!disabled) {
             onPressed();
           }
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: disabled == null || disabled == false
-              ? Palette.mainPurple
-              : Palette.greySoft,
+          backgroundColor:
+              disabled == false ? Palette.mainPurple : Palette.greySoft,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),

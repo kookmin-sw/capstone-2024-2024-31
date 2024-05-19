@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
@@ -8,7 +6,9 @@ import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen_sec.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:frontend/widgets/rtu_button.dart';
 import 'package:get/get.dart';
+import 'package:frontend/widgets/rtu_divider.dart';
 
 class JoinChallengeScreen extends StatefulWidget {
   final Challenge challenge;
@@ -21,7 +21,6 @@ class JoinChallengeScreen extends StatefulWidget {
 
 class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   bool showVerificationInput = false;
-  bool isCheckedAll = false;
   List<bool> isCheckList = [false, false, false];
 
   @override
@@ -29,94 +28,56 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Get.back();
-            },
-          ),
-          title: const Text(
-            '루틴업 참가하기',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Pretendard',
-            ),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+        title: const Text(
+          '루틴업 참가하기',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pretendard',
           ),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: SingleChildScrollView(
           child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              child: Column(
-                children: [
-                  PhotoesWidget(
-                      screenHeight: screenSize.height,
-                      imageUrl: widget.challenge.challengeImagePaths![0]),
-                  InformationWidget(challenge: widget.challenge),
-                  const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                      child: Divider(thickness: 10, color: Palette.grey50)),
-                  ExampleMsg(screenSize),
-                  const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                      child: Divider(thickness: 10, color: Palette.grey50)),
-                  AgreeCheckWidget(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                    color: Colors.transparent,
-                    width: double.infinity,
-                    child: isCheckList.every((element) => element == true)
-                        ? InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      JoinChallengeSecScreen(challenge: widget.challenge),
-                                ),
-                              );
-                            },
-                            child: SvgPicture.asset(
-                              'assets/svgs/next_btn_checked.svg',
-                              // width: double.infinity,
-                              // height: 30,
-                            ))
-                        : SvgPicture.asset(
-                            'assets/svgs/next_btn_unchecked.svg',
-                            // width: double.infinity,
-                            // height: 30,
-                          ),
-                  ),
-                  // inputPenaltyName(screenSize),
-                  // if (showVerificationInput) ...[
-                  //   SizedBox(height: 5),
-                  //   verificationInput(screenSize),
-                  // ],
-                  // Container(
-                  //   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                  //   color: Colors.transparent,
-                  //   width: double.infinity,
-                  //   child: InkWell(
-                  //     onTap: () {},
-                  //     child: SvgPicture.asset(
-                  //       'assets/svgs/join_challenge_btn.svg',
-                  //       // width: double.infinity,
-                  //       // height: 30,
-                  //     ),
-                  //   ),
-                  // )
-                ],
-              )),
-        ));
+              child: Column(children: [
+                PhotoesWidget(
+                    screenHeight: screenSize.height,
+                    imageUrl: widget.challenge.challengeImagePaths![0]),
+                InformationWidget(challenge: widget.challenge),
+                const RtuDivider(),
+                exampleMsg(screenSize),
+                const RtuDivider(),
+                AgreeCheckWidget(),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                  color: Colors.transparent,
+                  width: double.infinity,
+                  child: RtuButton(
+                      onPressed: () {
+                        Get.to(JoinChallengeSecScreen(
+                            challenge: widget.challenge));
+                      },
+                      text: '다음으로',
+                      disabled:
+                          isCheckList.every((element) => element) == false),
+                ),
+              ]))),
+    );
   }
 
-  Widget ExampleMsg(Size _screenSize) {
+  Widget exampleMsg(Size screenSize) {
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15),
         child: Column(
@@ -157,7 +118,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
               path: 'assets/images/success_msg.jpg',
               color: Palette.white,
               isSuccess: true,
-              screenSize: _screenSize * 0.7,
+              screenSize: screenSize * 0.7,
               isJoinScreen: true,
             ),
             const SizedBox(height: 20),
@@ -195,7 +156,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 path: 'assets/images/fail_msg.jpg',
                 color: Palette.white,
                 isSuccess: false,
-                screenSize: _screenSize * 0.7,
+                screenSize: screenSize * 0.7,
                 isJoinScreen: true),
           ],
         ));
@@ -251,12 +212,12 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                           color: Palette.grey200,
                           fontFamily: 'Pretendard'),
                       contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                       filled: true,
                       fillColor: Palette.greySoft,
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Palette.greySoft)),
+                          borderSide: const BorderSide(color: Palette.greySoft)),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: const BorderSide(
@@ -295,7 +256,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   Widget verificationInput(Size screenSize) {
     return Container(
         // margin: EdgeInsets.only(left: 20, right: 20),
-        padding: EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
             // border: Palette.greySoft, // 배경색 설정
             borderRadius: BorderRadius.circular(10)),
@@ -303,7 +264,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             const Text(
               "패널티 휴대폰 인증",
               style: TextStyle(
@@ -313,7 +274,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 color: Palette.grey300,
               ),
             ),
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
             const Text(
               "인증 완료시, 본 전화번호 소유자 개인정보 수집에 동의합니다.",
               style: TextStyle(
@@ -322,7 +283,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   fontFamily: 'Pretendard',
                   color: Palette.grey200),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 SizedBox(

@@ -54,7 +54,7 @@ class ChallengeCompleteScreen extends StatelessWidget {
         fontSize: fontSize,
       );
 
-  bool _isSuccess = false;
+  final bool _isSuccess = false;
   bool isEnded = false;
 
   @override

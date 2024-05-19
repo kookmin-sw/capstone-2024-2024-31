@@ -286,7 +286,7 @@ class ChallengeWidgets {
     int numberOfCertification = challengeStatus.numberOfCertifications;
     int totalCertificationCount = challengeStatus.totalCertificationCount;
     int myCertificationNum = 0;
-    int fail_num = 0;
+    int failNum = 0;
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -329,7 +329,7 @@ class ChallengeWidgets {
                 ],
               ),
               Text(
-                "실패 횟수 : $fail_num회",
+                "실패 횟수 : $failNum회",
                 style: const TextStyle(
                   fontSize: 9,
                   color: Palette.grey300,
@@ -361,8 +361,8 @@ class ChallengeWidgets {
 
   static Widget certificationStateBar(double screenWidth,
       Challenge thisChallenge, ChallengeStatus challengeStatus) {
-    int my_certification_number = 13;
-    String percent = (my_certification_number * 100).toStringAsFixed(1);
+    int myCertificationNumber = 13;
+    String percent = (myCertificationNumber * 100).toStringAsFixed(1);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -387,7 +387,7 @@ class ChallengeWidgets {
                 ),
               ),
               Text(
-                "${(my_certification_number / challengeStatus.totalCertificationCount! * 100).toStringAsFixed(1)} %",
+                "${(myCertificationNumber / challengeStatus.totalCertificationCount * 100).toStringAsFixed(1)} %",
                 style: const TextStyle(
                   color: Palette.grey500,
                   fontSize: 10,
