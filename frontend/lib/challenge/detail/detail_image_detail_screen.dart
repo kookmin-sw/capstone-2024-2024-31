@@ -7,8 +7,6 @@ class ImageDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(),
       body: GestureDetector(

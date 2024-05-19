@@ -1,12 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
-import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 import 'package:frontend/model/data/challenge/challenge_filter.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,7 +24,8 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   final logger = Logger();
   final ScrollController _scrollController = ScrollController();
   List<ChallengeSimple> challengeList = [];
-  List<String> categoryList = ['전체'] + ChallengeCategory.values.map((e) => e.name).toList();
+  List<String> categoryList =
+      ['전체'] + ChallengeCategory.values.map((e) => e.name).toList();
 
   String searchValue = '';
   bool _isPrivate = false;
@@ -49,7 +49,8 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
       _getFilteredChallengeList(false);
     }
   }
@@ -61,24 +62,30 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
       final dio = Dio();
       final prefs = await SharedPreferences.getInstance();
       dio.options.headers['content-Type'] = 'application/json';
-      dio.options.headers['Authorization'] = 'Bearer ${prefs.getString('access_token')}';
+      dio.options.headers['Authorization'] =
+          'Bearer ${prefs.getString('access_token')}';
 
       final filter = ChallengeFilter(
         name: searchValue,
         isPrivate: isFiltered ? _isPrivate : null,
-        category: selectedIndex == 0 ? null : ChallengeCategory.values[selectedIndex - 1],
+        category: selectedIndex == 0
+            ? null
+            : ChallengeCategory.values[selectedIndex - 1],
       ).toJson();
 
       logger.d("challenge filter: $filter");
 
-      final response = await dio.post('${Env.serverUrl}/challenges/list',
+      final response = await dio.post(
+        '${Env.serverUrl}/challenges/list',
         data: filter,
         queryParameters: {'cursor': currentCursor, 'size': pageSize},
       );
 
       if (response.statusCode == 200) {
         logger.d(response.data);
-        List<ChallengeSimple> newData = (response.data as List).map((c) => ChallengeSimple.fromJson(c)).toList();
+        List<ChallengeSimple> newData = (response.data as List)
+            .map((c) => ChallengeSimple.fromJson(c))
+            .toList();
 
         setState(() {
           if (newData.isNotEmpty) {
@@ -94,10 +101,6 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
     } catch (e) {
       logger.d(e.toString());
     }
-  }
-
-  void _onSearch(String value) {
-    setState(() => searchValue = value);
   }
 
   void _onCategorySelected(int index) {
@@ -123,24 +126,21 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EasySearchBar(
-        backgroundColor: Palette.mainPurple,
-        foregroundColor: Palette.white,
-        searchTextStyle: const TextStyle(
-          color: Palette.mainPurple,
-          fontFamily: "Pretendard",
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Get.back();
+          },
         ),
         title: const Text(
-          "챌린지 모아보기",
+          '챌린지 모아보기',
           style: TextStyle(
-            fontFamily: "Pretendard",
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pretender',
           ),
         ),
-        onSearch: _onSearch,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),

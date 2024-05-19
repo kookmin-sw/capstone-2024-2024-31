@@ -130,7 +130,9 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {},
+          onPressed: () {
+            Get.back();
+          },
         ),
         title: const Text(
           '루틴업 참가하기',

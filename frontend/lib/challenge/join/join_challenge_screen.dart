@@ -211,13 +211,14 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                           fontSize: 9,
                           color: Palette.grey200,
                           fontFamily: 'Pretendard'),
-                      contentPadding:
-                          const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 10),
                       filled: true,
                       fillColor: Palette.greySoft,
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: const BorderSide(color: Palette.greySoft)),
+                          borderSide:
+                              const BorderSide(color: Palette.greySoft)),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: const BorderSide(
