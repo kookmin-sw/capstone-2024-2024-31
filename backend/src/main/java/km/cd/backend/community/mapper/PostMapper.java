@@ -1,14 +1,12 @@
 package km.cd.backend.community.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.community.dto.CommentResponse;
 import km.cd.backend.community.dto.PostRequest;
-import km.cd.backend.community.dto.PostDetailResponse;
-import km.cd.backend.community.dto.PostSimpleResponse;
+import km.cd.backend.community.dto.PostResponse;
 import km.cd.backend.community.dto.ReportResponse;
 import km.cd.backend.user.domain.User;
 import km.cd.backend.user.domain.mapper.UserMapper;
@@ -28,7 +26,7 @@ public interface PostMapper {
   String CONTENT_DELETE = "삭제된 댓글입니다.";
 
   @Mapping(target = "comments", source = "comments", qualifiedByName = "mapComments")
-  PostDetailResponse entityToDetailResponse(Post post);
+  PostResponse entityToResponse(Post post);
 
   @Mapping(target = "author", source = "user")
   Post requestToEntity(PostRequest postRequest, User user, Challenge challenge);
@@ -46,9 +44,6 @@ public interface PostMapper {
         .collect(Collectors.toList());
   }
 
-  @Mapping(target = "author", source = "post.author.name")
-  PostSimpleResponse entityToSimpleResponse(Post post);
-  
   @Mapping(target = "reportingCount", source = "post", qualifiedByName = "countReports")
   ReportResponse postToReportResponse(Post post);
   
