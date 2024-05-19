@@ -1,32 +1,35 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/detail/detail_image_detail_screen.dart';
 import 'package:frontend/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/challenge/detail/widgets/certification_method_widget.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen.dart';
-import 'package:frontend/env.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/data/challenge/ChallengeService.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
-import 'package:frontend/widgets/custom_button.dart';
+import 'package:frontend/widgets/rtu_button.dart';
+import 'package:frontend/widgets/rtu_divider.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../model/controller/user_controller.dart';
 
 class ChallengeDetailScreen extends StatefulWidget {
   final int challengeId;
   final bool isFromMainScreen;
   final bool isFromMypage;
+  final bool isFromPrivateCodeDialog;
+  final Map<String, dynamic>? challengeData;
 
-  const ChallengeDetailScreen({
-    super.key,
-    required this.challengeId,
-    this.isFromMainScreen = false,
-    this.isFromMypage = false,
-  });
+  const ChallengeDetailScreen(
+      {super.key,
+      required this.challengeId,
+      this.challengeData,
+      this.isFromMainScreen = false,
+      this.isFromMypage = false,
+      this.isFromPrivateCodeDialog = false});
 
   @override
   State<ChallengeDetailScreen> createState() => _ChallengeDetailScreenState();
@@ -36,65 +39,51 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   final logger = Logger();
   Challenge? challenge;
   bool isLoading = true;
+  late UserController userController;
+  late bool _isMyChallenge;
 
-  Future<Challenge> _fetchChallenge() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    Dio dio = Dio();
-
-    dio.options.headers['content-Type'] = 'application/json';
-    dio.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
-
-    try {
-      logger.d(widget.challengeId);
-      final response = await dio.get(
-          '${Env.serverUrl}/challenges/${widget.challengeId}',
-          queryParameters: {"code": ""});
-      if (response.statusCode == 200) {
-        logger.d('챌린지 디테일 조회 성공');
-        logger.d(response.data);
-        final challenge = Challenge.fromJson(response.data);
-
-        // Print each field to check for null values
-        logger.d('Challenge Name: ${challenge.challengeName}');
-        logger.d('Challenge Explanation: ${challenge.challengeExplanation}');
-        logger.d('Challenge Image Paths: ${challenge.challengeImagePaths}');
-        logger.d(
-            'Successful Verification Image: ${challenge.successfulVerificationImage}');
-        logger.d(
-            'Failed Verification Image: ${challenge.failedVerificationImage}');
-        // Add more fields as necessary
-
-        return challenge;
-      } else {
-        return Future.error(
-            "서버 응답 상태 코드: ${response.statusCode}, ${response.data}");
-      }
-    } catch (e) {
-      logger.e(e);
-      return Future.error("챌린지 정보를 불러오는데 실패했습니다.");
-    }
+  void isMyChallenges() {
+    userController = Get.find<UserController>();
+    logger.d("controller.myChallenges : ${userController.myChallenges}");
+    _isMyChallenge = userController.myChallenges
+        .any((challenge) => challenge.id == widget.challengeId);
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchChallenge().then((value) {
+    isMyChallenges(); //이미 챌린지 참여 중이면 참가하기 버튼 없애기
+
+    if (widget.isFromPrivateCodeDialog) {
+      logger.d("detail_screen 89번 라인 ) ${widget.isFromPrivateCodeDialog}");
+      logger.d("detail_screen 89번 라인 ) ${widget.challengeData!}");
+
+      challenge = Challenge.fromJson(widget.challengeData!);
       setState(() {
-        challenge = value;
         isLoading = false;
       });
-    }).catchError((err) {
-      setState(() {
-        isLoading = false;
+    }
+    //공개 챌린지 첫 입장시,
+    else {
+      ChallengeService.fetchChallenge(widget.challengeId, logger).then((value) {
+        logger.d("detail_screen initState() : $value");
+
+        setState(() {
+          challenge = value;
+          isLoading = false;
+        });
+      }).catchError((err) {
+        setState(() {
+          isLoading = false;
+        });
+        Get.snackbar(
+          "오류",
+          err.toString(),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       });
-      Get.snackbar(
-        "오류",
-        err.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    });
+    }
   }
 
   @override
@@ -141,11 +130,12 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           : challenge != null
               ? buildChallengeDetailBody(context, challenge!)
               : const Center(child: Text('챌린지 정보를 불러오지 못했습니다.')),
-      bottomNavigationBar: widget.isFromMypage || !widget.isFromMainScreen
+      bottomNavigationBar: _isMyChallenge
           ? null
           : isLoading
               ? const Center(child: CircularProgressIndicator())
-              : buildChallengeDetailBottomNavigationBar(context, challenge!),
+              : buildChallengeDetailBottomNavigationBar(
+                  context, challenge ?? Challenge.getDummyData()),
     );
   }
 
@@ -163,10 +153,10 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               child: InformationWidget(challenge: challenge)),
-          divider(),
+          const RtuDivider(),
           challengeExplanation(challenge),
           imageGridView(screenSize, challenge),
-          divider(),
+          const RtuDivider(),
           const SizedBox(height: 10),
           certificationExplainPicture(screenSize, challenge),
         ],
@@ -186,7 +176,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           height: 80,
           color: Colors.transparent,
           width: double.infinity,
-          child: CustomButton(
+          child: RtuButton(
             onPressed: () {
               Get.to(() => JoinChallengeScreen(challenge: challenge));
             },
@@ -328,13 +318,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           ],
         ),
       ],
-    );
-  }
-
-  Widget divider() {
-    return SvgPicture.asset(
-      'assets/svgs/divider.svg',
-      fit: BoxFit.contain,
     );
   }
 }

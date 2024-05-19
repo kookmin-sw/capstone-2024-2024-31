@@ -11,8 +11,8 @@ class Legend extends StatelessWidget {
     required this.valueStyle,
     required this.legendShape,
     required this.index,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String title;
   final double? inform;
@@ -56,14 +56,14 @@ class Legend extends StatelessWidget {
                     (index != 2)
                         ? SvgPicture.asset(
                             "assets/svgs/pie_chart_rectangle.svg")
-                        : Container(width: 2, height: 44,),
+                        : const SizedBox(width: 2, height: 44,),
                     const SizedBox(
                       width: 8.0,
                     ),
                   ],
                 ),
                 Text(
-                  '${inform?.toInt()?.toString() ?? '0'}명',
+                  '${inform?.toInt().toString() ?? '0'}명',
                   style: valueStyle,
                   softWrap: true,
                 ),

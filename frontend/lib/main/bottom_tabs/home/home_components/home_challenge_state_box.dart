@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
@@ -24,7 +23,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   final controller = Get.find<UserController>();
   final List<ChallengeSimple> challenges = [];
 
-  double getProgressPercent(int index) {
+  double getProgressPercent(int index){
     DateTime now = DateTime.now();
     DateTime start = challenges[index].startDate;
     DateTime end =
@@ -85,12 +84,14 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
               ? SvgPicture.asset("assets/svgs/no_challenge_state_card.svg")
               : Expanded(
                   child: Swiper(
+                    loop: false,
                     itemCount: challenges.length,
                     pagination: const SwiperPagination(
                       alignment: Alignment.bottomCenter,
+                      margin: EdgeInsets.all(1.0),
                       builder: DotSwiperPaginationBuilder(
                           space: 3,
-                          size: 8,
+                          size: 9,
                           activeSize: 9,
                           color: Palette.softPurPle,
                           activeColor: Palette.purPle300),
@@ -111,7 +112,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   Widget challengeStateCard(double screenWidth, int index) {
     return GestureDetector(
         onTap: () {
-          Get.to(() => ChallengeStateScreen());
+          Get.to(() => ChallengeStateScreen(isFromJoinScreen: false, challengeSimple: challenges[index]));
         },
         child: SizedBox(
             width: screenWidth * 0.95,
@@ -164,7 +165,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                                     ],
                                   )),
                               const SizedBox(
-                                height: 8,
+                                height: 5,
                               ),
                               stateBar(screenWidth, getProgressPercent(index))
                             ],

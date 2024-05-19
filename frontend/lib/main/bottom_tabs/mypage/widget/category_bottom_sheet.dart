@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
@@ -85,6 +83,12 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
       if (response.statusCode == 200) {
         final responseData = response.data is String ? jsonDecode(response.data) : response.data;
         logger.d("responseData : $responseData");
+
+
+        // UserController 업데이트
+        userController.updateCategories(categories);
+
+
         return responseData['id']; // 적절한 키로 값을 추출하여 반환
       } else {
         throw Exception('Failed to post categories');

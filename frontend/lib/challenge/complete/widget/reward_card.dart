@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/model/config/palette.dart';
-import '../../../model/data/sms.dart';
+import '../../../model/data/sms/sms.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 
 class RewardCard extends StatelessWidget {
@@ -36,28 +36,27 @@ class RewardCard extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("포인트", style: titleStyle),
-                  Text(
-                    isSuccess ? "+ 100point" : "0point",
-                    style: smallTextStyle,
-                  )
-                ]),
-        const SizedBox(height: 20),
-        Text("전송된 결과 메시지", style: titleStyle),
-        const SizedBox(height: 10),
-        BubbleSpecialThree(text: smsText(isSuccess),  color: const Color(0xFFE8E8EE),
-          tail: true,
-          isSender: false,
-          textStyle: const TextStyle(fontSize: 12, fontFamily: 'Pretender'),
-       ),
-        const SizedBox(height: 30),
-
-      ],
-    ));
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text("포인트", style: titleStyle),
+              Text(
+                isSuccess ? "+ 100point" : "0point",
+                style: smallTextStyle,
+              )
+            ]),
+            const SizedBox(height: 20),
+            Text("전송된 결과 메시지", style: titleStyle),
+            const SizedBox(height: 10),
+            BubbleSpecialThree(
+              text: smsText(isSuccess),
+              color: const Color(0xFFE8E8EE),
+              tail: true,
+              isSender: false,
+              textStyle: const TextStyle(fontSize: 12, fontFamily: 'Pretender'),
+            ),
+            const SizedBox(height: 30),
+          ],
+        ));
   }
 }

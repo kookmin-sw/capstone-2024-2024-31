@@ -19,14 +19,14 @@ class _HomeScreenState extends State<HomeScreen> {
           preferredSize: const Size.fromHeight(60), // 이미지의 높이에 맞춰서 설정
           child: homeAppBar,
         ),
-        body: SingleChildScrollView(
+        body: const SingleChildScrollView(
             child: Column(
           children: [
-            const ChallengeTopStack(),
-            const SizedBox(height: 10),
+            ChallengeTopStack(),
+            SizedBox(height: 10),
             HomeCategory(),
-            const SizedBox(height: 10),
-            const ChallengeItemList()
+            SizedBox(height: 10),
+            ChallengeItemList()
           ],
         )));
   }

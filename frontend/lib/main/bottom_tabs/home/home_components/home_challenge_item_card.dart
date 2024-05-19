@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/privateCode_input_dialog.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -16,27 +15,38 @@ class ChallengeItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
+    Logger logger = Logger();
     // 문자열을 DateTime 객체로 파싱
-    DateTime date = data.startDate as DateTime;
+    DateTime date = data.startDate;
 
     // 날짜 형식 변경
     String modifiedString = '${date.month}월 ${date.day}일부터 시작';
 
     return GestureDetector(
         onTap: () {
-          if (data.isPrivate) {
-            showDialog(
+
+        if (data.isPrivate) {
+            //비공개 챌린지라면, 암호코드 입력 dialog 호출
+          logger.d("home_challenge_item ) data.id? ${data.id}");
+          logger.d("home_challenge_item )data.isprivate ? ${data.isPrivate}");
+
+          showDialog(
               context: context,
               builder: (BuildContext context) {
-                return PasswordInputDialog(challengeId: data.id,);
+                return PasswordInputDialog(
+                  challengeId: data.id,
+                );
               },
             );
           } else {
-            Get.to(() => ChallengeDetailScreen(
-              challengeId: data.id,
-              isFromMainScreen: true,
-            ));
+            //비공개 챌린지가 아니라면, 디테일 스크린으로 이동
+          logger.d("home_challenge_item ) data.id? ${data.id}");
+          logger.d("home_challenge_item )data.isprivate? ${data.isPrivate}");
+
+          Get.to(() => ChallengeDetailScreen(
+                  challengeId: data.id,
+                  isFromMainScreen: true,
+                ));
           }
         },
         child: SizedBox(

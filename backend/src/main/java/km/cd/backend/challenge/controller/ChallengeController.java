@@ -98,7 +98,7 @@ public class ChallengeController {
 
     @PostMapping("/{challengeId}/join")
     public ResponseEntity<String> joinChallenge(
-            @PathVariable Long challengeId,
+            @PathVariable(name = "challengeId") Long challengeId,
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestBody ChallengeJoinRequest challengeJoinRequest) {
         challengeService.joinChallenge(challengeId, principalDetails.getUserId(), challengeJoinRequest);

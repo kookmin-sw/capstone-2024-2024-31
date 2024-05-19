@@ -1,19 +1,20 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
-import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 import 'package:frontend/model/data/challenge/challenge_filter.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'challenge_search_components.dart';
+
 class ChallengeSearchScreen extends StatefulWidget {
-  const ChallengeSearchScreen({super.key});
+  const ChallengeSearchScreen({super.key, this.enterSelectIndex});
+
+  final int? enterSelectIndex;
 
   @override
   State<ChallengeSearchScreen> createState() => _ChallengeSearchScreenState();
@@ -21,58 +22,64 @@ class ChallengeSearchScreen extends StatefulWidget {
 
 class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   final logger = Logger();
-
+  final ScrollController _scrollController = ScrollController();
+  List<ChallengeSimple> challengeList = [];
   List<String> categoryList =
       ['전체'] + ChallengeCategory.values.map((e) => e.name).toList();
-  String searchValue = '';
-  int selectedIndex = 0;
-  bool _isPrivate = false;
-  List<ChallengeSimple> challengeList = [];
 
+  String searchValue = '';
+  bool _isPrivate = false;
+  int selectedIndex = 0;
   int currentCursor = 0;
   final int pageSize = 10;
   bool hasMoreData = true;
-  final ScrollController _scrollController = ScrollController();
 
-  void _getFilteredChallengeList(bool isFiltered) async {
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.enterSelectIndex ?? 0;
+    _getFilteredChallengeList(false);
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      _getFilteredChallengeList(false);
+    }
+  }
+
+  Future<void> _getFilteredChallengeList(bool isFiltered) async {
     if (!hasMoreData) return;
 
-    Dio dio = Dio();
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    dio.options.headers['content-Type'] = 'application/json';
-    dio.options.headers['Authorization'] =
-    'Bearer ${prefs.getString('access_token')}';
-
-    Map<String, dynamic> filter = {}; // Initialize filter with an empty map
-
     try {
-      if (isFiltered) {
-        filter = ChallengeFilter(
-            name: searchValue,
-            isPrivate: _isPrivate,
-            category: selectedIndex == 0
-                ? null
-                : ChallengeCategory.values[selectedIndex - 1])
-            .toJson();
-      } else {
-        filter = ChallengeFilter(
-            name: searchValue,
-            isPrivate: null,
-            category: selectedIndex == 0
-                ? null
-                : ChallengeCategory.values[selectedIndex - 1])
-            .toJson();
+      final dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+      dio.options.headers['content-Type'] = 'application/json';
+      dio.options.headers['Authorization'] =
+          'Bearer ${prefs.getString('access_token')}';
 
-      }
+      final filter = ChallengeFilter(
+        name: searchValue,
+        isPrivate: isFiltered ? _isPrivate : null,
+        category: selectedIndex == 0
+            ? null
+            : ChallengeCategory.values[selectedIndex - 1],
+      ).toJson();
+
       logger.d("challenge filter: $filter");
 
-      final response = await dio.post('${Env.serverUrl}/challenges/list',
-          data: filter,
-          queryParameters: {
-            'cursor': currentCursor,
-            'size': pageSize,
-          });
+      final response = await dio.post(
+        '${Env.serverUrl}/challenges/list',
+        data: filter,
+        queryParameters: {'cursor': currentCursor, 'size': pageSize},
+      );
 
       if (response.statusCode == 200) {
         logger.d(response.data);
@@ -82,10 +89,6 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
 
         setState(() {
           if (newData.isNotEmpty) {
-            if (!_isPrivate) {
-              newData =
-                  newData.toList();
-            }
             challengeList.addAll(newData);
             currentCursor = challengeList.last.id;
           } else {
@@ -100,159 +103,75 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _getFilteredChallengeList(false); // 초기 데이터 로드  viewFilter = false
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        _getFilteredChallengeList(false); // 스크롤 끝에 도달할 때 추가 데이터 로드
-      }
+  void _onCategorySelected(int index) {
+    setState(() {
+      selectedIndex = selectedIndex == index ? 0 : index;
+      hasMoreData = true;
+      currentCursor = 0;
+      challengeList.clear();
+      _getFilteredChallengeList(true);
     });
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose(); // 스크롤 컨트롤러 해제
-    super.dispose();
+  void _onPrivateToggle(bool value) {
+    setState(() {
+      _isPrivate = value;
+      hasMoreData = true;
+      currentCursor = 0;
+      challengeList.clear();
+      _getFilteredChallengeList(true);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: EasySearchBar(
-          backgroundColor: Palette.mainPurple,
-          foregroundColor: Palette.white,
-          searchTextStyle: const TextStyle(
-            color: Palette.mainPurple,
-            fontFamily: "Pretendard",
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-          title: const Text(
-            "챌린지 모아보기",
-            style: TextStyle(
-              fontFamily: "Pretendard",
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          onSearch: (value) => setState(() => searchValue = value),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Get.back();
+          },
         ),
-        body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  selectCategory(),
-                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    const Text(
-                      "비공개 챌린지만",
-                      style: TextStyle(
-                        fontFamily: "Pretendard",
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Palette.grey300,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    CupertinoSwitch(
-                      value: _isPrivate,
-                      thumbColor: Palette.white,
-                      trackColor: Palette.greySoft,
-                      activeColor: Palette.purPle300,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          print(value);
-
-                          _isPrivate = value ?? false;
-                          hasMoreData = true;
-                          currentCursor = 0;
-                          challengeList.clear();
-
-                          if (challengeList.isEmpty && value!) {
-                            _getFilteredChallengeList(true);
-                          } else {
-                            _getFilteredChallengeList(false);
-                          }
-                        });
-                      },
-                    ),
-                  ]),
-                  const SizedBox(height: 5),
-                  Expanded(
-                      child: GridView.builder(
-                        controller: _scrollController,
-                        gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1 / 1.4,
-                        ),
-                        itemCount: challengeList.length,
-                        itemBuilder: (context, index) {
-                          return ChallengeItemCard(data: challengeList[index]);
-                        },
-                      ))
-                ])));
-  }
-
-  Widget selectCategory() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-        child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(
-                  categoryList.length,
-                      (index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            if (selectedIndex == index) {
-                              selectedIndex = 0; // Deselect if already selected
-                            } else {
-                              selectedIndex = index; // Select otherwise
-                            }
-                            hasMoreData = true;
-                            currentCursor = 0;
-                            challengeList.clear();
-                            _getFilteredChallengeList(true);
-                          });
-                        },
-                        style: ButtonStyle(
-                          padding:
-                          MaterialStateProperty.all<EdgeInsetsGeometry?>(
-                            const EdgeInsets.symmetric(horizontal: 15),
-                          ),
-                          maximumSize: MaterialStateProperty.all<Size>(
-                              const Size(80, 35)),
-                          minimumSize: MaterialStateProperty.all<Size>(
-                              const Size(10, 35)),
-                          // Adjust the button's size
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          ),
-                          backgroundColor: selectedIndex == index
-                              ? MaterialStateProperty.all<Color>(
-                              Palette.purPle400)
-                              : null,
-                        ),
-                        child: Text(categoryList[index],
-                            style: TextStyle(
-                                color: selectedIndex == index
-                                    ? Colors.white
-                                    : Palette.grey200,
-                                fontSize: 11,
-                                fontWeight: selectedIndex == index
-                                    ? FontWeight.bold
-                                    : FontWeight.w500)),
-                      ))),
-            )));
+        title: const Text(
+          '챌린지 모아보기',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pretender',
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            CategorySelector(
+              categoryList: categoryList,
+              selectedIndex: selectedIndex,
+              onCategorySelected: _onCategorySelected,
+            ),
+            PrivateToggle(
+              isPrivate: _isPrivate,
+              onToggle: _onPrivateToggle,
+            ),
+            const SizedBox(height: 5),
+            Expanded(
+              child: GridView.builder(
+                controller: _scrollController,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1 / 1.4,
+                ),
+                itemCount: challengeList.length,
+                itemBuilder: (context, index) {
+                  return ChallengeItemCard(data: challengeList[index]);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

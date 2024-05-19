@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/community/post_detail_screen.dart';
-import 'package:frontend/community/widget/follow_btn.dart';
 import 'package:frontend/community/widget/post_button_widget.dart';
 import 'package:frontend/community/widget/post_top.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -89,9 +86,9 @@ class _PostCardState extends State<PostCard> {
   }
 }
 
-Widget post_text(String post_text) {
+Widget post_text(String postText) {
   return Text(
-    post_text,
+    postText,
     maxLines: 5,
     textAlign: TextAlign.left,
     overflow: TextOverflow.ellipsis,

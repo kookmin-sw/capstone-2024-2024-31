@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/community/post_report_bottomScreen.dart';
 import 'package:frontend/main/bottom_tabs/mypage/widget/category_bottom_sheet.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
