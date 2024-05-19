@@ -78,11 +78,6 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
-                              if (classification != null)
-                                StatsRow('Classification:', '$classification'),
-                              if (classificationInferenceTime != null)
-                                StatsRow('Classification Inference time:',
-                                    '${classificationInferenceTime?.inMilliseconds} ms'),
                               if (objectDetectionInferenceTime != null)
                                 StatsRow('Object Detection Inference time:',
                                     '${objectDetectionInferenceTime?.inMilliseconds} ms'),
