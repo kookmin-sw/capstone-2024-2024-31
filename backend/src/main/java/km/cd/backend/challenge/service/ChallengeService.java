@@ -180,13 +180,12 @@ public class ChallengeService {
         Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
             .orElse(null);
         
-        // 3. 챌린지 생성자가 아닌 모든 유저
-        if (participant == null || !participant.isOwner()) {
-            // 챌린지가 비공개일 때, 인증코드가 다르면 에러 발생
+        // 3. 챌린지 참여자가 아닐 때
+        if (participant == null) {
+            // 비공개 챌린지이고 코드가 다르면 못 봄
             if (challenge.getIsPrivate() && !challenge.getPrivateCode().equals(code)) {
                 throw new CustomException(ExceptionCode.FORBIDDEN_ERROR);
             }
-            // 챌린지가 공개일 때는 그냥 반환
         }
         
         // 5. 도전 과제 정보를 응답으로 반환합니다.
