@@ -1,8 +1,7 @@
-BackGround
-Up
-Thumbs Up
-Thumbs Down
-Stop
-Right
-Left
 Down
+Side
+Side
+Stop
+Thumbs Down
+Thumbs Up
+Up
