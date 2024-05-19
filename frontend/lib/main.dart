@@ -1,33 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/challenge/certification/camera/camera_screen.dart';
-import 'package:frontend/challenge/certification/camera/camera_viewer.dart';
-import 'package:frontend/challenge/certification/camera/global_bindings.dart';
-import 'package:get/get.dart';
+import 'run_model_by_camera_demo.dart';
+import 'run_model_by_image_demo.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  runApp(const ChooseDemo());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class ChooseDemo extends StatefulWidget {
+  const ChooseDemo({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<ChooseDemo> createState() => _ChooseDemoState();
+}
+
+class _ChooseDemoState extends State<ChooseDemo> {
   @override
   Widget build(BuildContext context) {
-
-    return GetMaterialApp(
-      initialBinding: GlobalBindings(),
-      debugShowCheckedModeBanner: false,
-      title: "Camera Application",
-      home: const CameraScreen(),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Pytorch Mobile Example'),
+        ),
+        body: Builder(builder: (context) {
+          return Center(
+            child: Column(
+              children: [
+                TextButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RunModelByCameraDemo()),
+                    )
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  child: const Text(
+                    "Run Model with Camera",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RunModelByImageDemo()),
+                    )
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  child: const Text(
+                    "Run Model with Image",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        }),
+      ),
     );
-    //
-    // return MaterialApp(
-    //   title: 'Camera',
-    //   theme: ThemeData(
-    //     primarySwatch: Colors.blue,
-    //   ),
-    //   home: const CameraViewer(),
-    // );
   }
 }
