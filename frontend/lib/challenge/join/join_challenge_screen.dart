@@ -50,7 +50,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
               child: Column(children: [
                 PhotoesWidget(
                     screenHeight: screenSize.height,
-                    imageUrl: widget.challenge.challengeImagePaths![0]),
+                    imageUrl: widget.challenge.challengeImagePaths[0]),
                 InformationWidget(challenge: widget.challenge),
                 const RtuDivider(),
                 exampleMsg(screenSize),

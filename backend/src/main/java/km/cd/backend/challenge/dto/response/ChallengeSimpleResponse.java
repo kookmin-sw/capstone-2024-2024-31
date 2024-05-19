@@ -33,6 +33,8 @@ public record ChallengeSimpleResponse(
         String status,
 
     @Schema(description = "챌린지 비공개 여부")
-        boolean isPrivate
+        boolean isPrivate,
+
+    boolean isGalleryPossible
 ) {
 }

@@ -29,18 +29,18 @@ class CategorySelector extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () => onCategorySelected(index),
                 style: ButtonStyle(
-                  padding: MaterialStateProperty.all(
+                  padding: WidgetStateProperty.all(
                     const EdgeInsets.symmetric(horizontal: 15),
                   ),
-                  maximumSize: MaterialStateProperty.all(const Size(80, 35)),
-                  minimumSize: MaterialStateProperty.all(const Size(10, 35)),
-                  shape: MaterialStateProperty.all(
+                  maximumSize: WidgetStateProperty.all(const Size(80, 35)),
+                  minimumSize: WidgetStateProperty.all(const Size(10, 35)),
+                  shape: WidgetStateProperty.all(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
                   backgroundColor: selectedIndex == index
-                      ? MaterialStateProperty.all(Palette.purPle400)
+                      ? WidgetStateProperty.all(Palette.purPle400)
                       : null,
                 ),
                 child: Text(

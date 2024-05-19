@@ -38,24 +38,25 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
 
   ButtonStyle getCategoryButtonStyle(bool isSelected) {
     return ButtonStyle(
-      padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
+      padding: WidgetStateProperty.all<EdgeInsetsGeometry?>(
         const EdgeInsets.symmetric(horizontal: 10),
       ),
-      minimumSize: MaterialStateProperty.all<Size>(const Size(80, 100)),
-      shape: MaterialStateProperty.all<OutlinedBorder>(
+      minimumSize: WidgetStateProperty.all<Size>(const Size(80, 100)),
+      shape: WidgetStateProperty.all<OutlinedBorder>(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
       ),
-      backgroundColor: isSelected
-          ? MaterialStateProperty.all<Color>(Palette.purPle400)
-          : null,
+      backgroundColor:
+          isSelected ? WidgetStateProperty.all<Color>(Palette.purPle400) : null,
     );
   }
 
-  Future<Object> _saveCategoriesToServer(List<ChallengeCategory> categories) async {
+  Future<Object> _saveCategoriesToServer(
+      List<ChallengeCategory> categories) async {
     // JSON 문자열 배열로 변환
-    List<String> jsonCategories = categories.map((category) => category.name).toList();
+    List<String> jsonCategories =
+        categories.map((category) => category.name).toList();
 
     // 서버가 기대하는 형식으로 JSON 객체 생성
     Map<String, dynamic> requestPayload = {
@@ -68,7 +69,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
     // 서버에 저장하기 위해 HTTP 요청 보내기
     dioInstance.options.contentType = 'application/json';
     dioInstance.options.headers['Authorization'] =
-    'Bearer ${prefs.getString('access_token')}';
+        'Bearer ${prefs.getString('access_token')}';
 
     Logger logger = Logger();
     logger.d("Request payload: $requestPayload"); // 디버깅용 로그
@@ -81,19 +82,18 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
 
       // 서버 응답이 JSON 객체라고 가정하고 파싱
       if (response.statusCode == 200) {
-        final responseData = response.data is String ? jsonDecode(response.data) : response.data;
-        logger.d("responseData : $responseData");
-
+        final responseData =
+            response.data is String ? jsonDecode(response.data) : response.data;
+        logger.d("유저 관심 카테고리 업데이트 성공 : $responseData");
 
         // UserController 업데이트
         userController.updateCategories(categories);
-
 
         return responseData['id']; // 적절한 키로 값을 추출하여 반환
       } else {
         throw Exception('Failed to post categories');
       }
-    } on dio.DioError catch (e) {
+    } on dio.DioException catch (e) {
       logger.e('DioError: ${e.message}');
       if (e.response != null) {
         logger.d('Response status code: ${e.response?.statusCode}');
@@ -106,8 +106,6 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
     } catch (err) {
       return Future.error(err.toString());
     }
-
-
   }
 
   @override

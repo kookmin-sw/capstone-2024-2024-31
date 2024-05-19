@@ -88,11 +88,11 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
 
         setState(() {
           if (newData.isNotEmpty) {
-            newData.forEach((newChallenge) {
+            for (var newChallenge in newData) {
               if (!challengeList.any((existingChallenge) => existingChallenge.id == newChallenge.id)) {
                 challengeList.add(newChallenge);
               }
-            });
+            }
             currentCursor = challengeList.last.id;
           } else {
             hasMoreData = false;
@@ -159,7 +159,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
             onSubmitted: (value) {
               _onSearch(value);
             },
-            padding: const MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
+            padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
             trailing: const [Icon(Icons.search)],
           ),
         ),

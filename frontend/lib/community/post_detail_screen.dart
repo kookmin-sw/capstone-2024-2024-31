@@ -1,39 +1,39 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/community/widget/report_post_btn.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../model/data/post/post.dart';
 
 class PostDetailScreen extends StatefulWidget {
-  const PostDetailScreen({super.key, required this.post});
-
   final Post post;
+  final bool initialScroll;
+
+  const PostDetailScreen(
+      {super.key, required this.post, this.initialScroll = false});
 
   @override
   State<PostDetailScreen> createState() => _PostDetailScreenState();
 }
 
 class _PostDetailScreenState extends State<PostDetailScreen> {
-  bool _isTapSendCommentBtn = false;
-  Timer? _timer;
-
   final _commentFocusNode = FocusNode();
-  final TextEditingController _commentController = TextEditingController();
 
-  late String textFieldHintText;
-  late Post post;
+  late Post _post;
+
+  String _inputComment = '';
 
   @override
   void initState() {
     super.initState();
-    post = widget.post;
-    textFieldHintText = "댓글을 남겨보세요";
+    _post = widget.post;
+    if (widget.initialScroll) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _commentFocusNode.requestFocus();
+      });
+    }
   }
 
   @override
@@ -42,30 +42,29 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     super.dispose();
   }
 
-  TextStyle name_textStyle = const TextStyle(
+  TextStyle postNameTextStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 10,
       fontWeight: FontWeight.w600,
       color: Palette.grey500);
 
-  TextStyle date_textStyle = const TextStyle(
+  TextStyle postDateTextStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 10,
       fontWeight: FontWeight.w300,
       color: Palette.grey300);
 
-  TextStyle text_textStyle = const TextStyle(
+  TextStyle postContentTextStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 12,
       fontWeight: FontWeight.bold,
       color: Palette.grey300);
 
-  TextStyle btn_textStyle = const TextStyle(
+  TextStyle postButtonTextStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 12,
       fontWeight: FontWeight.w500,
       color: Palette.grey200);
-
 
   int _calculateCommentLength(List<Comment> comments) {
     int result = comments.length;
@@ -119,15 +118,16 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 child: Row(
                   children: [
                     Expanded(
-                        child: TextFormField(
-                      controller: _commentController,
+                        child: TextField(
+                      scrollPadding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
                       focusNode: _commentFocusNode,
                       style: const TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 11,
                           fontFamily: 'Pretender'),
                       decoration: InputDecoration(
-                          hintText: textFieldHintText,
+                          hintText: "댓글을 입력해주세요.",
                           hintStyle: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
@@ -146,32 +146,22 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                             borderSide: const BorderSide(
                                 color: Palette.grey50, width: 2),
                           )),
-                      validator: (value) =>
-                          value!.isEmpty ? textFieldHintText : null,
+                      onChanged: (value) => setState(() {
+                        _inputComment = value;
+                      }),
                     )),
                     const SizedBox(width: 10),
                     GestureDetector(
                         child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
-                                border: _isTapSendCommentBtn
-                                    ? Border.all(
-                                        color: Palette.grey50, width: 2.0)
-                                    : Border.all(
-                                        color: Palette.greyBG, width: 2.0)),
-                            child: SvgPicture.asset(
-                                "assets/svgs/comment_send_btn.svg")),
+                                border: Border.all(
+                                    color: Palette.grey50, width: 2.0)),
+                            child: Icon(Icons.send,
+                                color: _inputComment.isEmpty
+                                    ? Palette.grey200
+                                    : Palette.mainPurple)),
                         onTap: () {
-                          setState(() {
-                            _isTapSendCommentBtn = true;
-                          });
-                          _timer?.cancel();
-                          _timer = Timer(const Duration(milliseconds: 300), () {
-                            setState(() {
-                              _isTapSendCommentBtn = false;
-                            });
-                          });
-                          _commentController.clear();
                           _commentFocusNode.unfocus();
                         })
                   ],
@@ -183,11 +173,15 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PostCard(post: post, commentFocusNode: _commentFocusNode),
+                PostCard(
+                  post: _post,
+                  onPostDetail: true,
+                  focusNode: _commentFocusNode,
+                ),
                 Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                    child: Text("댓글 ${_calculateCommentLength(post.comments)}개",
+                    child: Text("댓글 ${_countComment(_post.comments)}개",
                         style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontFamily: 'Pretendard',
@@ -204,10 +198,10 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   Widget commentWidget() {
     Size size = MediaQuery.of(context).size;
     return Column(
-      children: post.comments.map((comment) {
+      children: _post.comments.map((comment) {
         List<Widget> commentAndReplies = [];
         String uploadTimeString = comment.createdDate;
-        String beforeHours = calculateBeforeHours(comment.createdDate);
+        String beforeHours = _calculateBeforeHours(comment.createdDate);
 
         // Add the main comment
         commentAndReplies.add(
@@ -247,16 +241,16 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                 children: [
                                   Text(
                                     comment.author,
-                                    style: name_textStyle,
+                                    style: postNameTextStyle,
                                   ),
                                   Text(
                                     "$uploadTimeString | $beforeHours",
-                                    style: date_textStyle,
+                                    style: postDateTextStyle,
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
                                     comment.content,
-                                    style: text_textStyle,
+                                    style: postContentTextStyle,
                                     softWrap: true,
                                     maxLines: 3,
                                     overflow: TextOverflow.visible,
@@ -266,10 +260,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                     splashColor: Palette.grey50,
                                     child: Text(
                                       "답글 달기",
-                                      style: btn_textStyle,
+                                      style: postButtonTextStyle,
                                     ),
                                     onTap: () {
-                                      _commentController.clear();
                                       _commentFocusNode
                                           .requestFocus(); // 포커스 요청
                                     },
@@ -285,7 +278,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ...comment.children.map<Widget>((childComment) {
                       String childUploadTimeString = childComment.createdDate;
                       String childBeforeHours =
-                          calculateBeforeHours(childUploadTimeString);
+                          _calculateBeforeHours(childUploadTimeString);
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Row(
@@ -307,11 +300,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                   children: [
                                     Text(
                                       childComment.author,
-                                      style: name_textStyle,
+                                      style: postNameTextStyle,
                                     ),
                                     Text(
                                       "$childUploadTimeString | $childBeforeHours",
-                                      style: date_textStyle,
+                                      style: postDateTextStyle,
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
@@ -319,7 +312,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                       softWrap: true,
                                       maxLines: 3,
                                       overflow: TextOverflow.visible,
-                                      style: text_textStyle,
+                                      style: postContentTextStyle,
                                     ),
                                   ],
                                 )),
@@ -339,7 +332,17 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     );
   }
 
-  String calculateBeforeHours(String dateTimeStr) {
+  int _countComment(List<Comment> comments) {
+    int result = comments.length;
+    for (final comment in comments) {
+      if (comment.children.isNotEmpty) {
+        result += _countComment(comment.children);
+      }
+    }
+    return result;
+  }
+
+  String _calculateBeforeHours(String dateTimeStr) {
     DateTime dateTime = DateTime.parse(dateTimeStr);
     Duration difference = DateTime.now().difference(dateTime);
     if (difference.inDays > 0) {

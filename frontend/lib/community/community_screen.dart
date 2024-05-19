@@ -4,9 +4,7 @@ import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
-import 'package:frontend/model/data/post.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../env.dart';
 import '../model/data/post/post.dart';
@@ -33,23 +31,22 @@ class _CommunityScreenState extends State<CommunityScreen>
 
   Future<List<Post>> _fetchPosts(int challengeId) async {
     final Dio dio = Dio();
-    final String url = '${Env.serverUrl}/challenges/$challengeId/posts';
-    logger.d("111111111111111111111111111111111111");
+    final String url = '${Env.serverUrl}/posts';
 
     try {
-      final response = await dio.get(url);
+      final response =
+          await dio.get(url, queryParameters: {'challengeId': challengeId});
 
       if (response.statusCode == 200) {
+        logger.d("커뮤니티 게시글 목록 조회 성공: ${response.data}");
         List<dynamic> data = response.data;
         List<Post> posts = data.map((item) => Post.fromJson(item)).toList();
-
-        logger.d("response.data: ${response.data}");
         return posts;
       } else {
         throw Exception('Failed to load posts');
       }
     } catch (e) {
-      print('Error: $e');
+      logger.e('Error: $e');
       throw Exception('Failed to load posts');
     }
   }
@@ -70,7 +67,6 @@ class _CommunityScreenState extends State<CommunityScreen>
       setState(() {
         posts = fetchedPosts;
         _sortPosts(); // Sort posts initially based on the default sort index
-        logger.d("posts: ${posts.toString()}");
       });
     } catch (e) {
       logger.e('Failed to load posts: $e');
@@ -88,11 +84,6 @@ class _CommunityScreenState extends State<CommunityScreen>
     } else if (_sortIndex == 1) {
       posts.sort((a, b) => b.likes.length.compareTo(a.likes.length));
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   final _selectedButtonStyle = ElevatedButton.styleFrom(

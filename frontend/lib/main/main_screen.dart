@@ -47,6 +47,7 @@ class _MainScreenState extends State<MainScreen> {
 
     dio.options.contentType = Headers.jsonContentType;
     dio.options.headers["Authorization"] = "Bearer $accessToken";
+    dio.options.receiveTimeout = const Duration(seconds: 3);
 
     try {
       final response = await dio.get('${Env.serverUrl}/users/me');
@@ -57,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
         userController.saveUser(user);
 
         final responseMyChallenges =
-        await dio.get('${Env.serverUrl}/users/me/challenges');
+            await dio.get('${Env.serverUrl}/users/me/challenges');
 
         if (responseMyChallenges.statusCode == 200) {
           logger.d("나의 챌린지 조회 성공: ${responseMyChallenges.data}");
@@ -72,7 +73,6 @@ class _MainScreenState extends State<MainScreen> {
     await prefs.remove("access_token");
     return Future.error("유저 조회 실패");
   }
-
 
   @override
   void initState() {

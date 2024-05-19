@@ -10,5 +10,4 @@ public record UserResponse(
         String name,
         int point,
         List<ChallengeCategory> categories
-        
-){ }
+) { }

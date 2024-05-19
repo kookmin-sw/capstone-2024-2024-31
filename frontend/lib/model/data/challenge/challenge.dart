@@ -1,83 +1,80 @@
+import 'package:frontend/model/data/challenge/challenge_category.dart';
+import 'package:frontend/model/data/challenge/challenge_certification_type.dart';
+import 'package:intl/intl.dart';
+
 class Challenge {
   final int id;
-  final bool? isPrivate;
-  final String? privateCode;
   final String challengeName;
-  final String? challengeExplanation;
-  final int? challengePeriod;
-  final DateTime startDate;
-  final DateTime endDate;
-  final String? certificationFrequency;
-  final int? certificationStartTime;
-  final int? certificationEndTime;
-  final String? certificationExplanation;
-  final bool? isGalleryPossible;
-  final int? maximumPeople;
-  final List<Participant> participants;
-  final List<String>? challengeImagePaths;
-  final String? failedVerificationImage;
-  final String? successfulVerificationImage;
-  final String? status;
+  final String challengeExplanation;
+  final String startDate;
+  final String endDate;
+  final String certificationFrequency;
+  final String certificationExplanation;
+  final int challengePeriod;
+  final int certificationStartTime;
+  final int certificationEndTime;
+  final int maximumPeople;
+  final List<String> challengeImagePaths;
+  final String failedVerificationImage;
+  final String successfulVerificationImage;
+  final String status;
+  final ChallengeCertificationType certificationType;
+  final ChallengeCategory challengeCategory;
   final int totalParticipants;
-  final CertificationType certificationType;
-  final ChallengeCategory? challengeCategory;
   final int? totalCertificationCount;
+  final bool isPrivate;
+  final bool isGalleryPossible;
 
   Challenge({
     required this.id,
-    this.isPrivate,
-    this.privateCode,
+    required this.isPrivate,
     required this.challengeName,
-    this.challengeExplanation,
-    this.challengePeriod,
+    required this.challengeExplanation,
     required this.startDate,
     required this.endDate,
-    this.certificationFrequency,
-    this.certificationStartTime,
-    this.certificationEndTime,
-    this.certificationExplanation,
-    this.isGalleryPossible,
-    this.maximumPeople,
-    this.participants = const [],
-    this.challengeImagePaths,
-    this.failedVerificationImage,
-    this.successfulVerificationImage,
-    this.status,
-    this.totalParticipants = 0,
-    this.certificationType = CertificationType.HAND_GESTURE,
-    this.challengeCategory,
+    required this.challengePeriod,
+    required this.certificationFrequency,
+    required this.certificationStartTime,
+    required this.certificationEndTime,
+    required this.certificationExplanation,
+    required this.isGalleryPossible,
+    required this.maximumPeople,
+    required this.challengeImagePaths,
+    required this.failedVerificationImage,
+    required this.successfulVerificationImage,
+    required this.status,
+    required this.totalParticipants,
+    required this.certificationType,
+    required this.challengeCategory,
     this.totalCertificationCount,
   });
 
   factory Challenge.fromJson(Map<String, dynamic> json) {
     return Challenge(
-      id: json['id'] ?? 0,
-      isPrivate: json['isPrivate'] as bool?,
-      privateCode: json['privateCode'] as String?,
-      challengeName: json['challengeName'] ?? '',
-      challengeExplanation: json['challengeExplanation'] as String?,
-      challengePeriod: json['challengePeriod'] as int?,
-      startDate: DateTime.parse(json['startDate']),
-      endDate: DateTime.parse(json['endDate']),
-      certificationFrequency: json['certificationFrequency'] as String?,
-      certificationStartTime: json['certificationStartTime'] as int?,
-      certificationEndTime: json['certificationEndTime'] as int?,
-      certificationExplanation: json['certificationExplanation'] as String?,
-      isGalleryPossible: json['isGalleryPossible'] as bool?,
-      maximumPeople: json['maximumPeople'] as int?,
-      participants: (json['participants'] as List<dynamic>?)
-          ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
-          .toList() ?? [],
-      challengeImagePaths: (json['challengeImagePaths'] as List<dynamic>?)
-          ?.map((e) => e as String)
+      id: json['id'],
+      isPrivate: json['private'],
+      challengeName: json['challengeName'] as String,
+      challengeExplanation: json['challengeExplanation'] as String,
+      startDate: json['startDate'] as String,
+      endDate: json['endDate'] as String,
+      challengePeriod: json['challengePeriod'],
+      certificationFrequency: json['certificationFrequency'] as String,
+      certificationStartTime: json['certificationStartTime'],
+      certificationEndTime: json['certificationEndTime'],
+      certificationExplanation: json['certificationExplanation'] as String,
+      isGalleryPossible: json['galleryPossible'],
+      maximumPeople: json['maximumPeople'],
+      challengeImagePaths: (json['challengeImagePaths'] as List<dynamic>)
+          .map((val) => val.toString())
           .toList(),
-      failedVerificationImage: json['failedVerificationImage'] as String?,
-      successfulVerificationImage: json['successfulVerificationImage'] as String?,
-      status: json['status'] as String?,
-      totalParticipants: json['totalParticipants'] ?? 0,
-      certificationType: CertificationTypeExtension.fromJson(json['certificationType'] as String? ?? 'HAND_GESTURE'),
-      challengeCategory: ChallengeCategoryExtension.fromJson(json['challengeCategory'] as String?),
-      totalCertificationCount: json['totalCertificationCount'] as int?,
+      failedVerificationImage: json['failedVerificationImage'] as String,
+      successfulVerificationImage:
+          json['successfulVerificationImage'] as String,
+      status: json['status'] as String,
+      totalParticipants: json['totalParticipants'],
+      certificationType: ChallengeCertificationType.handGesture,
+      challengeCategory:
+          ChallengeCategory.fromJson(json['challengeCategory'] as String),
     );
   }
 
@@ -85,26 +82,24 @@ class Challenge {
     return {
       'id': id,
       'isPrivate': isPrivate,
-      'privateCode': privateCode,
       'challengeName': challengeName,
       'challengeExplanation': challengeExplanation,
+      'startDate': startDate,
+      'endDate': endDate,
       'challengePeriod': challengePeriod,
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String(),
       'certificationFrequency': certificationFrequency,
       'certificationStartTime': certificationStartTime,
       'certificationEndTime': certificationEndTime,
       'certificationExplanation': certificationExplanation,
       'isGalleryPossible': isGalleryPossible,
       'maximumPeople': maximumPeople,
-      'participants': participants.map((e) => e.toJson()).toList(),
       'challengeImagePaths': challengeImagePaths,
       'failedVerificationImage': failedVerificationImage,
       'successfulVerificationImage': successfulVerificationImage,
       'status': status,
       'totalParticipants': totalParticipants,
       'certificationType': certificationType.toJson(),
-      'challengeCategory': challengeCategory?.toJson(),
+      'challengeCategory': challengeCategory.toJson(),
       'totalCertificationCount': totalCertificationCount,
     };
   }
@@ -114,29 +109,25 @@ class Challenge {
     return Challenge(
       id: 1,
       isPrivate: false,
-      privateCode: "123456",
       challengeName: "Dummy Challenge",
       challengeExplanation: "This is a dummy challenge for testing purposes.",
       challengePeriod: 30,
-      startDate: DateTime.now(),
-      endDate: DateTime.now().add(const Duration(days: 30)),
+      startDate: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      endDate: DateFormat("yyyy-MM-dd")
+          .format(DateTime.now().add(const Duration(days: 30))),
       certificationFrequency: "daily",
       certificationStartTime: 6,
       certificationEndTime: 22,
       certificationExplanation: "Please upload your daily certification.",
       isGalleryPossible: true,
       maximumPeople: 100,
-      participants: [
-        Participant(id: 1, name: "John Doe"),
-        Participant(id: 2, name: "Jane Doe")
-      ],
       challengeImagePaths: ["path/to/image1.jpg", "path/to/image2.jpg"],
       failedVerificationImage: "path/to/failed_image.jpg",
       successfulVerificationImage: "path/to/successful_image.jpg",
       status: "active",
       totalParticipants: 2,
-      certificationType: CertificationType.HAND_GESTURE,
-      challengeCategory: ChallengeCategory.CATEGORY_ONE,
+      certificationType: ChallengeCertificationType.handGesture,
+      challengeCategory: ChallengeCategory.eating,
       totalCertificationCount: 30,
     );
   }
@@ -163,52 +154,5 @@ class Participant {
       'id': id,
       'name': name,
     };
-  }
-}
-
-enum CertificationType {
-  HAND_GESTURE,
-  PHOTO,
-}
-
-extension CertificationTypeExtension on CertificationType {
-  static CertificationType fromJson(String json) {
-    switch (json) {
-      case 'HAND_GESTURE':
-        return CertificationType.HAND_GESTURE;
-      case 'PHOTO':
-        return CertificationType.PHOTO;
-      default:
-        throw ArgumentError('Invalid CertificationType: $json');
-    }
-  }
-
-  String toJson() {
-    return toString().split('.').last;
-  }
-}
-
-enum ChallengeCategory {
-  CATEGORY_ONE,
-  CATEGORY_TWO,
-  CATEGORY_THREE,
-}
-
-extension ChallengeCategoryExtension on ChallengeCategory {
-  static ChallengeCategory fromJson(String? json) {
-    switch (json) {
-      case 'CATEGORY_ONE':
-        return ChallengeCategory.CATEGORY_ONE;
-      case 'CATEGORY_TWO':
-        return ChallengeCategory.CATEGORY_TWO;
-      case 'CATEGORY_THREE':
-        return ChallengeCategory.CATEGORY_THREE;
-      default:
-        return ChallengeCategory.CATEGORY_ONE;
-    }
-  }
-
-  String toJson() {
-    return toString().split('.').last;
   }
 }

@@ -3,14 +3,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 
-class PostTopWidget extends StatefulWidget {
+class PostCardTop extends StatefulWidget {
   final String image;
   final String name;
   final String createdAt;
   final bool isInitiallyFollowing;
   final ValueChanged<bool> onFollowingChanged; // Callback to notify the parent
 
-  const PostTopWidget({
+  const PostCardTop({
     super.key,
     required this.image,
     required this.name,
@@ -20,10 +20,10 @@ class PostTopWidget extends StatefulWidget {
   });
 
   @override
-  _PostTopWidgetState createState() => _PostTopWidgetState();
+  State<PostCardTop> createState() => _PostCardTopState();
 }
 
-class _PostTopWidgetState extends State<PostTopWidget> {
+class _PostCardTopState extends State<PostCardTop> {
   late bool isFollowing;
 
   @override

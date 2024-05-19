@@ -61,13 +61,13 @@ class ChallengeRecommendBox extends StatelessWidget {
 
                   },
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                    shape: WidgetStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Palette.white),
+                        WidgetStateProperty.all<Color>(Palette.white),
                   ),
                   child: const Text(
                     "챌린지 보러가기",

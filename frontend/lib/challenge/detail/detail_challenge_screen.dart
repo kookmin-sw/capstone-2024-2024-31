@@ -7,8 +7,8 @@ import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge/ChallengeService.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:frontend/model/service/challenge_service.dart';
 import 'package:frontend/widgets/rtu_button.dart';
 import 'package:frontend/widgets/rtu_divider.dart';
 import 'package:get/get.dart';
@@ -65,7 +65,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
     }
     //공개 챌린지 첫 입장시,
     else {
-      ChallengeService.fetchChallenge(widget.challengeId, logger).then((value) {
+      ChallengeService.fetchChallenge(widget.challengeId).then((value) {
         logger.d("detail_screen initState() : $value");
 
         setState(() {
@@ -146,8 +146,8 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         children: [
           PhotoesWidget(
             screenHeight: screenSize.height,
-            imageUrl: challenge.challengeImagePaths?.isNotEmpty ?? false
-                ? challenge.challengeImagePaths![0]
+            imageUrl: challenge.challengeImagePaths.isNotEmpty ?? false
+                ? challenge.challengeImagePaths[0]
                 : '',
           ),
           Container(

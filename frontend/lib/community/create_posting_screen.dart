@@ -11,7 +11,6 @@ import 'package:dio/dio.dart' as dio;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/data/post/post_form.dart';
 import 'package:frontend/model/data/post/post.dart';
-import 'package:frontend/model/data/post/post_form.dart';
 
 class CreatePostingScreen extends StatefulWidget {
   const CreatePostingScreen(
@@ -57,9 +56,8 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
     ).toFormData());
 
     try {
-      final response = await dioInstance.post(
-          '${Env.serverUrl}/challenges/${widget.challengeId}/posts',
-          data: formData);
+      final response = await dioInstance.post('${Env.serverUrl}/posts',
+          data: formData, queryParameters: {'challengeId': widget.challengeId});
 
       if (response.statusCode == 201) {
         logger.d('게시물 생성 성공: ${response.data}');

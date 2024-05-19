@@ -4,13 +4,12 @@ import 'package:frontend/challenge/search/challenge_search_screen.dart';
 import 'package:frontend/env.dart';
 import 'package:frontend/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/data/challenge/challenge_category.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../../model/data/challenge/challenge.dart';
 
 class ChallengeItemList extends StatefulWidget {
   const ChallengeItemList({super.key});
@@ -27,7 +26,6 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
   List<ChallengeSimple> challengeList = [];
   String searchValue = '';
   int selectedIndex = 0;
-  final bool _isPrivate = false;
 
   void sortCombinedDataByStartDate(List<dynamic> data) {
     data.sort((a, b) {
@@ -46,7 +44,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
 
     dio.options.headers['content-Type'] = 'application/json';
     dio.options.headers['Authorization'] =
-    'Bearer ${prefs.getString('access_token')}';
+        'Bearer ${prefs.getString('access_token')}';
 
     try {
       // Build the query parameters
@@ -55,45 +53,44 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
       Map<String, dynamic> dataFalse = {
         'isPrivate': false,
         'name': searchValue,
-        'category': selectedIndex == 0 ? null : ChallengeCategory
-            .values[selectedIndex - 1]
-            .toString()
-            .split('.')
-            .last,
+        'category': selectedIndex == 0
+            ? null
+            : ChallengeCategory.values[selectedIndex - 1]
+                .toString()
+                .split('.')
+                .last,
       };
 
-      dataFalse.removeWhere((key, value) =>
-      value == null); // Remove null values
+      dataFalse
+          .removeWhere((key, value) => value == null); // Remove null values
 
       Map<String, dynamic> dataTrue = {
         'isPrivate': true,
         'name': searchValue,
-        'category': selectedIndex == 0 ? null : ChallengeCategory
-            .values[selectedIndex - 1]
-            .toString()
-            .split('.')
-            .last,
+        'category': selectedIndex == 0
+            ? null
+            : ChallengeCategory.values[selectedIndex - 1]
+                .toString()
+                .split('.')
+                .last,
       };
       dataTrue.removeWhere((key, value) => value == null); // Remove null values
 
+      final responseIsprivateFalse =
+          await dio.post('${Env.serverUrl}/challenges/list',
+              queryParameters: {
+                'cursorId': 0,
+                'size': 5,
+              },
+              data: dataFalse);
 
-      final responseIsprivateFalse = await dio.post(
-          '${Env.serverUrl}/challenges/list',
-          queryParameters: {
-            'cursorId': 0,
-            'size': 5,
-          },
-          data: dataFalse
-      );
-
-      final responseIsprivateTrue = await dio.post(
-          '${Env.serverUrl}/challenges/list',
-          queryParameters: {
-            'cursorId': 0,
-            'size': 5,
-          },
-          data:dataTrue
-      );
+      final responseIsprivateTrue =
+          await dio.post('${Env.serverUrl}/challenges/list',
+              queryParameters: {
+                'cursorId': 0,
+                'size': 5,
+              },
+              data: dataTrue);
 
       if (responseIsprivateFalse.statusCode == 200 &&
           responseIsprivateTrue.statusCode == 200) {
@@ -110,9 +107,6 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
       }
       throw Exception("Failed to load challenges");
     } catch (e) {
-      if (e is DioError) {
-        logger.e('DioError: ${e.response?.data}');
-      }
       logger.e(e.toString());
       throw Exception("챌린지 목록을 불러오는데 실패했습니다.");
     }
@@ -120,9 +114,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery
-        .of(context)
-        .size;
+    final screenSize = MediaQuery.of(context).size;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -155,17 +147,18 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
               } else if (snapshot.hasData) {
                 return snapshot.data!.isNotEmpty
                     ? SizedBox(
-                  height: screenSize.height * 0.3,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: List.generate(snapshot.data!.length, (index) {
-                      return ChallengeItemCard(
-                          data: snapshot.data![index]);
-                    }),
-                  ),
-                )
+                        height: screenSize.height * 0.3,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children:
+                              List.generate(snapshot.data!.length, (index) {
+                            return ChallengeItemCard(
+                                data: snapshot.data![index]);
+                          }),
+                        ),
+                      )
                     : SvgPicture.asset(
-                    "assets/svgs/no_challenge_box.svg"); // "snapshot.data 가 [] 일 경우 진행중인 챌린지 없음 안내
+                        "assets/svgs/no_challenge_box.svg"); // "snapshot.data 가 [] 일 경우 진행중인 챌린지 없음 안내
               } else {
                 return Container();
               }

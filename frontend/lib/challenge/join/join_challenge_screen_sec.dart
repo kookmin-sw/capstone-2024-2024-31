@@ -141,7 +141,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
           data: challengeJoin.toJson());
 
       if (response.statusCode == 201) {
-        logger.d(response.data);
+        logger.d('챌린지 참가 성공');
         Get.offAll(() => ChallengeStateScreen(
               isFromJoinScreen: true,
               challenge: widget.challenge,

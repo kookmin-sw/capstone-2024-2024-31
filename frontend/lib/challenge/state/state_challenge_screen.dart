@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/state/state_screen_widget.dart';
+import 'package:frontend/model/service/challenge_service.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import '../../model/data/challenge/challenge.dart';
-import '../../model/data/challenge/challenge_simple.dart';
 import '../../model/data/challenge/challenge_status.dart';
-import '../../model/data/challenge/ChallengeService.dart';
 
 class ChallengeStateScreen extends StatefulWidget {
   final bool isFromJoinScreen;
@@ -27,8 +26,8 @@ class ChallengeStateScreen extends StatefulWidget {
 class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
   final Logger logger = Logger();
   bool isLoading = true;
-  late Challenge thisChallenge;
-  late ChallengeStatus challengeStatus;
+  late Challenge _challenge;
+  late ChallengeStatus _challengeStatus;
 
   @override
   void initState() {
@@ -47,16 +46,16 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
   Future<bool> _fetchChallenge() async {
     if (widget.challenge != null) {
       setState(() {
-        thisChallenge = widget.challenge!;
+        _challenge = widget.challenge!;
       });
       return true;
     }
 
     Challenge? tmpChallenge =
-        await ChallengeService.fetchChallenge(widget.challengeId, logger);
+        await ChallengeService.fetchChallenge(widget.challengeId);
     if (tmpChallenge != null) {
       setState(() {
-        thisChallenge = tmpChallenge;
+        _challenge = tmpChallenge;
       });
       return true;
     } else {
@@ -66,10 +65,10 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
 
   Future<bool> _fetchChallengeStatus() async {
     ChallengeStatus? tmpChallengeStatus =
-        await ChallengeService.fetchChallengeStatus(widget.challengeId, logger);
+        await ChallengeService.fetchChallengeStatus(widget.challengeId);
     if (tmpChallengeStatus != null) {
       setState(() {
-        challengeStatus = tmpChallengeStatus;
+        _challengeStatus = tmpChallengeStatus;
       });
       return true;
     } else {
@@ -86,15 +85,15 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
         ),
       );
     } else {
-      return buildChallengeScreen(context, thisChallenge);
+      return buildChallengeScreen(context);
     }
   }
 
-  Widget buildChallengeScreen(BuildContext context, Challenge thisChallenge) {
+  Widget buildChallengeScreen(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final DateTime startDate = thisChallenge.startDate;
-    final int challengePeriod = thisChallenge.challengePeriod ?? 100;
+    final DateTime startDate = DateTime.parse(_challenge.startDate);
+    final int challengePeriod = _challenge.challengePeriod ?? 100;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     initializeDateFormatting('ko_KR', 'en_US');
@@ -106,25 +105,25 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              ChallengeWidgets.photoes(screenHeight, thisChallenge),
+              ChallengeWidgets.photoes(screenHeight, _challenge),
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 child: ChallengeWidgets.informationChallenge(
-                    startDate, endDate, thisChallenge, challengeStatus),
+                    startDate, endDate, _challenge, _challengeStatus),
               ),
               SvgPicture.asset(
                 'assets/svgs/divider.svg',
                 fit: BoxFit.contain,
               ),
               ChallengeWidgets.certificationState(
-                  screenWidth, screenHeight,  challengeStatus),
+                  screenWidth, screenHeight, _challengeStatus),
               SvgPicture.asset(
                 'assets/svgs/divider.svg',
                 fit: BoxFit.contain,
               ),
               ChallengeWidgets.entireCertificationStatus(
-                  screenWidth, screenHeight, challengeStatus),
+                  screenWidth, screenHeight, _challengeStatus),
             ],
           ),
         ),
