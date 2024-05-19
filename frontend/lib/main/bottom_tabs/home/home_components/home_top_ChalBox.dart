@@ -1,13 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ChallengeIngBox extends StatefulWidget {
-  const ChallengeIngBox({Key? key}) : super(key: key);
+  const ChallengeIngBox({super.key});
 
   @override
   State<ChallengeIngBox> createState() => _ChallengeIngBoxState();
@@ -184,14 +181,14 @@ class _ChallengeIngBoxState extends State<ChallengeIngBox> {
                       children: [
                         Text(
                           challenge['name'], // 챌린지 이름
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold,
                           fontSize:10),
 
                         ),
                         Text(
                           '${challenge['percent']}%',
-                          style: TextStyle(fontSize :12)// 진행 상태
+                          style: const TextStyle(fontSize :12)// 진행 상태
                         )
                       ]),
                 )

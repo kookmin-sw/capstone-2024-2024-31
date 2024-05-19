@@ -1,13 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/main/bottom_tabs/home/home_screen.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 import 'package:frontend/model/data/post.dart';
-import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +21,7 @@ class _CommunityScreenState extends State<CommunityScreen>
     with TickerProviderStateMixin {
   final logger = Logger();
 
-  int _selectedIndex = 0; // 탭 인덱스
+  final int _selectedIndex = 0; // 탭 인덱스
   int _sortIndex = 0; // 정렬 방식 인덱스
 
   late TabController _tabController;

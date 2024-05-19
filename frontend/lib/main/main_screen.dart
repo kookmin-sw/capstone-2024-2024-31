@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/login/login_screen.dart';
@@ -9,7 +7,6 @@ import 'package:frontend/main/bottom_tabs/mypage/mypage_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/user.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/point_screen.dart.dart';
 import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/tab_follow_screen.dart';
-import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/point_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:get/get.dart';

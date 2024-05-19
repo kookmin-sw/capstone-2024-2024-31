@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';

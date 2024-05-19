@@ -119,7 +119,7 @@ class Challenge {
       challengeExplanation: "This is a dummy challenge for testing purposes.",
       challengePeriod: 30,
       startDate: DateTime.now(),
-      endDate: DateTime.now().add(Duration(days: 30)),
+      endDate: DateTime.now().add(const Duration(days: 30)),
       certificationFrequency: "daily",
       certificationStartTime: 6,
       certificationEndTime: 22,

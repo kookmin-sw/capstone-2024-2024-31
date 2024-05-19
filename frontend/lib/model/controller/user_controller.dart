@@ -25,9 +25,9 @@ class UserController extends GetxController {
 
   void updateMyChallenges(List<dynamic> challenges) {
     _myChallenges.clear();
-    challenges.forEach((challenge) {
+    for (var challenge in challenges) {
       _myChallenges.add(ChallengeSimple.fromJson(challenge));
-    });
+    }
   }
 
   // 카테고리를 업데이트하는 메서드

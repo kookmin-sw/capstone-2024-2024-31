@@ -1,21 +1,18 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/detail/detail_image_detail_screen.dart';
 import 'package:frontend/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/challenge/detail/widgets/certification_method_widget.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen.dart';
-import 'package:frontend/env.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/ChallengeService.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
-import 'package:frontend/widgets/custom_button.dart';
+import 'package:frontend/widgets/rtu_button.dart';
+import 'package:frontend/widgets/rtu_divider.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/controller/user_controller.dart';
 
@@ -156,10 +153,10 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               child: InformationWidget(challenge: challenge)),
-          divider(),
+          const RtuDivider(),
           challengeExplanation(challenge),
           imageGridView(screenSize, challenge),
-          divider(),
+          const RtuDivider(),
           const SizedBox(height: 10),
           certificationExplainPicture(screenSize, challenge),
         ],
@@ -179,7 +176,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           height: 80,
           color: Colors.transparent,
           width: double.infinity,
-          child: CustomButton(
+          child: RtuButton(
             onPressed: () {
               Get.to(() => JoinChallengeScreen(challenge: challenge));
             },
@@ -321,13 +318,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           ],
         ),
       ],
-    );
-  }
-
-  Widget divider() {
-    return SvgPicture.asset(
-      'assets/svgs/divider.svg',
-      fit: BoxFit.contain,
     );
   }
 }
