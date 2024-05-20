@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:pytorch_lite/pytorch_lite.dart';
 
-import 'gesture.dart';
+import '../../../model/data/gesture.dart';
 
 class CertificationByGallery extends StatefulWidget {
   const CertificationByGallery({super.key});
