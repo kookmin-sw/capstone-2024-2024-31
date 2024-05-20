@@ -90,20 +90,24 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                   });
                   if (formKey.currentState!.validate()) {
                     logger.d(
-                        '인증 방법: ${controller.form.certificationExplanation}');
-                    logger.d('인증 수단: ${controller.form.isGalleryPossible}');
+                        '인증 방법: ${challengeFormController.form.certificationExplanation}');
                     logger.d(
-                        '성공 이미지: ${controller.form.successfulVerificationImage}');
+                        '인증 수단: ${challengeFormController.form.isGalleryPossible}');
                     logger.d(
-                        '실패 이미지: ${controller.form.failedVerificationImage}');
-                    logger.d('최대 인원: ${controller.form.maximumPeople}');
+                        '성공 이미지: ${challengeFormController.form.successfulVerificationImage}');
+                    logger.d(
+                        '실패 이미지: ${challengeFormController.form.failedVerificationImage}');
+                    logger.d(
+                        '최대 인원: ${challengeFormController.form.maximumPeople}');
 
                     try {
                       ChallengeService.createChallenge().then((val) {
+                        userController.addMyChallenge(val);
+                        Get.to(() => CreateCompleteScreen(challengeId: val.id));
+                      }).whenComplete(() {
                         setState(() {
                           isLoading = false;
                         });
-                        Get.to(() => CreateCompleteScreen(challengeId: val.id));
                       });
                     } catch (err) {
                       Get.snackbar("챌린지 생성 실패", "다시 시도해주세요.");
@@ -139,7 +143,6 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                           const SizedBox(height: 15),
                           _canSetCapacity ? buildMaxCapacity() : Container()
                         ],
-
                       ),
                     ),
                   ),
