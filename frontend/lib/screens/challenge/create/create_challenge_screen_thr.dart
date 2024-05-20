@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/challenge_form_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:frontend/model/service/challenge_service.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:frontend/widgets/rtu_button.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';

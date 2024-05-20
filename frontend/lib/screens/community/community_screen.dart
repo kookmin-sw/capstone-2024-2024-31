@@ -5,7 +5,7 @@ import 'package:frontend/screens/community/widget/post_card.dart';
 import 'package:frontend/screens/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
-import 'package:frontend/model/service/post_service.dart';
+import 'package:frontend/service/post_service.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 

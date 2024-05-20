@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/model/service/post_service.dart';
+import 'package:frontend/service/post_service.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:frontend/screens/community/post_detail_screen.dart';

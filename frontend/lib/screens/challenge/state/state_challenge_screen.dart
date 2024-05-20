@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/screens/challenge/state/state_screen_widget.dart';
-import 'package:frontend/model/service/challenge_service.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/date_symbol_data_local.dart';
 

@@ -4,11 +4,11 @@ import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/challenge/challenge_join.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:frontend/model/data/sms/sms_certification.dart';
-import 'package:frontend/model/service/dio_service.dart';
+import 'package:frontend/service/dio_service.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import '../data/challenge/challenge.dart';
-import '../data/challenge/challenge_status.dart';
+import '../model/data/challenge/challenge.dart';
+import '../model/data/challenge/challenge_status.dart';
 
 class ChallengeService {
   static final Dio dio = DioService().dio;
