@@ -49,9 +49,14 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? const Center(
-            child: CircularProgressIndicator(color: Palette.mainPurple))
+        ? Container(
+            color: Colors.white, // 배경 색상을 흰색으로 설정
+            child: const Center(
+              child: CircularProgressIndicator(color: Palette.mainPurple),
+            ),
+          )
         : Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
