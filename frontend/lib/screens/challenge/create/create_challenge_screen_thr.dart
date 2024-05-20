@@ -23,7 +23,7 @@ class CreateChallengeThr extends StatefulWidget {
 class _CreateChallengeThrState extends State<CreateChallengeThr> {
   final logger = Logger();
   final formKey = GlobalKey<FormState>();
-  final userController = Get.find<UserController>();
+  final UserController userController = Get.find<UserController>();
   final challengeFormController = Get.find<ChallengeFormController>();
   final picker = ImagePicker();
 
@@ -91,6 +91,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                   if (formKey.currentState!.validate()) {
                     logger.d(
                         '인증 방법: ${challengeFormController.form.certificationExplanation}');
+
                     logger.d(
                         '인증 수단: ${challengeFormController.form.isGalleryPossible}');
                     logger.d(

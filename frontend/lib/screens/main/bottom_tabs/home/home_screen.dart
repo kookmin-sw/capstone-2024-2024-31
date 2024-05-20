@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/main/bottom_tabs/home/home_components/home_challenge_list.dart';
-import 'package:frontend/screens/main/bottom_tabs/home/home_components/home_top_stack_box.dart';
-import 'package:frontend/screens/main/bottom_tabs/home/home_components/home_category_component.dart';
-import 'package:frontend/screens/main/bottom_tabs/home/home_components/home_appBar.dart';
+import 'package:frontend/screens/main/bottom_tabs/home/home_list_widgets/home_challenge_list.dart';
+import 'package:frontend/screens/main/bottom_tabs/home/home_top_box_widgets/home_top_stack_box.dart';
+import 'package:frontend/screens/main/bottom_tabs/home/home_category_widgets/home_category_component.dart';
+import 'package:frontend/screens/main/bottom_tabs/home/home_top_box_widgets/home_appBar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/main/bottom_tabs/home/home_components/home_challenge_recommend_box.dart';
-import 'package:frontend/screens/main/bottom_tabs/home/home_components/home_challenge_state_box.dart';
+import 'package:frontend/screens/main/bottom_tabs/home/home_list_widgets/home_challenge_recommend_box.dart';
+import 'package:frontend/screens/main/bottom_tabs/home/home_top_box_widgets/home_challenge_state_box.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:get/get.dart';

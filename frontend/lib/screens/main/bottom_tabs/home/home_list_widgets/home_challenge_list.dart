@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/data/challenge/challenge_filter.dart';
 import 'package:frontend/screens/challenge/search/challenge_search_screen.dart';
-import 'package:frontend/screens/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
+import 'package:frontend/screens/main/bottom_tabs/home/home_list_widgets/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:frontend/service/challenge_service.dart';

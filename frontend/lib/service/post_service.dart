@@ -78,42 +78,34 @@ class PostService {
     }
   }
 
+
   static Future<bool> checkPossibleCertification(
-      //오늘 인증 이미 있으면 false, 없으면 true 반환
-      int challengeId,
-      int userId) async {
-    final dio.Dio dioInstance = DioService().dio;
-    final String uri = '/challenges/$challengeId/posts';
-    final Logger logger = Logger();
-
+      int challengeId, int userId) async {
     try {
-      final response = await dioInstance.get(uri);
-
-      if (response.statusCode == 200) {
-        List<dynamic> data = response.data;
-        List<Post> posts = data.map((item) => Post.fromJson(item)).toList();
-
-        logger.d("response.data: ${response.data}");
-
-        // 현재 날짜를 가져옵니다.
-        DateTime today = DateTime.now();
-        String todayStr = DateFormat('yyyy-MM-dd').format(today);
-
-        // 오늘 날짜와 일치하고 author가 userId와 일치하는 게시물이 있는지 확인합니다.
-        for (var post in posts) {
-          String postDateStr =
-              DateFormat('yyyy-MM-dd').format(post.createdDate as DateTime);
-          if (postDateStr == todayStr && post.authorId == userId) {
-            return false;
-          }
-        }
+      List<Post> posts = await fetchPosts(challengeId);
+      if (posts.isEmpty) {
         return true;
-      } else {
-        throw Exception('Failed to load posts');
       }
+
+      // 현재 날짜를 가져옵니다.
+      DateTime today = DateTime.now();
+      String todayStr = DateFormat('yyyy-MM-dd').format(today);
+      // posts 중에 내 포스트만 필터링
+      var myPosts = posts.where((post) => post.authorId == userId);
+
+      // 필터링된 내 포스트 중에서 오늘 작성된 포스트가 있는지 검사
+      for (var post in myPosts) {
+
+        String postDateStr =
+        DateFormat('yyyy-MM-dd').format(DateTime.parse(post.createdDate));
+        if (postDateStr == todayStr) {
+          return false; // 오늘 날짜 글 있으면 false
+        }
+      }
+      return true; // 오늘 날짜 글 없으면 true
     } catch (e) {
       logger.e('Error: $e');
-      throw Exception('Failed to load posts');
+      throw Exception('게시글 조회 실패: ${e.toString()}');
     }
   }
 }
