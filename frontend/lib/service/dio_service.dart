@@ -26,4 +26,8 @@ class DioService {
   }
 
   Dio get dio => _dio;
+
+  static void updateAccessToken(String accessToken) {
+    _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+  }
 }

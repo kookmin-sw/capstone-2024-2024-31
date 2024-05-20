@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:frontend/screens/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/service/login_service.dart';
 import 'package:logger/logger.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:frontend/env.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,32 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isPressGoogleLogin = false;
   bool isSuccessGoogleLogin = false;
   final logger = Logger();
-
-  Future<void> _pressGoogleLoginButton() async {
-    const callbackUrlScheme = "web-auth-callback";
-
-    final url = Uri.parse("${Env.serverUrlNip}/oauth2/authorization/google");
-
-    final result = await FlutterWebAuth2.authenticate(
-        url: url.toString(), callbackUrlScheme: callbackUrlScheme);
-
-    final accessToken = Uri.parse(result).queryParameters["access_token"];
-    logger.d("access_token: $accessToken \n url : $url");
-
-    if (accessToken != null) {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("access_token", accessToken);
-      logger.d(' 구글 로그인 성공 👋');
-      Get.offAll(() => const MainScreen(
-            tabNumber: 0,
-          ));
-      return;
-    }
-
-    logger.d(' 구글 로그인 실패 😭');
-    Get.snackbar('로그인 실패', '다시 시도해주세요',
-        backgroundColor: Colors.red, colorText: Colors.white);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +59,14 @@ class _LoginScreenState extends State<LoginScreen> {
 // UI: 구글 로그인 버튼
   Widget _googleLoginButton() {
     return GestureDetector(
-      onTap: _pressGoogleLoginButton,
+      onTap: () {
+        LoginService.googleLogin().then((_) {
+          Get.offAll(() => const MainScreen(tabNumber: 0));
+        }).catchError((err) {
+          logger.e("구글 로그인 실패: $err");
+          Get.snackbar('구글 로그인 실패', '다시 시도해주세요');
+        });
+      },
       child: Container(
         alignment: Alignment.center,
         width: double.infinity,
