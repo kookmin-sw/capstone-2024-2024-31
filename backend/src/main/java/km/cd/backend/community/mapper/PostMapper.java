@@ -1,16 +1,11 @@
 package km.cd.backend.community.mapper;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.community.domain.Like;
 import km.cd.backend.community.dto.*;
 import km.cd.backend.user.domain.User;
-import km.cd.backend.user.domain.mapper.UserMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -26,8 +21,9 @@ public interface PostMapper {
 
   String CONTENT_DELETE = "삭제된 댓글입니다.";
 
-  @Mapping(target = "author", source = "post.author.name")
-  @Mapping(target = "avatar", source = "post.author.avatar")
+  @Mapping(target = "authorId", source = "author.id")
+  @Mapping(target = "author", source = "author.name")
+  @Mapping(target = "avatar", source = "author.avatar")
   @Mapping(target = "likes", source = "likes", qualifiedByName = "mapLikes")
   @Mapping(target = "comments", source = "comments", qualifiedByName = "mapComments")
   PostResponse entityToResponse(Post post);
