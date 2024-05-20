@@ -35,7 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("access_token", accessToken);
       logger.d(' 구글 로그인 성공 👋');
-      Get.offAll(() => MainScreen());
+      Get.offAll(() => const MainScreen(
+            tabNumber: 0,
+          ));
       return;
     }
 
@@ -122,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
       onTap: () async {
         //  네이버 로그인 버튼 클릭시
-        print("네이버 로그인 버튼 클릭");
+        logger.d("네이버 로그인 버튼 클릭");
         // Navigator.pushNamed(scaffoldContext, 'signUp');
       },
       child: Container(

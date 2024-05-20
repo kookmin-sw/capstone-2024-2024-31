@@ -54,4 +54,26 @@ class PostService {
       throw Exception('게시글 생성 실패: ${e.toString()}');
     }
   }
+
+  static Future<Comment> createComment(
+      int postId, String content, int? parentId) async {
+    final String uri = '/posts/$postId/comments';
+
+    try {
+      final response = await dioInstance.post(uri, queryParameters: {
+        'parentId': parentId,
+      }, data: {
+        'content': content,
+      });
+
+      if (response.statusCode == 201) {
+        logger.d('댓글 생성 성공: ${response.data}');
+        return Comment.fromJson(response.data);
+      } else {
+        throw Exception('댓글 생성 실패: ${response.data}');
+      }
+    } catch (err) {
+      throw Exception('댓글 생성 실패: ${err.toString()}');
+    }
+  }
 }

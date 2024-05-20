@@ -46,7 +46,9 @@ class _MyAppState extends State<MyApp> {
               useInheritedMediaQuery: true,
               routes: {
                 'login': (context) => const LoginScreen(),
-                'main': (context) => MainScreen(),
+                'main': (context) => const MainScreen(
+                      tabNumber: 0,
+                    ),
               });
         });
   }

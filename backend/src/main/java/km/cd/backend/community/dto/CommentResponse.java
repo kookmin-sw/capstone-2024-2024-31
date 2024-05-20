@@ -7,6 +7,7 @@ import java.util.List;
 
 public record CommentResponse(
         Long id,
+        Long parentId,
         String author,
         String avatar,
         String content,

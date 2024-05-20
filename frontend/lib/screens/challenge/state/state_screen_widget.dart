@@ -18,7 +18,9 @@ class ChallengeWidgets {
       elevation: 0,
       leading: isFromJoinScreen
           ? IconButton(
-              onPressed: () => Get.offAll(MainScreen()),
+              onPressed: () => Get.offAll(const MainScreen(
+                    tabNumber: 0,
+                  )),
               icon: const Icon(
                 Icons.home,
                 color: Colors.white,
@@ -194,7 +196,7 @@ class ChallengeWidgets {
                     ),
                   ),
                   Text(
-                    challengeStatus.certificationFrequency ?? "-",
+                    challengeStatus.certificationFrequency,
                     style: const TextStyle(
                       color: Palette.grey300,
                       fontSize: 10,
