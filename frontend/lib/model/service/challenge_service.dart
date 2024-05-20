@@ -1,55 +1,118 @@
 import 'package:dio/dio.dart';
+import 'package:frontend/model/controller/challenge_form_controller.dart';
+import 'package:frontend/model/controller/user_controller.dart';
+import 'package:frontend/model/data/challenge/challenge_join.dart';
+import 'package:frontend/model/data/challenge/challenge_simple.dart';
+import 'package:frontend/model/data/sms/sms_certification.dart';
+import 'package:frontend/model/service/dio_service.dart';
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../env.dart';
 import '../data/challenge/challenge.dart';
 import '../data/challenge/challenge_status.dart';
 
 class ChallengeService {
-  static final logger = Logger();
+  static final Dio dio = DioService().dio;
+  static final Logger logger = Logger();
 
-  static Future<Challenge?> fetchChallenge(int id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    Dio dio = Dio();
-
-    dio.options.headers['content-Type'] = 'application/json';
-    dio.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
+  static Future<Challenge> fetchChallenge(int id) async {
+    final String uri = '/challenges/$id';
 
     try {
-      final response = await dio.get('${Env.serverUrl}/challenges/$id');
+      final response = await dio.get(uri);
+
       if (response.statusCode == 200) {
         logger.d('챌린지 조회 성공: ${response.data}');
         return Challenge.fromJson(response.data);
       } else {
-        logger.e('챌린지 조회 실패: ${response.data}');
+        throw Exception('챌린지 조회 실패: ${response.data}');
       }
     } catch (e) {
-      logger.e('챌린지 조회 실패: ${e.toString()}');
+      throw Exception('챌린지 조회 실패: ${e.toString()}');
     }
-
-    return null;
   }
 
-  static Future<ChallengeStatus?> fetchChallengeStatus(int id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    Dio dio = Dio();
-
-    dio.options.headers['content-Type'] = 'application/json';
-    dio.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
+  static Future<ChallengeStatus> fetchChallengeStatus(int id) async {
+    final String uri = '/challenges/$id/status';
 
     try {
-      final response = await dio.get('${Env.serverUrl}/challenges/$id/status');
+      final response = await dio.get(uri);
       if (response.statusCode == 200) {
+        logger.d('챌린지 상태 조회 성공: ${response.data}');
         return ChallengeStatus.fromJson(response.data);
       } else {
-        logger.e("챌린지 상태 조회 실패: ${response.data}");
+        throw Exception("챌린지 상태 조회 실패: ${response.data}");
       }
     } catch (e) {
-      logger.e(e);
+      throw Exception('챌린지 상태 조회 실패: ${e.toString()}');
     }
+  }
 
-    return null;
+  static Future<ChallengeSimple> createChallenge() async {
+    final ChallengeFormController challengeFormController = Get.find();
+    const String uri = '/challenges/create';
+
+    final formData = challengeFormController.toFormData();
+
+    try {
+      final response = await dio.post(uri, data: formData);
+      if (response.statusCode == 200) {
+        logger.d('챌린지 생성 성공: ${response.data}');
+        return ChallengeSimple.fromJson(response.data);
+      } else {
+        throw Exception('챌린지 생성 실패: ${response.data}');
+      }
+    } catch (err) {
+      throw Exception('챌린지 생성 실패: $err');
+    }
+  }
+
+  static Future<void> joinChallenge(
+      int challengeId, ChallengeJoin challengeJoin) async {
+    final String uri = '/challenges/$challengeId/join';
+
+    try {
+      final response = await dio.post(uri, data: challengeJoin.toJson());
+
+      if (response.statusCode == 201) {
+        logger.d('챌린지 참가 성공');
+      } else {
+        throw Exception('챌린지 참가 실패: ${response.data}');
+      }
+    } catch (err) {
+      throw Exception('챌린지 참가 실패: $err');
+    }
+  }
+
+  static Future<void> sendCode(String number) async {
+    const String uri = '/sms/send';
+
+    try {
+      final response =
+          await dio.post(uri, data: SmsCertification(phone: number).toJson());
+
+      if (response.statusCode == 200) {
+        logger.d('인증번호 전송 성공: ${response.data}');
+      } else {
+        throw Exception('인증번호 전송 실패: ${response.data}');
+      }
+    } catch (err) {
+      throw Exception('인증번호 전송 실패: $err');
+    }
+  }
+
+  static Future<void> verifyCode(String number, String code) async {
+    const uri = '/sms/verify';
+
+    try {
+      final response = await dio.post(uri,
+          data: SmsCertification(phone: number, certificationNumber: code)
+              .toJson());
+
+      if (response.statusCode == 200) {
+        logger.d('인증번호 확인 성공: ${response.data}');
+      }
+    } catch (err) {
+      throw Exception('인증번호 확인 실패: $err');
+    }
   }
 }

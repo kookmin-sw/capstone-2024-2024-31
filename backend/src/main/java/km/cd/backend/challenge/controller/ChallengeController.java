@@ -3,6 +3,7 @@ package km.cd.backend.challenge.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
+import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.dto.request.ChallengeJoinRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
@@ -33,7 +34,7 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Long> createChallenge(
+    public ResponseEntity<ChallengeSimpleResponse> createChallenge(
             @RequestPart(name = "json") ChallengeCreateRequest challengeCreateRequest,
             @RequestPart(name = "images") List<MultipartFile> images,
             @RequestPart(name = "successImage") MultipartFile successfulVerificationImage,
@@ -45,7 +46,8 @@ public class ChallengeController {
             images,
             successfulVerificationImage,
             failedVerificationImage);
-        return ResponseEntity.ok(saved.getId());
+        ChallengeSimpleResponse challengeSimpleResponse = ChallengeMapper.INSTANCE.entityToSimpleResponse(saved);
+        return ResponseEntity.ok(challengeSimpleResponse);
     }
 
     @PostMapping("/list")
