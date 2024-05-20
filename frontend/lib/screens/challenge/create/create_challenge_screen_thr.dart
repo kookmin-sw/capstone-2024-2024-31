@@ -23,7 +23,7 @@ class CreateChallengeThr extends StatefulWidget {
 class _CreateChallengeThrState extends State<CreateChallengeThr> {
   final logger = Logger();
   final formKey = GlobalKey<FormState>();
-  final userController = Get.find<UserController>();
+  final UserController userController = Get.find<UserController>();
   final challengeFormController = Get.find<ChallengeFormController>();
   final picker = ImagePicker();
 
@@ -90,13 +90,13 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                   });
                   if (formKey.currentState!.validate()) {
                     logger.d(
-                        '인증 방법: ${controller.form.certificationExplanation}');
-                    logger.d('인증 수단: ${controller.form.isGalleryPossible}');
+                        '인증 방법: ${challengeFormController.form.certificationExplanation}');
+                    logger.d('인증 수단: ${challengeFormController.form.isGalleryPossible}');
                     logger.d(
-                        '성공 이미지: ${controller.form.successfulVerificationImage}');
+                        '성공 이미지: ${challengeFormController.form.successfulVerificationImage}');
                     logger.d(
-                        '실패 이미지: ${controller.form.failedVerificationImage}');
-                    logger.d('최대 인원: ${controller.form.maximumPeople}');
+                        '실패 이미지: ${challengeFormController.form.failedVerificationImage}');
+                    logger.d('최대 인원: ${challengeFormController.form.maximumPeople}');
 
                     try {
                       ChallengeService.createChallenge().then((val) {

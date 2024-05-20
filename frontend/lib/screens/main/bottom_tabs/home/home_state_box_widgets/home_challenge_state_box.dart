@@ -40,6 +40,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
       challengeSimples.clear();
       challengeSimples.addAll(
           controller.myChallenges.where((c) => c.status == "진행중").toList());
+
     });
   }
 

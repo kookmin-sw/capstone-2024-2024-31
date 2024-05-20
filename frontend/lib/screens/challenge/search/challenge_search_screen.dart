@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/env.dart';
-import 'package:frontend/screens/main/bottom_tabs/home/home_components/home_challenge_item_card.dart';
+import 'package:frontend/screens/main/bottom_tabs/home/home_list_widgets/home_challenge_item_card.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 import 'package:frontend/model/data/challenge/challenge_filter.dart';
