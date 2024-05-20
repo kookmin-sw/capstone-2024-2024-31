@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/challenge_form_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/service/challenge_service.dart';
 import 'package:frontend/widgets/rtu_button.dart';
 import 'package:get/get.dart';
@@ -22,8 +23,10 @@ class CreateChallengeThr extends StatefulWidget {
 class _CreateChallengeThrState extends State<CreateChallengeThr> {
   final logger = Logger();
   final formKey = GlobalKey<FormState>();
-  final controller = Get.find<ChallengeFormController>();
+  final userController = Get.find<UserController>();
+  final challengeFormController = Get.find<ChallengeFormController>();
   final picker = ImagePicker();
+
   bool isLoading = false;
   bool _canSetCapacity = false;
   final List<bool> _toggleSelections = [true, false];
@@ -34,9 +37,11 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       if (isSuccess) {
-        controller.updateSuccessfulVerificationImage(File(pickedImage.path));
+        challengeFormController
+            .updateSuccessfulVerificationImage(File(pickedImage.path));
       } else {
-        controller.updateFailedVerificationImage(File(pickedImage.path));
+        challengeFormController
+            .updateFailedVerificationImage(File(pickedImage.path));
       }
     }
   }
@@ -134,6 +139,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                           const SizedBox(height: 15),
                           _canSetCapacity ? buildMaxCapacity() : Container()
                         ],
+
                       ),
                     ),
                   ),
@@ -189,8 +195,8 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
                 ),
               ),
               validator: (value) => value!.isEmpty ? "내용을 입력해주세요." : null,
-              onChanged: (value) =>
-                  controller.updateCertificationExplanation(value.trim()),
+              onChanged: (value) => challengeFormController
+                  .updateCertificationExplanation(value.trim()),
             ),
           ],
         ));
@@ -217,7 +223,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
               _toggleSelections[index] = true;
               _toggleSelections[(index + 1) % 2] = false;
             });
-            controller.updateIsGalleryPossible(index == 1);
+            challengeFormController.updateIsGalleryPossible(index == 1);
           },
           children: [
             Container(
@@ -277,11 +283,15 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
         Obx(
           () => Row(
             children: [
-              buildImageContainer(controller.form.successfulVerificationImage,
-                  Palette.green, true),
+              buildImageContainer(
+                  challengeFormController.form.successfulVerificationImage,
+                  Palette.green,
+                  true),
               const SizedBox(width: 20),
               buildImageContainer(
-                  controller.form.failedVerificationImage, Palette.red, false),
+                  challengeFormController.form.failedVerificationImage,
+                  Palette.red,
+                  false),
             ],
           ),
         )
@@ -436,7 +446,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
               ),
             ),
             onChanged: (value) {
-              controller.updateMaximumPeople(int.parse(value));
+              challengeFormController.updateMaximumPeople(int.parse(value));
             },
           ),
         ),
