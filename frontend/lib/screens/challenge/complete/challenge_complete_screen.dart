@@ -5,8 +5,8 @@ import 'package:frontend/screens/challenge/detail/widgets/certification_method_w
 import 'package:frontend/screens/community/community_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
-import 'package:frontend/model/service/challenge_service.dart';
-import 'package:frontend/model/service/post_service.dart';
+import 'package:frontend/service/challenge_service.dart';
+import 'package:frontend/service/post_service.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';

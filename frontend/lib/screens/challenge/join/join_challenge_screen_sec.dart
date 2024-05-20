@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/model/service/challenge_service.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:frontend/screens/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';

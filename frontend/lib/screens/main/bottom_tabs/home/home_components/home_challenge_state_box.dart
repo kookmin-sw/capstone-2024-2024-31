@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
-import 'package:frontend/model/service/challenge_service.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:frontend/screens/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/screens/community/create_posting_screen.dart';
 import 'package:frontend/model/config/palette.dart';

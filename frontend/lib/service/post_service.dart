@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart' as dio;
 import 'package:frontend/model/data/post/post.dart';
 import 'package:frontend/model/data/post/post_form.dart';
-import 'package:frontend/model/service/dio_service.dart';
+import 'package:frontend/service/dio_service.dart';
 import 'package:logger/logger.dart';
 
 class PostService {

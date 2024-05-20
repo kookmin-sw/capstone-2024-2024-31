@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/model/service/dio_service.dart';
+import 'package:frontend/service/dio_service.dart';
 import 'package:frontend/screens/login/login_screen.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:intl/date_symbol_data_local.dart';
