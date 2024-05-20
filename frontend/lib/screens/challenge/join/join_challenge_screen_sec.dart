@@ -389,7 +389,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                       width: screenSize.width * 0.4,
                       child: TextFormField(
                         keyboardType: TextInputType.number,
-                        maxLength: 4,
+                        maxLength: 6,
                         style: const TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 11,
