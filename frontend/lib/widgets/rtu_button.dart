@@ -17,7 +17,7 @@ class RtuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 5),
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -31,7 +31,7 @@ class RtuButton extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 10),
             ),
             child: Text(
               text,
