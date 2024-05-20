@@ -25,6 +25,10 @@ class UserController extends GetxController {
     _user.value = user;
   }
 
+  void addMyChallenge(ChallengeSimple challenge) {
+    _myChallenges.add(challenge);
+  }
+
   void updateMyChallenges(List<ChallengeSimple> challenges) {
     _myChallenges.assignAll(challenges);
   }
