@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:frontend/model/controller/challenge_form_controller.dart';
-import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/challenge/challenge_join.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:frontend/model/data/sms/sms_certification.dart';

@@ -5,7 +5,7 @@ import 'run_model_by_image_demo.dart';
 
 
 class CertifacationScreen extends StatefulWidget {
-  const CertifacationScreen({Key? key}) : super(key: key);
+  const CertifacationScreen({super.key});
 
   @override
   State<CertifacationScreen> createState() => _ChooseDemoState();

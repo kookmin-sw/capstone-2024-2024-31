@@ -5,7 +5,6 @@ import 'package:frontend/screens/main/bottom_tabs/home/home_components/privateCo
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
 class ChallengeItemCard extends StatelessWidget {
   final ChallengeSimple challengeSimple;

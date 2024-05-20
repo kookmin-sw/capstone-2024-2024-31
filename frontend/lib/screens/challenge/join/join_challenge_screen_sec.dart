@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,13 +6,10 @@ import 'package:frontend/screens/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
-import 'package:frontend/model/data/sms/sms_certification.dart';
-import 'package:frontend/model/data/sms/sms_result.dart';
 import 'package:frontend/widgets/rtu_button.dart';
 import 'package:logger/logger.dart';
 import 'package:get/get.dart';
 
-import '../../../env.dart';
 import '../../../model/data/challenge/challenge_join.dart';
 
 class JoinChallengeSecScreen extends StatefulWidget {

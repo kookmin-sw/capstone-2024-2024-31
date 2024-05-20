@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/community/create_posting_screen.dart';
 import 'package:frontend/screens/community/widget/post_card.dart';
@@ -9,7 +8,6 @@ import 'package:frontend/service/post_service.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import '../../env.dart';
 import '../../model/data/post/post.dart';
 
 class CommunityScreen extends StatefulWidget {

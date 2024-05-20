@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pytorch_lite/pytorch_lite.dart';
 
 class RunModelByImageDemo extends StatefulWidget {
-  const RunModelByImageDemo({Key? key}) : super(key: key);
+  const RunModelByImageDemo({super.key});
 
   @override
   _RunModelByImageDemoState createState() => _RunModelByImageDemoState();
