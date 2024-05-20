@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
+import 'package:frontend/screens/community/community_screen.dart';
 import 'package:frontend/screens/community/create_posting_screen.dart';
 import 'package:frontend/screens/main/main_screen.dart';
 import 'package:frontend/service/challenge_service.dart';
@@ -14,56 +15,81 @@ import '../../../model/package/pie_chart/src/chart_values_options.dart';
 import '../../../model/package/pie_chart/src/legend_options.dart';
 import '../../../model/package/pie_chart/src/pie_chart.dart';
 
-class ChallengeWidgets {
-  static AppBar buildAppBar(final bool isFromJoinScreen) {
+class ChallengeStateScreenWidgets {
+  static AppBar buildAppBar(final bool isFromJoinScreen, Challenge challenge) {
     return AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      leading: isFromJoinScreen
-          ? IconButton(
-              onPressed: () => Get.offAll(const MainScreen(
-                    tabNumber: 0,
-                  )),
-              icon: const Icon(
-                Icons.home,
-                color: Colors.white,
-              ))
-          : IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Get.back();
-              },
-            ),
-      actions: [
-        IconButton(
-          onPressed: () {},
+        toolbarHeight: 56,
+        backgroundColor: Palette.purPle700,
+        // 불투명도를 50%로 설정
+        elevation: 0,
+        leading: isFromJoinScreen
+            ? IconButton(
+            onPressed: () =>
+                Get.offAll(const MainScreen(
+                  tabNumber: 0,
+                )),
+            icon: const Icon(
+              Icons.home,
+              color: Colors.white,
+            ))
+            : IconButton(
           icon: const Icon(
-            Icons.ios_share,
+            Icons.arrow_back_ios,
             color: Colors.white,
           ),
+          onPressed: () {
+            Get.back();
+          },
         ),
-      ],
+        title: const Text(
+          "내 챌린지 현황",
+          style: TextStyle(
+            fontSize: 15,
+            fontFamily: "Pretendard",
+            fontWeight: FontWeight.w500,
+            color: Palette.white,
+          ),
+        ),
+        actions: [
+        IconButton(
+        onPressed: ()
+    {
+      Get.to(CommunityScreen(challenge: challenge));
+    },
+    icon: const Icon(
+    Icons.chat,
+    size: 30,
+    color: Colors.white,
+    ),
+    )
+    ,
+    ]
+    ,
     );
   }
 
-  static Widget buildBottomNavigationBar(Challenge challenge) {
+  static Widget buildBottomNavigationBar(Challenge challenge,
+      bool isPossibleButtonClick) {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       height: 80,
       color: Colors.transparent,
       width: double.infinity,
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {
-          Get.to(CreatePostingScreen(
+          isPossibleButtonClick
+              ? Get.to(CreatePostingScreen(
             challenge: challenge,
-          ));
+          ))
+              : null;
         },
-        child: SvgPicture.asset(
+        child: isPossibleButtonClick
+            ? SvgPicture.asset(
           'assets/svgs/certification_bottom_btn.svg',
+        )
+            : SvgPicture.asset(
+          'assets/svgs/certification_disable_btn.svg',
         ),
       ),
     );
@@ -74,15 +100,32 @@ class ChallengeWidgets {
       children: <Widget>[
         Container(
           height: screenHeight * 0.3,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/challenge_image.png'),
-              fit: BoxFit.fitWidth,
+              image: NetworkImage(thisChallenge.challengeImagePaths[0]),
+              // 이미지 경로
+              fit: BoxFit.fitWidth, // 이미지가 컨테이너를 채우도록 설정
             ),
           ),
         ),
         Positioned(
-          top: (screenHeight * 0.3) - 80,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+                height: screenHeight * 0.09, // 전체 높이의 30%만큼 그라데이션 적용
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.grey.withOpacity(0.6),
+                      Colors.transparent,
+                    ],
+                  ),
+                ))),
+        Positioned(
+          top: (screenHeight * 0.3) - 70,
           left: 10,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +157,8 @@ class ChallengeWidgets {
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
-        " ${thisChallenge.certificationFrequency} | ${thisChallenge.challengePeriod}주 ",
+        " ${thisChallenge.certificationFrequency} | ${thisChallenge
+            .challengePeriod}주 ",
         style: const TextStyle(
           fontSize: 10,
           fontFamily: "Pretendard",
@@ -127,6 +171,10 @@ class ChallengeWidgets {
 
   static Widget informationChallenge(DateTime startDate, DateTime endDate,
       Challenge thisChallenge, ChallengeStatus challengeStatus) {
+    String formattedEndTime = challengeStatus.certificationEndTime == 24
+        ? "24시"
+        : "${challengeStatus.certificationEndTime}";
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -155,7 +203,9 @@ class ChallengeWidgets {
                     ),
                   ),
                   Text(
-                    "${DateFormat("M월 d일(E)", "ko_KR").format(startDate)}-${DateFormat("M월 d일(E)", "ko_KR").format(endDate)}  ${thisChallenge.challengePeriod}주",
+                    "${DateFormat("M월 d일(E)", "ko_KR").format(
+                        startDate)}-${DateFormat("M월 d일(E)", "ko_KR").format(
+                        endDate)}  ${thisChallenge.challengePeriod}주",
                     style: const TextStyle(
                       color: Palette.grey300,
                       fontSize: 10,
@@ -226,7 +276,8 @@ class ChallengeWidgets {
                     ),
                   ),
                   Text(
-                    "${challengeStatus.certificationStartTime}시 ~ ${challengeStatus.certificationEndTime}",
+                    "${challengeStatus
+                        .certificationStartTime}시 ~ $formattedEndTime",
                     style: const TextStyle(
                       color: Palette.grey300,
                       fontSize: 10,
@@ -335,7 +386,8 @@ class ChallengeWidgets {
                     ),
                   ),
                   Text(
-                    " / $totalCertificationCount회  |  남은 인증 : ${totalCertificationCount - myCertificationNum}회",
+                    " / $totalCertificationCount회  |  남은 인증 : ${totalCertificationCount -
+                        myCertificationNum}회",
                     style: const TextStyle(
                       fontSize: 10,
                       color: Palette.grey300,
@@ -376,13 +428,13 @@ class ChallengeWidgets {
     );
   }
 
-  static Widget certificationStateBar(
-      double screenWidth, ChallengeStatus challengeStatus) {
+  static Widget certificationStateBar(double screenWidth,
+      ChallengeStatus challengeStatus) {
     int myCertificationNumber =
         challengeStatus.numberOfCertifications; //내가 한 인증 횟수
     String percent =
-        (myCertificationNumber / challengeStatus.totalCertificationCount * 100)
-            .toStringAsFixed(1);
+    (myCertificationNumber / challengeStatus.totalCertificationCount * 100)
+        .toStringAsFixed(1);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),

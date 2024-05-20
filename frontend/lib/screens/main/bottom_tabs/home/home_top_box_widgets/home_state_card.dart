@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/service/post_service.dart';
 import 'package:frontend/service/challenge_service.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
+import '../../../../../model/controller/user_controller.dart';
 import '../../../../../model/data/challenge/challenge_simple.dart';
 import '../../../../challenge/state/state_challenge_screen.dart';
 import '../../../../community/create_posting_screen.dart';
@@ -14,17 +16,33 @@ class HomeChallengeStateCard extends StatefulWidget {
   final double screenWidth;
   final ChallengeSimple challengeSimple;
 
-  const HomeChallengeStateCard({super.key,
+  const HomeChallengeStateCard({
+    super.key,
     required this.screenWidth,
     required this.challengeSimple,
   });
 
   @override
-  _HomeChallengeStateCardState createState() => _HomeChallengeStateCardState();
+  HomeChallengeStateCardState createState() => HomeChallengeStateCardState();
 }
 
-class _HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
+class HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
   bool isLoading = false;
+  late UserController _userController;
+  late bool isPossibleButtonClick = false; // 초기값 설정
+
+  @override
+  void initState() {
+    super.initState();
+    _userController = Get.find<UserController>();
+    _checkButtonClickPossibility(); // 비동기 작업을 별도의 함수에서 호출
+  }
+
+  Future<void> _checkButtonClickPossibility() async {
+    isPossibleButtonClick = await PostService.checkPossibleCertification(
+        widget.challengeSimple.id, _userController.user.id);
+    setState(() {}); // 상태 업데이트
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +56,7 @@ class _HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
           Challenge challenge = await ChallengeService.fetchChallenge(
               widget.challengeSimple.id, null);
           Get.to(() => ChallengeStateScreen(
-              isFromJoinScreen: false, challenge: challenge));
+              isFromJoinScreen: false, challenge: challenge, isPossibleCertification :isPossibleButtonClick));
         } finally {
           setState(() {
             isLoading = false;
@@ -96,7 +114,8 @@ class _HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    stateBar(widget.screenWidth, getProgressPercent(widget.challengeSimple)),
+                    stateBar(widget.screenWidth,
+                        getProgressPercent(widget.challengeSimple)),
                   ],
                 ),
                 const SizedBox(width: 10),
@@ -107,13 +126,14 @@ class _HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
                 ),
                 const SizedBox(width: 5),
                 ElevatedButton(
-                  onPressed: () async {
+                  onPressed: isPossibleButtonClick ? () async {
                     setState(() {
                       isLoading = true;
                     });
 
                     try {
-                      Challenge challenge = await ChallengeService.fetchChallenge(
+                      Challenge challenge =
+                      await ChallengeService.fetchChallenge(
                           widget.challengeSimple.id);
                       Get.to(() => CreatePostingScreen(challenge: challenge));
                     } finally {
@@ -121,19 +141,20 @@ class _HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
                         isLoading = false;
                       });
                     }
-                  },
+                  } : null,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(40, 40),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0), // 테두리를 둥글게 만드는 부분
+                      borderRadius:
+                      BorderRadius.circular(10.0), // 테두리를 둥글게 만드는 부분
                     ),
                     padding: EdgeInsets.zero,
-                    backgroundColor: Palette.purPle50,
+                    backgroundColor: isPossibleButtonClick ? Palette.purPle50 : Palette.grey50,
                     foregroundColor: Palette.purPle700,
                   ),
-                  child: const Text(
-                    '인증',
-                    style: TextStyle(
+                  child: Text(
+                    isPossibleButtonClick ? '인증': '✔️',
+                    style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 11,
                       fontFamily: 'Pretendard',
