@@ -3,27 +3,27 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 
-class PostTopWidget extends StatefulWidget {
+class PostCardTop extends StatefulWidget {
   final String image;
   final String name;
-  final DateTime uploadTime;
+  final String createdAt;
   final bool isInitiallyFollowing;
   final ValueChanged<bool> onFollowingChanged; // Callback to notify the parent
 
-  const PostTopWidget({
+  const PostCardTop({
     super.key,
     required this.image,
     required this.name,
-    required this.uploadTime,
+    required this.createdAt,
     required this.isInitiallyFollowing,
     required this.onFollowingChanged,
   });
 
   @override
-  _PostTopWidgetState createState() => _PostTopWidgetState();
+  State<PostCardTop> createState() => _PostCardTopState();
 }
 
-class _PostTopWidgetState extends State<PostTopWidget> {
+class _PostCardTopState extends State<PostCardTop> {
   late bool isFollowing;
 
   @override
@@ -41,18 +41,17 @@ class _PostTopWidgetState extends State<PostTopWidget> {
 
   @override
   Widget build(BuildContext context) {
-    String uploadTimeString = formatDate(widget.uploadTime);
-    String beforeHours = calculateBeforeHours(widget.uploadTime);
+    String uploadTimeString = widget.createdAt;
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
             CircleAvatar(
               radius: 25,
-              backgroundImage: AssetImage(widget.image),
+              backgroundImage: NetworkImage(widget.image),
             ),
             const SizedBox(width: 13),
             Column(
@@ -97,16 +96,5 @@ class _PostTopWidgetState extends State<PostTopWidget> {
 
   String formatDate(DateTime dateTime) {
     return "${dateTime.year}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.day.toString().padLeft(2, '0')}";
-  }
-
-  String calculateBeforeHours(DateTime uploadTime) {
-    DateTime now = DateTime.now();
-    Duration difference = now.difference(uploadTime);
-
-    if (difference.inHours >= 24) {
-      return '${difference.inDays} 일전';
-    } else {
-      return '${difference.inHours} 시간전';
-    }
   }
 }

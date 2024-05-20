@@ -452,17 +452,17 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                             });
                           },
                           style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all<Size>(
+                            minimumSize: WidgetStateProperty.all<Size>(
                                 const Size(10, 35)),
                             // Adjust the button's size
 
-                            shape: MaterialStateProperty.all<OutlinedBorder>(
+                            shape: WidgetStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
                             backgroundColor: selectedFrequency == index
-                                ? MaterialStateProperty.all<Color>(
+                                ? WidgetStateProperty.all<Color>(
                                     Palette.mainPurple)
                                 : null,
                           ),
@@ -516,17 +516,17 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                       },
                       style: ButtonStyle(
                           padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry?>(
+                              WidgetStateProperty.all<EdgeInsetsGeometry?>(
                             const EdgeInsets.symmetric(horizontal: 10),
                           ),
-                          fixedSize: MaterialStateProperty.all<Size>(
+                          fixedSize: WidgetStateProperty.all<Size>(
                               const Size.fromHeight(50.0)),
 
                           // maximumSize: MaterialStateProperty.all<Size>(
                           //     const Size(110, 50)),
                           // minimumSize:
                           //     MaterialStateProperty.all<Size>(const Size(10, 35)),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                          shape: WidgetStateProperty.all<OutlinedBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -535,9 +535,9 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                                   categoryList[categoryIndex]['category']
                                       .name
                                       .toString()
-                              ? MaterialStateProperty.all<Color>(
+                              ? WidgetStateProperty.all<Color>(
                                   Palette.mainPurple)
-                              : MaterialStateProperty.all<Color>(
+                              : WidgetStateProperty.all<Color>(
                                   Palette.white)),
                       child: Row(
                         children: [

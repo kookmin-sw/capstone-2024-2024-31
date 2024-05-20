@@ -24,6 +24,7 @@ class MyRoutineUpCard extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     final int challengePeriod = challenge.challengePeriod;
     final DateTime startDate = challenge.startDate;
+    final int challengeId = challenge.id;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     double getProgressPercent() {
@@ -37,14 +38,17 @@ class MyRoutineUpCard extends StatelessWidget {
         onTap: () {
           isStarted
               ? isIng
-                  ? Get.to(() => const CommunityScreen())
-                  : Get.to(() => ChallengeCompleteScreen())
-              : Get.to(() => ChallengeDetailScreen(challengeId: challenge.id, isFromMypage: true));
+                  ? Get.to(() => CommunityScreen(challengeId: challengeId))
+                  : Get.to(() => ChallengeCompleteScreen(
+                        challengeId: challengeId,
+                      ))
+              : Get.to(() => ChallengeDetailScreen(
+                  challengeId: challengeId, isFromMypage: true));
         },
         child: SizedBox(
             width: screenSize.width * 0.95,
             child: Card(
-                color:isIng ? Colors.white : Colors.grey[80],
+                color: isIng ? Colors.white : Colors.grey[80],
                 child: Opacity(
                     opacity: isIng ? 1.0 : 0.5, // 불투명도 조절
                     child: Padding(
@@ -75,16 +79,18 @@ class MyRoutineUpCard extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Flexible(child: Text(
+                                          Flexible(
+                                              child: Text(
                                             challenge.challengeName, // 챌린지 이름
                                             overflow: TextOverflow.fade,
                                             maxLines: 1,
                                             style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 10,
-                                              fontFamily: "Pretender",
-                                              color: isIng ?Palette.mainPurple :Palette.purPle200
-                                            ),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 10,
+                                                fontFamily: "Pretender",
+                                                color: isIng
+                                                    ? Palette.mainPurple
+                                                    : Palette.purPle200),
                                           )),
                                           Text(
                                             '${getProgressPercent().toInt()}%',

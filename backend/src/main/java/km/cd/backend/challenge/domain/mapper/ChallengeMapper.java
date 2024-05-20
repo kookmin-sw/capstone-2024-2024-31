@@ -36,7 +36,10 @@ public interface ChallengeMapper {
     @Mapping(target = "totalParticipants", ignore = true)
     @Mapping(target = "totalCertificationCount", expression = "java(calculateTotalCertificationCount(convertNumber(request.getChallengePeriod()), request.getCertificationFrequency()))")
     Challenge requestToEntity(ChallengeCreateRequest request);
-    
+
+    @Mapping(target = "challengeCategory", source = "challenge.challengeCategory.name")
+    @Mapping(target = "galleryPossible", source = "isGalleryPossible")
+    @Mapping(target = "private", source = "isPrivate")
     ChallengeInformationResponse challengeToChallengeResponse(Challenge challenge);
     
     @Mapping(target = "currentAchievementRate", expression = "java(getCurrentAchievementRate(numberOfCertifications, challenge.getTotalCertificationCount()))")

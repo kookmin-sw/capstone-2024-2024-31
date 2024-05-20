@@ -1,119 +1,188 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/community/post_detail_screen.dart';
-import 'package:frontend/community/widget/post_button_widget.dart';
-import 'package:frontend/community/widget/post_top.dart';
-import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/community/widget/post_card_bottom.dart';
+import 'package:frontend/community/widget/post_card_top.dart';
+import 'package:frontend/env.dart';
+import 'package:frontend/model/controller/user_controller.dart';
+import 'package:frontend/model/data/post/post.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostCard extends StatefulWidget {
-  int number;
-  static bool isLiked = false;
-  static int likeNum = 19;
-  static int commentNum = 1;
-  static String imageUrl = 'assets/images/image.png';
-  static String userName = '챌린지장인';
-  static String postText = "ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ래서 지금 이게 5줄이 넘을지 모르겟쯘올ㅇ";
-  static String authImage = 'assets/images/challenge_image.png';
-  final FocusNode? commentFocusNode;
+  final Post post;
+  final bool onPostDetail;
+  FocusNode? focusNode;
 
-  PostCard({required this.number, super.key, this.commentFocusNode});
+  PostCard(
+      {super.key,
+      required this.post,
+      this.onPostDetail = false,
+      this.focusNode});
 
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
-  bool isFollowing = false;
+  final controller = Get.find<UserController>();
+  final logger = Logger();
 
-  void handleFollowingChanged(bool newFollowingStatus) {
+  late Post _post;
+  bool _isFollowing = false;
+  bool _isLiked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _post = widget.post;
+    _isLiked = _post.likes.any((like) => like.userId == controller.user.id);
+    for (final user in controller.user.following) {
+      if (user.friendName == _post.author) {
+        _isFollowing = true;
+        break;
+      }
+    }
+  }
+
+  void _handleFollow(bool isFollowing) {
     setState(() {
-      isFollowing = newFollowingStatus;
+      _isFollowing = isFollowing;
     });
+  }
+
+  Future<void> _handleLike(bool isLiked) async {
+    final prefs = await SharedPreferences.getInstance();
+    final dio = Dio(
+      BaseOptions(
+          method: isLiked ? 'POST' : 'DELETE',
+          baseUrl: Env.serverUrl,
+          receiveTimeout: const Duration(seconds: 3),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${prefs.getString('access_token')}',
+          }),
+    );
+
+    try {
+      final response = await dio.request('/posts/${_post.id}/likes');
+
+      if (response.statusCode == 200) {
+        logger.d(_isLiked ? '좋아요 취소 성공' : '좋아요 성공');
+        setState(() {
+          _isLiked = isLiked;
+          if (_isLiked) {
+            _post.likes.add(Like(userId: controller.user.id));
+          } else {
+            _post.likes
+                .removeWhere((like) => like.userId == controller.user.id);
+          }
+        });
+      } else {
+        throw Exception('${response.statusCode}: ${response.statusMessage}');
+      }
+    } catch (e) {
+      logger.e('handleLike 실패: $e');
+      Get.snackbar('좋아요 및 취소 실패', '다시 시도해주세요');
+    }
+  }
+
+  void _handleComment() {
+    if (!widget.onPostDetail) {
+      Get.to(() => PostDetailScreen(
+            post: _post,
+            initialScroll: !widget.onPostDetail,
+          ));
+    } else {
+      widget.focusNode?.requestFocus();
+    }
+  }
+
+  int _countLike() {
+    return _post.likes.length;
+  }
+
+  int _countComment(List<Comment> comments) {
+    int result = comments.length;
+    for (final comment in comments) {
+      if (comment.children.isNotEmpty) {
+        result += _countComment(comment.children);
+      }
+    }
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    return InkWell(
-      onTap: () {
-        // 게시물 상세 정보 페이지로 이동하는 코드 추가
-        widget.commentFocusNode != null
-            ? null
-            : Get.to(() => const PostDetailPage());
-      },
-      child: Column(
-        children: [
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+    return Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          GestureDetector(
+            onTap: () {
+              if (!widget.onPostDetail) {
+                Get.to(() => PostDetailScreen(
+                      post: _post,
+                      initialScroll: false,
+                    ));
+              }
+            },
             child: Column(
               children: [
-                PostTopWidget(
-                  image: PostCard.imageUrl,
-                  name: PostCard.userName,
-                  uploadTime: DateTime(2024, 5, 15),
-                  isInitiallyFollowing: isFollowing,
-                  onFollowingChanged: handleFollowingChanged,
+                PostCardTop(
+                  image: _post.image,
+                  name: _post.author,
+                  createdAt: _post.createdDate,
+                  isInitiallyFollowing: _isFollowing,
+                  onFollowingChanged: _handleFollow,
                 ),
                 const SizedBox(height: 10),
-                post_text(PostCard.postText),
-                const SizedBox(height: 17),
-                post_image(PostCard.authImage),
-                const SizedBox(height: 20),
-                widget.commentFocusNode == null
-                    ? PostBtnWidget(
-                        likeNum: PostCard.likeNum,
-                        commentNum: PostCard.commentNum,
-                      )
-                    : PostBtnWidget(
-                        likeNum: PostCard.likeNum,
-                        commentNum: PostCard.commentNum,
-                        commentFocusNode: widget.commentFocusNode),
-                const SizedBox(height: 15),
+                postCardContent(_post.content),
+                const SizedBox(height: 10),
+                postCardImage(_post.image),
               ],
             ),
           ),
-          const Divider(
-              height: 0,
-              thickness: 7,
-              color: Palette.greySoft,
-              indent: 0,
-              endIndent: 0),
-        ],
-      ),
-    );
+          const SizedBox(height: 10),
+          PostCardBottom(
+            isLiked: _isLiked,
+            countLike: _countLike(),
+            countComment: _countComment(_post.comments),
+            handleLike: _handleLike,
+            handleComment: _handleComment,
+          ),
+        ]));
   }
 }
 
-Widget post_text(String postText) {
-  return Text(
-    postText,
-    maxLines: 5,
-    textAlign: TextAlign.left,
-    overflow: TextOverflow.ellipsis,
-    style: const TextStyle(
-      fontFamily: 'Pretendard', fontSize: 12, height: 1.3, // 줄간격 조정
-    ),
-  );
+Widget postCardContent(String postText) {
+  return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(
+        postText,
+        maxLines: 5,
+        textAlign: TextAlign.left,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          fontFamily: 'Pretendard', fontSize: 12, height: 1.3, // 줄간격 조정
+        ),
+      ));
 }
 
-Widget post_image(String image) {
+Widget postCardImage(String image) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(12.0),
     child: Container(
       width: double.infinity,
       color: Colors.grey[200], // 테두리 색상
-      child: Image.asset(
+      child: Image.network(
         image,
         fit: BoxFit.fitWidth,
       ),
     ),
   );
-}
-
-String formatDate(DateTime dateTime) {
-  return "${dateTime.year}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.day.toString().padLeft(2, '0')}";
 }
 
 String calculateBeforeHours(DateTime uploadTime) {

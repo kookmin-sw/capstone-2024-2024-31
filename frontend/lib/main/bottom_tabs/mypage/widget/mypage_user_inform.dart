@@ -26,7 +26,7 @@ class UserInformation extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
         child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               imageStackLevel(),
@@ -82,7 +82,7 @@ class UserInformation extends StatelessWidget {
           userController.user.avatar != null
               ? CircleAvatar(
                   radius: 70,
-                  backgroundImage: NetworkImage(userController.user.avatar!),
+                  backgroundImage: NetworkImage(userController.user.avatar),
                 )
               : CircleAvatar(
                   radius: 70,
@@ -110,10 +110,9 @@ class UserInformation extends StatelessWidget {
   }
 
   Widget nameText(Size screenSize) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
       SizedBox(
           width: userController.user.name.length * 25,
-          height: 35,
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
@@ -132,6 +131,7 @@ class UserInformation extends StatelessWidget {
               )
             ],
           )),
+      const SizedBox(width: 5),
       const Text(
         '님 반가워요!',
         style: TextStyle(

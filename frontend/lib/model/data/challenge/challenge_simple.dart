@@ -9,7 +9,7 @@ class ChallengeSimple {
   final String imageUrl;
   final String status;
   final bool isPrivate;
-
+  final bool isGalleryPossible;
   ChallengeSimple({
     required this.id,
     required this.challengeName,
@@ -20,6 +20,7 @@ class ChallengeSimple {
     required this.imageUrl,
     required this.status,
     required this.isPrivate,
+    required this.isGalleryPossible
   });
 
   // JSON에서 객체로 변환
@@ -34,6 +35,8 @@ class ChallengeSimple {
       imageUrl: json['imageUrl'],
       status: json['status'],
       isPrivate: json['isPrivate'],
+      isGalleryPossible: json['isGalleryPossible'],
+
     );
   }
 
@@ -50,6 +53,8 @@ class ChallengeSimple {
       'imageUrl': imageUrl,
       'status': status,
       'isPrivate': isPrivate,
+      'isGalleryPossible': isGalleryPossible,
+
     };
   }
 }

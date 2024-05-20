@@ -23,7 +23,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   final controller = Get.find<UserController>();
   final List<ChallengeSimple> challenges = [];
 
-  double getProgressPercent(int index){
+  double getProgressPercent(int index) {
     DateTime now = DateTime.now();
     DateTime start = challenges[index].startDate;
     DateTime end =
@@ -112,7 +112,8 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   Widget challengeStateCard(double screenWidth, int index) {
     return GestureDetector(
         onTap: () {
-          Get.to(() => ChallengeStateScreen(isFromJoinScreen: false, challengeSimple: challenges[index]));
+          Get.to(() => ChallengeStateScreen(
+              isFromJoinScreen: false, challengeId: challenges[index].id));
         },
         child: SizedBox(
             width: screenWidth * 0.95,
@@ -179,7 +180,11 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                           const SizedBox(width: 5),
                           ElevatedButton(
                             onPressed: () {
-                              Get.to(() => const CreatePostingScreen());
+                              Get.to(() => CreatePostingScreen(
+                                    challengeId: challenges[index].id,
+                                isPossibleGallery: challenges[index].isGalleryPossible,
+
+                                  ));
                             },
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(40, 40),

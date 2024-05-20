@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:frontend/community/post_detail_screen.dart';
 import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/post.dart';
 import 'package:get/get.dart';
 
-class PostItemCard extends StatelessWidget {
-  final Article article;
+import '../../../model/data/post/post.dart';
 
-  const PostItemCard({super.key, required this.article});
+class PostItemCard extends StatelessWidget {
+  final Post post;
+
+  const PostItemCard({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
     // 문자열을 DateTime 객체로 파싱
-    DateTime date = DateTime.parse(article.createdDate.toIso8601String());
+    DateTime date = DateTime.parse(post.createdDate.toString());
 
     // 날짜 형식 변경
-    String beforeHours = calculateBeforeHours(article.createdDate);
+    String beforeHours = calculateBeforeHours(date);
 
     return GestureDetector(
         onTap: () {
-          print("${article.title} 챌린지 클릭됨");
-          Get.put(() => const PostDetailPage());
+          Get.put(() => PostDetailScreen(post: post));
         },
         child: Container(
             // color: Palette.grey300,
@@ -42,7 +42,7 @@ class PostItemCard extends StatelessWidget {
                       articleImage(screenSize),
                       const SizedBox(height: 2),
                       Text(
-                        article.title,
+                        post.title,
                         overflow: TextOverflow.fade,
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
@@ -52,7 +52,7 @@ class PostItemCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      userInform(article.author.avatar, article.author.name),
+                      // userInform(post.avatar, post.author.name), //Todo : post image
                       const SizedBox(height: 2),
                       articleInform(),
                       Text(
@@ -69,7 +69,7 @@ class PostItemCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Image.asset(
-        'assets/images/image.png', // 이미지 경로 article.image
+        post.image, // 이미지 경로 article.image
         fit: BoxFit.cover,
         width: screenSize.width * 0.35,
         height: screenSize.width * 0.35 * (3 / 4),
@@ -124,11 +124,11 @@ class PostItemCard extends StatelessWidget {
 
         const Icon(Icons.comment_outlined, color: Palette.grey200, size: 15),
         const SizedBox(width: 5),
-        Text(article.comments.length.toString(), style: numberStyle),
+        Text(post.comments.length.toString(), style: numberStyle),
         const SizedBox(width: 10),
         const Icon(Icons.thumb_up_outlined, color: Palette.grey200, size: 15),
         const SizedBox(width: 5),
-        Text(article.comments.length.toString(), //좋아요 개수로 바꿔야함
+        Text(post.comments.length.toString(), //좋아요 개수로 바꿔야함
             style: numberStyle)
       ],
     );

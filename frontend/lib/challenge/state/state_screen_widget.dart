@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/main/main_screen.dart';
 import 'package:get/get.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:intl/intl.dart';
@@ -11,19 +12,26 @@ import '../../model/package/pie_chart/src/legend_options.dart';
 import '../../model/package/pie_chart/src/pie_chart.dart';
 
 class ChallengeWidgets {
-  static AppBar buildAppBar() {
+  static AppBar buildAppBar(final bool isFromJoinScreen) {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Get.back();
-        },
-      ),
+      leading: isFromJoinScreen
+          ? IconButton(
+              onPressed: () => Get.offAll(MainScreen()),
+              icon: const Icon(
+                Icons.home,
+                color: Colors.white,
+              ))
+          : IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Get.back();
+              },
+            ),
       actions: [
         IconButton(
           onPressed: () {},
@@ -108,8 +116,8 @@ class ChallengeWidgets {
     );
   }
 
-  static Widget informationChallenge(
-      DateTime startDate, DateTime endDate, Challenge thisChallenge) {
+  static Widget informationChallenge(DateTime startDate, DateTime endDate,
+      Challenge thisChallenge, ChallengeStatus challengeStatus) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -186,7 +194,7 @@ class ChallengeWidgets {
                     ),
                   ),
                   Text(
-                    thisChallenge.certificationFrequency ?? "-",
+                    challengeStatus.certificationFrequency ?? "-",
                     style: const TextStyle(
                       color: Palette.grey300,
                       fontSize: 10,
@@ -209,7 +217,7 @@ class ChallengeWidgets {
                     ),
                   ),
                   Text(
-                    "${thisChallenge.certificationStartTime}시 ~ ${thisChallenge.certificationEndTime}",
+                    "${challengeStatus.certificationStartTime}시 ~ ${challengeStatus.certificationEndTime}",
                     style: const TextStyle(
                       color: Palette.grey300,
                       fontSize: 10,
@@ -232,7 +240,7 @@ class ChallengeWidgets {
                     ),
                   ),
                   Text(
-                    "${thisChallenge.totalParticipants}명",
+                    "${challengeStatus.totalParticipants}명",
                     style: const TextStyle(
                       color: Palette.grey300,
                       fontSize: 10,
@@ -282,10 +290,12 @@ class ChallengeWidgets {
   }
 
   static Widget certificationState(double screenWidth, double screenHeight,
-      Challenge thisChallenge, ChallengeStatus challengeStatus) {
-    int numberOfCertification = challengeStatus.numberOfCertifications;
-    int totalCertificationCount = challengeStatus.totalCertificationCount;
-    int myCertificationNum = 0;
+      ChallengeStatus challengeStatus) {
+    print(
+        "aaaaaaaaaaaaaaaaaaaaaaaaaa${challengeStatus.totalCertificationCount}");
+    int totalCertificationCount =
+        challengeStatus.totalCertificationCount; //챌린지 총 인증횟수
+    int myCertificationNum = challengeStatus.numberOfCertifications; //내가 한 인증횟수
     int failNum = 0;
 
     return Container(
@@ -318,7 +328,7 @@ class ChallengeWidgets {
                     ),
                   ),
                   Text(
-                    " / $totalCertificationCount회  |  남은 인증 : ${numberOfCertification - myCertificationNum}회",
+                    " / $totalCertificationCount회  |  남은 인증 : ${totalCertificationCount - myCertificationNum}회",
                     style: const TextStyle(
                       fontSize: 10,
                       color: Palette.grey300,
@@ -340,7 +350,7 @@ class ChallengeWidgets {
             ],
           ),
           const SizedBox(height: 20),
-          certificationStateBar(screenWidth, thisChallenge, challengeStatus),
+          certificationStateBar(screenWidth, challengeStatus),
           const SizedBox(height: 15),
           Container(
             alignment: Alignment.center,
@@ -359,10 +369,13 @@ class ChallengeWidgets {
     );
   }
 
-  static Widget certificationStateBar(double screenWidth,
-      Challenge thisChallenge, ChallengeStatus challengeStatus) {
-    int myCertificationNumber = 13;
-    String percent = (myCertificationNumber * 100).toStringAsFixed(1);
+  static Widget certificationStateBar(
+      double screenWidth, ChallengeStatus challengeStatus) {
+    int myCertificationNumber =
+        challengeStatus.numberOfCertifications; //내가 한 인증 횟수
+    String percent =
+        (myCertificationNumber / challengeStatus.totalCertificationCount * 100)
+            .toStringAsFixed(1);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -387,7 +400,7 @@ class ChallengeWidgets {
                 ),
               ),
               Text(
-                "${(myCertificationNumber / challengeStatus.totalCertificationCount * 100).toStringAsFixed(1)} %",
+                "${challengeStatus.currentAchievementRate} %",
                 style: const TextStyle(
                   color: Palette.grey500,
                   fontSize: 10,
@@ -430,12 +443,13 @@ class ChallengeWidgets {
     );
   }
 
-  static Widget entireCertificationStatus(
-      double screenWidth, double screenHeight, Challenge thisChallenge, ChallengeStatus challengeStatus) {
+
+  static Widget entireCertificationStatus(double screenWidth,
+      double screenHeight, ChallengeStatus challengeStatus) {
     final dataMap = <String, double>{
-      "100%": 100,
-      "80% 이상": 300,
-      "80% 미만": 600
+      "100%": challengeStatus.fullAchievementCount.toDouble(),
+      "80% 이상": challengeStatus.highAchievementCount.toDouble(),
+      "80% 미만": challengeStatus.lowAchievementCount.toDouble()
     };
     final colorList = <Color>[
       Palette.purPle500,
@@ -472,7 +486,7 @@ class ChallengeWidgets {
                     ),
                   ),
                   Text(
-                    "  ${thisChallenge.totalParticipants}명",
+                    "  ${challengeStatus.totalParticipants}명",
                     style: const TextStyle(
                       fontSize: 11,
                       color: Palette.purPle400,
@@ -485,7 +499,7 @@ class ChallengeWidgets {
             ],
           ),
           const SizedBox(height: 20),
-          certificationStateBar(screenWidth, thisChallenge, challengeStatus),
+          certificationStateBar(screenWidth, challengeStatus),
           const SizedBox(height: 15),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
@@ -508,7 +522,7 @@ class ChallengeWidgets {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              totalValue: thisChallenge.totalParticipants.toDouble(),
+              totalValue: challengeStatus.totalParticipants.toDouble(),
               legendOptions: const LegendOptions(
                 legendValueTextStyle: TextStyle(
                   fontSize: 10,
@@ -527,11 +541,11 @@ class ChallengeWidgets {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              centerWidget: const Center(
+              centerWidget: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "평균 예상 달성률",
                       style: TextStyle(
                         fontSize: 10,
@@ -541,8 +555,8 @@ class ChallengeWidgets {
                       ),
                     ),
                     Text(
-                      "88.5%",
-                      style: TextStyle(
+                      "${challengeStatus.overallAverageAchievementRate}",
+                      style: const TextStyle(
                         fontSize: 20,
                         color: Palette.grey500,
                         fontFamily: "Pretendard",

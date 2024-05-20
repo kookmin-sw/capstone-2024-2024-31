@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/community/community_screen.dart';
+import 'package:frontend/community/post_detail_screen.dart';
+import 'package:frontend/env.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/widgets/rtu_button.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
 import 'package:dio/dio.dart' as dio;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:frontend/model/data/createdPost.dart';
-import 'package:http_parser/http_parser.dart';
+import '../model/data/post/post_form.dart';
+import 'package:frontend/model/data/post/post.dart';
 
 class CreatePostingScreen extends StatefulWidget {
-  const CreatePostingScreen({super.key});
+  const CreatePostingScreen(
+      {super.key, required this.challengeId, required this.isPossibleGallery});
+
+  final int challengeId;
+  final bool isPossibleGallery;
 
   @override
   State<CreatePostingScreen> createState() => _CreatePostingScreenState();
@@ -28,44 +34,53 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
 
   final logger = Logger();
   final formKey = GlobalKey<FormState>();
+  File image = File('');
+  bool showImage = false;
+  bool hoverImage = false;
+  String _inputTitle = '';
+  String _inputContent = '';
+  File _inputImage = File('');
 
-  Future<CreatedpostPost> createPostForChallenge(int challengeId, File image) async {
+  Future<void> _createPost() async {
+    final prefs = await SharedPreferences.getInstance();
+    final dio.Dio dioInstance = dio.Dio();
 
-    final formData = dio.FormData.fromMap({
-      'challengeId': challengeId,
-      'image': await dio.MultipartFile.fromFile(
-        image.path,
-        filename: image.path.split('/').last,
-        contentType: MediaType('image', 'jpeg'),
-      ),
-    });
+    dioInstance.options.contentType = 'multipart/form-data';
+    dioInstance.options.headers['Authorization'] =
+        'Bearer ${prefs.getString('access_token')}';
+
+    final formData = dio.FormData.fromMap(PostForm(
+      title: _inputTitle,
+      content: _inputContent,
+      image: _inputImage,
+    ).toFormData());
 
     try {
-      // SharedPreferences에서 access_token 가져오기
-      final prefs = await SharedPreferences.getInstance();
-      final accessToken = prefs.getString('access_token');
+      final response = await dioInstance.post('${Env.serverUrl}/posts',
+          data: formData, queryParameters: {'challengeId': widget.challengeId});
 
-      // Dio 인스턴스 생성 및 헤더 설정
-      dio.Dio dioInstance = dio.Dio();
-      dioInstance.options.headers['Authorization'] = 'Bearer $accessToken';
-
-      // 이미지 파일을 MultipartFile로 변환
-      final imageFile = dio.MultipartFile.fromFile(image.path, filename: image.path.split('/').last);
-
-      // API 호출
-      final response = await dioInstance.post('/challenges/$challengeId/posts', data: formData);
-
-      // 응답 데이터 처리
       if (response.statusCode == 201) {
-        return CreatedpostPost.fromJson(response.data);
-      } else if (response.statusCode == 404) {
-        throw Exception("해당 챌린지를 찾을 수 없습니다.");
+        logger.d('게시물 생성 성공: ${response.data}');
+
+        final Post post = Post.fromJson(response.data);
+        Get.off(() => PostDetailScreen(post: post));
       } else {
-        throw Exception("게시물 생성 실패: ${response.statusCode}");
+        throw Exception('게시물 생성 실패: ${response.statusCode}: ${response.data}');
       }
-    } catch (e) {
-      logger.e("게시물 생성 중 에러 발생: $e");
-      rethrow;
+    } catch (err) {
+      logger.e("게시물 생성 중 에러 발생: $err");
+      Get.snackbar('게시물 생성 실패', '다시 시도해주세요');
+    }
+  }
+
+  void getimage(final bool isGallery) async {
+    final image = await ImagePicker().pickImage(
+        source: isGallery ? ImageSource.gallery : ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _inputImage = File(image.path);
+        showImage = true;
+      });
     }
   }
 
@@ -88,26 +103,54 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
             ),
           ),
         ),
+        bottomNavigationBar: Column(mainAxisSize: MainAxisSize.min, children: [
+          Center(
+              child: Text(
+            "※ 공정한 인증을 위하여\n사진과 글은 추후에 수정할 수 없습니다.",
+            textAlign: TextAlign.center,
+            style: textStyle(11, Palette.purPle400),
+          )),
+          const SizedBox(height: 10),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: RtuButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    _createPost();
+                  }
+                },
+                text: "올리기",
+              ))
+        ]),
         body: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Form(
-                key: formKey,
-                child: Column(
+              key: formKey,
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("📸 인증 사진",
-                        style: textStyle(15, Palette.grey500,
-                            weight: FontWeight.bold)),
-                    const SizedBox(height: 5),
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image.asset("assets/images/challenge_image.png",
-                            width: double.infinity)),
-                    const SizedBox(height: 15),
+                    Row(children: [
+                      Text("📸 인증 사진",
+                          style: textStyle(15, Palette.grey500,
+                              weight: FontWeight.bold)),
+                      Visibility(
+                          visible: showImage,
+                          child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  showImage = false;
+                                });
+                              },
+                              child:
+                                  const Icon(Icons.close, color: Palette.red)))
+                    ]),
+                    const SizedBox(height: 10),
+                    imageContainer(),
+                    const SizedBox(height: 20),
                     Text("제목",
                         style: textStyle(15, Palette.grey500,
                             weight: FontWeight.bold)),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 10),
                     SizedBox(
                         height: 70,
                         child: TextFormField(
@@ -135,7 +178,9 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                               )),
                           validator: (value) =>
                               value!.isEmpty ? '제목을 입력해주세요.' : null,
-                          // onChanged: (value) => controller.updateChallengeName(value),
+                          onChanged: (value) => setState(() {
+                            _inputTitle = value;
+                          }),
                         )),
                     const SizedBox(height: 10),
                     Text("📢 루틴업 한마디",
@@ -168,38 +213,68 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                           )),
                       validator: (value) =>
                           value!.isEmpty ? "오늘의 루틴업 한마디를 작성해주세요." : null,
-                      // onChanged: (value) => controller.updateChallengeName(value),
+                      onChanged: (value) => setState(() {
+                        _inputContent = value;
+                      }),
+                    )
+                  ]),
+            )));
+  }
+
+  Widget imageContainer() {
+    return SizedBox(
+        width: double.infinity,
+        height: 200,
+        child: Stack(
+          children: [
+            Positioned.fill(
+                child: Visibility(
+                    visible: !showImage,
+                    child: Row(
+                      children: [
+                        shadowBtn(Icons.camera_alt, false),
+                        const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 30, horizontal: 3),
+                            child: VerticalDivider(
+                              color: Palette.grey50,
+                              thickness: 3,
+                            )),
+                        shadowBtn(Icons.add_photo_alternate, true)
+                      ],
+                    ))),
+            Positioned.fill(
+              child: Visibility(
+                  visible: showImage,
+                  child: Image.file(
+                    _inputImage,
+                    fit: BoxFit.fitHeight,
+                  )),
+            ),
+          ],
+        ));
+  }
+
+  Widget shadowBtn(final IconData iconData, bool isGallery) {
+    return Expanded(
+        child: GestureDetector(
+            onTap: () => getimage(isGallery),
+            child: Container(
+                decoration: BoxDecoration(
+                  color: Palette.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3), // changes position of shadow
                     ),
-                    const SizedBox(height: 40),
-                    Center(
-                        child: Text(
-                      "※ 공정한 인증을 위하여\n사진과 글은 추후에 수정할 수 없습니다.",
-                      textAlign: TextAlign.center,
-                      style: textStyle(11, Palette.purPle400),
-                    )),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                        onTap: () {
-                          if (formKey.currentState!.validate()) {
-                            // logger.d("사진: ${controller.form.challengeName}");
-                            // logger.d(
-                            //     "제목: ${controller.form.challengeExplanation}");
-                            // logger.d("내용: ${controller.form.challengeImages}");
-                            //
-                            try {
-                              // final int challengeId = await _postChallenge();
-                              logger.d('인증글 생성 성공: ');
-                              Get.snackbar("오늘의 인증 성공 ✨", "당신의 갓생을 응원해요!");
-                              Get.offAll(() => const CommunityScreen(
-                                  isFromCreatePostingScreen: true));
-                            } catch (err) {
-                              Get.snackbar("오늘의 인증 실패", "다시 시도해주세요😭");
-                            }
-                          }
-                        },
-                        child: SvgPicture.asset(
-                            "assets/svgs/create_posting_btn.svg"))
                   ],
-                ))));
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Center(
+                        child: Icon(iconData, color: Palette.grey500))))));
   }
 }

@@ -61,7 +61,7 @@ class _CreateChallengeThrState extends State<CreateChallengeThr> {
       );
 
       return response.data as int;
-    } on dio.DioError catch (e) {
+    } on dio.DioException catch (e) {
       logger.d('DioError: ${e.message}');
       if (e.response != null) {
         logger.d('Response status code: ${e.response?.statusCode}');

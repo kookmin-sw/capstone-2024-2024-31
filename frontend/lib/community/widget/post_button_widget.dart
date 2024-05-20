@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/community/post_detail_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:get/get.dart';
 
 class PostBtnWidget extends StatefulWidget {
   int likeNum;
@@ -17,7 +15,7 @@ class PostBtnWidget extends StatefulWidget {
   });
 
   @override
-  _PostBtnWidgetState createState() => _PostBtnWidgetState();
+  State<PostBtnWidget> createState() => _PostBtnWidgetState();
 }
 
 class _PostBtnWidgetState extends State<PostBtnWidget> {
@@ -50,9 +48,10 @@ class _PostBtnWidgetState extends State<PostBtnWidget> {
             svgPicturePath: "assets/svgs/icon_comment.svg",
             text: widget.commentNum.toString(),
             onPressed: () {
-             widget.commentFocusNode == null
-                  ? Get.to(() => const PostDetailPage())
-                  : widget.commentFocusNode?.requestFocus();
+
+              // widget.commentFocusNode == null
+              //     ? Get.to(() => const PostDetailScreen())
+              //     : widget.commentFocusNode?.requestFocus();
             },
           ),
           _buildButtonWithText(

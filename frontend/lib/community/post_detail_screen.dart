@@ -1,28 +1,40 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/community/widget/post_card.dart';
 import 'package:frontend/community/widget/report_post_btn.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
-class PostDetailPage extends StatefulWidget {
-  const PostDetailPage({super.key});
+import '../model/data/post/post.dart';
+
+class PostDetailScreen extends StatefulWidget {
+  final Post post;
+  final bool initialScroll;
+
+  const PostDetailScreen(
+      {super.key, required this.post, this.initialScroll = false});
 
   @override
-  State<PostDetailPage> createState() => _PostDetailPageState();
+  State<PostDetailScreen> createState() => _PostDetailScreenState();
 }
 
-class _PostDetailPageState extends State<PostDetailPage> {
-  bool _isTapSendCommentBtn = false;
-  Timer? _timer;
-
+class _PostDetailScreenState extends State<PostDetailScreen> {
   final _commentFocusNode = FocusNode();
-  final TextEditingController _commentController = TextEditingController();
 
-  late String textFieldHintText;
+  late Post _post;
+
+  String _inputComment = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _post = widget.post;
+    if (widget.initialScroll) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _commentFocusNode.requestFocus();
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -30,124 +42,38 @@ class _PostDetailPageState extends State<PostDetailPage> {
     super.dispose();
   }
 
-  List<Map<String, dynamic>> comment_list = [
-    {
-      'index': 0,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕감자통자',
-      'dateTime': DateTime(2024, 4, 6, 13, 40),
-      'text': '대단합니다.'
-    },
-    {
-      'index': 1,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕감자13통자',
-      'dateTime': DateTime(2024, 4, 6, 13, 40),
-      'text': '대단합니다2342.'
-    },
-    {
-      'index': 2,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕통자',
-      'dateTime': DateTime(2024, 4, 9, 13, 40),
-      'text': '대단합니다. 어쩌면ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ'
-    },
-    {
-      'index': 3,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕감자',
-      'dateTime': DateTime(2024, 4, 13, 17, 40),
-      'text': '대단합니다ㅇㅁㄴㄹㄹ.'
-    },
-    {
-      'index': 4,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '왕감통자',
-      'dateTime': DateTime(2024, 3, 6, 13, 40),
-      'text': '대단ㅁㄴㅁㄴㄻㄴㅇㄻㄴㅇㄹ합니다.'
-    },
-    {
-      'index': 5,
-      'image': 'assets/images/challenge_image.png',
-      'nickname': '자통자',
-      'dateTime': DateTime(2024, 4, 6, 20, 40),
-      'text': '대단합ㅁㄴㅇㄻㅇㄴㄹ니다.'
-    },
-  ];
-
-  List<Map<String, dynamic>> re_comment_list = [
-    {
-      'index': 0,
-      'image': 'assets/images/image.png',
-      'nickname': '너비아니',
-      'dateTime': DateTime(2024, 4, 6, 18, 40),
-      'text': 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ.'
-    },
-    {
-      'index': 1,
-      'image': 'assets/images/image.png',
-      'nickname': '너비아니22222',
-      'dateTime': DateTime(2024, 4, 7, 13, 40),
-      'text': '대단합니다2342.'
-    },
-    {
-      'index': 1,
-      'image': 'assets/images/image.png',
-      'nickname': '왕너비아니통slslslls자',
-      'dateTime': DateTime(2024, 4, 10, 13, 40),
-      'text': '대단합니다. 어쩌면ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ'
-    },
-    {
-      'index': 1,
-      'image': 'assets/images/image.png',
-      'nickname': '왕감너비아니자',
-      'dateTime': DateTime(2024, 4, 23, 17, 40),
-      'text': '대단합니다ㅇㅁㄴㄹㄹ.'
-    },
-    {
-      'index': 4,
-      'image': 'assets/images/image.png',
-      'nickname': '왕감통자너비아니',
-      'dateTime': DateTime(2024, 3, 6, 13, 40),
-      'text': '대단ㅁㄴㅁㄴㄻㄴㅇㄻㄴㅇㄹ합니다.'
-    },
-    {
-      'index': 5,
-      'image': 'assets/images/image.png',
-      'nickname': '너비아니자통자',
-      'dateTime': DateTime(2024, 4, 6, 20, 40),
-      'text': '대단합ㅁㄴㅇㄻㅇㄴㄹ니다.'
-    },
-  ];
-
-  TextStyle name_textStyle = const TextStyle(
+  TextStyle postNameTextStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 10,
       fontWeight: FontWeight.w600,
       color: Palette.grey500);
 
-  TextStyle date_textStyle = const TextStyle(
+  TextStyle postDateTextStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 10,
       fontWeight: FontWeight.w300,
       color: Palette.grey300);
 
-  TextStyle text_textStyle = const TextStyle(
+  TextStyle postContentTextStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 12,
       fontWeight: FontWeight.bold,
       color: Palette.grey300);
 
-  TextStyle btn_textStyle = const TextStyle(
+  TextStyle postButtonTextStyle = const TextStyle(
       fontFamily: 'Pretendard',
       fontSize: 12,
       fontWeight: FontWeight.w500,
       color: Palette.grey200);
-@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    textFieldHintText = "댓글을 남겨보세요";
+
+  int _calculateCommentLength(List<Comment> comments) {
+    int result = comments.length;
+    for (final comment in comments) {
+      if (comment.children.isNotEmpty) {
+        result += _calculateCommentLength(comment.children);
+      }
+    }
+    return result;
   }
 
   @override
@@ -192,15 +118,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 child: Row(
                   children: [
                     Expanded(
-                        child: TextFormField(
-                      controller: _commentController,
+                        child: TextField(
+                      scrollPadding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
                       focusNode: _commentFocusNode,
                       style: const TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 11,
                           fontFamily: 'Pretender'),
                       decoration: InputDecoration(
-                          hintText: textFieldHintText,
+                          hintText: "댓글을 입력해주세요.",
                           hintStyle: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
@@ -219,31 +146,22 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             borderSide: const BorderSide(
                                 color: Palette.grey50, width: 2),
                           )),
-                      validator: (value) => value!.isEmpty ? textFieldHintText : null,
+                      onChanged: (value) => setState(() {
+                        _inputComment = value;
+                      }),
                     )),
                     const SizedBox(width: 10),
                     GestureDetector(
                         child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
-                                border: _isTapSendCommentBtn
-                                    ? Border.all(
-                                        color: Palette.grey50, width: 2.0)
-                                    : Border.all(
-                                        color: Palette.greyBG, width: 2.0)),
-                            child: SvgPicture.asset(
-                                "assets/svgs/comment_send_btn.svg")),
+                                border: Border.all(
+                                    color: Palette.grey50, width: 2.0)),
+                            child: Icon(Icons.send,
+                                color: _inputComment.isEmpty
+                                    ? Palette.grey200
+                                    : Palette.mainPurple)),
                         onTap: () {
-                          setState(() {
-                            _isTapSendCommentBtn = true;
-                          });
-                          _timer?.cancel();
-                          _timer = Timer(const Duration(milliseconds: 300), () {
-                            setState(() {
-                              _isTapSendCommentBtn = false;
-                            });
-                          });
-                          _commentController.clear();
                           _commentFocusNode.unfocus();
                         })
                   ],
@@ -255,12 +173,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PostCard(number: 10, commentFocusNode: _commentFocusNode),
+                PostCard(
+                  post: _post,
+                  onPostDetail: true,
+                  focusNode: _commentFocusNode,
+                ),
                 Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                    child: Text(
-                        "댓글 ${(comment_list.length + re_comment_list.length)}개",
+                    child: Text("댓글 ${_countComment(_post.comments)}개",
                         style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontFamily: 'Pretendard',
@@ -277,10 +198,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Widget commentWidget() {
     Size size = MediaQuery.of(context).size;
     return Column(
-      children: comment_list.map((comment) {
+      children: _post.comments.map((comment) {
         List<Widget> commentAndReplies = [];
-        String uploadTimeString = formatDate(comment['dateTime']);
-        String beforeHours = calculateBeforeHours(comment['dateTime']);
+        String uploadTimeString = comment.createdDate;
+        String beforeHours = _calculateBeforeHours(comment.createdDate);
 
         // Add the main comment
         commentAndReplies.add(
@@ -309,9 +230,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           const SizedBox(width: 10),
                           CircleAvatar(
                             radius: 20,
-                            backgroundImage: AssetImage(
-                              comment['image'],
-                            ),
+                            backgroundImage: NetworkImage(comment.avatar),
                           ),
                           const SizedBox(width: 12),
                           SizedBox(
@@ -321,17 +240,17 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    comment['nickname'],
-                                    style: name_textStyle,
+                                    comment.author,
+                                    style: postNameTextStyle,
                                   ),
                                   Text(
                                     "$uploadTimeString | $beforeHours",
-                                    style: date_textStyle,
+                                    style: postDateTextStyle,
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    comment['text'],
-                                    style: text_textStyle,
+                                    comment.content,
+                                    style: postContentTextStyle,
                                     softWrap: true,
                                     maxLines: 3,
                                     overflow: TextOverflow.visible,
@@ -341,10 +260,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     splashColor: Palette.grey50,
                                     child: Text(
                                       "답글 달기",
-                                      style: btn_textStyle,
+                                      style: postButtonTextStyle,
                                     ),
                                     onTap: () {
-                                      _commentController.clear();
                                       _commentFocusNode
                                           .requestFocus(); // 포커스 요청
                                     },
@@ -356,54 +274,52 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     ],
                   ),
                   const SizedBox(height: 5),
-                  ...re_comment_list
-                      .where((reply) => reply['index'] == comment['index'])
-                      .map((reply) {
-                    String reUploadTimeString = formatDate(reply['dateTime']);
-                    String reBeforeHours =
-                        calculateBeforeHours(reply['dateTime']);
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(width: 50),
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage(
-                              reply['image'],
+                  if (comment.children.isNotEmpty)
+                    ...comment.children.map<Widget>((childComment) {
+                      String childUploadTimeString = childComment.createdDate;
+                      String childBeforeHours =
+                          _calculateBeforeHours(childUploadTimeString);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(width: 50),
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundImage:
+                                  NetworkImage(childComment.avatar),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          SizedBox(
-                              width: size.width * 0.5,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    reply['nickname'],
-                                    style: name_textStyle,
-                                  ),
-                                  Text(
-                                    "$reUploadTimeString | $reBeforeHours",
-                                    style: date_textStyle,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    reply['text'],
-                                    softWrap: true,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.visible,
-                                    style: text_textStyle,
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    );
-                  }),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: size.width * 0.5,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      childComment.author,
+                                      style: postNameTextStyle,
+                                    ),
+                                    Text(
+                                      "$childUploadTimeString | $childBeforeHours",
+                                      style: postDateTextStyle,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      childComment.content,
+                                      softWrap: true,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.visible,
+                                      style: postContentTextStyle,
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      );
+                    }),
                 ],
               ),
             ),
@@ -416,11 +332,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  String formatDate(DateTime dateTime) {
-    return DateFormat('yyyy.MM.dd').format(dateTime);
+  int _countComment(List<Comment> comments) {
+    int result = comments.length;
+    for (final comment in comments) {
+      if (comment.children.isNotEmpty) {
+        result += _countComment(comment.children);
+      }
+    }
+    return result;
   }
 
-  String calculateBeforeHours(DateTime dateTime) {
+  String _calculateBeforeHours(String dateTimeStr) {
+    DateTime dateTime = DateTime.parse(dateTimeStr);
     Duration difference = DateTime.now().difference(dateTime);
     if (difference.inDays > 0) {
       return '${difference.inDays}일 전';

@@ -5,57 +5,40 @@ import 'freind.dart';
 class User {
   final int id;
   final String email;
-  final String? password;
-  final String? provider;
-  final String? providerId;
   final String name;
-  final String? avatar;
-  final String role;
-  final DateTime? createdDate;
-  int point;
-  List<Friend> following;
-  List<Friend> followers;
-  List<ChallengeCategory> categories;
+  final String avatar;
+  final int point;
+  final List<ChallengeCategory> categories;
+  final List<Friend> following;
+  final List<Friend> followers;
 
   User({
     required this.id,
     required this.email,
-    this.password,
-    this.provider,
-    this.providerId,
     required this.name,
-    this.avatar,
-    this.role = 'ROLE_USER',
-    this.createdDate,
-    this.point = 0,
+    required this.avatar,
+    required this.point,
+    required this.categories,
     required this.following,
     required this.followers,
-    required this.categories,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'] ?? 0,
       email: json['email'] ?? '',
-      password: json['password'],
-      provider: json['provider'],
-      providerId: json['providerId'],
       name: json['name'] ?? '',
       avatar: json['avatar'],
-      role: json['role'] ?? 'ROLE_USER',
-      createdDate: json['createdDate'] != null
-          ? DateTime.parse(json['createdDate'])
-          : null,
       point: json['point'] ?? 0,
+      categories: json['categories'] != null
+          ? List<ChallengeCategory>.from(
+              json['categories'].map((x) => ChallengeCategory.fromJson(x)))
+          : [],
       following: json['following'] != null
           ? List<Friend>.from(json['following'].map((x) => Friend.fromJson(x)))
           : [],
       followers: json['followers'] != null
           ? List<Friend>.from(json['followers'].map((x) => Friend.fromJson(x)))
-          : [],
-      categories: json['categories'] != null
-          ? List<ChallengeCategory>.from(
-              json['categories'].map((x) => ChallengeCategory.fromJson(x)))
           : [],
     );
   }
@@ -64,19 +47,12 @@ class User {
     return {
       'id': id,
       'email': email,
-      'password': password,
-      'provider': provider,
-      'providerId': providerId,
       'name': name,
       'avatar': avatar,
-      'role': role,
-      'createdDate': createdDate?.toIso8601String(),
       'point': point,
+      'categories': categories.map((e) => e.toJson()).toList(),
       'following': following.map((e) => e.toJson()).toList(),
       'followers': followers.map((e) => e.toJson()).toList(),
-      'categories': categories.map((e) => e.toJson()).toList(),
     };
   }
 }
-
-

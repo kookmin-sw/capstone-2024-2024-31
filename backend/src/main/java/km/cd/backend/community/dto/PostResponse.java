@@ -1,7 +1,6 @@
 package km.cd.backend.community.dto;
 
-import km.cd.backend.community.domain.Like;
-import km.cd.backend.user.dto.UserResponse;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,8 +9,11 @@ public record PostResponse(
         Long id,
         String title,
         String content,
-        UserResponse author,
+        String author,
+        String avatar,
         String image,
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime createdDate,
         List<LikeResponse> likes,
         List<CommentResponse> comments) {

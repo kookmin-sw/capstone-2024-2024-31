@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/challenges/{challengeId}/posts")
+@RequestMapping("/posts")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -29,9 +29,9 @@ public class PostController {
   @PostMapping(path = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<PostResponse> createPost(
-      @PathVariable(name = "challengeId") Long challengeId,
-      @RequestPart(value = "data") PostRequest postRequest,
-      @RequestPart(value = "image") MultipartFile image,
+      @RequestParam(name = "challengeId") Long challengeId,
+      @RequestPart(name = "data") PostRequest postRequest,
+      @RequestPart(name = "image") MultipartFile image,
       @AuthenticationPrincipal PrincipalDetails principalDetails) {
     PostResponse postResponse = postService.createPost(principalDetails.getUserId(), challengeId, postRequest, image);
     return ResponseEntity
@@ -41,7 +41,7 @@ public class PostController {
 
   @GetMapping("")
   public ResponseEntity<List<PostResponse>> getAllPost(
-          @PathVariable(name = "challengeId") Long challengeId
+          @RequestParam(name = "challengeId") Long challengeId
   ) {
     List<PostResponse> postResponses = postService.findAllByChallengeId(challengeId);
     return ResponseEntity.ok(postResponses);
