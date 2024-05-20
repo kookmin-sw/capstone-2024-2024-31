@@ -1,16 +1,11 @@
 package km.cd.backend.community.mapper;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.community.domain.Like;
 import km.cd.backend.community.dto.*;
 import km.cd.backend.user.domain.User;
-import km.cd.backend.user.domain.mapper.UserMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -41,6 +36,7 @@ public interface PostMapper {
         .filter(comment -> !comment.hasParent())
         .map(comment -> new CommentResponse(
             comment.getId(),
+            comment.getParent() != null ? comment.getId() : null,
             comment.getAuthor().getName(),
             comment.getAuthor().getAvatar(),
             comment.isDeleted() ? CONTENT_DELETE : comment.getContent(),

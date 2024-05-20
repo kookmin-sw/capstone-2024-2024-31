@@ -15,6 +15,7 @@ public interface CommentMapper {
 
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
+    @Mapping(target = "parentId", source = "parent.id")
     @Mapping(target = "author", source = "author.name")
     @Mapping(target = "avatar", source = "author.avatar")
     CommentResponse entityToResponse(Comment comment);

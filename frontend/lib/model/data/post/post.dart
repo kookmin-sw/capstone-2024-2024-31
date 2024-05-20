@@ -46,8 +46,8 @@ class Post {
 
 class Comment {
   final int id;
+  final int? parentId;
   final String author;
-  final String image;
   final String avatar;
   final String content;
   final String createdDate;
@@ -57,18 +57,18 @@ class Comment {
     required this.id,
     required this.author,
     required this.content,
-    required this.image,
     required this.avatar,
     required this.children,
     required this.createdDate,
+    this.parentId,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
         id: json['id'] as int,
+        parentId: json['parentId'] as int?,
         author: json['author'] as String,
         content: json['content'] as String,
-        image: json['image'] as String,
         avatar: json['avatar'] as String,
         children: json['children'] == null
             ? []

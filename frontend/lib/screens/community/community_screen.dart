@@ -84,7 +84,9 @@ class _CommunityScreenState extends State<CommunityScreen>
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             widget.isFromCreatePostingScreen
-                ? Get.to(() => MainScreen())
+                ? Get.to(() => const MainScreen(
+                      tabNumber: 0,
+                    ))
                 : Get.back();
           },
         ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/screens/community/widget/post_card.dart';
 import 'package:frontend/screens/community/widget/report_post_btn.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/service/post_service.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../../model/data/post/post.dart';
 
@@ -18,11 +20,16 @@ class PostDetailScreen extends StatefulWidget {
 }
 
 class _PostDetailScreenState extends State<PostDetailScreen> {
-  final _commentFocusNode = FocusNode();
+  final _commentInputFocusNode = FocusNode();
+  final logger = Logger();
 
   late Post _post;
 
   String _inputComment = '';
+  final _textFieldController = TextEditingController();
+  int _replyCommentId = 0;
+  String _replyAuthor = '';
+  bool _isreplayAurhorVisible = false;
 
   @override
   void initState() {
@@ -30,14 +37,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     _post = widget.post;
     if (widget.initialScroll) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _commentFocusNode.requestFocus();
+        _commentInputFocusNode.requestFocus();
       });
     }
   }
 
   @override
   void dispose() {
-    _commentFocusNode.dispose();
+    _commentInputFocusNode.dispose();
     super.dispose();
   }
 
@@ -64,16 +71,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       fontSize: 12,
       fontWeight: FontWeight.w500,
       color: Palette.grey200);
-
-  int _calculateCommentLength(List<Comment> comments) {
-    int result = comments.length;
-    for (final comment in comments) {
-      if (comment.children.isNotEmpty) {
-        result += _calculateCommentLength(comment.children);
-      }
-    }
-    return result;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,64 +105,155 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       ),
       bottomNavigationBar: SafeArea(
           child: Padding(
-              padding: EdgeInsets.only(
-                  left: 15,
-                  right: 15,
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: SizedBox(
-                height: 70,
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextField(
-                      scrollPadding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      focusNode: _commentFocusNode,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 11,
-                          fontFamily: 'Pretender'),
-                      decoration: InputDecoration(
-                          hintText: "댓글을 입력해주세요.",
-                          hintStyle: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w300,
-                            color: Palette.grey200,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 10),
-                          filled: true,
-                          fillColor: Palette.greySoft,
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              borderSide:
-                                  const BorderSide(color: Palette.greySoft)),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                            borderSide: const BorderSide(
-                                color: Palette.grey50, width: 2),
-                          )),
-                      onChanged: (value) => setState(() {
-                        _inputComment = value;
-                      }),
+        padding: EdgeInsets.only(
+            left: 15,
+            right: 15,
+            bottom: 10 + MediaQuery.of(context).viewInsets.bottom,
+            top: 10),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Visibility(
+                visible: _isreplayAurhorVisible,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 10),
+                  height: 25,
+                  child: Row(children: [
+                    RichText(
+                        text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: _replyAuthor,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Pretendard',
+                              color: Palette.grey300,
+                            )),
+                        const TextSpan(
+                            text: '님께 답글을 달고있어요.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w200,
+                              fontFamily: 'Pretendard',
+                              color: Palette.grey300,
+                            ))
+                      ],
                     )),
-                    const SizedBox(width: 10),
                     GestureDetector(
-                        child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                    color: Palette.grey50, width: 2.0)),
-                            child: Icon(Icons.send,
-                                color: _inputComment.isEmpty
-                                    ? Palette.grey200
-                                    : Palette.mainPurple)),
-                        onTap: () {
-                          _commentFocusNode.unfocus();
-                        })
+                      child: const Icon(
+                        Icons.close,
+                        color: Palette.red,
+                        size: 15,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _isreplayAurhorVisible = false;
+                          _replyAuthor = '';
+                          _replyCommentId = 0;
+                        });
+                      },
+                    )
+                  ]),
+                )),
+          ]),
+          _isreplayAurhorVisible
+              ? const Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      height: 1,
+                      color: Palette.greySoft,
+                      thickness: 1,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
                   ],
-                ),
-              ))),
+                )
+              : const SizedBox.shrink(),
+          Row(
+            children: [
+              Expanded(
+                  child: TextField(
+                controller: _textFieldController,
+                scrollPadding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                focusNode: _commentInputFocusNode,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 11,
+                    fontFamily: 'Pretender'),
+                decoration: InputDecoration(
+                    hintText: "댓글을 입력해주세요.",
+                    hintStyle: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w300,
+                      color: Palette.grey200,
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    filled: true,
+                    fillColor: Palette.greySoft,
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: const BorderSide(color: Palette.greySoft)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide:
+                          const BorderSide(color: Palette.grey50, width: 2),
+                    )),
+                onChanged: (value) => setState(() {
+                  _inputComment = value;
+                }),
+              )),
+              const SizedBox(width: 10),
+              GestureDetector(
+                  child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border:
+                              Border.all(color: Palette.grey50, width: 2.0)),
+                      child: Icon(Icons.send,
+                          color: _inputComment.isEmpty
+                              ? Palette.grey200
+                              : Palette.mainPurple)),
+                  onTap: () {
+                    PostService.createComment(_post.id, _inputComment,
+                            _isreplayAurhorVisible ? _replyCommentId : null)
+                        .then((comment) {
+                      setState(() {
+                        if (comment.parentId != null) {
+                          for (final c in _post.comments) {
+                            if (c.id == comment.parentId) {
+                              c.children.add(comment);
+                              break;
+                            }
+                          }
+                        } else {
+                          _post.comments.add(comment);
+                        }
+                      });
+                    }).catchError((err) {
+                      logger.e(err);
+                      Get.snackbar('댓글 생성 실패', '다시 시도해주세요');
+                    }).whenComplete(() {
+                      setState(() {
+                        _inputComment = '';
+                        _textFieldController.clear();
+                        _replyCommentId = 0;
+                        _replyAuthor = '';
+                        _isreplayAurhorVisible = false;
+                      });
+                      _commentInputFocusNode.unfocus();
+                    });
+                  })
+            ],
+          )
+        ]),
+      )),
       body: SingleChildScrollView(
         child: Container(
             color: Palette.greyBG,
@@ -175,7 +263,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 PostCard(
                   post: _post,
                   onPostDetail: true,
-                  focusNode: _commentFocusNode,
+                  focusNode: _commentInputFocusNode,
                 ),
                 Padding(
                     padding:
@@ -262,8 +350,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                       style: postButtonTextStyle,
                                     ),
                                     onTap: () {
-                                      _commentFocusNode
+                                      _commentInputFocusNode
                                           .requestFocus(); // 포커스 요청
+                                      setState(() {
+                                        _replyCommentId = comment.id;
+                                        _replyAuthor = comment.author;
+                                        _isreplayAurhorVisible = true;
+                                      });
                                     },
                                   ),
                                 ],

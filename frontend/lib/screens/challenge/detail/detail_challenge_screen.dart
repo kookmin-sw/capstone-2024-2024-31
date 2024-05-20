@@ -104,7 +104,9 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
                   color: Palette.grey300,
                 ),
                 onPressed: () {
-                  Get.offAll(() => MainScreen());
+                  Get.offAll(() => const MainScreen(
+                        tabNumber: 0,
+                      ));
                 }),
         title: const Text(
           "챌린지 자세히 보기",
@@ -208,7 +210,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   }
 
   Widget imageGridView(Size screenSize, Challenge challenge) {
-    final imagePaths = challenge.challengeImagePaths ?? [];
+    final imagePaths = challenge.challengeImagePaths;
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
@@ -259,7 +261,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
                   fontWeight: FontWeight.w600)),
           const SizedBox(height: 15),
           Text(
-            challenge.challengeExplanation ?? "",
+            challenge.challengeExplanation,
             style: const TextStyle(
                 fontSize: 10,
                 fontFamily: "Pretendard",
@@ -287,7 +289,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
               const SizedBox(height: 15),
               CertificationMethod(challenge: challenge),
               Text(
-                challenge.certificationExplanation ?? "",
+                challenge.certificationExplanation,
                 style: const TextStyle(
                   fontSize: 10,
                   fontFamily: "Pretendard",
@@ -302,14 +304,14 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             BuildImageContainer(
-              path: challenge.successfulVerificationImage ?? "",
+              path: challenge.successfulVerificationImage,
               color: Palette.green,
               isSuccess: true,
               screenSize: screenSize,
             ),
             const SizedBox(width: 10),
             BuildImageContainer(
-              path: challenge.failedVerificationImage ?? "",
+              path: challenge.failedVerificationImage,
               color: Palette.red,
               isSuccess: false,
               screenSize: screenSize,
