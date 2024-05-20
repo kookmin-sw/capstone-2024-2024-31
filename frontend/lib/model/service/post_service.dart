@@ -9,10 +9,12 @@ class PostService {
   static final Logger logger = Logger();
 
   static Future<List<Post>> fetchPosts(int challengeId) async {
-    final String uri = '/challenges/$challengeId/posts';
+    const String uri = '/posts';
 
     try {
-      final response = await dioInstance.get(uri);
+      final response = await dioInstance.get(uri, queryParameters: {
+        'challengeId': challengeId,
+      });
 
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;

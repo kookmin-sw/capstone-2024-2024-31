@@ -111,11 +111,18 @@ class _CommunityScreenState extends State<CommunityScreen>
               children: [
                 _buildSortButtons(),
                 Expanded(
-                  child: ListView.builder(
-                      itemCount: _posts.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return PostCard(post: _posts[index]);
-                      }),
+                  child: ListView.separated(
+                    itemCount: _posts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return PostCard(post: _posts[index]);
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider(
+                        height: 1,
+                        color: Palette.greySoft,
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
