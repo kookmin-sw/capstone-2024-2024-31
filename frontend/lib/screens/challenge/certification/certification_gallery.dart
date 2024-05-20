@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:pytorch_lite/pytorch_lite.dart';
 
-import 'gesture.dart';
+import '../../../model/data/gesture.dart';
 
 class CertificationByGallery extends StatefulWidget {
   const CertificationByGallery({super.key});
@@ -126,6 +126,7 @@ class CertificationByGalleryState extends State<CertificationByGallery> {
     setState(() {
       _image = File(image.path);
       isLoading = false;
+      isInit = true;
     });
     textToShow = "인증 실패했습니다\n다시 시도하세요!";
 
@@ -158,8 +159,9 @@ class CertificationByGalleryState extends State<CertificationByGallery> {
           ));
   }
 
-  String resultString(bool result) =>
-      result ? "인증되었습니다!" : "${certificationGesture['nameText']} 포즈\n인증 실패했습니다.\n다시 시도하세요.";
+  String resultString(bool result) => result
+      ? "✔️ 인증되었습니다!"
+      : "🚫 ${certificationGesture['nameText']} 포즈\n인증 실패했습니다.\n다시 시도하세요.";
 
   @override
   Widget build(BuildContext context) {
@@ -217,15 +219,17 @@ class CertificationByGalleryState extends State<CertificationByGallery> {
                   ),
                   Center(
                     child: Visibility(
-                      visible: textToShow != null,
-                      child: Text(
-                        "$textToShow",
-                        style: textStyle(15, Palette.grey500,
-                            weight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                        maxLines: 3,
-                      ),
-                    ),
+                        visible: textToShow != null,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            "$textToShow",
+                            style: textStyle(15, Palette.grey500,
+                                weight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                            maxLines: 3,
+                          ),
+                        )),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),

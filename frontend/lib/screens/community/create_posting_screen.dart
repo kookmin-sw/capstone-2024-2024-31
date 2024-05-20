@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
+import '../challenge/certification/certification_gallery.dart';
 
 class CreatePostingScreen extends StatefulWidget {
   final Challenge challenge;
@@ -47,15 +48,24 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
   }
 
   void getimage(final bool isGallery) async {
-    final image = await ImagePicker().pickImage(
-        source: isGallery ? ImageSource.gallery : ImageSource.camera);
-    if (image != null) {
-      setState(() {
-        _inputImage = File(image.path);
-        _showImage = true;
-      });
-    }
-  }
+    if (isGallery) {
+      final selectedImage = await Get.to(() => const CertificationByGallery());
+      if (selectedImage != null) {
+        setState(() {
+          _inputImage = selectedImage;
+          _showImage = true;
+        });
+      } else {
+        final image = await ImagePicker().pickImage(
+            source: isGallery ? ImageSource.gallery : ImageSource.camera);
+        if (image != null) {
+          setState(() {
+            _inputImage = File(image.path);
+            _showImage = true;
+          });
+        }
+      }
+    }}
 
   @override
   Widget build(BuildContext context) {
