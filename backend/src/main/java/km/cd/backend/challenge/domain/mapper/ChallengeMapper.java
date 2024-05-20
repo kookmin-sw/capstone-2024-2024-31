@@ -1,12 +1,9 @@
 package km.cd.backend.challenge.domain.mapper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import km.cd.backend.certification.domain.CertificationType;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
@@ -35,14 +32,18 @@ public interface ChallengeMapper {
     @Mapping(target = "successfulVerificationImage", ignore = true)
     @Mapping(target = "failedVerificationImage", ignore = true)
     @Mapping(target = "certificationType", ignore = true)
-    @Mapping(target = "isEnded", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "totalParticipants", ignore = true)
     @Mapping(target = "totalCertificationCount", expression = "java(calculateTotalCertificationCount(convertNumber(request.getChallengePeriod()), request.getCertificationFrequency()))")
     Challenge requestToEntity(ChallengeCreateRequest request);
-    
+
+    @Mapping(target = "challengeCategory", source = "challenge.challengeCategory.name")
+    @Mapping(target = "galleryPossible", source = "isGalleryPossible")
+    @Mapping(target = "private", source = "isPrivate")
     ChallengeInformationResponse challengeToChallengeResponse(Challenge challenge);
     
-    ChallengeStatusResponse toChallengeStatusResponse(Challenge challenge, Long numberOfCertifications);
+    @Mapping(target = "currentAchievementRate", expression = "java(getCurrentAchievementRate(numberOfCertifications, challenge.getTotalCertificationCount()))")
+    ChallengeStatusResponse toChallengeStatusResponse(Challenge challenge, Long numberOfCertifications, Integer fullAchievementCount, Integer highAchievementCount,Integer lowAchievementCount, Double overallAverageAchievementRate);
     
     @Mappings({
         @Mapping(target = "challengeId", source = "participant.challenge.id"),
@@ -54,29 +55,28 @@ public interface ChallengeMapper {
 
     @Mapping(target = "imageUrl", expression = "java(challenge.getChallengeImagePaths().get(0))")
     ChallengeSimpleResponse entityToSimpleResponse(Challenge challenge);
+    
+    default Double getCurrentAchievementRate(Long numberOfCertifications, int totalCertificationCount){
+        if (totalCertificationCount == 0) {
+            throw new IllegalArgumentException();
+        }
+        double rate = (double) numberOfCertifications / totalCertificationCount * 100;
+        return Math.round(rate * 10) / 10.0;
+    }
 
     default int calculateTotalCertificationCount(Integer challengePeriod, String certificationFrequency) {
         return challengePeriod * ChallengeFrequency.findByFrequency(certificationFrequency).getDaysPerWeek();
     }
-
-
-    default Date parseDateString(String dateString) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            return simpleDateFormat.parse(dateString);
-        } catch (ParseException e) {
-            return null;
-        }
+    
+    
+    default LocalDate parseDateString(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(dateString, formatter);
     }
 
-    default Date calculateEndDate(Date StartDate, String challengePeriod) {
+    default LocalDate calculateEndDate(LocalDate StartDate, String challengePeriod) {
         int weeks = convertNumber(challengePeriod);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(StartDate);
-        calendar.add(Calendar.WEEK_OF_YEAR, weeks);
-
-        return calendar.getTime();
+        return StartDate.plusWeeks(weeks);
     }
 
     default Integer convertNumber(String sentence) {

@@ -1,29 +1,40 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/controller/user_controller.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:frontend/model/data/sms/sms_certification.dart';
+import 'package:frontend/model/data/sms/sms_result.dart';
+import 'package:frontend/widgets/rtu_button.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
-class JoinChallengeScreen_sec extends StatefulWidget {
+import '../../env.dart';
+import '../../model/data/challenge/challenge_join.dart';
+
+class JoinChallengeSecScreen extends StatefulWidget {
   final Challenge challenge;
 
-  const JoinChallengeScreen_sec({Key? key, required this.challenge})
-      : super(key: key);
+  const JoinChallengeSecScreen({super.key, required this.challenge});
 
   @override
-  State<JoinChallengeScreen_sec> createState() =>
-      _JoinChallengeScreen_secState();
+  State<JoinChallengeSecScreen> createState() => _JoinChallengeSecScreenState();
 }
 
-class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
+class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
+  bool isLoading = false;
   bool isAllInput = false;
   List<bool> isInputList = [false, false, false, false];
 
-  late String receiverName;
-  late String receiverNumber;
-  String authNumber = '1010';
-  late String authInputNumber = '';
-  late String toReceiverText;
+  String _targetName = '';
+  String _receiverNumber = '';
+  String _determination = '';
+  String _authInputNumber = '';
+  bool _showAuthInput = false;
 
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _numberFocusNode = FocusNode();
@@ -31,6 +42,15 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
   final FocusNode _resultFocusNode = FocusNode();
 
   // 나머지 코드는 유지됩니다.
+  final GlobalKey<FormState> _formKey =
+      GlobalKey<FormState>(); // Add a GlobalKey for the form
+  final logger = Logger();
+  final UserController user = UserController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -42,158 +62,239 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
     super.dispose();
   }
 
-  bool validateInput() {
-    // 모든 입력 필드가 채워져 있는지 확인
-    return isInputList.every((element) => element == true);
-  }
-
   void _updateButtonState() {
     setState(() {
-      // 입력이 유효한지 확인하여 버튼 상태 업데이트
+      // Check if all input fields are filled
       if (validateInput()) {
-        // 모든 입력이 유효한 경우
+        // All input fields are filled
         isAllInput = true;
       } else {
-        // 하나 이상의 입력이 유효하지 않은 경우
+        // At least one input field is not filled
         isAllInput = false;
       }
     });
+  }
+
+  bool validateInput() {
+    // Check if all input fields are filled
+    return isInputList.every((element) => element);
+  }
+
+  Future<Dio> _createDio() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Dio dio = Dio();
+
+    dio.options.contentType = 'application/json';
+    dio.options.headers['Authorization'] =
+        'Bearer ${prefs.getString('access_token')}';
+
+    return dio;
+  }
+
+  Future<bool> _getCode() async {
+    Dio dio = await _createDio();
+
+    try {
+      final response = await dio.post('${Env.serverUrl}/sms/send',
+          data: SmsCertification(phone: _receiverNumber).toJson());
+
+      if (response.statusCode == 200) {
+        logger.d(response.data);
+        final SmsResult smsResult = SmsResult.fromJson(response.data);
+        return smsResult.isSuccess;
+      }
+    } catch (err) {
+      logger.e('Error: $err');
+      Get.snackbar('메세지 전송 실패', '다시 시도해주세요.');
+    }
+
+    return false;
+  }
+
+  Future<bool> _verifyCode() async {
+    Dio dio = await _createDio();
+
+    try {
+      final response = await dio.post('${Env.serverUrl}/sms/verify',
+          data: SmsCertification(
+                  phone: _receiverNumber, certificationNumber: _authInputNumber)
+              .toJson());
+
+      if (response.statusCode == 200) {
+        final SmsResult smsResult = SmsResult.fromJson(response.data);
+        return smsResult.isSuccess;
+      }
+    } catch (err) {
+      logger.e('Error: $err');
+      Get.snackbar('인증 실패', '인증번호를 다시 확인해주세요.');
+    }
+
+    return false;
+  }
+
+  Future<void> _pressJoinButton(ChallengeJoin challengeJoin) async {
+    Dio dio = await _createDio();
+
+    try {
+      final response = await dio.post(
+          '${Env.serverUrl}/challenges/${widget.challenge.id}/join',
+          data: challengeJoin.toJson());
+
+      if (response.statusCode == 201) {
+        logger.d('챌린지 참가 성공');
+        Get.offAll(() => ChallengeStateScreen(
+              isFromJoinScreen: true,
+              challenge: widget.challenge,
+              challengeId: widget.challenge.id,
+            ));
+      }
+    } catch (err) {
+      logger.e('Error: $err');
+      Get.snackbar('챌린지 참가 실패', '다시 시도해주세요.');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white, // 배경색 설정
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {},
-        ),
-        title: const Text(
-          '루틴업 참가하기',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Pretendard',
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Colors.white,
+        // 배경색 설정
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          title: const Text(
+            '루틴업 참가하기',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Pretender',
+            ),
           ),
         ),
-      ),
-      body: GestureDetector(
-          onTap: () {
-            // 다른 곳을 탭하면 포커스 해제
-            FocusScope.of(context).unfocus();
-          },
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  SizedBox(height: 15),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Text(
-                      "\"결과를 누구에게 전송할까요?\"",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        fontFamily: 'Pretendard',
-                        color: Palette.grey500,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  inputPenaltyName(screenSize),
-                  SizedBox(height: 15),
-                  inputPenaltyNumber(screenSize),
-                  SizedBox(height: 5),
-                  verificationInput(screenSize),
-                  SizedBox(height: 25),
-                  inputResultText(screenSize),
-                  SizedBox(height: 10),
-                ],
-              ),
-            ),
-          )),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-        color: Colors.transparent,
-        width: double.infinity,
-        child: isAllInput
-            ? InkWell(
-                onTap: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ChallengeStateScreen(challenge: widget.challenge),
-                    ),
-                  );
-                },
-                child: SvgPicture.asset(
-                  'assets/svgs/join_able_btn.svg',
+        body: GestureDetector(
+            onTap: () {
+              // 다른 곳을 탭하면 포커스 해제
+              FocusScope.of(context).unfocus();
+            },
+            child: isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(color: Palette.mainPurple),
+                  )
+                : SingleChildScrollView(
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Form(
+                          key: _formKey, // Add the form key here
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 15),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                child: Text(
+                                  "\"결과를 누구에게 전송할까요?\"",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                    fontFamily: 'Pretendard',
+                                    color: Palette.grey500,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              inputPenaltyName(screenSize),
+                              const SizedBox(height: 15),
+                              inputPenaltyNumber(screenSize),
+                              const SizedBox(height: 5),
+                              verificationInput(screenSize),
+                              const SizedBox(height: 25),
+                              inputResultText(screenSize),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
+                        )),
+                  )),
+        bottomNavigationBar: Container(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+            color: Colors.transparent,
+            width: double.infinity,
+            child: Row(children: [
+              Expanded(
+                child: RtuButton(
+                  onPressed: () => _pressJoinButton(ChallengeJoin()),
+                  text: '바로 참가하기',
                 ),
-              )
-            : SvgPicture.asset(
-                'assets/svgs/join_disable_btn.svg',
               ),
-      ),
-    );
+              const SizedBox(width: 8),
+              Expanded(
+                  child: RtuButton(
+                onPressed: () => _pressJoinButton(ChallengeJoin(
+                    determination: _determination,
+                    targetName: _targetName,
+                    receiverNumber: _receiverNumber)),
+                text: "번호 등록 후 참가하기",
+                disabled: !isAllInput,
+              )),
+            ])));
   }
 
   Widget inputPenaltyName(Size screenSize) {
-    return Form(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-        "이름을 입력해주세요",
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Text(
+        "결과를 수신할 분의 이름을 입력해주세요",
         style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 13,
             fontFamily: 'Pretendard',
             color: Palette.grey300),
       ),
-      Text(
-        "ex) 부모님, 친구, 연인",
+      const Text(
+        "ex) 친구, 어머니, ...",
         style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 11,
-            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w500,
+            fontSize: 10,
+            fontFamily: 'Pretender',
             color: Palette.grey200),
       ),
-      SizedBox(height: 15),
+      const SizedBox(height: 15),
       Container(
           padding: EdgeInsets.only(right: screenSize.width * 0.4),
           // width: screenSize.width * 0.4,
           child: TextFormField(
-            maxLength: 5,
+            maxLength: 8,
             keyboardType: TextInputType.name,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w300,
                 fontSize: 11,
-                fontFamily: 'Pretendard'),
+                fontFamily: 'Pretender'),
             decoration: InputDecoration(
                 hintText: "김혁주",
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w300,
                   color: Palette.grey200,
                 ),
-                counterStyle: TextStyle(
+                counterStyle: const TextStyle(
                     fontSize: 9,
                     color: Palette.grey200,
                     fontFamily: 'Pretendard'),
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 filled: true,
                 fillColor: Palette.greySoft,
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(color: Palette.greySoft)),
+                    borderSide: const BorderSide(color: Palette.greySoft)),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide:
-                        BorderSide(color: Palette.mainPurple, width: 2))),
+                        const BorderSide(color: Palette.mainPurple, width: 2))),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return '이름을 입력하세요.';
@@ -201,35 +302,34 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
               return null;
             },
             onChanged: (value) {
-              receiverName = value.toString();
+              _targetName = value.toString();
               isInputList[0] = true;
               _updateButtonState();
             },
             focusNode: _nameFocusNode,
           )),
-    ]));
+    ]);
   }
 
   Widget inputPenaltyNumber(Size screenSize) {
-    return Form(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Text(
         "전화번호 입력해주세요.",
         style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 13,
-            fontFamily: 'Pretendard',
+            fontFamily: 'Pretender',
             color: Palette.grey300),
       ),
-      Text(
-        "(성공을 가장 알리고 싶은 or 실패를 가장 숨기고 싶은)",
+      const Text(
+        "(성공을 가장 알리고 싶은 or 실패를 가장 숨기고 싶은) 사람의 전화번호",
         style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 10,
-            fontFamily: 'Pretendard',
+            fontFamily: 'Pretender',
             color: Palette.grey200),
       ),
-      SizedBox(height: 15),
+      const SizedBox(height: 15),
       Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -239,34 +339,39 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
               maxLength: 11,
               // 휴대폰 번호는 보통 11자리입니다.
               keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(11),
+                // Limit to 11 characters
+              ],
               // 키보드 타입을 전화번호로 설정합니다.
-              style: TextStyle(
+              style: const TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 11,
                   fontFamily: 'Pretendard'),
               decoration: InputDecoration(
-                  hintText: "010-1234-5678",
+                  hintText: "01012345678",
                   // 예시 번호를 힌트로 표시합니다.
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
                     color: Palette.grey200,
                   ),
-                  counterStyle: TextStyle(
+                  counterStyle: const TextStyle(
                       fontSize: 9,
                       color: Palette.grey200,
                       fontFamily: 'Pretendard'),
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   filled: true,
                   fillColor: Palette.greySoft,
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: BorderSide(color: Palette.greySoft)),
+                      borderSide: const BorderSide(color: Palette.greySoft)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide:
-                          BorderSide(color: Palette.mainPurple, width: 2))),
+                      borderSide: const BorderSide(
+                          color: Palette.mainPurple, width: 2))),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return '휴대폰 번호를 입력하세요.';
@@ -274,7 +379,7 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
                 return null;
               },
               onChanged: (value) {
-                receiverNumber = value.toString();
+                _receiverNumber = value.toString();
                 isInputList[1] = true;
                 _updateButtonState();
               },
@@ -285,7 +390,22 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  setState(() {});
+                  _getCode().then((success) {
+                    if (success) {
+                      setState(() {
+                        _showAuthInput = true;
+                      });
+                      Get.snackbar("인증번호 전송 성공!", "4자리 인증번호를 하단에 입력하세요.",
+                          backgroundColor: Palette.greenSuccess,
+                          colorText: Palette.white,
+                          duration: const Duration(seconds: 1));
+                    } else {
+                      Get.snackbar('인증번호 전송 실패', '다시 시도해주세요.',
+                          backgroundColor: Palette.red,
+                          colorText: Palette.white,
+                          duration: const Duration(seconds: 1));
+                    }
+                  });
                 },
                 child: SvgPicture.asset(
                   'assets/svgs/number_auth_btn.svg',
@@ -295,26 +415,24 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
               ),
             )
           ])
-    ]));
+    ]);
   }
 
   Widget verificationInput(Size screenSize) {
-    return Container(
-        // margin: EdgeInsets.only(left: 20, right: 20),
-        // padding: EdgeInsets.only(left: 30),
-        decoration: BoxDecoration(
-            // border: Palette.greySoft, // 배경색 설정
-            borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 5),
-            Row(
+    return Visibility(
+        visible: _showAuthInput,
+        child: Container(
+            // margin: EdgeInsets.only(left: 20, right: 20),
+            // padding: EdgeInsets.only(left: 30),
+            decoration: BoxDecoration(
+                // border: Palette.greySoft, // 배경색 설정
+                borderRadius: BorderRadius.circular(10)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset("assets/svgs/horizonal_bar.svg"),
-                Text(
+                const SizedBox(height: 5),
+                const Text(
                   "인증번호",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -323,94 +441,102 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
                     color: Palette.grey300,
                   ),
                 ),
-                SvgPicture.asset("assets/svgs/horizonal_bar.svg"),
-              ],
-            ),
-            SizedBox(height: 3),
-            Text(
-              "완료시, 본 전화번호 소유자 개인정보 수집에 동의합니다.",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 9,
-                  fontFamily: 'Pretendard',
-                  color: Palette.grey200),
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: screenSize.width * 0.4,
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 11,
-                      fontFamily: 'Pretendard',
-                    ),
-                    decoration: InputDecoration(
-                      hintText: "4자리 입력",
-                      hintStyle: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w300,
-                        color: Palette.grey200,
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                      filled: true,
-                      fillColor: Palette.white,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Palette.greySoft),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide:
-                            BorderSide(color: Palette.mainPurple, width: 2),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '인증번호를 입력하세요.';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      authInputNumber = value.toString();
-                      if (authNumber == authInputNumber) {
-                        isInputList[2] = true;
-                        _updateButtonState();
-                      }
-                    },
-                    focusNode: _authFocusNode,
-                  ),
+                const SizedBox(height: 3),
+                const Text(
+                  "완료시, 본 전화번호 소유자 개인정보 수집에 동의합니다.",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                      fontFamily: 'Pretender',
+                      color: Palette.grey200),
                 ),
-                SizedBox(width: 10),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {});
-                    },
-                    child: SvgPicture.asset(
-                      'assets/svgs/auth_check_btn.svg',
-                      // width: double.infinity,
-                      // height: 30,
+                const SizedBox(height: 10),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: screenSize.width * 0.4,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        maxLength: 4,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 11,
+                          fontFamily: 'Pretendard',
+                        ),
+                        decoration: InputDecoration(
+                          hintText: "4자리 입력",
+                          hintStyle: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w300,
+                            color: Palette.grey200,
+                          ),
+                          filled: true,
+                          fillColor: Palette.greySoft,
+                          counterStyle: const TextStyle(
+                              fontSize: 9,
+                              color: Palette.grey200,
+                              fontFamily: 'Pretendard'),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide:
+                                const BorderSide(color: Palette.greySoft),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: const BorderSide(
+                                color: Palette.mainPurple, width: 2),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '인증번호를 입력하세요.';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          _authInputNumber = value.toString();
+                        },
+                        focusNode: _authFocusNode,
+                      ),
                     ),
-                  ),
-                )
+                    const SizedBox(width: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () async {
+                          if (await _verifyCode()) {
+                            isInputList[2] = true;
+                            _updateButtonState();
+                            Get.snackbar("인증완료", "수신자 개인 정보 제공에 동의합니다.",
+                                colorText: Palette.white,
+                                backgroundColor: Palette.purPle200,
+                                duration: const Duration(seconds: 1));
+                          } else {
+                            Get.snackbar("인증실패", "인증번호를 다시 확인해주세요.",
+                                colorText: Palette.white,
+                                backgroundColor: Palette.red,
+                                duration: const Duration(seconds: 1));
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          'assets/svgs/auth_check_btn.svg',
+                          // width: double.infinity,
+                          // height: 30,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ],
-            ),
-          ],
-        ));
+            )));
   }
 
   Widget inputResultText(Size screenSize) {
-    return Form(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Text(
         "각오 한마디를 입력해주세요",
         style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -418,7 +544,7 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
             fontFamily: 'Pretendard',
             color: Palette.grey300),
       ),
-      Text(
+      const Text(
         "성공/실패 시 결과와 함께 전송돼요.",
         style: TextStyle(
             fontWeight: FontWeight.w500,
@@ -426,39 +552,39 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
             fontFamily: 'Pretendard',
             color: Palette.grey200),
       ),
-      SizedBox(height: 15),
+      const SizedBox(height: 15),
       Container(
-          padding: EdgeInsets.symmetric(horizontal: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           child: TextFormField(
             maxLength: 50,
             maxLines: 3,
             keyboardType: TextInputType.text,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w300,
                 fontSize: 11,
                 fontFamily: 'Pretendard'),
             decoration: InputDecoration(
                 hintText: "ex) 나 실패하면 ㅋ 공차 사줄게 ㅋ\n\t   나의 갓생을 응원해줘~ 반드시 성공할거야~",
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w300,
                   color: Palette.grey200,
                 ),
-                counterStyle: TextStyle(
+                counterStyle: const TextStyle(
                     fontSize: 9,
                     color: Palette.grey200,
                     fontFamily: 'Pretendard'),
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                 filled: true,
                 fillColor: Palette.greySoft,
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(color: Palette.greySoft)),
+                    borderSide: const BorderSide(color: Palette.greySoft)),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide:
-                        BorderSide(color: Palette.mainPurple, width: 2))),
+                        const BorderSide(color: Palette.mainPurple, width: 2))),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return '각오 한마디를 입력하세요.';
@@ -466,12 +592,12 @@ class _JoinChallengeScreen_secState extends State<JoinChallengeScreen_sec> {
               return null;
             },
             onChanged: (value) {
-              toReceiverText = value.toString();
+              _determination = value.toString();
               isInputList[3] = true;
               _updateButtonState();
             },
             focusNode: _resultFocusNode,
           )),
-    ]));
+    ]);
   }
 }

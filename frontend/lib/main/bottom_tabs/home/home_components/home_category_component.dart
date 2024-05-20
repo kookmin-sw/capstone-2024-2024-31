@@ -1,42 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/challenge/search/challenge_search_screen.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/config/category_card_list.dart';
+import 'package:get/get.dart';
 
-class Home_Category extends StatelessWidget {
-  final List<Map<String, dynamic>> categoryList = [
-    {
-      "name": "운동",
-      "memo": "튼튼한 몸을 위하여!",
-      "icons": "assets/icons/category_icons/exercise.svg",
-      "color": const Color(0xffEEE9FD),
-    },
-    {
-      "name": "식습관",
-      "memo": "골고루 건강하게!",
-      "icons": "assets/icons/category_icons/eating.svg",
-      "color": const Color(0xffFFDFDF),
-    },
-    {
-      "name": "취미",
-      "memo": "더 즐거운 삶을 위해!",
-      "icons": "assets/icons/category_icons/hobby.svg",
-      "color": const Color(0xffFFD0A3),
-    },
-    {
-      "name": "환경",
-      "memo": "깨끗한 환경에서!",
-      "icons": "assets/icons/category_icons/nature.svg",
-      "color": const Color(0xffDAF2CB),
-    },
-    {
-      "name": "공부",
-      "memo": "지적인 나를 위해!",
-      "icons": "assets/icons/category_icons/study.svg",
-      "color": const Color(0xffD4E0FF),
-    }
-  ];
+class HomeCategory extends StatelessWidget {
+  const HomeCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +22,8 @@ class Home_Category extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: Palette.grey500,
                     fontFamily: 'Pretendard',
-                    fontSize: 15),),
+                    fontSize: 15),
+              ),
               const SizedBox(height: 13),
               SizedBox(
                   height: 160,
@@ -77,7 +48,8 @@ class CategoryCard extends StatelessWidget {
   final String iconPath;
   final Color color;
 
-  const CategoryCard({super.key,
+  const CategoryCard({
+    super.key,
     required this.name,
     required this.memo,
     required this.iconPath,
@@ -87,63 +59,69 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        print("$name 카테고리 클릭됨");
-      },
+        onTap: () {
+          int index =
+              categoryList.indexWhere((category) => category['name'] == name);
+
+          Get.to(ChallengeSearchScreen(enterSelectIndex: index + 1));
+          },
+
         child: Container(
-        padding: const EdgeInsets.all(0),
-        width: 120, // Set the width of the card
-        child: Card(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-          ),
-          color: color,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: SvgPicture.asset(
-                    iconPath,
-                    width: 45,
-                    height: 45,
-                  )),
-              Container(
-                width: 128,
-                height: 77,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(8), // Rounded bottom-left corner
-                    bottomRight: Radius.circular(8), // Rounded bottom-right corner
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
+            padding: const EdgeInsets.all(0),
+            width: 120, // Set the width of the card
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              color: color,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: SvgPicture.asset(
+                        iconPath,
+                        width: 45,
+                        height: 45,
+                      )),
+                  Container(
+                    width: 128,
+                    height: 77,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft:
+                            Radius.circular(8), // Rounded bottom-left corner
+                        bottomRight:
+                            Radius.circular(8), // Rounded bottom-right corner
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    Text(
-                      memo,
-                      style: const TextStyle(
-                        color: Color(0xFF96979B),
-                        fontSize: 9,
-                        fontWeight: FontWeight.w400,
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          memo,
+                          style: const TextStyle(
+                            color: Color(0xFF96979B),
+                            fontSize: 9,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        )));
+                  )
+                ],
+              ),
+            )));
   }
 }

@@ -1,5 +1,6 @@
 package km.cd.backend.challenge.fixture;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -16,8 +17,8 @@ public class ChallengeFixture {
             .challengeName("피트니스 챌린지")
             .challengeExplanation("저희 피트니스 챌린지에 참여하여 몸매를 만들어 보세요!")
             .challengePeriod(30)
-            .startDate(new Date())
-            .endDate(new Date(System.currentTimeMillis() + 30L * 24 * 60 * 60 * 1000)) // 현재로부터 30일 후
+            .startDate(LocalDate.now())
+            .endDate(LocalDate.now().plusDays(30)) // 현재로부터 30일 후
             .certificationFrequency("주5일")
             .certificationStartTime(8) // 오전 8시
             .certificationEndTime(20) // 오후 8시
@@ -33,7 +34,7 @@ public class ChallengeFixture {
 
     public static Challenge challengeWithCategory(ChallengeCategory category) {
         Challenge challenge = challenge();
-        challenge.setCategory(category);
+        challenge.setChallengeCategory(category);
         return challenge;
     }
     

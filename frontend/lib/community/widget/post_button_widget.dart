@@ -5,15 +5,17 @@ import 'package:frontend/model/config/palette.dart';
 class PostBtnWidget extends StatefulWidget {
   int likeNum;
   int commentNum;
+  final FocusNode? commentFocusNode;
 
   PostBtnWidget({
-    Key? key,
+    super.key,
     required this.likeNum,
     required this.commentNum,
-  }) : super(key: key);
+    this.commentFocusNode,
+  });
 
   @override
-  _PostBtnWidgetState createState() => _PostBtnWidgetState();
+  State<PostBtnWidget> createState() => _PostBtnWidgetState();
 }
 
 class _PostBtnWidgetState extends State<PostBtnWidget> {
@@ -22,7 +24,7 @@ class _PostBtnWidgetState extends State<PostBtnWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: Palette.greySoft,
         border: Border.all(color: Colors.transparent),
@@ -46,7 +48,10 @@ class _PostBtnWidgetState extends State<PostBtnWidget> {
             svgPicturePath: "assets/svgs/icon_comment.svg",
             text: widget.commentNum.toString(),
             onPressed: () {
-              // 댓글 버튼 동작
+
+              // widget.commentFocusNode == null
+              //     ? Get.to(() => const PostDetailScreen())
+              //     : widget.commentFocusNode?.requestFocus();
             },
           ),
           _buildButtonWithText(
@@ -93,14 +98,14 @@ class _PostBtnWidgetState extends State<PostBtnWidget> {
           children: [
             isLikeBtn
                 ? SvgPicture.asset(
-              svgPicturePath,
-              color: isLiked ? Palette.mainPurple : null,
-            )
+                    svgPicturePath,
+                    color: isLiked ? Palette.mainPurple : null,
+                  )
                 : SvgPicture.asset(svgPicturePath),
-            SizedBox(width: 7),
+            const SizedBox(width: 7),
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 11,
                 fontFamily: 'Pretendard',

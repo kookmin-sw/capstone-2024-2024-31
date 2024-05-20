@@ -26,7 +26,7 @@ Widget homeAppBar = AppBar(
             },
           ),
           IconButton(
-            icon: Icon(CupertinoIcons.add),
+            icon: const Icon(CupertinoIcons.add),
             onPressed: () {
               Get.to(() => const CreateChallengeFir());
             },

@@ -2,11 +2,11 @@ package km.cd.backend.challenge.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import km.cd.backend.certification.domain.CertificationType;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -30,9 +30,9 @@ public class Challenge {
     
     private Integer challengePeriod;
 
-    private Date startDate;
+    private LocalDate startDate;
 
-    private Date endDate;
+    private LocalDate endDate;
 
     private String certificationFrequency;
 
@@ -58,8 +58,7 @@ public class Challenge {
 
     private String successfulVerificationImage;
     
-    @Builder.Default
-    private Boolean isEnded = false;
+    private String status;
     
     @Builder.Default
     private Integer totalParticipants = 0;
@@ -75,9 +74,5 @@ public class Challenge {
     
     public void increaseNumOfParticipants() {
         totalParticipants += 1;
-    }
-
-    public void finishChallenge() {
-        this.isEnded = true;
     }
 }

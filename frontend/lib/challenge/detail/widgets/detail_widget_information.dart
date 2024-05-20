@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:intl/intl.dart';
 
 class InformationWidget extends StatelessWidget {
@@ -11,7 +11,7 @@ class InformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime startDate = challenge.startDate;
+    final DateTime startDate = DateTime.parse(challenge.startDate);
     final int challengePeriod = challenge.challengePeriod;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
@@ -93,7 +93,7 @@ class InformationWidget extends StatelessWidget {
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500)),
                         Text(
-                            "${DateFormat("M월 d일 (E)", "ko_KR").format(startDate)}-${DateFormat("M월 d일 (E)", "ko_KR").format(endDate)} ${challenge.challengePeriod}",
+                            "${DateFormat("M월 d일 (E)", "ko_KR").format(startDate)}-${DateFormat("M월 d일 (E)", "ko_KR").format(endDate)} ${challenge.challengePeriod}주",
                             style: const TextStyle(
                                 color: Palette.grey300,
                                 fontSize: 10,

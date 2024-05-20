@@ -3,12 +3,11 @@ package km.cd.backend.community.service;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.repository.ChallengeRepository;
 import km.cd.backend.community.domain.Post;
-import km.cd.backend.community.dto.PostDetailResponse;
+import km.cd.backend.community.dto.PostResponse;
 import km.cd.backend.community.dto.PostRequest;
-import km.cd.backend.community.dto.PostSimpleResponse;
 import km.cd.backend.community.repository.PostRepository;
-import km.cd.backend.user.User;
-import km.cd.backend.user.UserRepository;
+import km.cd.backend.user.domain.User;
+import km.cd.backend.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +40,9 @@ class PostServiceTest {
     
     @Autowired
     PostService postService;
+
+    @Autowired
+    LikeService likeService;
     
     private User fakeUser;
     private Challenge fakeChallenge;
@@ -69,10 +71,10 @@ class PostServiceTest {
             "description"
         );
 
-        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest, file);
+        PostResponse postResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest, file);
         
-        assertEquals(postRequest.title(), postDetailResponse.title());
-        assertEquals(postRequest.content(), postDetailResponse.content());
+        assertEquals(postRequest.title(), postResponse.title());
+        assertEquals(postRequest.content(), postResponse.content());
     }
     
     @Test
@@ -90,17 +92,11 @@ class PostServiceTest {
         postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest1, file);
         postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest2, file);
         
-        List<PostSimpleResponse> postSimpleResponses = postService.findAllByChallengeId(fakeChallenge.getId());
+        List<PostResponse> postSimpleResponses = postService.findAllByChallengeId(fakeChallenge.getId());
         
         assertEquals(2, postSimpleResponses.size());
     }
-    
-    @Test
-    @DisplayName("게시물_단건_조회-성공")
-    void find_post_success() {
-    
-    }
-    
+
     @Test
     @DisplayName("게시물_삭제-성공")
     void delete_post_success() {
@@ -109,12 +105,32 @@ class PostServiceTest {
             "description"
         );
         
-        PostDetailResponse postDetailResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest, file);
+        PostResponse postResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest, file);
         
-        postService.deletePost(fakeUser.getId(), postDetailResponse.id());
+        postService.deletePost(fakeUser.getId(), postResponse.id());
         
-        Optional<Post> _post = postRepository.findById(postDetailResponse.id());
+        Optional<Post> _post = postRepository.findById(postResponse.id());
         assertTrue(_post.isEmpty());
     }
-    
+
+    @Test
+    @DisplayName("게시물_좋아요-성공")
+    void like_post_success() {
+        User user = User.builder()
+                .email("test@exam.ple")
+                .build();
+        user = userRepository.save(user);
+
+        PostRequest postRequest = new PostRequest(
+                "title",
+                "description"
+        );
+
+        PostResponse postResponse = postService.createPost(fakeUser.getId(), fakeChallenge.getId(), postRequest, file);
+
+        likeService.likePost(user.getId(), postResponse.id());
+
+        postResponse = postService.findByPostId(postResponse.id());
+        assertEquals(postResponse.likes().size(), 1);
+    }
 }

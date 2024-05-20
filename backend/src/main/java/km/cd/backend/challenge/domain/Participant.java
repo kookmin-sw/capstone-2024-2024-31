@@ -1,8 +1,7 @@
 package km.cd.backend.challenge.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import km.cd.backend.user.User;
+import km.cd.backend.user.domain.User;
 import lombok.*;
 
 @Entity
@@ -23,6 +22,7 @@ public class Participant {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(nullable = false)
     private boolean isOwner;
     
     private String targetName;

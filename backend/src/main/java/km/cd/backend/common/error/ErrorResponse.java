@@ -43,7 +43,7 @@ public class ErrorResponse {
     protected ErrorResponse(final ExceptionCode code, final List<FieldError> errors) {
         this.status = code.getStatus();
         this.code = code.getCode();
-        this.message = message;  // 주어진 메시지를 사용합니다.
+        this.message = code.getMessage();  // 주어진 메시지를 사용합니다.
         this.errors = errors;
     }
     

@@ -3,7 +3,6 @@ package km.cd.backend.challenge.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
-import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.dto.request.ChallengeJoinRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
@@ -49,7 +48,7 @@ public class ChallengeController {
         return ResponseEntity.ok(saved.getId());
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<List<ChallengeSimpleResponse>> getAllChallenge(
         @RequestParam(name = "cursorId", required = false, defaultValue = "0") Long cursorId,
         @RequestParam(name = "size", required = false, defaultValue = "5") int size,
@@ -59,9 +58,26 @@ public class ChallengeController {
         return ResponseEntity.ok(challenges);
     }
     
+    @GetMapping("/list")
+    public ResponseEntity<List<ChallengeInformationResponse>> getAllChallenge() {
+        return ResponseEntity.ok(challengeService.getAllChallenge());
+    }
+    
 
     @GetMapping("/{challengeId}")
-    public ResponseEntity<ChallengeInformationResponse> getChallenge(@PathVariable Long challengeId) {
+    public ResponseEntity<ChallengeInformationResponse> getChallenge(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long challengeId,
+            @RequestParam(name = "code", required = false, defaultValue = "") String code
+    ) {
+        ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId, principalDetails.getUserId(), code);
+        return ResponseEntity.ok(challengeInformationResponse);
+    }
+    
+    @GetMapping("/{challengeId}/detail")
+    public ResponseEntity<ChallengeInformationResponse> getChallenge(
+        @PathVariable Long challengeId
+    ) {
         ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId);
         return ResponseEntity.ok(challengeInformationResponse);
     }
@@ -71,6 +87,7 @@ public class ChallengeController {
         List<ParticipantResponse> participants =  challengeService.getParticipant(challengeId);
         return ResponseEntity.ok(participants);
     }
+
     @GetMapping("/{challengeId}/status")
     public ResponseEntity<ChallengeStatusResponse> checkChallengeStatus(
             @PathVariable(name = "challengeId") Long challengeId,
@@ -81,7 +98,7 @@ public class ChallengeController {
 
     @PostMapping("/{challengeId}/join")
     public ResponseEntity<String> joinChallenge(
-            @PathVariable Long challengeId,
+            @PathVariable(name = "challengeId") Long challengeId,
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestBody ChallengeJoinRequest challengeJoinRequest) {
         challengeService.joinChallenge(challengeId, principalDetails.getUserId(), challengeJoinRequest);

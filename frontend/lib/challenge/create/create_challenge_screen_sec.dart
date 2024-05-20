@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/create/create_challenge_screen_thr.dart';
 import 'package:frontend/model/config/category_list.dart';
 import 'package:frontend/model/controller/challenge_form_controller.dart';
-import 'package:frontend/widgets/custom_button.dart';
+import 'package:frontend/widgets/rtu_button.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/svg.dart';
@@ -72,7 +72,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             color: Colors.transparent,
             width: double.infinity,
-            child: CustomButton(
+            child: RtuButton(
                 text: "다음으로",
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
@@ -90,6 +90,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                         "설정된 챌린지 인증 시작 시간: ${controller.form.certificationStartTime}");
                     logger.d(
                         "설정된 챌린지 인증 종료 시간: ${controller.form.certificationEndTime}");
+
                     Get.to(() => const CreateChallengeThr());
                   }
                 })),
@@ -174,7 +175,8 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                           const BorderSide(color: Palette.mainPurple, width: 2),
                     )),
                 validator: (value) => value!.isEmpty ? '챌린지 이름을 입력해주세요.' : null,
-                onChanged: (value) => controller.updateChallengeName(value),
+                onChanged: (value) =>
+                    controller.updateChallengeName(value.trim()),
               ))
         ])));
   }
@@ -229,7 +231,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                     )),
                 validator: (value) => value!.isEmpty ? '챌린지 소개를 입력해주세요.' : null,
                 onChanged: (value) =>
-                    controller.updateChallengeExplanation(value),
+                    controller.updateChallengeExplanation(value.trim()),
               )),
         ])));
   }
@@ -450,17 +452,17 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                             });
                           },
                           style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all<Size>(
+                            minimumSize: WidgetStateProperty.all<Size>(
                                 const Size(10, 35)),
                             // Adjust the button's size
 
-                            shape: MaterialStateProperty.all<OutlinedBorder>(
+                            shape: WidgetStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
                             backgroundColor: selectedFrequency == index
-                                ? MaterialStateProperty.all<Color>(
+                                ? WidgetStateProperty.all<Color>(
                                     Palette.mainPurple)
                                 : null,
                           ),
@@ -495,55 +497,66 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: List.generate(CategoryList.length, (categoryIndex) {
+              children: List.generate(categoryList.length, (categoryIndex) {
                 return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: ElevatedButton(
                       onPressed: () {
                         if (controller.form.challengeCategory ==
-                            CategoryList[categoryIndex]['category']) {
+                            categoryList[categoryIndex]['category']
+                                .name
+                                .toString()) {
                           controller.updateChallengeCategory('');
                         } else {
                           controller.updateChallengeCategory(
-                              CategoryList[categoryIndex]['category']);
+                              categoryList[categoryIndex]['category']
+                                  .name
+                                  .toString());
                         }
                       },
                       style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
-                          const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        fixedSize: MaterialStateProperty.all<Size>(
-                            const Size.fromHeight(50.0)),
-
-                        // maximumSize: MaterialStateProperty.all<Size>(
-                        //     const Size(110, 50)),
-                        // minimumSize:
-                        //     MaterialStateProperty.all<Size>(const Size(10, 35)),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                          padding:
+                              WidgetStateProperty.all<EdgeInsetsGeometry?>(
+                            const EdgeInsets.symmetric(horizontal: 10),
                           ),
-                        ),
-                        backgroundColor: controller.form.challengeCategory ==
-                                CategoryList[categoryIndex]['category']
-                            ? MaterialStateProperty.all<Color>(
-                                Palette.mainPurple)
-                            : null,
-                      ),
+                          fixedSize: WidgetStateProperty.all<Size>(
+                              const Size.fromHeight(50.0)),
+
+                          // maximumSize: MaterialStateProperty.all<Size>(
+                          //     const Size(110, 50)),
+                          // minimumSize:
+                          //     MaterialStateProperty.all<Size>(const Size(10, 35)),
+                          shape: WidgetStateProperty.all<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          backgroundColor: controller.form.challengeCategory ==
+                                  categoryList[categoryIndex]['category']
+                                      .name
+                                      .toString()
+                              ? WidgetStateProperty.all<Color>(
+                                  Palette.mainPurple)
+                              : WidgetStateProperty.all<Color>(
+                                  Palette.white)),
                       child: Row(
                         children: [
                           SizedBox(
-                            child: CategoryList[categoryIndex]['icon'],
+                            child: categoryList[categoryIndex]['icon'],
                             width: 30,
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            CategoryList[categoryIndex]['category'],
+                            categoryList[categoryIndex]['category']
+                                .name
+                                .toString(),
                             style: TextStyle(
                               fontSize: 11.0,
                               fontWeight: FontWeight.w500,
                               color: controller.form.challengeCategory ==
-                                      CategoryList[categoryIndex]['category']
+                                      categoryList[categoryIndex]['category']
+                                          .name
+                                          .toString()
                                   ? Colors.white
                                   : Colors.black, // 선택된 항목은 진한 파란색으로 설정
                             ),
@@ -587,17 +600,23 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
             changeDay: (value) => setState(() {
               var today = DateTime.now();
               today = DateTime(today.year, today.month, today.day);
+
               if (value.isBefore(today)) {
-                Get.snackbar("알림", "오늘 이후의 날짜를 선택해주세요.",
-                    backgroundColor: Palette.purPle300,
-                    colorText: Colors.white,
-                    snackPosition: SnackPosition.BOTTOM,
-                    margin: const EdgeInsets.all(8));
+                Get.snackbar(
+                  "알림",
+                  "오늘 이후의 날짜를 선택해주세요.",
+                  backgroundColor: Colors.purple[300], // Palette.purPle300을 대체
+                  colorText: Colors.white,
+                  snackPosition: SnackPosition.BOTTOM,
+                  margin: const EdgeInsets.all(8),
+                );
                 return;
               }
+
               selectedDay = value;
-              final DateFormat formatter = DateFormat('yyyy-MM-dd');
-              controller.updateStartDate(formatter.format(value));
+              final String formattedDate =
+                  DateFormat('yyyy-MM-dd').format(value);
+              controller.updateStartDate(formattedDate);
             }),
             enableWeeknumberText: false,
             weeknumberColor: Palette.grey200,

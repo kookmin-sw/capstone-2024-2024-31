@@ -1,13 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_information.dart';
 import 'package:frontend/challenge/detail/widgets/detail_widget_photoes.dart';
 import 'package:frontend/challenge/join/join_challenge_screen_sec.dart';
 import 'package:frontend/model/config/palette.dart';
-import 'package:frontend/model/data/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:frontend/widgets/rtu_button.dart';
+import 'package:get/get.dart';
+import 'package:frontend/widgets/rtu_divider.dart';
 
 class JoinChallengeScreen extends StatefulWidget {
   final Challenge challenge;
@@ -20,11 +21,6 @@ class JoinChallengeScreen extends StatefulWidget {
 
 class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   bool showVerificationInput = false;
-  bool isCheckedAll = false;
-  bool _isCheckChallengeInform = false;
-  bool _isCheckPersonalInform = false;
-  bool _isCheckJoin = false;
-
   List<bool> isCheckList = [false, false, false];
 
   @override
@@ -32,94 +28,58 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {},
-          ),
-          title: const Text(
-            '루틴업 참가하기',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Pretendard',
-            ),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+        title: const Text(
+          '루틴업 참가하기',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pretendard',
           ),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: SingleChildScrollView(
           child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              child: Column(
-                children: [
-                  PhotoesWidget(
-                      screenHeight: screenSize.height,
-                      imageUrl: widget.challenge.challengeImageUrls[0]),
-                  InformationWidget(challenge: widget.challenge),
-                  Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                      child: Divider(thickness: 10, color: Palette.grey50)),
-                  ExampleMsg(screenSize),
-                  Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                      child: Divider(thickness: 10, color: Palette.grey50)),
-                  AgreeCheckWidget(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                    color: Colors.transparent,
-                    width: double.infinity,
-                    child: isCheckList.every((element) => element == true)
-                        ? InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => JoinChallengeScreen_sec(
-                                      challenge: widget.challenge),
-                                ),
-                              );
-                            },
-                            child: SvgPicture.asset(
-                              'assets/svgs/next_btn_checked.svg',
-                              // width: double.infinity,
-                              // height: 30,
-                            ))
-                        : SvgPicture.asset(
-                            'assets/svgs/next_btn_unchecked.svg',
-                            // width: double.infinity,
-                            // height: 30,
-                          ),
-                  ),
-                  // inputPenaltyName(screenSize),
-                  // if (showVerificationInput) ...[
-                  //   SizedBox(height: 5),
-                  //   verificationInput(screenSize),
-                  // ],
-                  // Container(
-                  //   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                  //   color: Colors.transparent,
-                  //   width: double.infinity,
-                  //   child: InkWell(
-                  //     onTap: () {},
-                  //     child: SvgPicture.asset(
-                  //       'assets/svgs/join_challenge_btn.svg',
-                  //       // width: double.infinity,
-                  //       // height: 30,
-                  //     ),
-                  //   ),
-                  // )
-                ],
-              )),
-        ));
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Column(children: [
+                PhotoesWidget(
+                    screenHeight: screenSize.height,
+                    imageUrl: widget.challenge.challengeImagePaths[0]),
+                InformationWidget(challenge: widget.challenge),
+                const RtuDivider(),
+                exampleMsg(screenSize),
+                const RtuDivider(),
+                AgreeCheckWidget(),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                  color: Colors.transparent,
+                  width: double.infinity,
+                  child: RtuButton(
+                      onPressed: () {
+                        Get.to(JoinChallengeSecScreen(
+                            challenge: widget.challenge));
+                      },
+                      text: '다음으로',
+                      disabled:
+                          isCheckList.every((element) => element) == false),
+                ),
+              ]))),
+    );
   }
 
-  Widget ExampleMsg(Size _screenSize) {
+  Widget exampleMsg(Size screenSize) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,10 +92,10 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   width: 30,
                 ),
                 const SizedBox(width: 5),
-                Text(
+                const Text(
                   "루틴업 성공 시",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'Pretendard',
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
@@ -144,9 +104,10 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
               ],
             ),
             const SizedBox(height: 10),
-            Text(
-              "나의 갓생을 자랑할 수 있어요!",
-              style: const TextStyle(
+            const Text(
+              "수신자에게 나의 성공 소식이 전해져요.\n나의 갓생을 자랑할 수 있어요!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
@@ -155,9 +116,9 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             const SizedBox(height: 10),
             BuildImageContainer(
               path: 'assets/images/success_msg.jpg',
-              color: Palette.green,
+              color: Palette.white,
               isSuccess: true,
-              screenSize: _screenSize,
+              screenSize: screenSize * 0.7,
               isJoinScreen: true,
             ),
             const SizedBox(height: 20),
@@ -169,10 +130,10 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   width: 30,
                 ),
                 const SizedBox(width: 5),
-                Text(
+                const Text(
                   "루틴업 실패 시",
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
                       fontFamily: 'Pretendard',
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
@@ -181,9 +142,10 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
               ],
             ),
             const SizedBox(height: 10),
-            Text(
-              "실패 시 채찍의 한마디로 갓생을 향해 나아가요!",
-              style: const TextStyle(
+            const Text(
+              "수신자에게 나의 실패 소식이 전해져요.\n채찍의 한마디로 갓생을 향해 나아가요!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
@@ -192,9 +154,9 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
             const SizedBox(height: 10),
             BuildImageContainer(
                 path: 'assets/images/fail_msg.jpg',
-                color: Palette.red,
+                color: Palette.white,
                 isSuccess: false,
-                screenSize: _screenSize,
+                screenSize: screenSize * 0.7,
                 isJoinScreen: true),
           ],
         ));
@@ -206,7 +168,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
         child: Form(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
+          const Text(
             "결과 알림 받을 전화번호 입력해 주세요.",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -214,7 +176,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 fontFamily: 'Pretendard',
                 color: Palette.grey300),
           ),
-          Text(
+          const Text(
             "(성공을 가장 알리고 싶은 or 실패를 가장 숨기고 싶은)",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -222,7 +184,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 fontFamily: 'Pretendard',
                 color: Palette.grey200),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -233,33 +195,34 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   // 휴대폰 번호는 보통 11자리입니다.
                   keyboardType: TextInputType.phone,
                   // 키보드 타입을 전화번호로 설정합니다.
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       fontSize: 11,
                       fontFamily: 'Pretendard'),
                   decoration: InputDecoration(
                       hintText: "010-1234-5678",
                       // 예시 번호를 힌트로 표시합니다.
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w300,
                         color: Palette.grey200,
                       ),
-                      counterStyle: TextStyle(
+                      counterStyle: const TextStyle(
                           fontSize: 9,
                           color: Palette.grey200,
                           fontFamily: 'Pretendard'),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 10),
                       filled: true,
                       fillColor: Palette.greySoft,
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Palette.greySoft)),
+                          borderSide:
+                              const BorderSide(color: Palette.greySoft)),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide:
-                              BorderSide(color: Palette.mainPurple, width: 2))),
+                          borderSide: const BorderSide(
+                              color: Palette.mainPurple, width: 2))),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return '휴대폰 번호를 입력하세요.';
@@ -294,7 +257,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   Widget verificationInput(Size screenSize) {
     return Container(
         // margin: EdgeInsets.only(left: 20, right: 20),
-        padding: EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
             // border: Palette.greySoft, // 배경색 설정
             borderRadius: BorderRadius.circular(10)),
@@ -302,8 +265,8 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 5),
-            Text(
+            const SizedBox(height: 5),
+            const Text(
               "패널티 휴대폰 인증",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -312,8 +275,8 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                 color: Palette.grey300,
               ),
             ),
-            SizedBox(height: 3),
-            Text(
+            const SizedBox(height: 3),
+            const Text(
               "인증 완료시, 본 전화번호 소유자 개인정보 수집에 동의합니다.",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -321,37 +284,37 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   fontFamily: 'Pretendard',
                   color: Palette.grey200),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 SizedBox(
                   width: screenSize.width * 0.4,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       fontSize: 11,
                       fontFamily: 'Pretendard',
                     ),
                     decoration: InputDecoration(
                       hintText: "4자리 입력",
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w300,
                         color: Palette.grey200,
                       ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 10),
                       filled: true,
                       fillColor: Palette.white,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Palette.greySoft),
+                        borderSide: const BorderSide(color: Palette.greySoft),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
-                        borderSide:
-                            BorderSide(color: Palette.mainPurple, width: 2),
+                        borderSide: const BorderSide(
+                            color: Palette.mainPurple, width: 2),
                       ),
                     ),
                     validator: (value) {
@@ -365,7 +328,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                     },
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -393,7 +356,7 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           "확인해주세요",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -426,12 +389,12 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   Widget checkBoxWidget(
       String text, bool isChecked, void Function(bool?) onChanged) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       width: double.infinity,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 10,
               fontFamily: 'Pretendard',

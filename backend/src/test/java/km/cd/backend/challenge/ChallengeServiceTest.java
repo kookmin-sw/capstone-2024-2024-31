@@ -15,8 +15,8 @@ import km.cd.backend.common.error.CustomException;
 import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.common.utils.redis.RedisUtil;
 import km.cd.backend.helper.IntegrationTest;
-import km.cd.backend.user.User;
-import km.cd.backend.user.UserRepository;
+import km.cd.backend.user.domain.User;
+import km.cd.backend.user.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -126,7 +126,7 @@ class ChallengeServiceTest extends IntegrationTest {
     @DisplayName("[성공] 챌린지와 인증 횟수가 주어지면 챌린지 진행 현황 조회는 성공한다.")
     void checkChallengeStatus_챌린지와_인증_횟수가_주어지면_챌린지_진행_현황_조회는_성공() {
         // 반환값 설정
-        ChallengeStatusResponse expectedResponseDto = ChallengeMapper.INSTANCE.toChallengeStatusResponse(challenge, 0L);
+        ChallengeStatusResponse expectedResponseDto = ChallengeMapper.INSTANCE.toChallengeStatusResponse(challenge, 0L, 0, 0 ,0,0.0);
         
         // Mock behavior
         when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));

@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
-import 'package:frontend/model/data/challenge_form.dart';
+import 'package:frontend/model/data/challenge/challenge_form.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:intl/intl.dart';
 
 class ChallengeFormController extends GetxController {
   final _form = ChallengeForm(
@@ -13,7 +15,7 @@ class ChallengeFormController extends GetxController {
     challengeImages: [],
     challengePeriod: "",
     challengeCategory: "",
-    startDate: DateTime.now().toString(),
+    startDate: DateFormat('yyyy-MM-dd').format(DateTime.now()),  // ISO 8601 형식으로 변환
     certificationFrequency: "매일",
     certificationStartTime: "0",
     certificationEndTime: "24",
@@ -129,23 +131,28 @@ class ChallengeFormController extends GetxController {
   }
 
   dio.FormData toFormData() {
+    String jsonData = jsonEncode({
+      "isPrivate": form.isPrivate,
+      "privateCode" : form.privateCode,
+      "challengeName": form.challengeName,
+      "challengeExplanation": form.challengeExplanation,
+      "challengePeriod": form.challengePeriod,
+      "challengeCategory": form.challengeCategory,
+      "startDate": form.startDate,
+      "certificationFrequency": form.certificationFrequency,
+      "certificationStartTime": form.certificationStartTime,
+      "certificationEndTime": form.certificationEndTime,
+      "certificationExplanation": form.certificationExplanation,
+      "isGalleryPossible": form.isGalleryPossible,
+      "maximumPeople": form.maximumPeople,
+    });
+
+    if (kDebugMode) {
+      print('JSON Data: $jsonData');
+    }
+
     return dio.FormData.fromMap({
-      "json": dio.MultipartFile.fromString(
-          jsonEncode({
-            "isPrivate": form.isPrivate,
-            "challengeName": form.challengeName,
-            "challengeExplanation": form.challengeExplanation,
-            "challengePeriod": form.challengePeriod,
-            "challengeCategory": form.challengeCategory,
-            "startDate": form.startDate,
-            "certificationFrequency": form.certificationFrequency,
-            "certificationStartTime": form.certificationStartTime,
-            "certificationEndTime": form.certificationEndTime,
-            "certificationExplanation": form.certificationExplanation,
-            "isGalleryPossible": form.isGalleryPossible,
-            "maximumPeople": form.maximumPeople,
-          }),
-          contentType: MediaType('application', 'json')),
+      "json": jsonData,
       "images": form.challengeImages
           .map((image) => dio.MultipartFile.fromFileSync(image.path,
               contentType: MediaType('image', 'jpeg')))
@@ -160,5 +167,16 @@ class ChallengeFormController extends GetxController {
               contentType: MediaType('image', 'jpeg'))
           : null,
     });
+  }
+
+  void printFormData() {
+    final formData = toFormData();
+    print('FormData:');
+    for (var field in formData.fields) {
+      print('Field: ${field.key} = ${field.value}');
+    }
+    for (var file in formData.files) {
+      print('File: ${file.key} = ${file.value.filename}');
+    }
   }
 }

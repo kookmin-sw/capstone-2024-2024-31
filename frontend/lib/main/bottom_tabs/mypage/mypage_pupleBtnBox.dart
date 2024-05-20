@@ -1,75 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/point_screen.dart.dart';
 import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/tab_follow_screen.dart';
-import 'package:frontend/main/bottom_tabs/mypage/follow_point_screen/point_screen.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/controller/user_controller.dart';
 import 'package:get/get.dart';
 
 class PurpleThreeBox extends StatelessWidget {
   PurpleThreeBox({super.key});
 
-  final List<dynamic> _followerList = [
-    {
-      'image': 'assets/images/image.png',
-      'name': '루틴업 공식계정',
-      'isFollowing': false
-    },
-    {
-      'image': 'assets/images/image.png',
-      'name': '루틴업 공식계정',
-      'isFollowing': true
-    },
-    {
-      'image': 'assets/images/image.png',
-      'name': '루틴업 샤넬',
-      'isFollowing': false
-    },
-    {
-      'image': 'assets/images/image.png',
-      'name': '코코 공식계정',
-      'isFollowing': false
-    },
-    {
-      'image': 'assets/images/image.png',
-      'name': '일론머스크 공식계정',
-      'isFollowing': true
-    },
-    {
-      'image': 'assets/images/image.png',
-      'name': '루틴업 만만세',
-      'isFollowing': false
-    },
-    {'image': 'assets/images/image.png', 'name': '형아', 'isFollowing': true}
-  ];
-
-  final List<dynamic> _followingList = [
-    {
-      'image': 'assets/images/image.png',
-      'name': '루틴업 공식계정',
-      'isFollowing': true
-    },
-    {
-      'image': 'assets/images/image.png',
-      'name': '루틴업 샤넬',
-      'isFollowing': false
-    },
-    {
-      'image': 'assets/images/image.png',
-      'name': '코코 공식계정',
-      'isFollowing': false
-    },
-    {
-      'image': 'assets/images/image.png',
-      'name': '일론머스크 공식계정',
-      'isFollowing': true
-    },
-    {
-      'image': 'assets/images/image.png',
-      'name': '루틴업 만만세',
-      'isFollowing': false
-    },
-    {'image': 'assets/images/image.png', 'name': '형아', 'isFollowing': true}
-  ];
+  final UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -85,13 +24,15 @@ class PurpleThreeBox extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            button(context, screenSize, _followingList.length, '팔로잉'),
+            button(context, screenSize, userController.user.following.length,
+                '팔로잉'),
             Container(
               width: 1,
               height: 40,
               color: Palette.greySoft,
             ),
-            button(context, screenSize, _followerList.length, '팔로워'),
+            button(context, screenSize, userController.user.followers.length,
+                '팔로워'),
             Container(
               width: 1,
               height: 40,
@@ -108,14 +49,14 @@ class PurpleThreeBox extends StatelessWidget {
         onTap: () {
           if (text == '팔로잉') {
             Get.to(() => TabFollowScreen(
-                  followerList: _followerList,
-                  followingList: _followingList,
+                  followerList: userController.user.following,
+                  followingList: userController.user.followers,
                   isFromFollowing: true,
                 ));
           } else if (text == '팔로워') {
             Get.to(() => TabFollowScreen(
-                  followerList: _followerList,
-                  followingList: _followingList,
+                  followerList: userController.user.following,
+                  followingList: userController.user.followers,
                   isFromFollowing: false,
                 ));
           } else {
@@ -131,7 +72,7 @@ class PurpleThreeBox extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  isPoint ? '$number point' : number.toString(),
+                  userController.user.point.toString(),
                   style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Pretendard',

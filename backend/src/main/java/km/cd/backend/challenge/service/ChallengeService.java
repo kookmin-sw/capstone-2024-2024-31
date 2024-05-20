@@ -1,6 +1,8 @@
 package km.cd.backend.challenge.service;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -8,6 +10,7 @@ import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.domain.Participant;
 import km.cd.backend.challenge.domain.mapper.ParticipantMapper;
+import km.cd.backend.challenge.dto.enums.ChallengeStatus;
 import km.cd.backend.challenge.dto.request.ChallengeJoinRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
@@ -25,11 +28,10 @@ import km.cd.backend.common.error.ExceptionCode;
 import km.cd.backend.common.utils.RandomUtil;
 import km.cd.backend.common.utils.redis.RedisUtil;
 import km.cd.backend.common.utils.s3.S3Uploader;
-import km.cd.backend.common.utils.sms.SmsCertificationDao;
 import km.cd.backend.common.utils.sms.SmsUtil;
 import km.cd.backend.community.repository.PostRepository;
-import km.cd.backend.user.User;
-import km.cd.backend.user.UserRepository;
+import km.cd.backend.user.domain.User;
+import km.cd.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +61,14 @@ public class ChallengeService {
 
         // 프론트로부터 넘겨받은 챌린지 데이터
         Challenge challenge = ChallengeMapper.INSTANCE.requestToEntity(challengeCreateRequest);
+        
+        // 챌린지 상태 설정
+        boolean isProgress = challenge.getStartDate().isEqual(LocalDate.now()) || challenge.getStartDate().isBefore(LocalDate.now());
+        challenge.setStatus(
+            isProgress ?
+                ChallengeStatus.IN_PROGRESS.getDescription() :
+                ChallengeStatus.NOT_STARTED.getDescription()
+        );
 
         // participant 생성
         Participant creator = new Participant();
@@ -74,9 +84,8 @@ public class ChallengeService {
         List<String> imagePaths = images.stream().map(
             image -> s3Uploader.uploadFileToS3(image, FilePathEnum.CHALLENGES.getPath())
             ).toList();
-            challenge.setChallengeImagePaths(imagePaths);
-            
-
+        challenge.setChallengeImagePaths(imagePaths);
+        
         // 인증 성공 이미지 업로드
         String successImagePath = s3Uploader.uploadFileToS3(successfulVerificationImage, FilePathEnum.CHALLENGES.getPath());
         challenge.setSuccessfulVerificationImage(successImagePath);
@@ -126,16 +135,58 @@ public class ChallengeService {
     
     public ChallengeStatusResponse checkChallengeStatus(Long challengeId, Long userId) {
         Challenge challenge = validateExistChallenge(challengeId);
-
+        List<Participant> participants = challenge.getParticipants();
         Long countCertifications = postRepository.countCertification(challengeId, userId);
+        
+        int fullAchievementCount = 0;
+        int highAchievementCount = 0;
+        int lowAchievementCount = 0;
+        int overallAverageAchievement = 0;
+        
+        for (Participant participant : participants) {
+            Long participantUserId = participant.getUser().getId();
+            Long counts = postRepository.countCertification(challengeId, participantUserId);
+            double percentage = (double) counts / challenge.getTotalCertificationCount() * 100;
+            
+            if (percentage == 100.0) {
+                fullAchievementCount += 1;
+            } else if (percentage >= 80.0) {
+                highAchievementCount += 1;
+            } else {
+                lowAchievementCount += 1;
+            }
+            
+            if (willAchieveTarget(challenge, countCertifications)) {
+                overallAverageAchievement += 1;
+            }
+        }
+        double overallAverageAchievementRate = (double) overallAverageAchievement / participants.size() * 100;
+        overallAverageAchievementRate = Math.ceil(overallAverageAchievementRate * 10) / 10.0;
 
-        return ChallengeMapper.INSTANCE.toChallengeStatusResponse(challenge, countCertifications);
-    }
-
-    public List<Challenge> findChallengesByEndDate(Date endDate) {
-        return challengeRepository.findByEndDate(endDate);
+        return ChallengeMapper.INSTANCE.toChallengeStatusResponse(
+            challenge,
+            countCertifications,
+            fullAchievementCount,
+            highAchievementCount,
+            lowAchievementCount,
+            overallAverageAchievementRate
+        );
     }
     
+    private boolean willAchieveTarget(Challenge challenge, Long countCertifications) {
+        int requiredCount = (int) Math.ceil((90.0 / 100) * challenge.getTotalCertificationCount());
+        int challengeFrequency = challenge.getTotalCertificationCount() / challenge.getChallengePeriod();
+        int futureCount = countCertifications.intValue() + (challengeFrequency * calculateRemainingWeeks(challenge.getEndDate()));
+        return futureCount >= requiredCount;
+    }
+    
+    private int calculateRemainingWeeks(LocalDate endDate) {
+        LocalDate currentDate = LocalDate.now();
+        if (currentDate.isAfter(endDate)) {
+            return 0;
+        }
+        return (int) ChronoUnit.WEEKS.between(currentDate, endDate);
+    }
     public void finishChallenge(Challenge challenge) {
         // 참여자 성공/실패 결과 전송
         Integer totalCount = challenge.getTotalCertificationCount();
@@ -144,18 +195,52 @@ public class ChallengeService {
             Long countCertifications = postRepository.countCertification(challenge.getId(), participant.getId());
             boolean isSuccess = isOverNinetyPercent(totalCount, countCertifications);
             
+            distributeRewards(isSuccess, countCertifications, participant.getUser());
             smsUtil.sendResult(participant, challenge.getChallengeName(), participant.getUser().getName(), isSuccess);
         }
         
         // 챌린지 상태 변경
-        challenge.finishChallenge();
+        challenge.setStatus(ChallengeStatus.COMPLETED.getDescription());
         challengeRepository.save(challenge);
+    }
+    
+    public void startChallenge(Challenge challenge) {
+        challenge.setStatus(ChallengeStatus.IN_PROGRESS.getDescription());
+        challengeRepository.save(challenge);
+    }
+    private void distributeRewards(boolean isSuccess, Long countCertifications, User user) {
+        if (isSuccess) {
+            int challengePoint = (int) (countCertifications * 10);
+            user.setPoint(user.getPoint() + challengePoint);
+            userRepository.save(user);
+        }
     }
     private boolean isOverNinetyPercent(Integer totalCount, Long countCertifications) {
         double ratio = (double) countCertifications / totalCount;
         return ratio >= 0.9;
     }
-
+    
+    public ChallengeInformationResponse getChallenge(Long challengeId, Long userId, String code) {
+        // 1. 도전 과제의 존재 여부를 확인합니다.
+        Challenge challenge = validateExistChallenge(challengeId);
+        
+        // 2. 참가자 정보를 가져옵니다.
+        Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
+            .orElse(null);
+        
+        // 3. 챌린지 참여자가 아닐 때
+        if (participant == null) {
+            // 비공개 챌린지이고 코드가 다르면 못 봄
+            if (challenge.getIsPrivate() && !challenge.getPrivateCode().equals(code)) {
+                throw new CustomException(ExceptionCode.FORBIDDEN_ERROR);
+            }
+        }
+        
+        // 5. 도전 과제 정보를 응답으로 반환합니다.
+        return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
+    }
+    
+    
     public ChallengeInformationResponse getChallenge(Long challengeId) {
         Challenge challenge = validateExistChallenge(challengeId);
         return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
@@ -164,7 +249,18 @@ public class ChallengeService {
     public List<ChallengeSimpleResponse> getAllChallenge(Long cursorId, int size, ChallengeFilter filter) {
         List<Challenge> challenges = challengeRepository.findByChallengeWithFilterAndPaging(cursorId, size, filter);
 
-        return challenges.stream().map(challenge -> ChallengeMapper.INSTANCE.entityToSimpleResponse(challenge)).toList();
+        return challenges.stream().map(ChallengeMapper.INSTANCE::entityToSimpleResponse).toList();
+    }
+    
+    public List<ChallengeInformationResponse> getAllChallenge() {
+        Iterable<Challenge> challenges = challengeRepository.findAll();
+        List<ChallengeInformationResponse> responses = new ArrayList<>();
+        
+        for (Challenge challenge : challenges) {
+            responses.add(ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge));
+        }
+        
+        return responses;
     }
     
     public List<ParticipantResponse> getParticipant(Long challengeId) {

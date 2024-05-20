@@ -11,6 +11,8 @@ public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태
     PARTICIPANT_NOT_FOUND_ERROR(404, "PARTICIPANT_001", "해당되는 참가자를 찾을 수 없습니다."),
     
     POST_NOT_FOUND(404, "POST_001", "해당되는 id 의 글을 찾을 수 없습니다."),
+    SAME_REPORTED_USER_ID(400, "POST_001", "사용자 ID와 작성자 ID가 동일합니다."),
+    ALREADY_REPORTED(400, "POST_002", "이미 신고한 사용자입니다."),
     
     REPLY_NOT_FOUND(404, "COMMENT_001", "해당되는 id의 댓글을 찾을 수 없습니다."),
     PARENT_COMMENT_NOT_FOUND(400, "COMMENT_002", "상위 댓글을 찾을 수 없습니다."),
@@ -19,7 +21,6 @@ public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태
     
     ALREADY_LIKED(400, "LIKE_001", "이미 '좋아요'를 누른 상태입니다."),
     LIKE_NOT_FOUND(400, "LIKE_003", "'좋아요'를 누르지 않은 상태입니다."),
-    IMAGE_IS_NULL(400, "IMAGE_001", "이미지를 확인해주세요."),
     
     ALREADY_SIGNED_UP_ERROR(400, "SIGNUP_001", "이미 화원가입 된 이메일입니다."),
     INVALID_EMAIL_PASSWORD_ERROR(400, "AUTH_003", "유효하지 않은 이메일 또는 비밀번호입니다."),
@@ -34,6 +35,8 @@ public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태
     USER_CAN_NOT_BE_NULL(400, "USER_005", "사용자는 null이 될 수 없습니다."),
     USER_ID_NOT_FOUND(404, "USER_006", "해당되는 id의 사용자를 찾을 수 없습니다."),
     
+    IMAGE_IS_NULL(400, "IMAGE_001", "이미지를 확인해주세요."),
+    IMAGE_DELETION_ERROR(403, "IMG_001", "이미지를 삭제할 수 없습니다."),
     
     UNAUTHORIZED_ERROR(401, "AUTH_001", "인증되지 않았습니다. 접근 권한이 없습니다."),
     FORBIDDEN_ERROR(403, "AUTH_002", "이 리소스에 접근할 권한이 없습니다."),
@@ -42,6 +45,10 @@ public enum ExceptionCode { // 예외 발생시, body에 실어 날려줄 상태
     // @RequestBody 및 @RequestParam, @PathVariable 값이 유효하지 않음
     NOT_VALID_ERROR(404, "G011", "Validation Exception 발생"),
     INTERNAL_SERVER_ERROR(500, "SERVER_001", "서버 내부 오류가 발생했습니다."),
+    
+    FRIEND_REQUEST_NOT_FOUND(404, "FR_001", "친구 요청이 없습니다."),
+    CANNOT_FOLLOW_YOURSELF(404, "FR_002", "본인을 팔로우할 수 없습니다."),
+    ALREADY_FOLLOWING(404, "FR_003", "이미 팔로우 하셨습니다."),
     
     WRONG_AUTHENTICATION_CODE(400, "SMS_001", "인증번호가 일치하지 않습니다.");
     

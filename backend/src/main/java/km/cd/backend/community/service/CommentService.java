@@ -9,8 +9,8 @@ import km.cd.backend.community.dto.CommentResponse;
 import km.cd.backend.community.mapper.CommentMapper;
 import km.cd.backend.community.repository.CommentRepository;
 import km.cd.backend.community.repository.PostRepository;
-import km.cd.backend.user.User;
-import km.cd.backend.user.UserRepository;
+import km.cd.backend.user.domain.User;
+import km.cd.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +41,7 @@ public class CommentService {
             Comment parent = commentRepository.findById(parentId)
                     .orElseThrow(() -> new CustomException(ExceptionCode.PARENT_COMMENT_NOT_FOUND));
             comment.setParent(parent);
+            parent.getChildren().add(comment);
         }
         commentRepository.save(comment);
         return CommentMapper.INSTANCE.entityToResponse(comment);

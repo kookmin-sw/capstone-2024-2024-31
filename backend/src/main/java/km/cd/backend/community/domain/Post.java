@@ -3,7 +3,7 @@ package km.cd.backend.community.domain;
 import jakarta.persistence.*;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.common.domain.BaseTimeEntity;
-import km.cd.backend.user.User;
+import km.cd.backend.user.domain.User;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -33,13 +33,16 @@ public class Post extends BaseTimeEntity {
   @Setter
   private String image;
 
-  private Boolean isRejected;
+  private Boolean isRejected = false;
 
   @OneToMany(mappedBy = "post", orphanRemoval = true)
   private final List<Comment> comments = new ArrayList<>();
 
   @OneToMany(mappedBy = "post", orphanRemoval = true)
   private final List<Like> likes = new ArrayList<>();
+  
+  @ElementCollection(fetch = FetchType.LAZY)
+  private List<Long> report = new ArrayList<>();
 
   @Builder
   public Post(String title, String content, Challenge challenge, User author) {

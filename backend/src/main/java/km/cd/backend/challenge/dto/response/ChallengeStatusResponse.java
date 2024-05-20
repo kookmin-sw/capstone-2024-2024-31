@@ -1,7 +1,7 @@
 package km.cd.backend.challenge.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.Date;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,10 +21,10 @@ public class ChallengeStatusResponse {
     private Integer challengePeriod;
     
     @Schema(description = "챌린지 시작일")
-    private Date startDate;
+    private LocalDate startDate;
     
     @Schema(description = "챌린지 종료일")
-    private Date endDate;
+    private LocalDate endDate;
     
     @Schema(description = "인증 시작 시간")
     private Integer certificationStartTime;
@@ -43,4 +43,14 @@ public class ChallengeStatusResponse {
     
     @Schema(description = "전체 인증 횟수")
     private int totalCertificationCount;
+    
+    private Double currentAchievementRate;
+    
+    private Integer fullAchievementCount;
+    
+    private Integer highAchievementCount;
+    
+    private Integer lowAchievementCount;
+    
+    private Double overallAverageAchievementRate;
 }

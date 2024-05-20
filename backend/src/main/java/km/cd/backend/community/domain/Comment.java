@@ -1,7 +1,8 @@
 package km.cd.backend.community.domain;
 
 import jakarta.persistence.*;
-import km.cd.backend.user.User;
+import km.cd.backend.common.domain.BaseTimeEntity;
+import km.cd.backend.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @Table(name = "comments")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,38 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/main/bottom_tabs/mypage/widget/categoryButtonPress.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
-import 'package:frontend/model/data/user.dart';
 import 'package:get/get.dart';
+import 'package:frontend/model/data/challenge/challenge_category.dart';
 
 class UserInformation extends StatelessWidget {
   UserInformation({super.key});
 
   final UserController userController = Get.find<UserController>();
 
-  final int followingNum = 10;
-  final int followerNum = 1;
-  final int level = 1;
-  final String imgUrl = '';
   final tagTextStyle = const TextStyle(
       fontFamily: 'Pretender',
       fontWeight: FontWeight.w600,
       fontSize: 11,
       color: Palette.purPle500);
 
-  List<String> categoryList = [];
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final List<ChallengeCategory> categoryList =
+        userController.user.categories; // Set을 List로 변환
 
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
         child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               imageStackLevel(),
@@ -42,6 +36,7 @@ class UserInformation extends StatelessWidget {
                 const SizedBox(height: 4),
                 if (categoryList.isNotEmpty)
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         "루티너님의 관심사는",
@@ -62,10 +57,10 @@ class UserInformation extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4),
                                 child: Text(
-                                  "#${categoryList[index]}",
+                                  "#${categoryList[index].name}",
                                   style: tagTextStyle,
                                 ));
-                          })))
+                          }).toList()))
                     ],
                   )
                 else
@@ -84,21 +79,28 @@ class UserInformation extends StatelessWidget {
         width: 90,
         height: 90,
         child: Stack(children: [
-          CircleAvatar(
-            radius: 70,
-            backgroundImage: NetworkImage(userController.user.avatar),
-          ),
+          userController.user.avatar != null
+              ? CircleAvatar(
+                  radius: 70,
+                  backgroundImage: NetworkImage(userController.user.avatar),
+                )
+              : CircleAvatar(
+                  radius: 70,
+                  backgroundColor: Colors.grey[200],
+                  child: const Icon(Icons.person,
+                      size: 70, color: Palette.purPle200),
+                ),
           Positioned(
               left: 65,
               top: 65,
               child: SvgPicture.asset('assets/svgs/level_stack.svg')),
-          Positioned(
+          const Positioned(
               left: 75,
               top: 67,
               child: Text(
-                level.toString(),
+                "1",
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Pretendard',
@@ -108,10 +110,9 @@ class UserInformation extends StatelessWidget {
   }
 
   Widget nameText(Size screenSize) {
-    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
       SizedBox(
           width: userController.user.name.length * 25,
-          height: 35,
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
@@ -130,6 +131,7 @@ class UserInformation extends StatelessWidget {
               )
             ],
           )),
+      const SizedBox(width: 5),
       const Text(
         '님 반가워요!',
         style: TextStyle(
