@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/community/create_posting_screen.dart';
 import 'package:frontend/main/main_screen.dart';
 import 'package:get/get.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
@@ -44,7 +45,7 @@ class ChallengeWidgets {
     );
   }
 
-  static Widget buildBottomNavigationBar() {
+  static Widget buildBottomNavigationBar(int challengeId, bool isPossibleGallery) {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
@@ -52,7 +53,9 @@ class ChallengeWidgets {
       color: Colors.transparent,
       width: double.infinity,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Get.to(CreatePostingScreen(challengeId: challengeId, isPossibleGallery: isPossibleGallery));
+        },
         child: SvgPicture.asset(
           'assets/svgs/certification_bottom_btn.svg',
         ),
