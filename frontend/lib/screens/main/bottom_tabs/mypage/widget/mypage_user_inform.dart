@@ -88,9 +88,10 @@ class UserInformation extends StatelessWidget {
   }
 
   Widget nameText(Size screenSize) {
+    int nameLength = userController.user.name.length;
     return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       SizedBox(
-          width: screenSize.width * 0.3,
+          width: nameLength > 5 ? screenSize.width * 0.3 :userController.user.name.length * 25,
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
