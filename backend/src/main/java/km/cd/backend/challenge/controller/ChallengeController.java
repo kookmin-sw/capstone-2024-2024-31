@@ -3,6 +3,7 @@ package km.cd.backend.challenge.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import km.cd.backend.challenge.domain.Challenge;
+import km.cd.backend.challenge.domain.mapper.ChallengeMapper;
 import km.cd.backend.challenge.dto.request.ChallengeJoinRequest;
 import km.cd.backend.challenge.dto.response.ChallengeInformationResponse;
 import km.cd.backend.challenge.dto.request.ChallengeInviteCodeRequest;
@@ -33,7 +34,7 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Long> createChallenge(
+    public ResponseEntity<ChallengeSimpleResponse> createChallenge(
             @RequestPart(name = "json") ChallengeCreateRequest challengeCreateRequest,
             @RequestPart(name = "images") List<MultipartFile> images,
             @RequestPart(name = "successImage") MultipartFile successfulVerificationImage,
@@ -45,10 +46,11 @@ public class ChallengeController {
             images,
             successfulVerificationImage,
             failedVerificationImage);
-        return ResponseEntity.ok(saved.getId());
+        ChallengeSimpleResponse challengeSimpleResponse = ChallengeMapper.INSTANCE.entityToSimpleResponse(saved);
+        return ResponseEntity.ok(challengeSimpleResponse);
     }
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     public ResponseEntity<List<ChallengeSimpleResponse>> getAllChallenge(
         @RequestParam(name = "cursorId", required = false, defaultValue = "0") Long cursorId,
         @RequestParam(name = "size", required = false, defaultValue = "5") int size,
@@ -57,12 +59,7 @@ public class ChallengeController {
         List<ChallengeSimpleResponse> challenges = challengeService.getAllChallenge(cursorId, size, filter);
         return ResponseEntity.ok(challenges);
     }
-    
-    @GetMapping("/list")
-    public ResponseEntity<List<ChallengeInformationResponse>> getAllChallenge() {
-        return ResponseEntity.ok(challengeService.getAllChallenge());
-    }
-    
+
 
     @GetMapping("/{challengeId}")
     public ResponseEntity<ChallengeInformationResponse> getChallenge(
@@ -73,15 +70,7 @@ public class ChallengeController {
         ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId, principalDetails.getUserId(), code);
         return ResponseEntity.ok(challengeInformationResponse);
     }
-    
-    @GetMapping("/{challengeId}/detail")
-    public ResponseEntity<ChallengeInformationResponse> getChallenge(
-        @PathVariable Long challengeId
-    ) {
-        ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId);
-        return ResponseEntity.ok(challengeInformationResponse);
-    }
-    
+
     @GetMapping(value = "/{challengeId}/participant")
     public ResponseEntity<List<ParticipantResponse>> getParticipant(@PathVariable Long challengeId) {
         List<ParticipantResponse> participants =  challengeService.getParticipant(challengeId);

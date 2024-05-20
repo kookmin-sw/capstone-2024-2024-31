@@ -37,6 +37,7 @@ public interface PostMapper {
         .filter(comment -> !comment.hasParent())
         .map(comment -> new CommentResponse(
             comment.getId(),
+            comment.getParent() != null ? comment.getId() : null,
             comment.getAuthor().getName(),
             comment.getAuthor().getAvatar(),
             comment.isDeleted() ? CONTENT_DELETE : comment.getContent(),
