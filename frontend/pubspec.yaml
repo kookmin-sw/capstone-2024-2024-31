@@ -61,7 +61,7 @@ dependencies:
 
   #AI 관련 디펜던시
   camera: ^0.10.5+2
-  image: ^4.0.15
+  image: ^4.1.7
   tflite_v2: ^1.0.0
   pytorch_lite: ^4.2.5
   #flutter_pytorch: ^1.0.1

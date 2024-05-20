@@ -27,7 +27,8 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
       backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
-          CameraView(resultsCallback, resultsCallbackClassification, key: cameraViewKey),
+          CameraView(resultsCallback, resultsCallbackClassification,
+              key: cameraViewKey),
           boundingBoxes2(results),
           Align(
             alignment: Alignment.bottomCenter,
@@ -48,13 +49,15 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.keyboard_arrow_up, size: 48, color: Colors.orange),
+                        const Icon(Icons.keyboard_arrow_up,
+                            size: 48, color: Colors.orange),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
                               if (objectDetectionInferenceTime != null)
-                                StatsRow('Object Detection Inference time:', '${objectDetectionInferenceTime?.inMilliseconds} ms'),
+                                StatsRow('Object Detection Inference time:',
+                                    '${objectDetectionInferenceTime?.inMilliseconds} ms'),
                               ElevatedButton(
                                 onPressed: () {
                                   cameraViewKey.currentState?.switchCamera();
@@ -85,7 +88,8 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
     );
   }
 
-  void resultsCallback(List<ResultObjectDetection> results, Duration inferenceTime) {
+  void resultsCallback(
+      List<ResultObjectDetection> results, Duration inferenceTime) {
     if (!mounted) {
       return;
     }
@@ -107,7 +111,8 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
     });
   }
 
-  void resultsCallbackClassification(String classification, Duration inferenceTime) {
+  void resultsCallbackClassification(
+      String classification, Duration inferenceTime) {
     if (!mounted) {
       return;
     }
