@@ -396,7 +396,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                           fontFamily: 'Pretendard',
                         ),
                         decoration: InputDecoration(
-                          hintText: "4자리 입력",
+                          hintText: "6자리 입력",
                           hintStyle: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
@@ -448,6 +448,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                                 backgroundColor: Palette.purPle200,
                                 duration: const Duration(seconds: 1));
                           }).catchError((err) {
+                            logger.e(err);
                             Get.snackbar("인증실패", "인증번호를 다시 확인해주세요.",
                                 colorText: Palette.white,
                                 backgroundColor: Palette.red,
