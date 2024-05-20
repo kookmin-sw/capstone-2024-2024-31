@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
+import 'package:frontend/service/user_service.dart';
 import 'package:get/get.dart';
-import 'package:dio/dio.dart' as dio;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logger/logger.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 import 'package:frontend/model/config/category_list.dart';
-import 'dart:convert';
-import '../../../../../env.dart';
 
 class CategoryBottomSheet extends StatefulWidget {
   const CategoryBottomSheet({super.key});
@@ -20,7 +17,8 @@ class CategoryBottomSheet extends StatefulWidget {
 
 class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
   final logger = Logger();
-  late UserController userController;
+  final UserController userController = Get.find();
+
   bool isLoading = false;
   List<ChallengeCategory> selectedCategories = [];
 
@@ -52,67 +50,10 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
     );
   }
 
-  Future<Object> _saveCategoriesToServer(
-      List<ChallengeCategory> categories) async {
-    // JSON 문자열 배열로 변환
-    List<String> jsonCategories =
-        categories.map((category) => category.name).toList();
-
-    // 서버가 기대하는 형식으로 JSON 객체 생성
-    Map<String, dynamic> requestPayload = {
-      'categories': jsonCategories,
-    };
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    dio.Dio dioInstance = dio.Dio();
-
-    // 서버에 저장하기 위해 HTTP 요청 보내기
-    dioInstance.options.contentType = 'application/json';
-    dioInstance.options.headers['Authorization'] =
-        'Bearer ${prefs.getString('access_token')}';
-
-    Logger logger = Logger();
-    logger.d("Request payload: $requestPayload"); // 디버깅용 로그
-
-    try {
-      final response = await dioInstance.post(
-        '${Env.serverUrl}/users/category',
-        data: jsonEncode(requestPayload), // JSON 문자열을 전달
-      );
-
-      // 서버 응답이 JSON 객체라고 가정하고 파싱
-      if (response.statusCode == 200) {
-        final responseData =
-            response.data is String ? jsonDecode(response.data) : response.data;
-        logger.d("유저 관심 카테고리 업데이트 성공 : $responseData");
-
-        // UserController 업데이트
-        userController.updateCategories(categories.toNameList());
-
-        return responseData['id']; // 적절한 키로 값을 추출하여 반환
-      } else {
-        throw Exception('Failed to post categories');
-      }
-    } on dio.DioException catch (e) {
-      logger.e('DioError: ${e.message}');
-      if (e.response != null) {
-        logger.d('Response status code: ${e.response?.statusCode}');
-        logger.d('Response data: ${e.response?.data}');
-        logger.d('Request options: ${e.response?.requestOptions}');
-      } else {
-        logger.e('Error sending request: ${e.requestOptions}');
-      }
-      return Future.error(e.toString());
-    } catch (err) {
-      return Future.error(err.toString());
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    userController = Get.find<UserController>();
-    selectedCategories = [];
+    selectedCategories = userController.user.categories.toList();
   }
 
   @override
@@ -158,10 +99,16 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
                 setState(() {
                   isLoading = true;
                 });
-                await _saveCategoriesToServer(selectedCategories).then((value) {
-
-                  setState((){isLoading = false;});
+                await UserService.updateMyCategory(selectedCategories)
+                    .then((value) {
                   _closeModalAndNavigateBack(context);
+                }).catchError((err) {
+                  logger.e("유저 관심 카테고리 업데이트 실패: $err");
+                  Get.snackbar('유저 관심 카테고리 업데이트 실패', '다시 시도해주세요');
+                }).whenComplete(() {
+                  setState(() {
+                    isLoading = false;
+                  });
                 });
               },
               child: isLoading
@@ -194,9 +141,9 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
       onPressed: () {
         setState(() {
           if (selectedCategories.contains(category)) {
-            selectedCategories.remove(category); // 이미 선택된 경우 제거
+            selectedCategories.remove(category);
           } else {
-            selectedCategories.add(category); // 선택되지 않은 경우 추가
+            selectedCategories.add(category);
           }
         });
       },

@@ -1,5 +1,3 @@
-import 'package:logger/logger.dart';
-
 enum ChallengeCategory {
   exercise('운동'),
   eating('식습관'),
@@ -17,8 +15,7 @@ enum ChallengeCategory {
       return ChallengeCategory.values.firstWhere((e) => e.name == name);
     } catch (e) {
       // Log the error and return a default value or handle it appropriately
-      Logger().e('Invalid category name: $name');
-      throw Exception('Invalid category name: $name');
+      throw Exception('유효하지 않은 카테고리: $name');
     }
   }
 
@@ -31,6 +28,6 @@ enum ChallengeCategory {
 // List<ChallengeCategory>를 List<String>으로 변환하는 확장 메소드
 extension ChallengeCategoryListExtension on List<ChallengeCategory> {
   List<String> toNameList() {
-    return this.map((category) => category.name).toList();
+    return map((category) => category.name).toList();
   }
 }

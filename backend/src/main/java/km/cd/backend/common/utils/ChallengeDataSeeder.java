@@ -40,7 +40,7 @@ public class ChallengeDataSeeder implements CommandLineRunner {
             .successfulVerificationImage("https://routineup-s3.s3.ap-northeast-2.amazonaws.com/challenges/008e838c-256f-4803-a272-5a0c6977f609")
             .status(ChallengeStatus.IN_PROGRESS.getDescription())
             .certificationType(CertificationType.HAND_GESTURE)
-            .challengeCategory(ChallengeCategory.EXCERCISE)
+            .challengeCategory(ChallengeCategory.EXERCISE)
             .totalCertificationCount(21)
             .build();
         
@@ -86,7 +86,7 @@ public class ChallengeDataSeeder implements CommandLineRunner {
             .successfulVerificationImage("https://routineup-s3.s3.ap-northeast-2.amazonaws.com/challenges/008e838c-256f-4803-a272-5a0c6977f609")
             .status(ChallengeStatus.IN_PROGRESS.getDescription())
             .certificationType(CertificationType.HAND_GESTURE)
-            .challengeCategory(ChallengeCategory.EXCERCISE)
+            .challengeCategory(ChallengeCategory.EXERCISE)
             .totalCertificationCount(14)
             .build();
         

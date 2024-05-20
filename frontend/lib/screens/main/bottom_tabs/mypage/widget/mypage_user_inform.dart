@@ -3,11 +3,12 @@ import 'package:frontend/screens/main/bottom_tabs/mypage/widget/categoryButtonPr
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:get/get.dart';
-import 'package:frontend/model/data/challenge/challenge_category.dart';
+import 'package:logger/logger.dart';
 
 class UserInformation extends StatelessWidget {
   UserInformation({super.key});
 
+  final logger = Logger();
   final UserController userController = Get.find<UserController>();
 
   final tagTextStyle = const TextStyle(
@@ -19,8 +20,6 @@ class UserInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final List<ChallengeCategory> categoryList =
-        userController.user.categories; // Set을 List로 변환
 
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
@@ -30,45 +29,50 @@ class UserInformation extends StatelessWidget {
             children: [
               imageStackLevel(),
               const SizedBox(width: 15),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                nameText(screenSize),
-                const SizedBox(height: 4),
-                if (categoryList.isNotEmpty)
-                  Column(
+              Obx(() {
+                return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "루티너님의 관심사는",
-                        style: TextStyle(
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 11,
-                            color: Colors.grey),
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            CategoryButtonPress(context);
-                          },
-                          child: Row(
-                              children:
-                                  List.generate(categoryList.length, (index) {
-                            return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                child: Text(
-                                  "#${categoryList[index].name}",
-                                  style: tagTextStyle,
-                                ));
-                          }).toList()))
-                    ],
-                  )
-                else
-                  TextButton(
-                      onPressed: () {
-                        CategoryButtonPress(context);
-                      },
-                      child: Text("관심있는 #카테고리 설정하기", style: tagTextStyle))
-              ])
+                      nameText(screenSize),
+                      const SizedBox(height: 4),
+                      if (userController.user.categories.isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "루티너님의 관심사는",
+                              style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 11,
+                                  color: Colors.grey),
+                            ),
+                            GestureDetector(
+                                onTap: () {
+                                  CategoryButtonPress(context);
+                                },
+                                child: Row(
+                                    children: List.generate(
+                                        userController.user.categories.length,
+                                        (index) {
+                                  return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                      child: Text(
+                                        "#${userController.user.categories[index].name}",
+                                        style: tagTextStyle,
+                                      ));
+                                }).toList()))
+                          ],
+                        )
+                      else
+                        TextButton(
+                            onPressed: () {
+                              CategoryButtonPress(context);
+                            },
+                            child: Text("관심있는 #카테고리 설정하기", style: tagTextStyle))
+                    ]);
+              })
             ]));
   }
 

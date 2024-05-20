@@ -2,11 +2,8 @@ package km.cd.backend.user;
 
 import km.cd.backend.challenge.dto.response.ChallengeSimpleResponse;
 import km.cd.backend.common.jwt.PrincipalDetails;
-import km.cd.backend.user.domain.User;
-import km.cd.backend.user.domain.mapper.UserMapper;
 import km.cd.backend.user.dto.GithubUsernameRequest;
 import km.cd.backend.user.dto.UserCategoryRequest;
-import km.cd.backend.user.dto.UserDetailResponse;
 import km.cd.backend.user.dto.UserResponse;
 import km.cd.backend.user.dto.FriendListResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +32,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<UserDetailResponse> me(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return ResponseEntity.ok(userService.getMyInfo(principalDetails.getUserId()));
     }
     

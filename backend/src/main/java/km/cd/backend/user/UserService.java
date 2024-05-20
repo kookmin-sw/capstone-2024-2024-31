@@ -1,7 +1,6 @@
 package km.cd.backend.user;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.stream.Collectors;
 import km.cd.backend.challenge.domain.Challenge;
 import km.cd.backend.challenge.domain.ChallengeCategory;
@@ -20,7 +19,6 @@ import km.cd.backend.user.domain.mapper.UserMapper;
 import km.cd.backend.user.dto.FriendListResponse;
 import km.cd.backend.user.dto.GithubUsernameRequest;
 import km.cd.backend.user.dto.UserCategoryRequest;
-import km.cd.backend.user.dto.UserDetailResponse;
 import km.cd.backend.user.dto.UserResponse;
 import km.cd.backend.user.repository.FriendRepository;
 import km.cd.backend.user.repository.UserRepository;
@@ -49,9 +47,9 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
     }
     
-    public UserDetailResponse getMyInfo(Long userId) {
+    public UserResponse getMyInfo(Long userId) {
         User user = findById(userId);
-        return UserMapper.INSTANCE.userToUserDetailResponse(user, getFollowingList(user.getEmail()), getFollwerList(user.getEmail()));
+        return UserMapper.INSTANCE.userToUserResponse(user);
     }
     
     public void followFriend(String targetEmail, Long userId) {

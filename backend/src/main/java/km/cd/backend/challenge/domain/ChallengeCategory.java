@@ -7,13 +7,13 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum ChallengeCategory {
-  EXCERCISE("운동"),
+  EXERCISE("운동"),
   EATING("식습관"),
   HOBBY("취미"),
   NATURE("환경"),
   STUDY("공부");
 
-  String name;
+  final String name;
 
   @JsonCreator
   public static ChallengeCategory fromString(String name) {

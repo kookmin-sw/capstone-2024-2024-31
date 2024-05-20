@@ -1,6 +1,7 @@
 package km.cd.backend.user.dto;
 
 import java.util.List;
+
 import km.cd.backend.challenge.domain.ChallengeCategory;
 
 public record UserResponse(
@@ -9,5 +10,8 @@ public record UserResponse(
         String avatar,
         String name,
         int point,
-        List<ChallengeCategory> categories
-) { }
+        List<ChallengeCategory> categories,
+        List<FriendListResponse> following,
+        List<FriendListResponse> follower
+) {
+}

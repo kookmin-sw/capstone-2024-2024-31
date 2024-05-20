@@ -4,7 +4,7 @@ import 'package:frontend/model/data/user.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 
 class UserController extends GetxController {
-  final _user = User(
+  final Rx<User> _user = User(
     id: 0,
     email: '',
     name: '',
@@ -26,14 +26,10 @@ class UserController extends GetxController {
   }
 
   void updateMyChallenges(List<ChallengeSimple> challenges) {
-    _myChallenges.clear();
-    _myChallenges.addAll(challenges);
+    _myChallenges.assignAll(challenges);
   }
 
-  void updateCategories(List<dynamic> categories) {
-    _user.value.categories.clear();
-    for (final category in categories) {
-      _user.value.categories.add(ChallengeCategory.fromJson(category));
-    }
+  void updateCategories(List<ChallengeCategory> categories) {
+    _user.value.categories.assignAll(categories);
   }
 }

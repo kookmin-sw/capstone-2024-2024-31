@@ -1,6 +1,6 @@
 import 'package:frontend/model/data/challenge/challenge_category.dart';
-
-import 'freind.dart';
+import 'package:frontend/model/data/freind.dart';
+import 'package:get/get.dart';
 
 class User {
   final int id;
@@ -8,9 +8,9 @@ class User {
   final String name;
   final String avatar;
   final int point;
-  final List<ChallengeCategory> categories;
-  final List<Friend> following;
-  final List<Friend> followers;
+  final RxList<ChallengeCategory> categories;
+  final RxList<Friend> following;
+  final RxList<Friend> followers;
 
   User({
     required this.id,
@@ -18,10 +18,12 @@ class User {
     required this.name,
     required this.avatar,
     required this.point,
-    required this.categories,
-    required this.following,
-    required this.followers,
-  });
+    required List<ChallengeCategory> categories,
+    required List<Friend> following,
+    required List<Friend> followers,
+  })  : categories = categories.obs,
+        following = following.obs,
+        followers = followers.obs;
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
