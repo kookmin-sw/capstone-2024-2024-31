@@ -15,7 +15,7 @@ class PostForm {
     required this.image,
   });
 
-  Map<String, dynamic> toFormData() {
+  Map<String, dynamic> toJson() {
     return {
       'data': jsonEncode({
         'title': title,

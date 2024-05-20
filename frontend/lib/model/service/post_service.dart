@@ -1,31 +1,55 @@
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:frontend/model/data/post/post.dart';
+import 'package:frontend/model/data/post/post_form.dart';
+import 'package:frontend/model/service/dio_service.dart';
 import 'package:logger/logger.dart';
 
-import '../../env.dart';
-
 class PostService {
+  static final dio.Dio dioInstance = DioService().dio;
+  static final Logger logger = Logger();
+
   static Future<List<Post>> fetchPosts(int challengeId) async {
-    final Dio dio = Dio();
-    final String url = '${Env.serverUrl}/challenges/$challengeId/posts';
-    Logger logger = Logger();
-    logger.d("111111111111111111111111111111111111");
+    final String uri = '/challenges/$challengeId/posts';
 
     try {
-      final response = await dio.get(url);
+      final response = await dioInstance.get(uri);
 
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
         List<Post> posts = data.map((item) => Post.fromJson(item)).toList();
 
-        logger.d("response.data: ${response.data}");
+        logger.d("게시글 조회 성공: ${response.data}");
         return posts;
       } else {
-        throw Exception('Failed to load posts');
+        throw Exception('게시글 조회 실패: ${response.data}');
       }
     } catch (e) {
-      print('Error: $e');
-      throw Exception('Failed to load posts');
+      throw Exception('게시글 조회 실패: ${e.toString()}');
+    }
+  }
+
+  static Future<Post> createPost(int challengeId, PostForm form) async {
+    const String uri = '/posts';
+
+    final data = dio.FormData.fromMap(form.toJson());
+    try {
+      final response = await dioInstance.post(uri,
+          queryParameters: {
+            'challengeId': challengeId,
+          },
+          options: dio.Options(headers: {
+            'Content-Type': 'multipart/form-data',
+          }),
+          data: data);
+
+      if (response.statusCode == 201) {
+        logger.d('게시글 생성 성공: ${response.data}');
+        return Post.fromJson(response.data);
+      } else {
+        throw Exception('게시글 생성 실패: ${response.data}');
+      }
+    } catch (e) {
+      throw Exception('게시글 생성 실패: ${e.toString()}');
     }
   }
 }
