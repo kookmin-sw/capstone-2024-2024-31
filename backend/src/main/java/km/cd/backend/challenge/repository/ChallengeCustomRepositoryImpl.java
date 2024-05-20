@@ -17,34 +17,35 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository {
 
-  private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
-  @Override
-  public List<Challenge> findByChallengeWithFilterAndPaging(Long cursorId, int size, ChallengeFilter filter) {
-    QChallenge challenge = QChallenge.challenge;
-    BooleanExpression predicate = challenge.isNotNull();
+    @Override
+    public List<Challenge> findByChallengeWithFilterAndPaging(Long cursorId, int size, ChallengeFilter filter) {
+        QChallenge challenge = QChallenge.challenge;
+        BooleanExpression predicate = challenge.isNotNull();
 
-    if (cursorId != 0) {
-      predicate = challenge.id.lt(cursorId);
+        if (cursorId != 0) {
+            predicate = challenge.id.lt(cursorId);
+        }
+
+        if (StringUtils.hasText(filter.name())) {
+            predicate = challenge.challengeName.startsWith(filter.name());
+        }
+
+        if (filter.isPrivate() != null) {
+            predicate = predicate.and(challenge.isPrivate.eq(filter.isPrivate()));
+        }
+
+        if (filter.category() != null) {
+            predicate = predicate.and(challenge.challengeCategory.eq(filter.category()));
+        }
+
+        return queryFactory
+                .selectFrom(challenge)
+                .where(predicate)
+                .limit(size)
+                .orderBy(challenge.id.desc())
+                .fetch();
     }
 
-    if (StringUtils.hasText(filter.name())) {
-      predicate = challenge.challengeName.startsWith(filter.name());
-    }
-
-    if (filter.isPrivate() != null) {
-      predicate = predicate.and(challenge.isPrivate.eq(filter.isPrivate()));
-    }
-
-    if (filter.category() != null) {
-      predicate = predicate.and(challenge.challengeCategory.eq(filter.category()));
-    }
-
-    return queryFactory
-      .selectFrom(challenge)
-      .where(predicate)
-      .limit(size)
-      .fetch();
-  }
-  
 }
