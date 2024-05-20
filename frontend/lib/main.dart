@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/challenge/certification/camera/camera_awosome.dart';
+// import 'package:frontend/challenge/certification/camera/camera_awosome.dart';
 import 'package:frontend/challenge/create/create_challenge_screen_fir.dart';
 import 'package:frontend/challenge/detail/detail_challenge_screen.dart';
 import 'package:frontend/login/login_screen.dart';
@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                 'detail_challenge': (context) =>
                     ChallengeDetailScreen(challengeId: Get.arguments),
                 // 'community': (context) => const CommunityScreen(),
-                'camera2': (context) => const CameraAwesomeApp(),
+                // 'camera2': (context) => const CameraAwesomeApp(),
               });
         });
   }

@@ -3,6 +3,7 @@ class Post {
   final String title;
   final String content;
   final String author;
+  final int authorId;
   final String avatar;
   final String image;
   final String createdDate;
@@ -14,6 +15,7 @@ class Post {
       required this.title,
       required this.content,
       required this.author,
+      required this.authorId,
       required this.avatar,
       required this.image,
       required this.createdDate,
@@ -25,6 +27,7 @@ class Post {
       id: json['id'] as int,
       title: json['title'] as String,
       content: json['content'] as String,
+      authorId: json['authorId'] as int,
       author: json['author'] as String,
       avatar: json['avatar'] as String,
       image: json['image'] as String,
@@ -38,9 +41,10 @@ class Post {
           .toList(),
     );
   }
+
   @override
   String toString() {
-    return 'Post{id: $id, title: $title, content: $content, createdDate: $createdDate, image: $image, comments: $comments, likes: $likes}';
+    return 'Post{id: $id, title: $title, content:  $content, author:  $authorId, $author, createdDate: $createdDate, image: $image, comments: $comments, likes: $likes}';
   }
 }
 

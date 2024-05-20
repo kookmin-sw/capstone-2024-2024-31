@@ -102,6 +102,7 @@ flutter:
     - assets/icons/
     - assets/icons/category_icons/
     - assets/images/
+    - assets/images/camera/
     - assets/images/logo/
     - assets/images/login_btn/
     - assets/buttons/

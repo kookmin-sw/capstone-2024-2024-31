@@ -127,7 +127,7 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: ChallengeWidgets.buildBottomNavigationBar(),
+        bottomNavigationBar: ChallengeWidgets.buildBottomNavigationBar(_challenge.id, _challenge.isGalleryPossible),
       ),
     );
   }
