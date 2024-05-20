@@ -8,6 +8,7 @@ enum ChallengeCategory {
   study('공부');
 
   final String name;
+
   const ChallengeCategory(this.name);
 
   // JSON에서 객체로 변환
@@ -24,5 +25,12 @@ enum ChallengeCategory {
   // 객체에서 JSON으로 변환
   String toJson() {
     return name;
+  }
+}
+
+// List<ChallengeCategory>를 List<String>으로 변환하는 확장 메소드
+extension ChallengeCategoryListExtension on List<ChallengeCategory> {
+  List<String> toNameList() {
+    return this.map((category) => category.name).toList();
   }
 }

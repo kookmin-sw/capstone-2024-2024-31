@@ -87,7 +87,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
         logger.d("유저 관심 카테고리 업데이트 성공 : $responseData");
 
         // UserController 업데이트
-        userController.updateCategories(categories);
+        userController.updateCategories(categories.toNameList());
 
         return responseData['id']; // 적절한 키로 값을 추출하여 반환
       } else {
@@ -159,7 +159,8 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
                   isLoading = true;
                 });
                 await _saveCategoriesToServer(selectedCategories).then((value) {
-                  isLoading = false;
+
+                  setState((){isLoading = false;});
                   _closeModalAndNavigateBack(context);
                 });
               },
