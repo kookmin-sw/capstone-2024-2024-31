@@ -53,7 +53,7 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final DateTime startDate = DateTime.parse(_challenge.startDate);
-    final int challengePeriod = _challenge.challengePeriod ?? 100;
+    final int challengePeriod = _challenge.challengePeriod;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     initializeDateFormatting('ko_KR', 'en_US');
@@ -87,7 +87,8 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: ChallengeWidgets.buildBottomNavigationBar(),
+        bottomNavigationBar:
+            ChallengeWidgets.buildBottomNavigationBar(_challenge),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/screens/community/create_posting_screen.dart';
 import 'package:frontend/screens/community/widget/post_card.dart';
 import 'package:frontend/screens/main/main_screen.dart';
@@ -14,9 +15,9 @@ class CommunityScreen extends StatefulWidget {
   const CommunityScreen(
       {super.key,
       this.isFromCreatePostingScreen = false,
-      required this.challengeSimple});
+      required this.challenge});
 
-  final ChallengeSimple challengeSimple;
+  final Challenge challenge;
   final bool isFromCreatePostingScreen;
 
   @override
@@ -27,7 +28,7 @@ class _CommunityScreenState extends State<CommunityScreen>
     with TickerProviderStateMixin {
   final logger = Logger();
 
-  late ChallengeSimple _challengeSimple;
+  late Challenge _challenge;
   List<Post> _posts = [];
   bool _isLoading = false;
   int _sortIndex = 0; // 정렬 방식 인덱스
@@ -35,8 +36,8 @@ class _CommunityScreenState extends State<CommunityScreen>
   @override
   void initState() {
     super.initState();
-    _challengeSimple = widget.challengeSimple;
-    PostService.fetchPosts(_challengeSimple.id).then((value) {
+    _challenge = widget.challenge;
+    PostService.fetchPosts(_challenge.id).then((value) {
       setState(() {
         _posts = value;
         _sortPosts();
@@ -99,7 +100,7 @@ class _CommunityScreenState extends State<CommunityScreen>
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Get.to(CreatePostingScreen(challengeSimple: _challengeSimple));
+              Get.to(CreatePostingScreen(challenge: _challenge));
             },
           ),
         ],

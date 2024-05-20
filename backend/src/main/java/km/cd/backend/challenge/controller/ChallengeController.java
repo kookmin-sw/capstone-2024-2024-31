@@ -50,7 +50,7 @@ public class ChallengeController {
         return ResponseEntity.ok(challengeSimpleResponse);
     }
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     public ResponseEntity<List<ChallengeSimpleResponse>> getAllChallenge(
         @RequestParam(name = "cursorId", required = false, defaultValue = "0") Long cursorId,
         @RequestParam(name = "size", required = false, defaultValue = "5") int size,
@@ -59,12 +59,7 @@ public class ChallengeController {
         List<ChallengeSimpleResponse> challenges = challengeService.getAllChallenge(cursorId, size, filter);
         return ResponseEntity.ok(challenges);
     }
-    
-    @GetMapping("/list")
-    public ResponseEntity<List<ChallengeInformationResponse>> getAllChallenge() {
-        return ResponseEntity.ok(challengeService.getAllChallenge());
-    }
-    
+
 
     @GetMapping("/{challengeId}")
     public ResponseEntity<ChallengeInformationResponse> getChallenge(
@@ -75,15 +70,7 @@ public class ChallengeController {
         ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId, principalDetails.getUserId(), code);
         return ResponseEntity.ok(challengeInformationResponse);
     }
-    
-    @GetMapping("/{challengeId}/detail")
-    public ResponseEntity<ChallengeInformationResponse> getChallenge(
-        @PathVariable Long challengeId
-    ) {
-        ChallengeInformationResponse challengeInformationResponse =  challengeService.getChallenge(challengeId);
-        return ResponseEntity.ok(challengeInformationResponse);
-    }
-    
+
     @GetMapping(value = "/{challengeId}/participant")
     public ResponseEntity<List<ParticipantResponse>> getParticipant(@PathVariable Long challengeId) {
         List<ParticipantResponse> participants =  challengeService.getParticipant(challengeId);

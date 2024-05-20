@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'run_model_by_camera_demo.dart';
-import 'run_model_by_image_demo.dart';
 
 
 
@@ -43,11 +42,7 @@ class _ChooseDemoState extends State<CertifacationScreen> {
                 ),
                 TextButton(
                   onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RunModelByImageDemo()),
-                    )
+
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.blue,

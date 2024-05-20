@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/challenge/detail/detail_challenge_screen.dart';
+import 'package:frontend/screens/challenge/detail/challenge_detail_screen.dart';
 import 'package:frontend/screens/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:get/get.dart';
 
 class CreateCompleteScreen extends StatelessWidget {
@@ -37,9 +38,11 @@ class CreateCompleteScreen extends StatelessWidget {
         const SizedBox(height: 50),
         GestureDetector(
             onTap: () {
-              Get.offAll(ChallengeDetailScreen(
-                challengeId: challengeId,
-              ));
+              ChallengeService.fetchChallenge(challengeId).then((challenge) {
+                Get.offAll(ChallengeDetailScreen(
+                  challenge: challenge,
+                ));
+              });
             },
             child: Container(
                 alignment: Alignment.center,

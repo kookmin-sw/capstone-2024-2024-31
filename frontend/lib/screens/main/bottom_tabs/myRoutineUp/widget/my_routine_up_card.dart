@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/model/data/challenge/challenge_status.dart';
 import 'package:frontend/screens/challenge/complete/challenge_complete_screen.dart';
-import 'package:frontend/screens/challenge/detail/detail_challenge_screen.dart';
+import 'package:frontend/screens/challenge/detail/challenge_detail_screen.dart';
+import 'package:frontend/screens/challenge/state/state_challenge_screen.dart';
 import 'package:frontend/screens/community/community_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
@@ -22,9 +25,9 @@ class MyRoutineUpCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final int challengeId = challengeSimple.id;
     final int challengePeriod = challengeSimple.challengePeriod;
     final DateTime startDate = challengeSimple.startDate;
-    final int challengeId = challengeSimple.id;
     final DateTime endDate = startDate.add(Duration(days: challengePeriod * 7));
 
     double getProgressPercent() {
@@ -36,14 +39,18 @@ class MyRoutineUpCard extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          isStarted
-              ? isIng
-                  ? Get.to(
-                      () => CommunityScreen(challengeSimple: challengeSimple))
-                  : Get.to(() =>
-                      ChallengeCompleteScreen(simpleChallenge: challengeSimple))
-              : Get.to(() => ChallengeDetailScreen(
-                  challengeId: challengeId, isFromMypage: true));
+          ChallengeService.fetchChallenge(challengeId).then((challenge) {
+            isStarted
+                ? isIng
+                    ? Get.to(() => ChallengeStateScreen(
+                          challenge: challenge,
+                          isFromJoinScreen: false,
+                        ))
+                    : Get.to(
+                        () => ChallengeCompleteScreen(challenge: challenge))
+                : Get.to(() => ChallengeDetailScreen(
+                    challenge: challenge, isFromMypage: true));
+          });
         },
         child: SizedBox(
             width: screenSize.width * 0.95,

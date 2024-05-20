@@ -14,9 +14,9 @@ import 'package:frontend/model/data/post/post.dart';
 import 'package:frontend/model/data/sms/sms.dart';
 
 class ChallengeCompleteScreen extends StatefulWidget {
-  const ChallengeCompleteScreen({super.key, required this.simpleChallenge});
+  const ChallengeCompleteScreen({super.key, required this.challenge});
 
-  final ChallengeSimple simpleChallenge;
+  final Challenge challenge;
 
   @override
   State<ChallengeCompleteScreen> createState() =>
@@ -34,11 +34,9 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
   );
   final logger = Logger();
 
-  bool _isLoading = true;
   final bool _isSuccess = false;
 
   late List<Post> _posts;
-  late ChallengeSimple _challengeSimple;
   late Challenge _challenge;
 
   TextStyle titleStyle(double fontSize) => TextStyle(
@@ -47,19 +45,10 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
         fontSize: fontSize,
       );
 
-  Future<void> loadData() async {
-    PostService.fetchPosts(_challengeSimple.id).then((value) => _posts = value);
-    ChallengeService.fetchChallenge(_challengeSimple.id)
-        .then((value) => _challenge = value);
-  }
-
   @override
   void initState() {
     super.initState();
-    _challengeSimple = widget.simpleChallenge;
-    loadData().then((value) => setState(() {
-          _isLoading = false;
-        }));
+    _challenge = widget.challenge;
   }
 
   @override
@@ -73,67 +62,63 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
           icon: const Icon(Icons.close),
         ),
       ),
-      body: _isLoading
-          ? const CircularProgressIndicator(
-              color: Palette.mainPurple,
-            )
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _isSuccess ? "챌린지를 성공했어요! 👍" : "챌린지를 실패했어요 😭",
-                      style: titleStyle(21.0),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "당신의 갓생을 루틴업이 응원합니다!",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Pretender',
-                        fontSize: 11,
-                        color: Palette.purPle200,
-                      ),
-                    ),
-                    const SizedBox(height: 25),
-                    challengeInform(),
-                    const SizedBox(height: 15),
-                    const Divider(
-                      indent: 20,
-                      endIndent: 20,
-                      height: 10,
-                      thickness: 1.5,
-                      color: Palette.grey50,
-                    ),
-                    const SizedBox(height: 10),
-                    CertificationMethod(challenge: _challenge),
-                    const SizedBox(height: 10),
-                    GestureDetector(
-                      child: Text("인증 게시글 모음 > ", style: titleStyle(15.0)),
-                      onTap: () => Get.to(() => {
-                            CommunityScreen(
-                              challengeSimple: _challengeSimple,
-                            )
-                          }),
-                    ),
-                    const SizedBox(height: 10),
-                    certificationPostList(),
-                    const SizedBox(height: 15),
-                    const Divider(
-                      indent: 20,
-                      endIndent: 20,
-                      height: 10,
-                      thickness: 1.5,
-                      color: Palette.grey50,
-                    ),
-                    const SizedBox(height: 15),
-                    RewardCard(isSuccess: _isSuccess, sms: _sms),
-                  ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _isSuccess ? "챌린지를 성공했어요! 👍" : "챌린지를 실패했어요 😭",
+                style: titleStyle(21.0),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "당신의 갓생을 루틴업이 응원합니다!",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Pretender',
+                  fontSize: 11,
+                  color: Palette.purPle200,
                 ),
               ),
-            ),
+              const SizedBox(height: 25),
+              challengeInform(),
+              const SizedBox(height: 15),
+              const Divider(
+                indent: 20,
+                endIndent: 20,
+                height: 10,
+                thickness: 1.5,
+                color: Palette.grey50,
+              ),
+              const SizedBox(height: 10),
+              CertificationMethod(challenge: _challenge),
+              const SizedBox(height: 10),
+              GestureDetector(
+                child: Text("인증 게시글 모음 > ", style: titleStyle(15.0)),
+                onTap: () => Get.to(() => {
+                      CommunityScreen(
+                        challenge: _challenge,
+                      )
+                    }),
+              ),
+              const SizedBox(height: 10),
+              certificationPostList(),
+              const SizedBox(height: 15),
+              const Divider(
+                indent: 20,
+                endIndent: 20,
+                height: 10,
+                thickness: 1.5,
+                color: Palette.grey50,
+              ),
+              const SizedBox(height: 15),
+              RewardCard(isSuccess: _isSuccess, sms: _sms),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/service/post_service.dart';
 import 'package:frontend/model/config/palette.dart';
+import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
+import 'package:frontend/model/data/post/post_form.dart';
 import 'package:frontend/screens/community/post_detail_screen.dart';
+import 'package:frontend/service/post_service.dart';
 import 'package:frontend/widgets/rtu_button.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
-import '../../model/data/post/post_form.dart';
 
 class CreatePostingScreen extends StatefulWidget {
-  const CreatePostingScreen({super.key, required this.challengeSimple});
+  final Challenge challenge;
 
-  final ChallengeSimple challengeSimple;
+  const CreatePostingScreen({super.key, required this.challenge});
 
   @override
   State<CreatePostingScreen> createState() => _CreatePostingScreenState();
@@ -41,8 +42,8 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
   @override
   void initState() {
     super.initState();
-    _challengeId = widget.challengeSimple.id;
-    _isGalleryPossible = widget.challengeSimple.isGalleryPossible;
+    _challengeId = widget.challenge.id;
+    _isGalleryPossible = widget.challenge.isGalleryPossible;
   }
 
   void getimage(final bool isGallery) async {
@@ -245,7 +246,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
   Widget shadowBtn(final IconData iconData, bool isGallery) {
     return Expanded(
         child: GestureDetector(
-            onTap: () => getimage(isGallery),
+            onTap: () => getimage(isGallery), //여기
             child: Container(
                 decoration: BoxDecoration(
                   color: Palette.white,

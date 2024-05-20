@@ -19,8 +19,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  late Future<User> _userDataFuture;
   final logger = Logger();
+
+  late Future<User> _userDataFuture;
   late int _selectedIndex;
 
   final List<Widget> _widgetOptions = <Widget>[

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:frontend/model/controller/challenge_form_controller.dart';
+import 'package:frontend/model/data/challenge/challenge_filter.dart';
 import 'package:frontend/model/data/challenge/challenge_join.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:frontend/model/data/sms/sms_certification.dart';
@@ -13,7 +14,7 @@ class ChallengeService {
   static final Dio dio = DioService().dio;
   static final Logger logger = Logger();
 
-  static Future<Challenge> fetchChallenge(int id) async {
+  static Future<Challenge> fetchChallenge(int id, [String? code]) async {
     final String uri = '/challenges/$id';
 
     try {
@@ -27,6 +28,50 @@ class ChallengeService {
       }
     } catch (e) {
       throw Exception('챌린지 조회 실패: ${e.toString()}');
+    }
+  }
+
+  static Future<List<ChallengeSimple>> fetchChallengeSimples(
+      int cursorId, int size, ChallengeFilter filter) async {
+    const String uri = '/challenges/list';
+
+    try {
+      final response = await dio.get(uri,
+          queryParameters: {
+            'cursorId': cursorId,
+            'size': size,
+          },
+          data: filter.toJson());
+
+      if (response.statusCode == 200) {
+        logger.d('챌린지 목록 조회 성공: ${response.data}');
+        return (response.data as List)
+            .map((e) => ChallengeSimple.fromJson(e))
+            .toList();
+      } else {
+        throw Exception('챌린지 목록 조회 실패: ${response.data}');
+      }
+    } catch (e) {
+      throw Exception('챌린지 목록 조회 실패: ${e.toString()}');
+    }
+  }
+
+  static Future<List<ChallengeSimple>> fetchMyChallengeSimples() async {
+    const String uri = '/users/me/challenges';
+
+    try {
+      final response = await dio.get(uri);
+
+      if (response.statusCode == 200) {
+        logger.d('내 챌린지 목록 조회 성공: ${response.data}');
+        return (response.data as List)
+            .map((e) => ChallengeSimple.fromJson(e))
+            .toList();
+      } else {
+        throw Exception('내 챌린지 목록 조회 실패: ${response.data}');
+      }
+    } catch (e) {
+      throw Exception('내 챌린지 목록 조회 실패: ${e.toString()}');
     }
   }
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/screens/challenge/detail/detail_challenge_screen.dart';
-import 'package:frontend/screens/main/bottom_tabs/home/home_components/privateCode_input_dialog.dart';
+import 'package:frontend/screens/challenge/detail/challenge_detail_screen.dart';
+import 'package:frontend/screens/main/bottom_tabs/home/home_components/private_code_input_dialog.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:get/get.dart';
 
 class ChallengeItemCard extends StatelessWidget {
@@ -26,16 +27,17 @@ class ChallengeItemCard extends StatelessWidget {
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                return PasswordInputDialog(
+                return PrivateCodeInputDialog(
                   challengeId: challengeSimple.id,
                 );
               },
             );
           } else {
-            Get.to(() => ChallengeDetailScreen(
-                  challengeId: challengeSimple.id,
-                  isFromMainScreen: true,
-                ));
+            ChallengeService.fetchChallenge(challengeSimple.id)
+                .then((challenge) {
+              Get.to(() => ChallengeDetailScreen(
+                  challenge: challenge, isFromMainScreen: true));
+            });
           }
         },
         child: SizedBox(

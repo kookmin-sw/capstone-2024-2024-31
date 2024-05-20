@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/challenge/detail/detail_image_detail_screen.dart';
+import 'package:frontend/screens/challenge/detail/challenge_image_detail_screen.dart';
 import 'package:frontend/screens/challenge/detail/widgets/build_image_container.dart';
 import 'package:frontend/screens/challenge/detail/widgets/certification_method_widget.dart';
 import 'package:frontend/screens/challenge/detail/widgets/detail_widget_information.dart';
@@ -17,16 +17,14 @@ import 'package:logger/logger.dart';
 import '../../../model/controller/user_controller.dart';
 
 class ChallengeDetailScreen extends StatefulWidget {
-  final int challengeId;
+  final Challenge challenge;
   final bool isFromMainScreen;
   final bool isFromMypage;
   final bool isFromPrivateCodeDialog;
-  final Map<String, dynamic>? challengeData;
 
   const ChallengeDetailScreen(
       {super.key,
-      required this.challengeId,
-      this.challengeData,
+      required this.challenge,
       this.isFromMainScreen = false,
       this.isFromMypage = false,
       this.isFromPrivateCodeDialog = false});
@@ -37,52 +35,17 @@ class ChallengeDetailScreen extends StatefulWidget {
 
 class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   final logger = Logger();
-  Challenge? challenge;
-  bool isLoading = true;
-  late UserController userController;
-  late bool _isMyChallenge;
+  final UserController userController = Get.find();
 
-  void isMyChallenges() {
-    userController = Get.find<UserController>();
-    _isMyChallenge = userController.myChallenges
-        .any((challenge) => challenge.id == widget.challengeId);
-  }
+  late Challenge _challenge;
+  late bool _isMyChallenge;
 
   @override
   void initState() {
     super.initState();
-    isMyChallenges(); //이미 챌린지 참여 중이면 참가하기 버튼 없애기
-
-    if (widget.isFromPrivateCodeDialog) {
-      logger.d("detail_screen 89번 라인 ) ${widget.isFromPrivateCodeDialog}");
-      logger.d("detail_screen 89번 라인 ) ${widget.challengeData!}");
-
-      challenge = Challenge.fromJson(widget.challengeData!);
-      setState(() {
-        isLoading = false;
-      });
-    }
-    //공개 챌린지 첫 입장시,
-    else {
-      ChallengeService.fetchChallenge(widget.challengeId).then((value) {
-        logger.d("detail_screen initState() : $value");
-
-        setState(() {
-          challenge = value;
-          isLoading = false;
-        });
-      }).catchError((err) {
-        setState(() {
-          isLoading = false;
-        });
-        Get.snackbar(
-          "오류",
-          err.toString(),
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      });
-    }
+    _challenge = widget.challenge;
+    _isMyChallenge = userController.myChallenges
+        .any((challenge) => challenge.id == _challenge.id);
   }
 
   @override
@@ -126,17 +89,10 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
               )),
         ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : challenge != null
-              ? buildChallengeDetailBody(context, challenge!)
-              : const Center(child: Text('챌린지 정보를 불러오지 못했습니다.')),
+      body: buildChallengeDetailBody(context, _challenge),
       bottomNavigationBar: _isMyChallenge
-          ? null
-          : isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : buildChallengeDetailBottomNavigationBar(
-                  context, challenge ?? Challenge.getDummyData()),
+          ? const SizedBox.shrink()
+          : buildChallengeDetailBottomNavigationBar(context, _challenge),
     );
   }
 
@@ -147,7 +103,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         children: [
           PhotoesWidget(
             screenHeight: screenSize.height,
-            imageUrl: challenge.challengeImagePaths.isNotEmpty ?? false
+            imageUrl: challenge.challengeImagePaths.isNotEmpty
                 ? challenge.challengeImagePaths[0]
                 : '',
           ),
@@ -195,7 +151,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
-              " ${challenge.certificationFrequency} | ${challenge.challengePeriod ?? 0}주 ",
+              " ${challenge.certificationFrequency} | ${challenge.challengePeriod}주 ",
               style: const TextStyle(
                 fontSize: 11,
                 fontFamily: "Pretendard",
@@ -230,7 +186,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      ImageDetailPage(imagePath: imagePaths[index]),
+                      ChallengeImageDetailScreen(imagePath: imagePaths[index]),
                 ),
               );
             },

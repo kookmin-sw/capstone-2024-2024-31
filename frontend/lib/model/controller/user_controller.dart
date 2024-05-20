@@ -25,11 +25,9 @@ class UserController extends GetxController {
     _user.value = user;
   }
 
-  void updateMyChallenges(List<dynamic> challenges) {
+  void updateMyChallenges(List<ChallengeSimple> challenges) {
     _myChallenges.clear();
-    for (var challenge in challenges) {
-      _myChallenges.add(ChallengeSimple.fromJson(challenge));
-    }
+    _myChallenges.addAll(challenges);
   }
 
   void updateCategories(List<dynamic> categories) {

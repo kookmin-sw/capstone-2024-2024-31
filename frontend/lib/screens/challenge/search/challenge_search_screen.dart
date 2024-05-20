@@ -6,6 +6,7 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 import 'package:frontend/model/data/challenge/challenge_filter.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,9 +29,9 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   List<String> categoryList =
       ['전체'] + ChallengeCategory.values.map((e) => e.name).toList();
 
-  String searchValue = '';
+  String _inputName = '';
   bool _isPrivate = false;
-  int selectedIndex = 0;
+  int _seletedCategoryIndex = 0;
   int currentCursor = 0;
   final int pageSize = 10;
   bool hasMoreData = true;
@@ -39,9 +40,9 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
   @override
   void initState() {
     super.initState();
-    selectedIndex = widget.enterSelectIndex ?? 0;
-    _getFilteredChallengeList(false);
+    _seletedCategoryIndex = widget.enterSelectIndex ?? 0;
     _scrollController.addListener(_onScroll);
+    _getFilteredChallengeList();
   }
 
   @override
@@ -55,88 +56,62 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
             _scrollController.position.maxScrollExtent &&
         hasMoreData &&
         !isLoading) {
-      _getFilteredChallengeList(false);
+      _getFilteredChallengeList();
     }
   }
 
-  Future<void> _getFilteredChallengeList(bool isFiltered) async {
+  Future<void> _getFilteredChallengeList() async {
     if (!hasMoreData || isLoading) return;
 
     setState(() {
       isLoading = true;
     });
 
-    try {
-      final dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
-      dio.options.headers['content-Type'] = 'application/json';
-      dio.options.headers['Authorization'] =
-          'Bearer ${prefs.getString('access_token')}';
+    ChallengeFilter filter = ChallengeFilter(
+      name: _inputName,
+      category: _seletedCategoryIndex == 0
+          ? null
+          : ChallengeCategory.values[_seletedCategoryIndex - 1],
+      isPrivate: _isPrivate ? true : null,
+    );
 
-      final filter = ChallengeFilter(
-        name: searchValue,
-        isPrivate: _isPrivate ? _isPrivate : null,
-        category: selectedIndex == 0
-            ? null
-            : ChallengeCategory.values[selectedIndex - 1],
-      ).toJson();
+    List<ChallengeSimple> newChallengeSimples =
+        await ChallengeService.fetchChallengeSimples(
+            currentCursor, pageSize, filter);
 
-      logger.d("challenge filter: $filter");
-
-      final response = await dio.post(
-        '${Env.serverUrl}/challenges/list',
-        data: filter,
-        queryParameters: {'cursor': currentCursor, 'size': pageSize},
-      );
-
-      if (response.statusCode == 200) {
-        logger.d(response.data);
-        List<ChallengeSimple> newData = (response.data as List)
-            .map((c) => ChallengeSimple.fromJson(c))
-            .toList();
-
-        setState(() {
-          if (newData.isNotEmpty) {
-            for (var newChallenge in newData) {
-              if (!challengeList.any((existingChallenge) =>
-                  existingChallenge.id == newChallenge.id)) {
-                challengeList.add(newChallenge);
-              }
-            }
-            currentCursor = challengeList.last.id;
-          } else {
-            hasMoreData = false;
-          }
-        });
+    setState(() {
+      if (newChallengeSimples.isNotEmpty) {
+        for (final newChallengeSimple in newChallengeSimples) {
+          challengeList.add(newChallengeSimple);
+        }
+        currentCursor = challengeList.last.id;
       } else {
-        throw Exception("Failed to load more data");
+        hasMoreData = false;
       }
-    } catch (e) {
-      logger.d(e.toString());
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    });
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void _onSearch(String value) {
     setState(() {
-      searchValue = value;
+      _inputName = value;
       hasMoreData = true;
       currentCursor = 0;
       challengeList.clear();
-      _getFilteredChallengeList(true);
+      _getFilteredChallengeList();
     });
   }
 
   void _onCategorySelected(int index) {
     setState(() {
-      selectedIndex = selectedIndex == index ? 0 : index;
+      _seletedCategoryIndex = _seletedCategoryIndex == index ? 0 : index;
       hasMoreData = true;
       currentCursor = 0;
       challengeList.clear();
-      _getFilteredChallengeList(true);
+      _getFilteredChallengeList();
     });
   }
 
@@ -146,7 +121,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
       hasMoreData = true;
       currentCursor = 0;
       challengeList.clear();
-      _getFilteredChallengeList(true);
+      _getFilteredChallengeList();
     });
   }
 
@@ -181,7 +156,7 @@ class _ChallengeSearchScreenState extends State<ChallengeSearchScreen> {
           children: [
             CategorySelector(
               categoryList: categoryList,
-              selectedIndex: selectedIndex,
+              selectedIndex: _seletedCategoryIndex,
               onCategorySelected: _onCategorySelected,
             ),
             PrivateToggle(

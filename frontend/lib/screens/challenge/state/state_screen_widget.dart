@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/model/data/challenge/challenge_simple.dart';
+import 'package:frontend/screens/community/create_posting_screen.dart';
 import 'package:frontend/screens/main/main_screen.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:get/get.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:intl/intl.dart';
@@ -46,7 +49,7 @@ class ChallengeWidgets {
     );
   }
 
-  static Widget buildBottomNavigationBar() {
+  static Widget buildBottomNavigationBar(Challenge challenge) {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
@@ -54,7 +57,11 @@ class ChallengeWidgets {
       color: Colors.transparent,
       width: double.infinity,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Get.to(CreatePostingScreen(
+            challenge: challenge,
+          ));
+        },
         child: SvgPicture.asset(
           'assets/svgs/certification_bottom_btn.svg',
         ),
@@ -293,8 +300,6 @@ class ChallengeWidgets {
 
   static Widget certificationState(double screenWidth, double screenHeight,
       ChallengeStatus challengeStatus) {
-    print(
-        "aaaaaaaaaaaaaaaaaaaaaaaaaa${challengeStatus.totalCertificationCount}");
     int totalCertificationCount =
         challengeStatus.totalCertificationCount; //챌린지 총 인증횟수
     int myCertificationNum = challengeStatus.numberOfCertifications; //내가 한 인증횟수

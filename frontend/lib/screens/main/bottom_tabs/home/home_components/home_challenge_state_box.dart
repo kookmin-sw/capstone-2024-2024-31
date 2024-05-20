@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:frontend/screens/community/create_posting_screen.dart';
 import 'package:frontend/service/challenge_service.dart';
 import 'package:frontend/screens/challenge/state/state_challenge_screen.dart';
-import 'package:frontend/screens/community/create_posting_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
@@ -23,13 +23,13 @@ class ChallengeStateBox extends StatefulWidget {
 class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   final logger = Logger();
   final controller = Get.find<UserController>();
-  final List<ChallengeSimple> challenges = [];
+  final List<ChallengeSimple> challengeSimples = [];
 
   double getProgressPercent(int index) {
     DateTime now = DateTime.now();
-    DateTime start = challenges[index].startDate;
+    DateTime start = challengeSimples[index].startDate;
     DateTime end =
-        start.add(Duration(days: challenges[index].challengePeriod * 7));
+        start.add(Duration(days: challengeSimples[index].challengePeriod * 7));
     return now.difference(start).inDays / end.difference(start).inDays * 100;
   }
 
@@ -37,8 +37,8 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   void initState() {
     super.initState();
     setState(() {
-      challenges.clear();
-      challenges.addAll(
+      challengeSimples.clear();
+      challengeSimples.addAll(
           controller.myChallenges.where((c) => c.status == "진행중").toList());
     });
   }
@@ -81,12 +81,12 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                 color: Colors.grey),
           ),
           const SizedBox(height: 10),
-          challenges.isEmpty
+          challengeSimples.isEmpty
               ? SvgPicture.asset("assets/svgs/no_challenge_state_card.svg")
               : Expanded(
                   child: Swiper(
                     loop: false,
-                    itemCount: challenges.length,
+                    itemCount: challengeSimples.length,
                     pagination: const SwiperPagination(
                       alignment: Alignment.bottomCenter,
                       margin: EdgeInsets.all(1.0),
@@ -113,8 +113,8 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
   Widget challengeStateCard(double screenWidth, int index) {
     return GestureDetector(
         onTap: () async {
-          Challenge challenge =
-              await ChallengeService.fetchChallenge(challenges[index].id);
+          Challenge challenge = await ChallengeService.fetchChallenge(
+              challengeSimples[index].id, null);
           Get.to(() => ChallengeStateScreen(
               isFromJoinScreen: false, challenge: challenge));
         },
@@ -131,7 +131,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: Image.network(
-                              challenges[index].imageUrl, // 이미지 경로
+                              challengeSimples[index].imageUrl, // 이미지 경로
                               width: 60, // 이미지 너비
                               height: 60, // 이미지 높이
                               fit: BoxFit.fitWidth,
@@ -150,7 +150,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                                     children: [
                                       Flexible(
                                           child: Text(
-                                        challenges[index]
+                                        challengeSimples[index]
                                             .challengeName, // 챌린지 이름
                                         maxLines: 1,
                                         overflow: TextOverflow.fade,
@@ -183,9 +183,12 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                           const SizedBox(width: 5),
                           ElevatedButton(
                             onPressed: () {
-                              Get.to(() => CreatePostingScreen(
-                                    challengeSimple: challenges[index],
-                                  ));
+                              ChallengeService.fetchChallenge(
+                                      challengeSimples[index].id)
+                                  .then((challenge) {
+                                Get.to(() =>
+                                    CreatePostingScreen(challenge: challenge));
+                              });
                             },
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(40, 40),

@@ -17,7 +17,7 @@ class HomeCategory extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Text(
-                "챌린지 카테고리 >",
+                "챌린지 카테고리",
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Palette.grey500,

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:frontend/model/data/post/post.dart';
 import 'package:frontend/model/data/post/post_form.dart';
 import 'package:frontend/service/dio_service.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 class PostService {
@@ -74,6 +75,45 @@ class PostService {
       }
     } catch (err) {
       throw Exception('댓글 생성 실패: ${err.toString()}');
+    }
+  }
+
+  static Future<bool> checkPossibleCertification(
+      //오늘 인증 이미 있으면 false, 없으면 true 반환
+      int challengeId,
+      int userId) async {
+    final dio.Dio dioInstance = DioService().dio;
+    final String uri = '/challenges/$challengeId/posts';
+    final Logger logger = Logger();
+
+    try {
+      final response = await dioInstance.get(uri);
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        List<Post> posts = data.map((item) => Post.fromJson(item)).toList();
+
+        logger.d("response.data: ${response.data}");
+
+        // 현재 날짜를 가져옵니다.
+        DateTime today = DateTime.now();
+        String todayStr = DateFormat('yyyy-MM-dd').format(today);
+
+        // 오늘 날짜와 일치하고 author가 userId와 일치하는 게시물이 있는지 확인합니다.
+        for (var post in posts) {
+          String postDateStr =
+              DateFormat('yyyy-MM-dd').format(post.createdDate as DateTime);
+          if (postDateStr == todayStr && post.authorId == userId) {
+            return false;
+          }
+        }
+        return true;
+      } else {
+        throw Exception('Failed to load posts');
+      }
+    } catch (e) {
+      logger.e('Error: $e');
+      throw Exception('Failed to load posts');
     }
   }
 }

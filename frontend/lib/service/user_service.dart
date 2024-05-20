@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:frontend/model/controller/user_controller.dart';
+import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:frontend/model/data/user.dart';
+import 'package:frontend/service/challenge_service.dart';
 import 'package:frontend/service/dio_service.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -23,13 +25,9 @@ class UserService {
         final User user = User.fromJson(response.data);
         userController.saveUser(user);
 
-        const nxtUri = '/users/me/challenges';
-        final responseMyChallenges = await dio.get(nxtUri);
-
-        if (responseMyChallenges.statusCode == 200) {
-          logger.d("나의 챌린지 조회 성공: ${responseMyChallenges.data}");
-          userController.updateMyChallenges(responseMyChallenges.data);
-        }
+        List<ChallengeSimple> myChallengeSimples =
+            await ChallengeService.fetchMyChallengeSimples();
+        userController.updateMyChallenges(myChallengeSimples);
         return userController.user;
       }
     } catch (err) {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ImageDetailPage extends StatelessWidget {
+class ChallengeImageDetailScreen extends StatelessWidget {
   final String imagePath;
 
-  const ImageDetailPage({super.key, required this.imagePath});
+  const ChallengeImageDetailScreen({super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
