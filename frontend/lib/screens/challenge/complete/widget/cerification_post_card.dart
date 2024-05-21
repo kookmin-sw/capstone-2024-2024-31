@@ -68,7 +68,7 @@ class PostItemCard extends StatelessWidget {
   Widget articleImage(Size screenSize) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
-      child: Image.asset(
+      child: Image.network(
         post.image, // 이미지 경로 article.image
         fit: BoxFit.cover,
         width: screenSize.width * 0.35,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/screens/challenge/complete/widget/cerification_post_card.dart';
 import 'package:frontend/screens/challenge/complete/widget/reward_card.dart';
 import 'package:frontend/screens/challenge/detail/widgets/certification_method_widget.dart';
@@ -33,10 +34,10 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
     letter: '이거 실패하면 공차 사줄게~',
   );
   final logger = Logger();
+  final userController = Get.find<UserController>();
 
   final bool _isSuccess = false;
 
-  late List<Post> _posts;
   late Challenge _challenge;
 
   TextStyle titleStyle(double fontSize) => TextStyle(
@@ -62,61 +63,82 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
           icon: const Icon(Icons.close),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _isSuccess ? "챌린지를 성공했어요! 👍" : "챌린지를 실패했어요 😭",
-                style: titleStyle(21.0),
+      body: FutureBuilder<List<Post>>(
+        future: PostService.fetchMyPosts(
+            _challenge.id, userController.user.id), // 비동기 작업을 수행하는 함수
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('인증 결과를 불러오지 못했어요.'));
+          } else {
+            List<Post>? posts = snapshot.data;
+            if (posts == null || posts.isEmpty) {
+              return const Center(child: Text('인증 결과를 불러오지 못했어요.'));
+            } else {
+              return buildBody(posts);
+            }
+          }
+        },
+      ),
+    );
+  }
+
+  Widget buildBody(List<Post> posts) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _isSuccess ? "챌린지를 성공했어요! 👍" : "챌린지를 실패했어요 😭",
+              style: titleStyle(21.0),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              "당신의 갓생을 루틴업이 응원합니다!",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Pretender',
+                fontSize: 11,
+                color: Palette.purPle200,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                "당신의 갓생을 루틴업이 응원합니다!",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Pretender',
-                  fontSize: 11,
-                  color: Palette.purPle200,
-                ),
-              ),
-              const SizedBox(height: 25),
-              challengeInform(),
-              const SizedBox(height: 15),
-              const Divider(
-                indent: 20,
-                endIndent: 20,
-                height: 10,
-                thickness: 1.5,
-                color: Palette.grey50,
-              ),
-              const SizedBox(height: 10),
-              CertificationMethod(challenge: _challenge),
-              const SizedBox(height: 10),
-              GestureDetector(
-                child: Text("인증 게시글 모음 > ", style: titleStyle(15.0)),
-                onTap: () => Get.to(() => {
-                      CommunityScreen(
-                        challenge: _challenge,
-                      )
-                    }),
-              ),
-              const SizedBox(height: 10),
-              certificationPostList(),
-              const SizedBox(height: 15),
-              const Divider(
-                indent: 20,
-                endIndent: 20,
-                height: 10,
-                thickness: 1.5,
-                color: Palette.grey50,
-              ),
-              const SizedBox(height: 15),
-              RewardCard(isSuccess: _isSuccess, sms: _sms),
-            ],
-          ),
+            ),
+            const SizedBox(height: 25),
+            challengeInform(),
+            const SizedBox(height: 15),
+            const Divider(
+              indent: 20,
+              endIndent: 20,
+              height: 10,
+              thickness: 1.5,
+              color: Palette.grey50,
+            ),
+            const SizedBox(height: 10),
+            CertificationMethod(challenge: _challenge),
+            const SizedBox(height: 10),
+            GestureDetector(
+              child: Text("인증 게시글 모음 > ", style: titleStyle(15.0)),
+              onTap: () => Get.to(() => {
+                    CommunityScreen(
+                      challenge: _challenge,
+                    )
+                  }),
+            ),
+            const SizedBox(height: 10),
+            certificationPostList(posts),
+            const SizedBox(height: 15),
+            const Divider(
+              indent: 20,
+              endIndent: 20,
+              height: 10,
+              thickness: 1.5,
+              color: Palette.grey50,
+            ),
+            const SizedBox(height: 15),
+            RewardCard(isSuccess: _isSuccess, sms: _sms),
+          ],
         ),
       ),
     );
@@ -163,12 +185,12 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
     );
   }
 
-  Widget certificationPostList() {
+  Widget certificationPostList(List<Post> posts) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: List.generate(5, (index) {
-          Post post = _posts[index];
+          Post post = posts[index];
           return PostItemCard(post: post);
         }),
       ),

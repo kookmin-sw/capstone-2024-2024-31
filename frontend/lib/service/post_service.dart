@@ -31,6 +31,28 @@ class PostService {
     }
   }
 
+  static Future<List<Post>> fetchMyPosts(int challengeId, int userId) {
+    final String uri = '/posts/users/$userId';
+
+    try {
+      return dioInstance.get(uri, queryParameters: {
+        'challengeId': challengeId,
+      }).then((response) {
+        if (response.statusCode == 200) {
+          List<dynamic> data = response.data;
+          List<Post> posts = data.map((item) => Post.fromJson(item)).toList();
+
+          logger.d("내 게시글 조회 성공: ${response.data}");
+          return posts;
+        } else {
+          throw Exception('내 게시글 조회 실패: ${response.data}');
+        }
+      });
+    } catch (e) {
+      throw Exception('내 게시글 조회 실패: ${e.toString()}');
+    }
+  }
+
   static Future<Post> createPost(int challengeId, PostForm form) async {
     const String uri = '/posts';
 
@@ -78,7 +100,6 @@ class PostService {
     }
   }
 
-
   static Future<bool> checkPossibleCertification(
       int challengeId, int userId) async {
     try {
@@ -95,9 +116,8 @@ class PostService {
 
       // 필터링된 내 포스트 중에서 오늘 작성된 포스트가 있는지 검사
       for (var post in myPosts) {
-
         String postDateStr =
-        DateFormat('yyyy-MM-dd').format(DateTime.parse(post.createdDate));
+            DateFormat('yyyy-MM-dd').format(DateTime.parse(post.createdDate));
         if (postDateStr == todayStr) {
           return false; // 오늘 날짜 글 있으면 false
         }

@@ -96,4 +96,12 @@ public class PostService {
     
     return PostMapper.INSTANCE.postToReportResponse(post);
   }
+
+  public List<PostResponse> findAllByChallengeIdAndUserId(Long challengeId, Long userId) {
+    List<Post> posts = postRepository.findAllByChallengeIdAndUserId(challengeId, userId);
+    return posts.stream()
+            .filter(post -> !post.getIsRejected())
+            .map(PostMapper.INSTANCE::entityToResponse)
+            .toList();
+  }
 }

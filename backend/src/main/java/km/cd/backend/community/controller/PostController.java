@@ -47,6 +47,15 @@ public class PostController {
     return ResponseEntity.ok(postResponses);
   }
 
+  @GetMapping("/users/{userId}")
+  public ResponseEntity<List<PostResponse>> getAllPostByUserId(
+          @RequestParam(name = "challengeId") Long challengeId,
+          @PathVariable(name = "userId") Long userId
+  ) {
+    List<PostResponse> postResponses = postService.findAllByChallengeIdAndUserId(challengeId, userId);
+    return ResponseEntity.ok(postResponses);
+  }
+
   @GetMapping("/{postId}")
   public ResponseEntity<PostResponse> getPost(
           @PathVariable(name = "postId") Long postId
