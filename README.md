@@ -7,9 +7,9 @@
 
 ![app_logo](assets/app_logo.png)
 
-건강한 생활 습관을 만들고 싶다면,
-도파민에서 멀어지고 싶다면,
-다른 사람들과 함께 성장하고 싶다면,
+건강한 생활 습관을 만들고 싶다면, <br />
+도파민에서 멀어지고 싶다면, <br />
+다른 사람들과 함께 성장하고 싶다면, <br />
 루틴업을 이용해보세요.
 <br />
 
@@ -54,7 +54,7 @@ YET
 
 - 이혁규[팀장]
   > - 학번 : \*\*\*\*1601
-  > - position : Leader, Infra, BE
+  > - position : Infra, BE
   > - Email : e_hyeok9@kookmin.ac.kr
 
 - 김채환
@@ -69,8 +69,9 @@ YET
 
 - 홍석주
   > - 학번 : \*\*\*\*3398
-  > - position : FE, BE
-  > - Email : ehensnfl@kookmin.ac.kr > <br/>
+  > - position : FS
+  > - Email : ehensnfl@kookmin.ac.kr >
+<br/>
 
 ## 🔎 실행 방법 | Execution method
 
@@ -136,13 +137,5 @@ docker compose up -d
 
 ## 🗂 자료 | Document
 
-<div align="center">
-  <a href="https://kcp2024.atlassian.net/wiki/spaces/K/overview?homepageId=229580">
-    <img src="assets/confluence.png" width="150" height="150"/>
-  </a>
-</div>
-<div align="center">
-  <a href="https://drive.google.com/file/d/1BjyOB5nw1K9DP4lKLAnxkNY2IdfBuueJ/view?usp=sharing">
-    중간 발표
-  </a>
-</div>
+[팀 문서](https://kcp2024.atlassian.net/wiki/spaces/K/overview?homepageId=229580)
+[중간 발표 자료](https://drive.google.com/file/d/1BjyOB5nw1K9DP4lKLAnxkNY2IdfBuueJ/view?usp=sharing)
