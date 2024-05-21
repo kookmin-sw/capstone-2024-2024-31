@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pytorch_lite/pytorch_lite.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
@@ -6,6 +7,7 @@ import 'camera_view_singleton.dart';
 import 'confirm_image_screen.dart';
 import 'ui/box_widget.dart';
 import 'ui/camera_view.dart';
+import 'dart:collection';
 
 class RunModelByCameraDemo extends StatefulWidget {
   const RunModelByCameraDemo({super.key});
@@ -17,8 +19,10 @@ class RunModelByCameraDemo extends StatefulWidget {
 class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
   List<ResultObjectDetection>? results;
   Duration? objectDetectionInferenceTime;
+  Queue<String?> recentClasses = Queue<String?>(); // 최근 탐지된 클래스 저장
   int detectionCount = 0;
   late File capturedImage;
+  bool detectionComplete = false; // 플래그 변수 추가
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   GlobalKey<CameraViewState> cameraViewKey = GlobalKey<CameraViewState>();
@@ -98,15 +102,30 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
 
   void resultsCallback(
       List<ResultObjectDetection> results, Duration inferenceTime) async {
-    if (!mounted) {
+    if (!mounted || detectionComplete) {
+      // 인증 완료된 경우 콜백 무시
       return;
     }
     setState(() {
       this.results = results;
       objectDetectionInferenceTime = inferenceTime;
-      detectionCount++;
-      if (detectionCount >= 3) {
-        captureImage();
+
+      // 최근 탐지된 클래스 추적
+      if (results.isNotEmpty) {
+        for (var result in results) {
+          String? detectedClass = result.className; // Null 가능성 처리
+          recentClasses.add(detectedClass);
+        }
+        if (recentClasses.length > 3) {
+          recentClasses.removeFirst();
+        }
+
+        // 같은 클래스가 연속 세 번 탐지되었는지 확인
+        if (recentClasses.length == 3 &&
+            recentClasses.every((c) => c == recentClasses.first)) {
+          detectionComplete = true; // 객체 탐지 완료 플래그 설정
+          captureImage();
+        }
       }
     });
   }
@@ -131,14 +150,14 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
           actions: <Widget>[
             TextButton(
               child: const Text('확인'),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop(); // 팝업 닫기
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ConfirmImageScreen(image: image),
-                  ),
-                );
+
+                final confirmedImage =
+                    await Get.to(() => ConfirmImageScreen(image: image));
+                if (confirmedImage != null) {
+                  Get.back(result: confirmedImage);
+                }
               },
             ),
           ],

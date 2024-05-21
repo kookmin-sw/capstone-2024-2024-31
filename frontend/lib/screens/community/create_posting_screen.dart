@@ -15,8 +15,7 @@ import '../challenge/certification/run_model_by_camera_demo.dart';
 
 class CreatePostingScreen extends StatefulWidget {
   final Challenge challenge;
-
-  const CreatePostingScreen({super.key, required this.challenge});
+  const CreatePostingScreen({super.key, required this.challenge,});
 
   @override
   State<CreatePostingScreen> createState() => _CreatePostingScreenState();
@@ -67,30 +66,16 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
           });
         }
       }
-    } else {
-      final capturedImage = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const RunModelByCameraDemo(),
-        ),
-      );
-      print("캡쳐이미지 $capturedImage");
-      if (capturedImage != null) {
-        // ConfirmImageScreen으로 이미지 전달
-        final confirmedImage = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ConfirmImageScreen(image: capturedImage),
-          ),
-        );
-        print("컨펌된 이미지 $confirmedImage");
-        if (confirmedImage != null) {
-          // ConfirmImageScreen에서 반환된 이미지 저장
-          setState(() {
-            _inputImage = confirmedImage;
-            _showImage = true;
-          });
-        }
+    } else { //카메라 버튼일때
+
+      final cameraImage  =  await Get.to(()=> const RunModelByCameraDemo());
+
+      if (cameraImage != null) {
+
+        setState(() {
+          _inputImage = cameraImage;
+          _showImage = true;
+        });
       }
     }
   }

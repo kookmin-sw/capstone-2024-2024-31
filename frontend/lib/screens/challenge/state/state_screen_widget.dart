@@ -18,58 +18,54 @@ import '../../../model/package/pie_chart/src/pie_chart.dart';
 class ChallengeStateScreenWidgets {
   static AppBar buildAppBar(final bool isFromJoinScreen, Challenge challenge) {
     return AppBar(
-        toolbarHeight: 56,
-        backgroundColor: Palette.purPle700,
-        // 불투명도를 50%로 설정
-        elevation: 0,
-        leading: isFromJoinScreen
-            ? IconButton(
-            onPressed: () =>
-                Get.offAll(const MainScreen(
-                  tabNumber: 0,
-                )),
-            icon: const Icon(
-              Icons.home,
-              color: Colors.white,
-            ))
-            : IconButton(
+      toolbarHeight: 56,
+      backgroundColor: Palette.purPle700,
+      // 불투명도를 50%로 설정
+      elevation: 0,
+      leading: isFromJoinScreen
+          ? IconButton(
+              onPressed: () => Get.offAll(const MainScreen(
+                    tabNumber: 0,
+                  )),
+              icon: const Icon(
+                Icons.home,
+                color: Colors.white,
+              ))
+          : IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+      title: const Text(
+        "내 챌린지 현황",
+        style: TextStyle(
+          fontSize: 15,
+          fontFamily: "Pretendard",
+          fontWeight: FontWeight.w500,
+          color: Palette.white,
+        ),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Get.to(CommunityScreen(challenge: challenge));
+          },
           icon: const Icon(
-            Icons.arrow_back_ios,
+            Icons.chat,
+            size: 30,
             color: Colors.white,
           ),
-          onPressed: () {
-            Get.back();
-          },
         ),
-        title: const Text(
-          "내 챌린지 현황",
-          style: TextStyle(
-            fontSize: 15,
-            fontFamily: "Pretendard",
-            fontWeight: FontWeight.w500,
-            color: Palette.white,
-          ),
-        ),
-        actions: [
-        IconButton(
-        onPressed: ()
-    {
-      Get.to(CommunityScreen(challenge: challenge));
-    },
-    icon: const Icon(
-    Icons.chat,
-    size: 30,
-    color: Colors.white,
-    ),
-    )
-    ,
-    ]
-    ,
+      ],
     );
   }
 
-  static Widget buildBottomNavigationBar(Challenge challenge,
-      bool isPossibleButtonClick) {
+  static Widget buildBottomNavigationBar(
+      Challenge challenge, bool isPossibleButtonClick) {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
@@ -80,17 +76,17 @@ class ChallengeStateScreenWidgets {
         onTap: () {
           isPossibleButtonClick
               ? Get.to(CreatePostingScreen(
-            challenge: challenge,
-          ))
+                  challenge: challenge,
+                ))
               : null;
         },
         child: isPossibleButtonClick
             ? SvgPicture.asset(
-          'assets/svgs/certification_bottom_btn.svg',
-        )
+                'assets/svgs/certification_bottom_btn.svg',
+              )
             : SvgPicture.asset(
-          'assets/svgs/certification_disable_btn.svg',
-        ),
+                'assets/svgs/certification_disable_btn.svg',
+              ),
       ),
     );
   }
@@ -157,8 +153,7 @@ class ChallengeStateScreenWidgets {
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
-        " ${thisChallenge.certificationFrequency} | ${thisChallenge
-            .challengePeriod}주 ",
+        " ${thisChallenge.certificationFrequency} | ${thisChallenge.challengePeriod}주 ",
         style: const TextStyle(
           fontSize: 10,
           fontFamily: "Pretendard",
@@ -203,9 +198,7 @@ class ChallengeStateScreenWidgets {
                     ),
                   ),
                   Text(
-                    "${DateFormat("M월 d일(E)", "ko_KR").format(
-                        startDate)}-${DateFormat("M월 d일(E)", "ko_KR").format(
-                        endDate)}  ${thisChallenge.challengePeriod}주",
+                    "${DateFormat("M월 d일(E)", "ko_KR").format(startDate)}-${DateFormat("M월 d일(E)", "ko_KR").format(endDate)}  ${thisChallenge.challengePeriod}주",
                     style: const TextStyle(
                       color: Palette.grey300,
                       fontSize: 10,
@@ -276,8 +269,7 @@ class ChallengeStateScreenWidgets {
                     ),
                   ),
                   Text(
-                    "${challengeStatus
-                        .certificationStartTime}시 ~ $formattedEndTime",
+                    "${challengeStatus.certificationStartTime}시 ~ $formattedEndTime",
                     style: const TextStyle(
                       color: Palette.grey300,
                       fontSize: 10,
@@ -386,8 +378,7 @@ class ChallengeStateScreenWidgets {
                     ),
                   ),
                   Text(
-                    " / $totalCertificationCount회  |  남은 인증 : ${totalCertificationCount -
-                        myCertificationNum}회",
+                    " / $totalCertificationCount회  |  남은 인증 : ${totalCertificationCount - myCertificationNum}회",
                     style: const TextStyle(
                       fontSize: 10,
                       color: Palette.grey300,
@@ -428,13 +419,13 @@ class ChallengeStateScreenWidgets {
     );
   }
 
-  static Widget certificationStateBar(double screenWidth,
-      ChallengeStatus challengeStatus) {
+  static Widget certificationStateBar(
+      double screenWidth, ChallengeStatus challengeStatus) {
     int myCertificationNumber =
         challengeStatus.numberOfCertifications; //내가 한 인증 횟수
     String percent =
-    (myCertificationNumber / challengeStatus.totalCertificationCount * 100)
-        .toStringAsFixed(1);
+        (myCertificationNumber / challengeStatus.totalCertificationCount * 100)
+            .toStringAsFixed(1);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/community/create_posting_screen.dart';
+import 'package:get/get.dart';
 import 'dart:io';
 
 import 'run_model_by_camera_demo.dart';
 
 class ConfirmImageScreen extends StatelessWidget {
   final File image;
-
   const ConfirmImageScreen({super.key, required this.image});
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +28,16 @@ class ConfirmImageScreen extends StatelessWidget {
               TextButton(
                 child: const Text('다시 찍기'),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RunModelByCameraDemo(),
-                    ),
-                  );
+                  Get.off(() => const RunModelByCameraDemo());
                 },
               ),
               TextButton(
                 child: const Text('예'),
                 onPressed: () {
                   print(image);
-                  Navigator.pop(context, image); // 이미지 반환하고 이전 화면으로 돌아가기
+                  print(333333333333333);
+
+                  Get.back(result: image); // 이미지 반환하고 이전 화면으로 돌아가기
                 },
               ),
             ],
