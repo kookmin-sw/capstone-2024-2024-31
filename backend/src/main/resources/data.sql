@@ -69,7 +69,7 @@ VALUES (1, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/10.png')
        (4, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/7.png'),
        (5, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/1.png'),
        (6, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/4.png'),
-       (7, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/16.png'),
+       (7, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/16.png');
 
 INSERT INTO participants (challenge_id, user_id, is_owner, target_name, receiver_number, determination)
 VALUES (1, 1, true, NULL, NULL, NULL),
