@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pytorch_lite/pytorch_lite.dart';
+import 'package:camera/camera.dart';
+import 'dart:io';
+import 'camera_view_singleton.dart';
+import 'confirm_image_screen.dart';
 import 'ui/box_widget.dart';
 import 'ui/camera_view.dart';
 
@@ -13,12 +17,17 @@ class RunModelByCameraDemo extends StatefulWidget {
 class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
   List<ResultObjectDetection>? results;
   Duration? objectDetectionInferenceTime;
-
-  String? classification;
-  Duration? classificationInferenceTime;
+  int detectionCount = 0;
+  late File capturedImage;
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   GlobalKey<CameraViewState> cameraViewKey = GlobalKey<CameraViewState>();
+
+  @override
+  void initState() {
+    super.initState();
+    detectionCount = 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +36,7 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
       backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
-          CameraView(resultsCallback, resultsCallbackClassification,
-              key: cameraViewKey),
+          CameraView(resultsCallback, key: cameraViewKey),
           boundingBoxes2(results),
           Align(
             alignment: Alignment.bottomCenter,
@@ -89,37 +97,54 @@ class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
   }
 
   void resultsCallback(
-      List<ResultObjectDetection> results, Duration inferenceTime) {
+      List<ResultObjectDetection> results, Duration inferenceTime) async {
     if (!mounted) {
       return;
     }
     setState(() {
       this.results = results;
       objectDetectionInferenceTime = inferenceTime;
-      for (var element in results) {
-        print({
-          "rect": {
-            "left": element.rect.left,
-            "top": element.rect.top,
-            "width": element.rect.width,
-            "height": element.rect.height,
-            "right": element.rect.right,
-            "bottom": element.rect.bottom,
-          },
-        });
+      detectionCount++;
+      if (detectionCount >= 3) {
+        captureImage();
       }
     });
   }
 
-  void resultsCallbackClassification(
-      String classification, Duration inferenceTime) {
-    if (!mounted) {
-      return;
+  void captureImage() async {
+    final CameraController? cameraController =
+        cameraViewKey.currentState?.cameraController;
+    if (cameraController != null && cameraController.value.isInitialized) {
+      final XFile file = await cameraController.takePicture();
+      capturedImage = File(file.path);
+      showSuccessDialog(capturedImage);
     }
-    setState(() {
-      this.classification = classification;
-      classificationInferenceTime = inferenceTime;
-    });
+  }
+
+  void showSuccessDialog(File image) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('인증 성공!'),
+          content: const Text('인증이 성공적으로 완료되었습니다.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop(); // 팝업 닫기
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConfirmImageScreen(image: image),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

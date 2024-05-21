@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
-import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:frontend/model/data/post/post_form.dart';
 import 'package:frontend/screens/community/post_detail_screen.dart';
 import 'package:frontend/service/post_service.dart';
@@ -11,6 +10,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
 import '../challenge/certification/certification_gallery.dart';
+import '../challenge/certification/confirm_image_screen.dart';
+import '../challenge/certification/run_model_by_camera_demo.dart';
 
 class CreatePostingScreen extends StatefulWidget {
   final Challenge challenge;
@@ -49,6 +50,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
 
   void getimage(final bool isGallery) async {
     if (isGallery) {
+      // 기존 isGallery=true 로직
       final selectedImage = await Get.to(() => const CertificationByGallery());
       if (selectedImage != null) {
         setState(() {
@@ -56,8 +58,8 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
           _showImage = true;
         });
       } else {
-        final image = await ImagePicker().pickImage(
-            source: isGallery ? ImageSource.gallery : ImageSource.camera);
+        final image =
+            await ImagePicker().pickImage(source: ImageSource.gallery);
         if (image != null) {
           setState(() {
             _inputImage = File(image.path);
@@ -65,7 +67,33 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
           });
         }
       }
-    }}
+    } else {
+      final capturedImage = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const RunModelByCameraDemo(),
+        ),
+      );
+      print("캡쳐이미지 $capturedImage");
+      if (capturedImage != null) {
+        // ConfirmImageScreen으로 이미지 전달
+        final confirmedImage = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ConfirmImageScreen(image: capturedImage),
+          ),
+        );
+        print("컨펌된 이미지 $confirmedImage");
+        if (confirmedImage != null) {
+          // ConfirmImageScreen에서 반환된 이미지 저장
+          setState(() {
+            _inputImage = confirmedImage;
+            _showImage = true;
+          });
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +165,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                               onTap: () {
                                 setState(() {
                                   _showImage = false;
+                                  _inputImage = File(''); // 이미지 리셋
                                 });
                               },
                               child:
