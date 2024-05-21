@@ -520,11 +520,6 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                           ),
                           fixedSize: WidgetStateProperty.all<Size>(
                               const Size.fromHeight(50.0)),
-
-                          // maximumSize: MaterialStateProperty.all<Size>(
-                          //     const Size(110, 50)),
-                          // minimumSize:
-                          //     MaterialStateProperty.all<Size>(const Size(10, 35)),
                           shape: WidgetStateProperty.all<OutlinedBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
@@ -536,7 +531,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
                                       .toString()
                               ? WidgetStateProperty.all<Color>(
                                   Palette.mainPurple)
-                              : WidgetStateProperty.all<Color>(Palette.white)),
+                              : null,),
                       child: Row(
                         children: [
                           SizedBox(
