@@ -78,7 +78,7 @@ VALUES (1, 1, true, NULL, NULL, NULL),
        (4, 1, true, NULL, NULL, NULL),
        (5, 2, true, NULL, NULL, NULL),
        (6, 1, true, NULL, NULL, NULL),
-       (7, 2, true, NULL, NULL, NULL),
+       (7, 2, true, NULL, NULL, NULL);
 
 INSERT INTO posts (is_rejected, author_id, challenge_id, created_date, modified_date, title, content, image)
 SELECT
