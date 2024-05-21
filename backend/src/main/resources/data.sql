@@ -99,7 +99,7 @@ INSERT INTO posts (is_rejected, author_id, challenge_id, created_date, modified_
 SELECT
     false,
     1,
-    8,
+    5,
     DATE_SUB(CURDATE(), INTERVAL 43 DAY) + INTERVAL ((RAND() * 6) + 1) * 7 DAY, -- 무작위 생성
     null,
     CONCAT('제목', FLOOR(RAND() * 100)), -- 임의의 제목
