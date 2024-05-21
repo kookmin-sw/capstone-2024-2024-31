@@ -234,7 +234,8 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
             Positioned.fill(
                 child: Visibility(
                     visible: !_showImage,
-                    child: Row(
+                    child:   _isGalleryPossible
+                        ? Row(
                       children: [
                         shadowBtn(Icons.camera_alt, false),
                         const Padding(
@@ -246,7 +247,8 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                             )),
                         shadowBtn(Icons.add_photo_alternate, true)
                       ],
-                    ))),
+                    ) : shadowBtn(Icons.camera_alt, false),
+                )),
             Positioned.fill(
               child: Visibility(
                   visible: _showImage,
