@@ -23,7 +23,7 @@ VALUES (true, '1234', '국민대 소융 1일 1헬스 챌린지', '건강을 위�
         CURDATE(), DATE_ADD(CURDATE(), INTERVAL 35 DAY), '주 4회', 0, 24,
         '자신이 공부하고 있는 사진을 루틴업Ai가 요청한 포즈와 함께 올려주세요~\n갤러리 사용 안됩니다~ 실시간 갓생을 올려주세요! ', false, 4,
         'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/15.jpg',
-        'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/14.png',
+        'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/14.jpg',
         '진행중', 'GITHUB_COMMIT', 'STUDY', 35),
 
        (true, "1234", '회기 수영장 오후반 수영연습', '회기수영장 오후반 여러분 우리 함께 실력을 키워보자구요! 주 3회 자유수영으로 실력 업그레이드 합시다.', 2,
