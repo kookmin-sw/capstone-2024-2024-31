@@ -13,59 +13,71 @@ import '../../../service/post_service.dart';
 
 class ChallengeStateScreen extends StatefulWidget {
   final bool isFromJoinScreen;
-  final Challenge challenge;
+  final int? challengeId;
+  final ChallengeStatus? challengeStatus;
   bool? isPossibleCertification;
+  Challenge? challenge;
 
   ChallengeStateScreen(
       {super.key,
       required this.isFromJoinScreen,
-      required this.challenge,
-      this.isPossibleCertification});
+      this.challengeId,
+      this.challengeStatus,
+      this.isPossibleCertification,
+      this.challenge});
 
   @override
   State<ChallengeStateScreen> createState() => _ChallengeStateScreenState();
 }
-
 class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
   final Logger logger = Logger();
   bool isLoading = true;
   late Challenge _challenge;
+  late int _challengeId;
   late ChallengeStatus _challengeStatus;
   final _userController = Get.find<UserController>();
-  bool _isPossibleCertification = false; // 기본 값을 false로 설정
+  bool _isPossibleCertification = false;
 
   @override
   void initState() {
     super.initState();
-    _challenge = widget.challenge;
-
-    // 비동기 작업을 initState 내에서 호출
     _initialize();
   }
 
   Future<void> _initialize() async {
-    if (widget.isPossibleCertification == null) {
-      try {
-        _isPossibleCertification = await PostService.checkPossibleCertification(
-            _challenge.id, _userController.user.id);
-      } catch (error) {
-        logger.e('Failed to check Possible Certification : $error');
-      }
-    } else {
-      _isPossibleCertification = widget.isPossibleCertification!;
-    }
-
     try {
-      _challengeStatus =
-          await ChallengeService.fetchChallengeStatus(_challenge.id);
-    } catch (error) {
-      logger.e('Failed to fetch challenge status: $error');
-    }
+      _challengeId = widget.challengeId ?? widget.challenge!.id;
 
-    setState(() {
-      isLoading = false;
-    });
+      if (widget.isPossibleCertification == null) {
+        _isPossibleCertification = await PostService.checkPossibleCertification(
+            _challengeId, _userController.user.id);
+      } else {
+        _isPossibleCertification = widget.isPossibleCertification!;
+      }
+
+      if (widget.challenge == null) {
+        _challenge = await ChallengeService.fetchChallenge(_challengeId, null);
+      } else {
+        _challenge = widget.challenge!;
+      }
+
+      if (widget.challengeStatus == null) {
+        _challengeStatus = await ChallengeService.fetchChallengeStatus(_challengeId);
+      } else {
+        _challengeStatus = widget.challengeStatus!;
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (error) {
+      logger.e('Initialization error: $error');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +104,8 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
     return SafeArea(
       child: Scaffold(
         // extendBodyBehindAppBar: true,
-        appBar: ChallengeStateScreenWidgets.buildAppBar(widget.isFromJoinScreen, _challenge),
+        appBar: ChallengeStateScreenWidgets.buildAppBar(
+            widget.isFromJoinScreen, _challenge),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -118,8 +131,9 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: ChallengeStateScreenWidgets.buildBottomNavigationBar(
-            _challenge, _isPossibleCertification),
+        bottomNavigationBar:
+            ChallengeStateScreenWidgets.buildBottomNavigationBar(
+                _challenge, _isPossibleCertification),
       ),
     );
   }
