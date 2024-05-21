@@ -327,7 +327,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                     setState(() {
                       _showAuthInput = true;
                     });
-                    Get.snackbar("인증번호 전송 성공!", "4자리 인증번호를 하단에 입력하세요.",
+                    Get.snackbar("인증번호 전송 성공!", "6자리 인증번호를 하단에 입력하세요.",
                         backgroundColor: Palette.greenSuccess,
                         colorText: Palette.white,
                         duration: const Duration(seconds: 1));
