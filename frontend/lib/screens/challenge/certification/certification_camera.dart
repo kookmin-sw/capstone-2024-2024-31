@@ -19,19 +19,24 @@ class CertificationCamera extends StatefulWidget {
 }
 
 class _CertificationCameraState extends State<CertificationCamera> {
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  GlobalKey<CameraViewState> cameraViewKey = GlobalKey<CameraViewState>();
+
   List<ResultObjectDetection>? results;
   Duration? objectDetectionInferenceTime;
   Queue<String?> recentClasses = Queue<String?>(); // 최근 탐지된 클래스 저장
   int detectionCount = 0;
   late File capturedImage;
   bool detectionComplete = false; // 플래그 변수 추가
-  late Map<String, dynamic> certificationGesture;
 
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-  GlobalKey<CameraViewState> cameraViewKey = GlobalKey<CameraViewState>();
+  //제스처 UI 관련
+  bool resultHasTarget = false;
+  late Map<String, dynamic> certificationGesture;
+  Gesture gesture = Gesture();
+  int correctDetectionCount = 0;
 
   TextStyle textStyle(double size, Color color,
-      {FontWeight weight = FontWeight.w400}) =>
+          {FontWeight weight = FontWeight.w400}) =>
       TextStyle(
           fontSize: size,
           fontWeight: weight,
@@ -40,10 +45,10 @@ class _CertificationCameraState extends State<CertificationCamera> {
 
   @override
   void initState() {
-    super.initState();
     detectionCount = 0;
-    certificationGesture = Gesture().getRandomGesture();
+    certificationGesture = gesture.getRandomGesture();
 
+    super.initState();
   }
 
   @override
@@ -74,21 +79,22 @@ class _CertificationCameraState extends State<CertificationCamera> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.keyboard_arrow_up,
-                            size: 48, color: Colors.orange),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(20.0),
                           child: Column(
                             children: [
                               offerGesture(certificationGesture),
-                              if (objectDetectionInferenceTime != null)
-                                StatsRow('Object Detection Inference time:',
-                                    '${objectDetectionInferenceTime?.inMilliseconds} ms'),
+                              const SizedBox(height: 10),
+                              CameraProgressWidget(
+                                  detectionCount: correctDetectionCount),
+                              const SizedBox(height: 15),
                               ElevatedButton(
                                 onPressed: () {
                                   cameraViewKey.currentState?.switchCamera();
                                 },
-                                child: const Text('Switch Camera'),
+                                child: const Icon(
+                                  Icons.cameraswitch_rounded,
+                                ),
                               ),
                             ],
                           ),
@@ -123,19 +129,28 @@ class _CertificationCameraState extends State<CertificationCamera> {
     setState(() {
       this.results = results;
       objectDetectionInferenceTime = inferenceTime;
-
+      print("inference Time : ${inferenceTime.inMilliseconds}}");
       // 최근 탐지된 클래스 추적
       if (results.isNotEmpty) {
         for (var result in results) {
           String? detectedClass = result.className; // Null 가능성 처리
-          recentClasses.add(detectedClass);
+          if (gesture.checkGesture(
+              certificationGesture['gesture'], detectedClass ?? "")) {
+            //제스처가 인증제스처와 같으면, add
+            resultHasTarget = true;
+            correctDetectionCount++;
+            recentClasses.add(detectedClass);
+          } else {
+            resultHasTarget = false; //탐지한 객체가 offerGesture와 다르면 false
+          }
         }
-        if (recentClasses.length > 3) {
+        if (recentClasses.length > 2) {
           recentClasses.removeFirst();
+          resultHasTarget = false;
         }
 
         // 같은 클래스가 연속 세 번 탐지되었는지 확인
-        if (recentClasses.length == 3 &&
+        if (recentClasses.length == 2 &&
             recentClasses.every((c) => c == recentClasses.first)) {
           detectionComplete = true; // 객체 탐지 완료 플래그 설정
           captureImage();
@@ -159,11 +174,21 @@ class _CertificationCameraState extends State<CertificationCamera> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('인증 성공!',style: textStyle(17, Palette.mainPurple, weight: FontWeight.bold),),
-          content: Text('인증이 성공적으로 완료되었습니다.',style: textStyle(13, Palette.grey300, weight: FontWeight.bold),),
+          title: Text(
+            '인증 성공!',
+            style: textStyle(17, Palette.mainPurple, weight: FontWeight.bold),
+          ),
+          content: Text(
+            '인증이 성공적으로 완료되었습니다.',
+            style: textStyle(13, Palette.grey300, weight: FontWeight.bold),
+          ),
           actions: <Widget>[
             TextButton(
-              child: Text('확인',style: textStyle(14, Palette.mainPurple, weight: FontWeight.bold),),
+              child: Text(
+                '확인',
+                style:
+                    textStyle(14, Palette.mainPurple, weight: FontWeight.bold),
+              ),
               onPressed: () async {
                 Navigator.of(context).pop(); // 팝업 닫기
 
@@ -181,54 +206,63 @@ class _CertificationCameraState extends State<CertificationCamera> {
   }
 }
 
-Widget offerGesture(Map<String, dynamic> certificationGesture){
+Widget offerGesture(Map<String, dynamic> certificationGesture) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      SizedBox(
-          child: certificationGesture['asset'],
-          height: 100),
+      SizedBox(child: certificationGesture['asset'], height: 100),
       const SizedBox(height: 20),
-      Text(
-          "${certificationGesture['nameText']} 포즈를\n3초 이상 유지하세요!",
-          textAlign: TextAlign.center,
-          style: textStyle(13, Palette.grey500))
+      Text("${certificationGesture['nameText']} 포즈를 유지하세요!",
+          textAlign: TextAlign.center, style: textStyle(13, Palette.grey500))
     ],
   );
 }
 
 TextStyle textStyle(double size, Color color,
-    {FontWeight weight = FontWeight.w400}) =>
+        {FontWeight weight = FontWeight.w400}) =>
     TextStyle(
         fontSize: size,
         fontWeight: weight,
         fontFamily: 'Pretender',
         color: color);
 
+class CameraProgressWidget extends StatelessWidget {
+  final int detectionCount;
 
-class StatsRow extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const StatsRow(this.title, this.value, {super.key});
-
+  const CameraProgressWidget({super.key, required this.detectionCount});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(value)
-        ],
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(2, (index) {
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: index < detectionCount
+                    ? Palette.purPle500
+                    : Palette.grey200,
+              ),
+              child: Center(
+                child: Text(
+                  '${index + 1}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Pretender',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
-
-
 }

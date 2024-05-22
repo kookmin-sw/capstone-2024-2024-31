@@ -146,7 +146,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(children: [
-                          Text("📸 인증 사진",
+                          Text("📸 사진",
                               style: textStyle(15, Palette.grey500,
                                   weight: FontWeight.bold)),
                           Visibility(
