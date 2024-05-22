@@ -1,7 +1,7 @@
-Down
-Side
-Side
-Stop
-Thumbs Down
-Thumbs Up
-Up
+아래
+좌/우를 가리킴
+좌/우를 가리킴
+멈춰
+엄지 아래로
+엄지 척
+위
