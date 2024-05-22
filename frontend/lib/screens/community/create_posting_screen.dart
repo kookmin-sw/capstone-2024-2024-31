@@ -15,7 +15,11 @@ import '../challenge/certification/certification_gallery.dart';
 
 class CreatePostingScreen extends StatefulWidget {
   final Challenge challenge;
-  const CreatePostingScreen({super.key, required this.challenge,});
+
+  const CreatePostingScreen({
+    super.key,
+    required this.challenge,
+  });
 
   @override
   State<CreatePostingScreen> createState() => _CreatePostingScreenState();
@@ -66,12 +70,12 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
           });
         }
       }
-    } else { //카메라 버튼일때
+    } else {
+      //카메라 버튼일때
 
-      final cameraImage  =  await Get.to(()=> const CertificationCamera());
+      final cameraImage = await Get.to(() => const CertificationCamera());
 
       if (cameraImage != null) {
-
         setState(() {
           _inputImage = cameraImage;
           _showImage = true;
@@ -145,21 +149,27 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(children: [
-                          Text("📸 사진",
-                              style: textStyle(15, Palette.grey500,
-                                  weight: FontWeight.bold)),
-                          Visibility(
-                              visible: _showImage,
-                              child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _showImage = false;
-                                      _inputImage = File(''); // 이미지 리셋
-                                    });
-                                  },
-                                  child: const Icon(Icons.close, color: Palette.red)))
-                        ]),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("📸 사진",
+                                  style: textStyle(15, Palette.grey500,
+                                      weight: FontWeight.bold)),
+                              Visibility(
+                                  visible: _showImage,
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _showImage = false;
+                                          _inputImage = File(''); // 이미지 리셋
+                                        });
+                                      },
+                                      child: Text(
+                                        "삭제",
+                                        style: textStyle(10, Palette.grey200,
+                                            weight: FontWeight.w400),
+                                      )))
+                            ]),
                         const SizedBox(height: 10),
                         imageContainer(),
                         const SizedBox(height: 20),
@@ -245,22 +255,23 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
           children: [
             Positioned.fill(
                 child: Visibility(
-                  visible: !_showImage,
-                  child:   _isGalleryPossible
-                      ? Row(
-                    children: [
-                      shadowBtn(Icons.camera_alt, false),
-                      const Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 30, horizontal: 3),
-                          child: VerticalDivider(
-                            color: Palette.grey50,
-                            thickness: 3,
-                          )),
-                      shadowBtn(Icons.add_photo_alternate, true)
-                    ],
-                  ) : shadowBtn(Icons.camera_alt, false),
-                )),
+              visible: !_showImage,
+              child: _isGalleryPossible
+                  ? Row(
+                      children: [
+                        shadowBtn(Icons.camera_alt, false),
+                        const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 30, horizontal: 3),
+                            child: VerticalDivider(
+                              color: Palette.grey50,
+                              thickness: 3,
+                            )),
+                        shadowBtn(Icons.add_photo_alternate, true)
+                      ],
+                    )
+                  : shadowBtn(Icons.camera_alt, false),
+            )),
             Positioned.fill(
               child: Visibility(
                   visible: _showImage,
