@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/screens/challenge/create/create_challenge_screen_fir.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 
 Widget homeAppBar = AppBar(
+  systemOverlayStyle: const SystemUiOverlayStyle(
+    statusBarColor: Palette.mainPurple,
+    statusBarIconBrightness: Brightness.light,
+  ),
   backgroundColor: Palette.mainPurple,
   foregroundColor: Colors.white,
   leading: Padding(

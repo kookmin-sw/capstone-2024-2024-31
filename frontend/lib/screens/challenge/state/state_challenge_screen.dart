@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/screens/challenge/state/state_screen_widget.dart';
 import 'package:frontend/service/challenge_service.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import '../../../model/config/palette.dart';
 import '../../../model/controller/user_controller.dart';
 import '../../../model/data/challenge/challenge.dart';
 import '../../../model/data/challenge/challenge_status.dart';
@@ -41,8 +43,17 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Palette.purPle700,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+
     _initialize();
   }
+
 
   Future<void> _initialize() async {
     try {
@@ -136,5 +147,18 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
                 _challenge, _isPossibleCertification),
       ),
     );
+  }
+
+
+  @override
+  void dispose() {
+    // 화면이 사라질 때 기본 상태바 스타일로 복원
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Palette.mainPurple,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+    super.dispose();
   }
 }

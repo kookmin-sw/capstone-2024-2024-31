@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/screens/main/bottom_tabs/myRoutineUp/widget/my_routine_widget.dart';
 import 'package:frontend/screens/main/bottom_tabs/myRoutineUp/widget/progress_widget.dart';
 import 'package:frontend/model/config/palette.dart';
@@ -30,6 +31,15 @@ class _MyRoutineUpScreenState extends State<MyRoutineUpScreen> {
   @override
   void initState() {
     super.initState();
+
+    // 상태바 스타일 설정
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Palette.mainPurple,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+
     for (var challenge in controller.myChallenges) {
       if (challenge.status == "진행전") {
         beforeChallenge.add(challenge);

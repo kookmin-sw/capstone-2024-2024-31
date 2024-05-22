@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/service/dio_service.dart';
 import 'package:frontend/screens/login/login_screen.dart';
 import 'package:frontend/model/controller/user_controller.dart';
@@ -9,7 +10,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'model/config/palette.dart';
+
 void main() async {
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Palette.mainPurple,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -41,7 +51,11 @@ class _MyAppState extends State<MyApp> {
         minTextAdapt: true,
         builder: (context, child) {
           return GetMaterialApp(
-              theme: ThemeData(primaryColor: Colors.white),
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                  scaffoldBackgroundColor: Colors.white,
+                  // primaryColor: Colors.white,
+                ),
               initialRoute: widget.isLoggedIn ? 'main' : 'login',
               useInheritedMediaQuery: true,
               routes: {
