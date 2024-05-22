@@ -157,24 +157,17 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
             color: Colors.transparent,
             width: double.infinity,
-            child: Row(children: [
-              Expanded(
-                child: RtuButton(
-                  onPressed: () => _pressJoinButton(ChallengeJoin()),
-                  text: '바로 참가하기',
-                ),
-              ),
-              const SizedBox(width: 8),
+            child:
               Expanded(
                   child: RtuButton(
                 onPressed: () => _pressJoinButton(ChallengeJoin(
                     determination: _determination,
                     targetName: _targetName,
                     receiverNumber: _receiverNumber)),
-                text: "번호 등록 후 참가하기",
+                text: "참가하기",
                 disabled: !isAllInput,
               )),
-            ])));
+            ));
   }
 
   Widget inputPenaltyName(Size screenSize) {
@@ -312,9 +305,11 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                 return null;
               },
               onChanged: (value) {
-                _receiverNumber = value.toString();
-                isInputList[1] = true;
-                _updateButtonState();
+                setState((){
+                  _receiverNumber = value.toString();
+                  isInputList[1] = true;
+                  _updateButtonState();
+                });
               },
               focusNode: _numberFocusNode,
             )),
@@ -332,6 +327,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                         colorText: Palette.white,
                         duration: const Duration(seconds: 1));
                   }).catchError((err) {
+                    logger.e(err);
                     Get.snackbar('인증번호 전송 실패', '다시 시도해주세요.',
                         backgroundColor: Palette.red,
                         colorText: Palette.white,
