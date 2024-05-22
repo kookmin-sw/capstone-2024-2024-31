@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import km.cd.backend.challenge.domain.ChallengeCategory;
 import km.cd.backend.common.oauth2.attributes.OAuth2Attributes;
 import lombok.*;
@@ -63,6 +61,9 @@ public class User {
     private List<ChallengeCategory> categories = new ArrayList<>();
     
     private String githubUsername;
+
+    @Setter
+    private String fcmToken;
     
     public User(Long id, String email, String name) {
         this.id = id;

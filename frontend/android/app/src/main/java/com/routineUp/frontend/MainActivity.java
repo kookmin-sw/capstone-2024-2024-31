@@ -1,4 +1,4 @@
-package com.routineUp.frontend;
+package com.routineup.frontend;
 
 import io.flutter.embedding.android.FlutterActivity;
 

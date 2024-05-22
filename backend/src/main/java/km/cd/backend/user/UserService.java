@@ -47,8 +47,12 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
     }
     
-    public UserResponse getMyInfo(Long userId) {
+    public UserResponse getMyInfo(Long userId, String fcmToken) {
         User user = findById(userId);
+
+        user.setFcmToken(fcmToken);
+        userRepository.save(user);
+
         return UserMapper.INSTANCE.userToUserResponse(user);
     }
     
