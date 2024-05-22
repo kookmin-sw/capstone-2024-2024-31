@@ -22,13 +22,13 @@ class _ChallengeTopStackState extends State<ChallengeTopStack> {
       children: [
         Column(mainAxisSize: MainAxisSize.min, children: [
           ChallengeRecommendBox(name: userController.user.name),
-          Container(height: 110, color: Palette.mainPurple),
-          Container(height: 100, color: Colors.transparent),
+          Container(height: 100, color: Palette.mainPurple),
+          Container(height: 110, color: Colors.transparent),
         ]),
         const Positioned(
           right: 0,
           left: 0,
-          top: 150,
+          top: 170,
           child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ChallengeStateBox()),
