@@ -95,7 +95,7 @@ class HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
                             child: Text(
                               widget.challengeSimple.challengeName, // 챌린지 이름
                               maxLines: 1,
-                              overflow: TextOverflow.fade,
+                              overflow: TextOverflow.clip,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontFamily: "Pretender",
@@ -104,7 +104,7 @@ class HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
                             ),
                           ),
                           Text(
-                            '${getProgressPercent(widget.challengeSimple).toInt()}%',
+                            ' ${getProgressPercent(widget.challengeSimple).toInt()}%',
                             style: const TextStyle(
                               fontSize: 11,
                               fontFamily: "Pretender",
