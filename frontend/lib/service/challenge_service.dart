@@ -18,7 +18,7 @@ class ChallengeService {
     final String uri = '/challenges/$id';
 
     try {
-      final response = await dio.get(uri);
+      final response = await dio.get(uri, queryParameters: {'code': code});
 
       if (response.statusCode == 200) {
         logger.d('챌린지 조회 성공: ${response.data}');
