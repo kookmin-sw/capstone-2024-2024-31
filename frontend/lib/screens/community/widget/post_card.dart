@@ -163,14 +163,16 @@ Widget postCardContent(String postTitle, String postText) {
   return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
         Text(
           postTitle,
           maxLines: 1,
           textAlign: TextAlign.left,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
-            fontWeight: FontWeight.bold ,fontFamily: 'Pretendard', fontSize: 16, height: 1.3, // 줄간격 조정
+            fontWeight: FontWeight.bold ,fontFamily: 'Pretendard', fontSize: 16, height: 2, // 줄간격 조정
           ),
         ),
         Text(
