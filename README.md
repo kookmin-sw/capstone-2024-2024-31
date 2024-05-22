@@ -121,7 +121,6 @@ docker compose up -d
 <div style="display: flex; gap: 6px;">
     <img src="https://img.shields.io/badge/python-2F9FD7?style=for-the-badge&logo=python&logoColor=white"/>
     <img src="https://img.shields.io/badge/pytorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"/>
-    <img src="https://img.shields.io/badge/fastapi-005571?style=for-the-badge&logo=fastapi&logoColor=white"/>
 </div>
 
 ### Tools
