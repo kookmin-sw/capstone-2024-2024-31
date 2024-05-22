@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/model/config/palette.dart';
 import 'package:get/get.dart';
 import 'package:pytorch_lite/pytorch_lite.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
+import '../../../model/data/gesture.dart';
 import 'camera_view_singleton.dart';
 import 'confirm_image_screen.dart';
 import 'ui/box_widget.dart';
@@ -23,14 +25,25 @@ class _CertificationCameraState extends State<CertificationCamera> {
   int detectionCount = 0;
   late File capturedImage;
   bool detectionComplete = false; // 플래그 변수 추가
+  late Map<String, dynamic> certificationGesture;
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   GlobalKey<CameraViewState> cameraViewKey = GlobalKey<CameraViewState>();
+
+  TextStyle textStyle(double size, Color color,
+      {FontWeight weight = FontWeight.w400}) =>
+      TextStyle(
+          fontSize: size,
+          fontWeight: weight,
+          fontFamily: 'Pretender',
+          color: color);
 
   @override
   void initState() {
     super.initState();
     detectionCount = 0;
+    certificationGesture = Gesture().getRandomGesture();
+
   }
 
   @override
@@ -67,6 +80,7 @@ class _CertificationCameraState extends State<CertificationCamera> {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
+                              offerGesture(certificationGesture),
                               if (objectDetectionInferenceTime != null)
                                 StatsRow('Object Detection Inference time:',
                                     '${objectDetectionInferenceTime?.inMilliseconds} ms'),
@@ -145,11 +159,11 @@ class _CertificationCameraState extends State<CertificationCamera> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('인증 성공!'),
-          content: const Text('인증이 성공적으로 완료되었습니다.'),
+          title: Text('인증 성공!',style: textStyle(17, Palette.mainPurple, weight: FontWeight.bold),),
+          content: Text('인증이 성공적으로 완료되었습니다.',style: textStyle(13, Palette.grey300, weight: FontWeight.bold),),
           actions: <Widget>[
             TextButton(
-              child: const Text('확인'),
+              child: Text('확인',style: textStyle(14, Palette.mainPurple, weight: FontWeight.bold),),
               onPressed: () async {
                 Navigator.of(context).pop(); // 팝업 닫기
 
@@ -167,11 +181,38 @@ class _CertificationCameraState extends State<CertificationCamera> {
   }
 }
 
+Widget offerGesture(Map<String, dynamic> certificationGesture){
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      SizedBox(
+          child: certificationGesture['asset'],
+          height: 100),
+      const SizedBox(height: 20),
+      Text(
+          "${certificationGesture['nameText']} 포즈를\n3초 이상 유지하세요!",
+          textAlign: TextAlign.center,
+          style: textStyle(13, Palette.grey500))
+    ],
+  );
+}
+
+TextStyle textStyle(double size, Color color,
+    {FontWeight weight = FontWeight.w400}) =>
+    TextStyle(
+        fontSize: size,
+        fontWeight: weight,
+        fontFamily: 'Pretender',
+        color: color);
+
+
 class StatsRow extends StatelessWidget {
   final String title;
   final String value;
 
   const StatsRow(this.title, this.value, {super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -188,4 +229,6 @@ class StatsRow extends StatelessWidget {
       ),
     );
   }
+
+
 }

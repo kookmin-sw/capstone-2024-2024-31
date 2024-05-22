@@ -47,7 +47,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
     _isGalleryPossible = widget.challenge.isGalleryPossible;
   }
 
-  void getimage(final bool isGallery) async {
+  void getImage(final bool isGallery) async {
     if (isGallery) {
       // 기존 isGallery=true 로직
       final selectedImage = await Get.to(() => const CertificationByGallery());
@@ -276,7 +276,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
   Widget shadowBtn(final IconData iconData, bool isGallery) {
     return Expanded(
         child: GestureDetector(
-            onTap: () => getimage(isGallery), //여기
+            onTap: () => getImage(isGallery), //여기
             child: Container(
                 decoration: BoxDecoration(
                   color: Palette.white,
