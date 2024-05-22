@@ -77,7 +77,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
           ),
           const SizedBox(height: 10),
           challengeSimples.isEmpty
-              ? SvgPicture.asset("assets/svgs/no_challenge_state_card.svg")
+              ? Center(child: SvgPicture.asset("assets/svgs/no_challenge_state_card.svg"))
               : Expanded(
                   child: Swiper(
                     loop: false,

@@ -190,15 +190,15 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     hintStyle: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w300,
-                      color: Palette.grey200,
+                      color: Palette.grey500,
                     ),
                     contentPadding:
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     filled: true,
-                    fillColor: Palette.greySoft,
+                    fillColor: Palette.white,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
-                        borderSide: const BorderSide(color: Palette.greySoft)),
+                        borderSide: const BorderSide(color: Palette.grey50)),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
                       borderSide:
@@ -213,12 +213,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                   child: Container(
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
+                        color: Palette.grey50,
                           borderRadius: BorderRadius.circular(15),
                           border:
                               Border.all(color: Palette.grey50, width: 2.0)),
                       child: Icon(Icons.send,
                           color: _inputComment.isEmpty
-                              ? Palette.grey200
+                              ? Palette.white
                               : Palette.mainPurple)),
                   onTap: () {
                     PostService.createComment(_post.id, _inputComment,
@@ -256,7 +257,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       )),
       body: SingleChildScrollView(
         child: Container(
-            color: Palette.greyBG,
+            color: Palette.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -265,6 +266,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                   onPostDetail: true,
                   focusNode: _commentInputFocusNode,
                 ),
+                const Divider(color: Palette.greyBG, thickness: 3 , indent: 18, endIndent: 18),
                 Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 6),

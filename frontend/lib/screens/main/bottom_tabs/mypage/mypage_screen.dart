@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/screens/login/login_screen.dart';
 import 'package:frontend/screens/main/bottom_tabs/mypage/mypage_pupleBtnBox.dart';
 import 'package:frontend/screens/main/bottom_tabs/mypage/widget/mypage_user_inform.dart';
@@ -13,11 +15,24 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    // 상태바 스타일 설정
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Palette.white,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Palette.white,
             // AppBar를 투명하게 설정
             elevation: 0,
             // 그림자 없애기
@@ -25,8 +40,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
               '마이페이지',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.bold,
                 fontFamily: 'Pretendard',
+                color: Colors.black
               ),
             )),
         body: SingleChildScrollView(

@@ -57,12 +57,12 @@ class BoxWidget extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: FittedBox(
             child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               color: usedColor,
               child: Row(
-                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text(result.className ?? result.classIndex.toString()),
-                  Text(" ${result.score.toStringAsFixed(2)}"),
+                  Text(result.className ?? result.classIndex.toString(), style: const TextStyle(fontFamily: 'Pretender',fontWeight: FontWeight.w500, color: Colors.white),),
+                  Text(" ${result.score.toStringAsFixed(2)}", style: const TextStyle(fontFamily: 'Pretender',fontWeight: FontWeight.w500,color: Colors.white),),
                 ],
               ),
             ),

@@ -25,18 +25,19 @@ class ChallengeCompleteScreen extends StatefulWidget {
 }
 
 class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
+
   final Sms _sms = Sms(
-    receiverNumber: '010-3333-9999',
-    userName: '신혜은',
-    challengeName: '조깅 3KM 진행하고 상금받자',
+    receiverNumber: '010-3473-2346',
+    userName: '혁규',
+    challengeName: '6주동안 다이어트 성공하기!',
     relationship: '친구',
-    receiverName: '김추환',
-    letter: '이거 실패하면 공차 사줄게~',
+    receiverName: '혜은',
+    letter: '나 이번 여름에는 비키니를 입을 테야. 실패하면 치킨 사줄게 ㅋㅋ',
   );
   final logger = Logger();
   final userController = Get.find<UserController>();
 
-  final bool _isSuccess = false;
+  final bool _isSuccess = true;
 
   late Challenge _challenge;
 
@@ -45,7 +46,37 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
         fontFamily: 'Pretender',
         fontSize: fontSize,
       );
+  //
+  // List<Post> posts = List.generate(10, (index) {
+  //   return Post(
+  //     id: index,
+  //     title: 'Post Title $index',
+  //     content: 'This is the content of post $index.',
+  //     author: 'Author $index',
+  //     authorId: index,
+  //     avatar: 'https://example.com/avatar$index.png',
+  //     image: 'https://example.com/image$index.png',
+  //     createdDate: '2023-05-01T12:00:00Z',
+  //     comments: List.generate(3, (commentIndex) {
+  //       return Comment(
+  //         id: commentIndex,
+  //         parentId: null,
+  //         author: 'Comment Author $commentIndex',
+  //         content: 'This is a comment $commentIndex on post $index.',
+  //         avatar: 'https://example.com/comment_avatar$commentIndex.png',
+  //         children: [],
+  //         createdDate: '2023-05-01T12:00:00Z',
+  //       );
+  //     }),
+  //     likes: List.generate(5, (likeIndex) {
+  //       return Like(
+  //         userId: likeIndex,
+  //       );
+  //     }),
+  //   );
+  // });
 
+  // print(jsonEncode(posts.map((post) => post.toJson()).toList()));
   @override
   void initState() {
     super.initState();
@@ -73,11 +104,11 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
             return const Center(child: Text('인증 결과를 불러오지 못했어요.'));
           } else {
             List<Post>? posts = snapshot.data;
-            if (posts == null || posts.isEmpty) {
-              return const Center(child: Text('인증 결과를 불러오지 못했어요.'));
-            } else {
-              return buildBody(posts);
-            }
+            // if (posts == null || posts.isEmpty) {
+            //   return const Center(child: Text('인증 결과를 불러오지 못했어요.'));
+            // } else {
+              return buildBody(posts!);
+            // }
           }
         },
       ),

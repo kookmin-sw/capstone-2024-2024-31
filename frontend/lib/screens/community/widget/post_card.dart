@@ -38,11 +38,12 @@ class _PostCardState extends State<PostCard> {
     super.initState();
     _post = widget.post;
     _isLiked = _post.likes.any((like) => like.userId == controller.user.id);
-    if( controller.user.id == _post.authorId){ //작성자가 본인이면 following 버튼 비활성화
+    if (controller.user.id == _post.authorId) {
+      //작성자가 본인이면 following 버튼 비활성화
       _isFollowing = true;
     }
     for (final user in controller.user.following) {
-      if (user.friendName == _post.author ) {
+      if (user.friendName == _post.author) {
         _isFollowing = true;
         break;
       }
@@ -141,7 +142,7 @@ class _PostCardState extends State<PostCard> {
                   onFollowingChanged: _handleFollow,
                 ),
                 const SizedBox(height: 10),
-                postCardContent(_post.content),
+                postCardContent(_post.title, _post.content),
                 const SizedBox(height: 10),
                 postCardImage(_post.image),
               ],
@@ -159,18 +160,36 @@ class _PostCardState extends State<PostCard> {
   }
 }
 
-Widget postCardContent(String postText) {
+Widget postCardContent(String postTitle, String postText) {
   return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(
-        postText,
-        maxLines: 5,
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontFamily: 'Pretendard', fontSize: 12, height: 1.3, // 줄간격 조정
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            postTitle,
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Pretender',
+              fontSize: 16,
+              height: 2, // 줄간격 조정
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            postText,
+            maxLines: 5,
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: 'Pretender', fontSize: 12, height: 1.2, // 줄간격 조정
+            ),
+          )
+        ],
       ));
 }
 

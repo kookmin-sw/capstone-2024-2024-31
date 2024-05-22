@@ -116,7 +116,7 @@ class CertificationByGalleryState extends State<CertificationByGallery> {
         "className": element?.className,
       });
       if (Gesture().checkGesture(
-          certificationGesture["gesture"], element?.className?.trim() ?? "")) {
+          certificationGesture["nameText"], element?.className?.trim() ?? "")) {
         textToShow = "인증되었습니다!";
         result = true;
       }
