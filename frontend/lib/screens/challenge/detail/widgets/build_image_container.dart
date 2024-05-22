@@ -59,12 +59,15 @@ class BuildImageContainer extends StatelessWidget {
             child: isJoinScreen
                 ? Image.asset(
                     path,
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.fill,
+              height: screenSize.height * 0.20,
                   )
                 : Image.network(
                     path,
-                    fit: BoxFit.fitWidth,
-                  ),
+                    fit: BoxFit.fill,
+              height: screenSize.height * 0.20,
+
+            ),
           ),
         ),
         const SizedBox(height: 5),
