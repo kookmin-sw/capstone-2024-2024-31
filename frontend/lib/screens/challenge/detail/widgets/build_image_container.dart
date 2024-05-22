@@ -47,7 +47,7 @@ class BuildImageContainer extends StatelessWidget {
         const SizedBox(height: 5),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28.0),
+            borderRadius: BorderRadius.circular(32.0),
             border: Border.all(
               color: color,
               width: 2.0,

@@ -87,6 +87,7 @@ class _MyRoutineUpCardState extends State<MyRoutineUpCard> {
           ),
         )
             : Card(
+          elevation: 5.0,
           color: widget.isIng ? Colors.white : Colors.grey[80],
           child: Opacity(
             opacity: widget.isIng ? 1.0 : 0.5,

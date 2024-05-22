@@ -220,4 +220,12 @@ class HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
       ),
     );
   }
+
+  double getProgressPercent(ChallengeSimple thisChallengeSimple) {
+    DateTime now = DateTime.now();
+    DateTime start = thisChallengeSimple.startDate;
+    DateTime end =
+    start.add(Duration(days: thisChallengeSimple.challengePeriod * 7));
+    return now.difference(start).inDays / end.difference(start).inDays * 100;
+  }
 }

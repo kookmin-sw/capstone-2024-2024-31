@@ -10,12 +10,16 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
+import '../challenge/certification/certification_camera.dart';
 import '../challenge/certification/certification_gallery.dart';
 
 class CreatePostingScreen extends StatefulWidget {
   final Challenge challenge;
 
-  const CreatePostingScreen({super.key, required this.challenge});
+  const CreatePostingScreen({
+    super.key,
+    required this.challenge,
+  });
 
   @override
   State<CreatePostingScreen> createState() => _CreatePostingScreenState();
@@ -47,8 +51,9 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
     _isGalleryPossible = widget.challenge.isGalleryPossible;
   }
 
-  void getimage(final bool isGallery) async {
+  void getImage(final bool isGallery) async {
     if (isGallery) {
+      // 기존 isGallery=true 로직
       final selectedImage = await Get.to(() => const CertificationByGallery());
       if (selectedImage != null) {
         setState(() {
@@ -56,14 +61,25 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
           _showImage = true;
         });
       } else {
-        final image = await ImagePicker().pickImage(
-            source: isGallery ? ImageSource.gallery : ImageSource.camera);
+        final image =
+            await ImagePicker().pickImage(source: ImageSource.gallery);
         if (image != null) {
           setState(() {
             _inputImage = File(image.path);
             _showImage = true;
           });
         }
+      }
+    } else {
+      //카메라 버튼일때
+
+      final cameraImage = await Get.to(() => const CertificationCamera());
+
+      if (cameraImage != null) {
+        setState(() {
+          _inputImage = cameraImage;
+          _showImage = true;
+        });
       }
     }
   }
@@ -133,21 +149,27 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(children: [
-                          Text("📸 인증 사진",
-                              style: textStyle(15, Palette.grey500,
-                                  weight: FontWeight.bold)),
-                          Visibility(
-                              visible: _showImage,
-                              child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _showImage = false;
-                                    });
-                                  },
-                                  child: const Icon(Icons.close,
-                                      color: Palette.red)))
-                        ]),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("📸 사진",
+                                  style: textStyle(15, Palette.grey500,
+                                      weight: FontWeight.bold)),
+                              Visibility(
+                                  visible: _showImage,
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _showImage = false;
+                                          _inputImage = File(''); // 이미지 리셋
+                                        });
+                                      },
+                                      child: Text(
+                                        "삭제",
+                                        style: textStyle(10, Palette.grey200,
+                                            weight: FontWeight.w400),
+                                      )))
+                            ]),
                         const SizedBox(height: 10),
                         imageContainer(),
                         const SizedBox(height: 20),
@@ -233,8 +255,9 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
           children: [
             Positioned.fill(
                 child: Visibility(
-                    visible: !_showImage,
-                    child: Row(
+              visible: !_showImage,
+              child: _isGalleryPossible
+                  ? Row(
                       children: [
                         shadowBtn(Icons.camera_alt, false),
                         const Padding(
@@ -246,7 +269,9 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                             )),
                         shadowBtn(Icons.add_photo_alternate, true)
                       ],
-                    ))),
+                    )
+                  : shadowBtn(Icons.camera_alt, false),
+            )),
             Positioned.fill(
               child: Visibility(
                   visible: _showImage,
@@ -262,7 +287,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
   Widget shadowBtn(final IconData iconData, bool isGallery) {
     return Expanded(
         child: GestureDetector(
-            onTap: () => getimage(isGallery), //여기
+            onTap: () => getImage(isGallery), //여기
             child: Container(
                 decoration: BoxDecoration(
                   color: Palette.white,

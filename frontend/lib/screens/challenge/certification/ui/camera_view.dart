@@ -11,10 +11,7 @@ class CameraView extends StatefulWidget {
   final Function(
           List<ResultObjectDetection> recognitions, Duration inferenceTime)
       resultsCallback;
-  final Function(String classification, Duration inferenceTime)
-      resultsCallbackClassification;
-
-  const CameraView(this.resultsCallback, this.resultsCallbackClassification,
+  const CameraView(this.resultsCallback,
       {super.key});
 
   @override
@@ -27,7 +24,6 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver {
   bool predicting = false;
   bool predictingObjectDetection = false;
   ModelObjectDetection? _objectModel;
-  ClassificationModel? _imageModel;
   bool classification = false;
   int _camFrameRotation = 0;
   String errorMessage = "";
@@ -161,14 +157,7 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver {
     setState(() {
       predicting = true;
     });
-    if (_imageModel != null) {
-      Stopwatch stopwatch = Stopwatch()..start();
-      String imageClassification = await _imageModel!
-          .getCameraImagePrediction(cameraImage, _camFrameRotation);
-      stopwatch.stop();
-      widget.resultsCallbackClassification(
-          imageClassification, stopwatch.elapsed);
-    }
+
     if (!mounted) {
       return;
     }

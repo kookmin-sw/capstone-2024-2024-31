@@ -47,7 +47,7 @@ class _ChallengeWidgetState extends State<ChallengeWidget> {
           textAlign: TextAlign.start,
           style: const TextStyle(
             fontFamily: 'Pretendard',
-            fontSize: 10,
+            fontSize: 12,
             color: Palette.grey500,
             fontWeight: FontWeight.bold,
           ),
