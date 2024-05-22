@@ -78,8 +78,8 @@ class PostService {
     }
   }
 
-  static Future<Comment> createComment(
-      int postId, String content, int? parentId) async {
+  static Future<Comment> createComment(int postId, String content,
+      int? parentId) async {
     final String uri = '/posts/$postId/comments';
 
     try {
@@ -100,14 +100,13 @@ class PostService {
     }
   }
 
-  static Future<bool> checkPossibleCertification(
-      int challengeId, int userId) async {
+  static Future<bool> checkPossibleCertification(int challengeId,
+      int userId) async {
     try {
       List<Post> posts = await fetchPosts(challengeId);
       if (posts.isEmpty) {
         return true;
       }
-
       // 현재 날짜를 가져옵니다.
       DateTime today = DateTime.now();
       String todayStr = DateFormat('yyyy-MM-dd').format(today);
@@ -117,7 +116,7 @@ class PostService {
       // 필터링된 내 포스트 중에서 오늘 작성된 포스트가 있는지 검사
       for (var post in myPosts) {
         String postDateStr =
-            DateFormat('yyyy-MM-dd').format(DateTime.parse(post.createdDate));
+        DateFormat('yyyy-MM-dd').format(DateTime.parse(post.createdDate));
         if (postDateStr == todayStr) {
           return false; // 오늘 날짜 글 있으면 false
         }
@@ -127,5 +126,29 @@ class PostService {
       logger.e('Error: $e');
       throw Exception('게시글 조회 실패: ${e.toString()}');
     }
+    return false;
+  }
+
+  static Future<bool> checkPossibleCommunityCertification(List<Post> posts,
+      int userId) async {
+    if (posts.isEmpty) {
+      return true;
+    }
+
+    // 현재 날짜를 가져옵니다.
+    DateTime today = DateTime.now();
+    String todayStr = DateFormat('yyyy-MM-dd').format(today);
+    // posts 중에 내 포스트만 필터링
+    var myPosts = posts.where((post) => post.authorId == userId);
+
+    // 필터링된 내 포스트 중에서 오늘 작성된 포스트가 있는지 검사
+    for (var post in myPosts) {
+      String postDateStr =
+      DateFormat('yyyy-MM-dd').format(DateTime.parse(post.createdDate));
+      if (postDateStr == todayStr) {
+        return false; // 오늘 날짜 글 있으면 false
+      }
+    }
+    return true; // 오늘 날짜 글 없으면 true
   }
 }

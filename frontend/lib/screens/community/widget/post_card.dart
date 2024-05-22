@@ -38,8 +38,11 @@ class _PostCardState extends State<PostCard> {
     super.initState();
     _post = widget.post;
     _isLiked = _post.likes.any((like) => like.userId == controller.user.id);
+    if( controller.user.id == _post.authorId){ //작성자가 본인이면 following 버튼 비활성화
+      _isFollowing = true;
+    }
     for (final user in controller.user.following) {
-      if (user.friendName == _post.author) {
+      if (user.friendName == _post.author ) {
         _isFollowing = true;
         break;
       }
@@ -131,7 +134,7 @@ class _PostCardState extends State<PostCard> {
             child: Column(
               children: [
                 PostCardTop(
-                  image: _post.image,
+                  image: _post.avatar,
                   name: _post.author,
                   createdAt: _post.createdDate,
                   isInitiallyFollowing: _isFollowing,

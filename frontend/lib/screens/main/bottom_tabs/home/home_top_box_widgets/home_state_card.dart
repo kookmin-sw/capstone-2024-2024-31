@@ -42,7 +42,6 @@ class HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
       isLoading = true;
     });
     _userController = Get.find<UserController>();
-    _checkButtonClickPossibility(); // 비동기 작업을 별도의 함수에서 호출
     _initialize();
   }
 

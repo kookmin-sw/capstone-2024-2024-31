@@ -8,7 +8,7 @@ import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:frontend/service/post_service.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-
+import 'package:frontend/model/controller/user_controller.dart';
 import '../../model/data/post/post.dart';
 
 class CommunityScreen extends StatefulWidget {
@@ -27,7 +27,9 @@ class CommunityScreen extends StatefulWidget {
 class _CommunityScreenState extends State<CommunityScreen>
     with TickerProviderStateMixin {
   final logger = Logger();
+  final controller = Get.find<UserController>();
 
+  late bool isPossibleCreateButtonClick;
   late Challenge _challenge;
   List<Post> _posts = [];
   bool _isLoading = false;
@@ -37,13 +39,33 @@ class _CommunityScreenState extends State<CommunityScreen>
   void initState() {
     super.initState();
     _challenge = widget.challenge;
-    PostService.fetchPosts(_challenge.id).then((value) {
+
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final posts = await PostService.fetchPosts(_challenge.id);
       setState(() {
-        _posts = value;
+        _posts = posts;
         _sortPosts();
       });
-    });
-    _isLoading = false;
+
+      isPossibleCreateButtonClick =
+          await PostService.checkPossibleCommunityCertification(
+              _posts, controller.user.id);
+    } catch (e) {
+      // Handle errors if necessary
+      print("Error during initialization: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   void _sortPosts() {
@@ -100,7 +122,9 @@ class _CommunityScreenState extends State<CommunityScreen>
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Get.to(CreatePostingScreen(challenge: _challenge));
+              isPossibleCreateButtonClick
+                  ? Get.to(CreatePostingScreen(challenge: _challenge))
+                  : Get.snackbar("오늘은 인증이 완료된 챌린지입니다.", "1일 1회 인증 가능합니다.");
             },
           ),
         ],
