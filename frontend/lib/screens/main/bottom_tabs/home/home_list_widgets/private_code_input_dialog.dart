@@ -6,6 +6,8 @@ import 'package:frontend/service/challenge_service.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
+import 'custom_snack_bar.dart';
+
 class PrivateCodeInputDialog extends StatefulWidget {
   const PrivateCodeInputDialog({super.key, required this.challengeId});
 
@@ -114,12 +116,13 @@ class _PrivateCodeInputDialogState extends State<PrivateCodeInputDialog> {
                           isFromPrivateCodeDialog: true,
                         ));
                   }).catchError((err) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('비공개 암호가 일치하지 않습니다'),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
+                    logger.e(err);
+                    setState(() {
+                      _isLoading = false;
+                    });
+
+                    showCustomSnackBar(context, '비공개 암호가 일치하지 않습니다');
+
                   }).whenComplete(() {
                     setState(() {
                       _isLoading = false;
