@@ -108,6 +108,8 @@ class HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
                             style: const TextStyle(
                               fontSize: 11,
                               fontFamily: "Pretender",
+                              color: Palette.purPle200,
+                              fontWeight: FontWeight.bold
                             ), // 진행 상태
                           ),
                         ],
