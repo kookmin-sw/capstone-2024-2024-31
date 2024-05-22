@@ -141,7 +141,7 @@ class _PostCardState extends State<PostCard> {
                   onFollowingChanged: _handleFollow,
                 ),
                 const SizedBox(height: 10),
-                postCardContent(_post.content),
+                postCardContent(_post.title, _post.content),
                 const SizedBox(height: 10),
                 postCardImage(_post.image),
               ],
@@ -159,19 +159,30 @@ class _PostCardState extends State<PostCard> {
   }
 }
 
-Widget postCardContent(String postText) {
+Widget postCardContent(String postTitle, String postText) {
   return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(
-        postText,
-        maxLines: 5,
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontFamily: 'Pretendard', fontSize: 12, height: 1.3, // 줄간격 조정
+      child: Column(children: [
+        Text(
+          postTitle,
+          maxLines: 1,
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold ,fontFamily: 'Pretendard', fontSize: 16, height: 1.3, // 줄간격 조정
+          ),
         ),
-      ));
+        Text(
+          postText,
+          maxLines: 5,
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontFamily: 'Pretendard', fontSize: 12, height: 1.3, // 줄간격 조정
+          ),
+        )
+      ],));
 }
 
 Widget postCardImage(String image) {

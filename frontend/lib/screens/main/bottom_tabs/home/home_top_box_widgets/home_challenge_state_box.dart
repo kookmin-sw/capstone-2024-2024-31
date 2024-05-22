@@ -77,14 +77,14 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
           ),
           const SizedBox(height: 10),
           challengeSimples.isEmpty
-              ? SvgPicture.asset("assets/svgs/no_challenge_state_card.svg")
+              ? Center(child: SvgPicture.asset("assets/svgs/no_challenge_state_card.svg"))
               : Expanded(
                   child: Swiper(
                     loop: false,
                     itemCount: challengeSimples.length,
                     pagination: const SwiperPagination(
                       alignment: Alignment.bottomCenter,
-                      margin: EdgeInsets.all(1.0),
+                      margin: EdgeInsets.all(10.0),
                       builder: DotSwiperPaginationBuilder(
                           space: 3,
                           size: 9,
