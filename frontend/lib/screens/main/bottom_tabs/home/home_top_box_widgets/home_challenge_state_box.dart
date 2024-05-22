@@ -84,7 +84,7 @@ class _ChallengeStateBoxState extends State<ChallengeStateBox> {
                     itemCount: challengeSimples.length,
                     pagination: const SwiperPagination(
                       alignment: Alignment.bottomCenter,
-                      margin: EdgeInsets.all(10.0),
+                      margin: EdgeInsets.all(1.0),
                       builder: DotSwiperPaginationBuilder(
                           space: 3,
                           size: 9,
