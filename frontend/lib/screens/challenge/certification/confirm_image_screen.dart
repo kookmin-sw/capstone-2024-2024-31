@@ -3,7 +3,7 @@ import 'package:frontend/screens/community/create_posting_screen.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 
-import 'run_model_by_camera_demo.dart';
+import 'certification_camera.dart';
 
 class ConfirmImageScreen extends StatelessWidget {
   final File image;
@@ -28,7 +28,7 @@ class ConfirmImageScreen extends StatelessWidget {
               TextButton(
                 child: const Text('다시 찍기'),
                 onPressed: () {
-                  Get.off(() => const RunModelByCameraDemo());
+                  Get.off(() => const CertificationCamera());
                 },
               ),
               TextButton(

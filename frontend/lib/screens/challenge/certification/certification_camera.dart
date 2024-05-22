@@ -9,14 +9,14 @@ import 'ui/box_widget.dart';
 import 'ui/camera_view.dart';
 import 'dart:collection';
 
-class RunModelByCameraDemo extends StatefulWidget {
-  const RunModelByCameraDemo({super.key});
+class CertificationCamera extends StatefulWidget {
+  const CertificationCamera({super.key});
 
   @override
-  State<RunModelByCameraDemo> createState() => _RunModelByCameraDemoState();
+  State<CertificationCamera> createState() => _CertificationCameraState();
 }
 
-class _RunModelByCameraDemoState extends State<RunModelByCameraDemo> {
+class _CertificationCameraState extends State<CertificationCamera> {
   List<ResultObjectDetection>? results;
   Duration? objectDetectionInferenceTime;
   Queue<String?> recentClasses = Queue<String?>(); // 최근 탐지된 클래스 저장

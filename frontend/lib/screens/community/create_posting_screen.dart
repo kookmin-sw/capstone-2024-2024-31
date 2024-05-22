@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
+import '../challenge/certification/certification_camera.dart';
 import '../challenge/certification/certification_gallery.dart';
 
 class CreatePostingScreen extends StatefulWidget {
@@ -67,7 +68,7 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
       }
     } else { //카메라 버튼일때
 
-      final cameraImage  =  await Get.to(()=> const RunModelByCameraDemo());
+      final cameraImage  =  await Get.to(()=> const CertificationCamera());
 
       if (cameraImage != null) {
 
@@ -244,20 +245,22 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
           children: [
             Positioned.fill(
                 child: Visibility(
-                    visible: !_showImage,
-                    child: Row(
-                      children: [
-                        shadowBtn(Icons.camera_alt, false),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 30, horizontal: 3),
-                            child: VerticalDivider(
-                              color: Palette.grey50,
-                              thickness: 3,
-                            )),
-                        shadowBtn(Icons.add_photo_alternate, true)
-                      ],
-                    ))),
+                  visible: !_showImage,
+                  child:   _isGalleryPossible
+                      ? Row(
+                    children: [
+                      shadowBtn(Icons.camera_alt, false),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 3),
+                          child: VerticalDivider(
+                            color: Palette.grey50,
+                            thickness: 3,
+                          )),
+                      shadowBtn(Icons.add_photo_alternate, true)
+                    ],
+                  ) : shadowBtn(Icons.camera_alt, false),
+                )),
             Positioned.fill(
               child: Visibility(
                   visible: _showImage,
