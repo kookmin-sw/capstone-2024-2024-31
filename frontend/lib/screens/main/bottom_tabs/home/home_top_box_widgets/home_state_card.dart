@@ -5,10 +5,12 @@ import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/service/post_service.dart';
 import 'package:frontend/service/challenge_service.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:logger/logger.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 import '../../../../../model/controller/user_controller.dart';
 import '../../../../../model/data/challenge/challenge_simple.dart';
+import '../../../../../model/data/challenge/challenge_status.dart';
 import '../../../../challenge/state/state_challenge_screen.dart';
 import '../../../../community/create_posting_screen.dart';
 
@@ -30,144 +32,172 @@ class HomeChallengeStateCardState extends State<HomeChallengeStateCard> {
   bool isLoading = false;
   late UserController _userController;
   late bool isPossibleButtonClick = false; // 초기값 설정
+  late ChallengeStatus challengeStatus;
+  Logger logger = Logger();
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      isLoading = true;
+    });
     _userController = Get.find<UserController>();
     _checkButtonClickPossibility(); // 비동기 작업을 별도의 함수에서 호출
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    await _checkButtonClickPossibility();
+    await _fetchChallengeStatus();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> _checkButtonClickPossibility() async {
     isPossibleButtonClick = await PostService.checkPossibleCertification(
         widget.challengeSimple.id, _userController.user.id);
-    setState(() {}); // 상태 업데이트
+  }
+
+  Future<ChallengeStatus> _fetchChallengeStatus() async {
+    try {
+      challengeStatus = await ChallengeService.fetchChallengeStatus(
+          widget.challengeSimple.id);
+    } catch (error) {
+      logger.e('Failed to fetch challenge status: $error');
+    }
+
+    return challengeStatus;
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        setState(() {
-          isLoading = true;
-        });
-
-        try {
-          Challenge challenge = await ChallengeService.fetchChallenge(
-              widget.challengeSimple.id, null);
-          Get.to(() => ChallengeStateScreen(
-              isFromJoinScreen: false, challenge: challenge, isPossibleCertification :isPossibleButtonClick));
-        } finally {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      },
-      child: SizedBox(
-        width: widget.screenWidth * 0.95,
-        child: Card(
-          color: Palette.greySoft,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
-                    widget.challengeSimple.imageUrl, // 이미지 경로
-                    width: 60, // 이미지 너비
-                    height: 60, // 이미지 높이
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: widget.screenWidth * 0.35,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SizedBox(
+      width: widget.screenWidth * 0.95,
+      child: isLoading
+          ? const Center(
+              child: SizedBox(
+                width: 20.0, // 원하는 크기로 설정
+                height: 20.0, // 원하는 크기로 설정
+                child: CircularProgressIndicator(color: Palette.mainPurple),
+              ),
+            )
+          : GestureDetector(
+              onTap: () {
+                Get.to(() => ChallengeStateScreen(
+                      isFromJoinScreen: false,
+                      challengeStatus: challengeStatus,
+                      challengeId: widget.challengeSimple.id,
+                    ));
+              },
+              child: Card(
+                color: Palette.greySoft,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.network(
+                          widget.challengeSimple.imageUrl, // 이미지 경로
+                          width: 60, // 이미지 너비
+                          height: 60, // 이미지 높이
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Flexible(
-                            child: Text(
-                              widget.challengeSimple.challengeName, // 챌린지 이름
-                              maxLines: 1,
-                              overflow: TextOverflow.clip,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Pretender",
-                                fontSize: 10,
-                              ),
+                          SizedBox(
+                            width: widget.screenWidth * 0.35,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    widget.challengeSimple
+                                        .challengeName, // 챌린지 이름
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Pretender",
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  ' ${challengeStatus.currentAchievementRate.toInt()}%',
+                                  style: const TextStyle(
+                                      fontSize: 11,
+                                      fontFamily: "Pretender",
+                                      color: Palette.purPle700), // 진행 상태
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            ' ${getProgressPercent(widget.challengeSimple).toInt()}%',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontFamily: "Pretender",
-                              color: Palette.purPle200,
-                              fontWeight: FontWeight.bold
-                            ), // 진행 상태
-                          ),
+                          const SizedBox(height: 5),
+                          stateBar(widget.screenWidth,
+                              challengeStatus.currentAchievementRate),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    stateBar(widget.screenWidth,
-                        getProgressPercent(widget.challengeSimple)),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                Container(
-                  width: 1,
-                  height: 40,
-                  color: Colors.grey[300],
-                ),
-                const SizedBox(width: 5),
-                ElevatedButton(
-                  onPressed: isPossibleButtonClick ? () async {
-                    setState(() {
-                      isLoading = true;
-                    });
+                      const SizedBox(width: 10),
+                      Container(
+                        width: 1,
+                        height: 40,
+                        color: Colors.grey[300],
+                      ),
+                      const SizedBox(width: 5),
+                      ElevatedButton(
+                        onPressed: isPossibleButtonClick
+                            ? () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
 
-                    try {
-                      Challenge challenge =
-                      await ChallengeService.fetchChallenge(
-                          widget.challengeSimple.id);
-                      Get.to(() => CreatePostingScreen(challenge: challenge));
-                    } finally {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  } : null,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(40, 40),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(10.0), // 테두리를 둥글게 만드는 부분
-                    ),
-                    padding: EdgeInsets.zero,
-                    backgroundColor: isPossibleButtonClick ? Palette.purPle50 : Palette.grey50,
-                    foregroundColor: Palette.purPle700,
+                                try {
+                                  Challenge challenge =
+                                      await ChallengeService.fetchChallenge(
+                                          widget.challengeSimple.id);
+                                  Get.to(() => CreatePostingScreen(
+                                      challenge: challenge));
+                                } finally {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                }
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(40, 40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(10.0), // 테두리를 둥글게 만드는 부분
+                          ),
+                          padding: EdgeInsets.zero,
+                          backgroundColor: isPossibleButtonClick
+                              ? Palette.purPle50
+                              : Palette.grey50,
+                          foregroundColor: Palette.purPle700,
+                        ),
+                        child: Text(
+                          isPossibleButtonClick ? '인증' : '✔️',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
+                            fontFamily: 'Pretendard',
+                          ),
+                        ), // 버튼 텍스트
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    isPossibleButtonClick ? '인증': '✔️',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 11,
-                      fontFamily: 'Pretendard',
-                    ),
-                  ), // 버튼 텍스트
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 

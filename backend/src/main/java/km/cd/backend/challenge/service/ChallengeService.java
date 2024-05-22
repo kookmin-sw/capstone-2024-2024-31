@@ -33,10 +33,14 @@ import km.cd.backend.community.repository.PostRepository;
 import km.cd.backend.user.domain.User;
 import km.cd.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -78,8 +82,7 @@ public class ChallengeService {
 
         // 챌린지 participant에 생성자 추가
         challenge.getParticipants().add(creator);
-        challenge.increaseNumOfParticipants();
-        
+
         // 챌린지 이미지 업로드
         List<String> imagePaths = images.stream().map(
             image -> s3Uploader.uploadFileToS3(image, FilePathEnum.CHALLENGES.getPath())
@@ -221,16 +224,12 @@ public class ChallengeService {
     }
     
     public ChallengeInformationResponse getChallenge(Long challengeId, Long userId, String code) {
-        // 1. 도전 과제의 존재 여부를 확인합니다.
         Challenge challenge = validateExistChallenge(challengeId);
         
-        // 2. 참가자 정보를 가져옵니다.
         Participant participant = participantRepository.findByChallengeIdAndUserId(challengeId, userId)
             .orElse(null);
-        
-        // 3. 챌린지 참여자가 아닐 때
+
         if (participant == null) {
-            // 비공개 챌린지이고 코드가 다르면 못 봄
             if (challenge.getIsPrivate() && !challenge.getPrivateCode().equals(code)) {
                 throw new CustomException(ExceptionCode.FORBIDDEN_ERROR);
             }
@@ -240,29 +239,13 @@ public class ChallengeService {
         return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
     }
     
-    
-    public ChallengeInformationResponse getChallenge(Long challengeId) {
-        Challenge challenge = validateExistChallenge(challengeId);
-        return ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge);
-    }
 
     public List<ChallengeSimpleResponse> getAllChallenge(Long cursorId, int size, ChallengeFilter filter) {
         List<Challenge> challenges = challengeRepository.findByChallengeWithFilterAndPaging(cursorId, size, filter);
 
         return challenges.stream().map(ChallengeMapper.INSTANCE::entityToSimpleResponse).toList();
     }
-    
-    public List<ChallengeInformationResponse> getAllChallenge() {
-        Iterable<Challenge> challenges = challengeRepository.findAll();
-        List<ChallengeInformationResponse> responses = new ArrayList<>();
-        
-        for (Challenge challenge : challenges) {
-            responses.add(ChallengeMapper.INSTANCE.challengeToChallengeResponse(challenge));
-        }
-        
-        return responses;
-    }
-    
+
     public List<ParticipantResponse> getParticipant(Long challengeId) {
         Challenge challenge = validateExistChallenge(challengeId);
         return ChallengeMapper.INSTANCE.participantListToParticipantResponseList(challenge.getParticipants());

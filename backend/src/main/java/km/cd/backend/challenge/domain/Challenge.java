@@ -59,9 +59,6 @@ public class Challenge {
     private String successfulVerificationImage;
     
     private String status;
-    
-    @Builder.Default
-    private Integer totalParticipants = 0;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
@@ -72,7 +69,4 @@ public class Challenge {
     
     private Integer totalCertificationCount;
     
-    public void increaseNumOfParticipants() {
-        totalParticipants += 1;
-    }
 }

@@ -24,4 +24,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
    */
   @Query("SELECT COUNT(p) FROM Post p WHERE p.author.id = :userId AND p.challenge.id = :challengeId AND p.isRejected = false")
   Long countCertification(Long challengeId, Long userId);
+
+  @Query("SELECT p FROM Post p WHERE p.challenge.id = :challengeId and p.author.id = :userId")
+  List<Post> findAllByChallengeIdAndUserId(Long challengeId, Long userId);
 }

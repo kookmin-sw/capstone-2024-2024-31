@@ -8,7 +8,6 @@ import 'package:frontend/screens/challenge/join/join_challenge_screen.dart';
 import 'package:frontend/screens/main/main_screen.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
-import 'package:frontend/service/challenge_service.dart';
 import 'package:frontend/widgets/rtu_button.dart';
 import 'package:frontend/widgets/rtu_divider.dart';
 import 'package:get/get.dart';

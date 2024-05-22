@@ -21,7 +21,7 @@ class _PrivateCodeInputDialogState extends State<PrivateCodeInputDialog> {
 
   final logger = Logger();
   Challenge? challenge;
-  bool isPossibleJoin = false;
+  bool _isLoading = true;
 
   TextStyle textStyle(double size, FontWeight weight, Color color) => TextStyle(
       fontFamily: "Pretender",
@@ -30,13 +30,7 @@ class _PrivateCodeInputDialogState extends State<PrivateCodeInputDialog> {
       color: color);
 
   Future<Challenge> _checkInputCode(String code) async {
-    ChallengeService.fetchChallenge(widget.challengeId, code).then((challenge) {
-      return challenge;
-    }).catchError((err) {
-      logger.e(err);
-    });
-
-    return Future.error("챌린지 정보를 불러오는데 실패했습니다.");
+    return ChallengeService.fetchChallenge(widget.challengeId, code);
   }
 
   @override
@@ -50,6 +44,12 @@ class _PrivateCodeInputDialogState extends State<PrivateCodeInputDialog> {
           challenge: challenge,
           isFromMainScreen: true,
           isFromPrivateCodeDialog: true));
+    }).catchError((err) {
+      logger.e(err);
+    }).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 
@@ -63,54 +63,75 @@ class _PrivateCodeInputDialogState extends State<PrivateCodeInputDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('비공개 암호를 입력하세요',
-          style: textStyle(13.0, FontWeight.bold, Palette.purPle400)),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            controller: _passwordController,
-            style: textStyle(14.0, FontWeight.w400, Palette.grey500),
-            decoration: InputDecoration(
-              labelText: '암호',
-              labelStyle: textStyle(12.0, FontWeight.w400, Palette.grey300),
-            ),
-          ),
-          const SizedBox(height: 10),
-        ],
+      title: Text(
+        '비공개 암호를 입력하세요',
+        style: textStyle(13.0, FontWeight.bold, Palette.purPle400),
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Cancel',
-              style: textStyle(13.0, FontWeight.w400, Palette.grey300)),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            String password = _passwordController.text;
-
-            _checkInputCode(password).then((challenge) {
-              Get.to(() => ChallengeDetailScreen(
-                    challenge: challenge,
-                    isFromMainScreen: true,
-                    isFromPrivateCodeDialog: true,
-                  ));
-            }).catchError((err) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('비공개 암호가 일치하지 않습니다'),
-                  duration: Duration(seconds: 2),
+      content: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: _passwordController,
+                  style: textStyle(14.0, FontWeight.w400, Palette.grey500),
+                  decoration: InputDecoration(
+                    labelText: '암호',
+                    labelStyle:
+                        textStyle(12.0, FontWeight.w400, Palette.grey300),
+                  ),
                 ),
-              );
-            });
-          },
-          child: Text('확인',
-              style: textStyle(13.0, FontWeight.w500, Palette.purPle400)),
-        ),
-      ],
+                const SizedBox(height: 10),
+              ],
+            ),
+      actions: _isLoading
+          ? []
+          : [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: textStyle(13.0, FontWeight.w400, Palette.grey300),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  String password = _passwordController.text;
+
+                  setState(() {
+                    _isLoading = true;
+                  });
+
+                  _checkInputCode(password).then((challenge) {
+                    Get.to(() => ChallengeDetailScreen(
+                          challenge: challenge,
+                          isFromMainScreen: true,
+                          isFromPrivateCodeDialog: true,
+                        ));
+                  }).catchError((err) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('비공개 암호가 일치하지 않습니다'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }).whenComplete(() {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  });
+                },
+                child: Text(
+                  '확인',
+                  style: textStyle(13.0, FontWeight.w500, Palette.purPle400),
+                ),
+              ),
+            ],
     );
   }
 }

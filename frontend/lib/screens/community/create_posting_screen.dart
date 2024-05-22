@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/model/config/palette.dart';
 import 'package:frontend/model/data/challenge/challenge.dart';
+import 'package:frontend/model/data/challenge/challenge_simple.dart';
 import 'package:frontend/model/data/post/post_form.dart';
 import 'package:frontend/screens/community/post_detail_screen.dart';
 import 'package:frontend/service/post_service.dart';
@@ -10,8 +11,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
 import '../challenge/certification/certification_gallery.dart';
-import '../challenge/certification/confirm_image_screen.dart';
-import '../challenge/certification/run_model_by_camera_demo.dart';
 
 class CreatePostingScreen extends StatefulWidget {
   final Challenge challenge;
@@ -133,50 +132,89 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                 text: "올리기",
               ))
         ]),
-        body: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            child: Form(
-              key: formKey,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(children: [
-                      Text("📸 인증 사진",
-                          style: textStyle(15, Palette.grey500,
-                              weight: FontWeight.bold)),
-                      Visibility(
-                          visible: _showImage,
-                          child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _showImage = false;
-                                  _inputImage = File(''); // 이미지 리셋
-                                });
-                              },
-                              child:
-                                  const Icon(Icons.close, color: Palette.red)))
-                    ]),
-                    const SizedBox(height: 10),
-                    imageContainer(),
-                    const SizedBox(height: 20),
-                    Text("제목",
-                        style: textStyle(15, Palette.grey500,
-                            weight: FontWeight.bold)),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                        height: 70,
-                        child: TextFormField(
-                          maxLength: 15,
+        body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          Text("📸 인증 사진",
+                              style: textStyle(15, Palette.grey500,
+                                  weight: FontWeight.bold)),
+                          Visibility(
+                              visible: _showImage,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _showImage = false;
+                                      _inputImage = File(''); // 이미지 리셋
+                                    });
+                                  },
+                                  child: const Icon(Icons.close, color: Palette.red)))
+                        ]),
+                        const SizedBox(height: 10),
+                        imageContainer(),
+                        const SizedBox(height: 20),
+                        Text("제목",
+                            style: textStyle(15, Palette.grey500,
+                                weight: FontWeight.bold)),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                            height: 70,
+                            child: TextFormField(
+                              maxLength: 15,
+                              style: textStyle(11, Palette.grey200,
+                                  weight: FontWeight.w300),
+                              decoration: InputDecoration(
+                                  hintText: "제목을 입력해주세요.",
+                                  hintStyle: textStyle(11, Palette.grey200,
+                                      weight: FontWeight.w300),
+                                  counterStyle: textStyle(10, Palette.grey200,
+                                      weight: FontWeight.normal),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 10),
+                                  filled: true,
+                                  fillColor: Palette.white,
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      borderSide: const BorderSide(
+                                          color: Palette.greySoft)),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    borderSide: const BorderSide(
+                                        color: Palette.mainPurple, width: 2),
+                                  )),
+                              validator: (value) =>
+                                  value!.isEmpty ? '제목을 입력해주세요.' : null,
+                              onChanged: (value) => setState(() {
+                                _inputTitle = value;
+                              }),
+                            )),
+                        const SizedBox(height: 10),
+                        Text("📢 루틴업 한마디",
+                            style: textStyle(15, Palette.grey500,
+                                weight: FontWeight.bold)),
+                        const SizedBox(height: 5),
+                        TextFormField(
+                          maxLength: 100,
+                          maxLines: 5,
                           style: textStyle(11, Palette.grey200,
                               weight: FontWeight.w300),
                           decoration: InputDecoration(
-                              hintText: "제목을 입력해주세요.",
+                              hintText: "오늘의 갓생은 어땠는지 루티너와 공유해주세요!",
                               hintStyle: textStyle(11, Palette.grey200,
                                   weight: FontWeight.w300),
                               counterStyle: textStyle(10, Palette.grey200,
                                   weight: FontWeight.normal),
                               contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 10),
+                                  vertical: 10, horizontal: 10),
                               filled: true,
                               fillColor: Palette.white,
                               enabledBorder: OutlineInputBorder(
@@ -189,48 +227,13 @@ class _CreatePostingScreenState extends State<CreatePostingScreen> {
                                     color: Palette.mainPurple, width: 2),
                               )),
                           validator: (value) =>
-                              value!.isEmpty ? '제목을 입력해주세요.' : null,
+                              value!.isEmpty ? "오늘의 루틴업 한마디를 작성해주세요." : null,
                           onChanged: (value) => setState(() {
-                            _inputTitle = value;
+                            _inputContent = value;
                           }),
-                        )),
-                    const SizedBox(height: 10),
-                    Text("📢 루틴업 한마디",
-                        style: textStyle(15, Palette.grey500,
-                            weight: FontWeight.bold)),
-                    const SizedBox(height: 5),
-                    TextFormField(
-                      maxLength: 100,
-                      maxLines: 5,
-                      style: textStyle(11, Palette.grey200,
-                          weight: FontWeight.w300),
-                      decoration: InputDecoration(
-                          hintText: "오늘의 갓생은 어땠는지 루티너와 공유해주세요!",
-                          hintStyle: textStyle(11, Palette.grey200,
-                              weight: FontWeight.w300),
-                          counterStyle: textStyle(10, Palette.grey200,
-                              weight: FontWeight.normal),
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          filled: true,
-                          fillColor: Palette.white,
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              borderSide:
-                                  const BorderSide(color: Palette.greySoft)),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                            borderSide: const BorderSide(
-                                color: Palette.mainPurple, width: 2),
-                          )),
-                      validator: (value) =>
-                          value!.isEmpty ? "오늘의 루틴업 한마디를 작성해주세요." : null,
-                      onChanged: (value) => setState(() {
-                        _inputContent = value;
-                      }),
-                    )
-                  ]),
-            )));
+                        )
+                      ]),
+                ))));
   }
 
   Widget imageContainer() {

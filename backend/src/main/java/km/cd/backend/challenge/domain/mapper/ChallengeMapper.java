@@ -33,15 +33,16 @@ public interface ChallengeMapper {
     @Mapping(target = "failedVerificationImage", ignore = true)
     @Mapping(target = "certificationType", ignore = true)
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "totalParticipants", ignore = true)
     @Mapping(target = "totalCertificationCount", expression = "java(calculateTotalCertificationCount(convertNumber(request.getChallengePeriod()), request.getCertificationFrequency()))")
     Challenge requestToEntity(ChallengeCreateRequest request);
 
+    @Mapping(target = "totalParticipants", expression = "java(challenge.getParticipants().size())")
     @Mapping(target = "challengeCategory", source = "challenge.challengeCategory.name")
     @Mapping(target = "galleryPossible", source = "isGalleryPossible")
     @Mapping(target = "private", source = "isPrivate")
     ChallengeInformationResponse challengeToChallengeResponse(Challenge challenge);
-    
+
+    @Mapping(target = "totalParticipants", expression = "java(challenge.getParticipants().size())")
     @Mapping(target = "currentAchievementRate", expression = "java(getCurrentAchievementRate(numberOfCertifications, challenge.getTotalCertificationCount()))")
     ChallengeStatusResponse toChallengeStatusResponse(Challenge challenge, Long numberOfCertifications, Integer fullAchievementCount, Integer highAchievementCount,Integer lowAchievementCount, Double overallAverageAchievementRate);
     
@@ -53,6 +54,7 @@ public interface ChallengeMapper {
     ParticipantResponse participantToParticipantResponse(Participant participant);
     List<ParticipantResponse> participantListToParticipantResponseList(List<Participant> participants);
 
+    @Mapping(target = "totalParticipants", expression = "java(challenge.getParticipants().size())")
     @Mapping(target = "imageUrl", expression = "java(challenge.getChallengeImagePaths().get(0))")
     ChallengeSimpleResponse entityToSimpleResponse(Challenge challenge);
     

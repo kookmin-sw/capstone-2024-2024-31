@@ -347,6 +347,14 @@ class ChallengeStateScreenWidgets {
         challengeStatus.totalCertificationCount; //챌린지 총 인증횟수
     int myCertificationNum = challengeStatus.numberOfCertifications; //내가 한 인증횟수
     int failNum = 0;
+    int remainNum;
+    if(totalCertificationCount -
+        myCertificationNum > 0){
+      remainNum = totalCertificationCount -
+          myCertificationNum;
+    }else{
+      remainNum = 0;
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -378,7 +386,8 @@ class ChallengeStateScreenWidgets {
                     ),
                   ),
                   Text(
-                    " / $totalCertificationCount회  |  남은 인증 : ${totalCertificationCount - myCertificationNum}회",
+                    " / $totalCertificationCount회  |  남은 인증 : ${totalCertificationCount -
+                        myCertificationNum}회",
                     style: const TextStyle(
                       fontSize: 10,
                       color: Palette.grey300,
