@@ -107,4 +107,4 @@ SELECT
 FROM
     information_schema.tables
 LIMIT
-    5
+    5;
