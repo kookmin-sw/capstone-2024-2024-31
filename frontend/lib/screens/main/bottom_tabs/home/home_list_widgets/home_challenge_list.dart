@@ -69,6 +69,7 @@ class _ChallengeItemListState extends State<ChallengeItemList> {
                         height: screenSize.height * 0.3,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
                           children:
                               List.generate(snapshot.data!.length, (index) {
                             return ChallengeItemCard(
