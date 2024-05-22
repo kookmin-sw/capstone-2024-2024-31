@@ -43,15 +43,19 @@ team_info                                 :
   - name                                  : 이혁규(XXXX1601)
     description                           : Leader, Backend, Infra
     image                                 : assets/avatar_hyuk.png
+    github_url                            : https://github.com/ehyeok9
   - name                                  : 신혜은(XXXX1618)
     description                           : Design, Frontend
     image                                 : https://avatars.githubusercontent.com/u/55487431?v=4
+    github_url                            : https://github.com/HyeeunShin
   - name                                  : 홍석주(XXXX3398)
-    description                           : Frontend, Backend
+    description                           : Fullstack
     image                                 : https://avatars.githubusercontent.com/u/102505374?v=4
+    github_url                            : https://github.com/sukjuhong
   - name                                  : 김채환(XXXX1604)
-    description                           : Ai
+    description                           : AI
     image                                 : assets/avatar_chea.png
+    github_url                            : https://github.com/chkim417
 
 
 architecture_image                        : assets/architecture.png

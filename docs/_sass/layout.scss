@@ -482,6 +482,7 @@ nav > ul li a:active {
 	}
 }
 
+
 .team {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -492,13 +493,19 @@ nav > ul li a:active {
   width: 300px; /* 카드 너비 */
 }
 
+
 .team:hover {
-  transform: scale(1.05);
+	transform: scale(1.05);
 }
 
 .team div {
-  padding: 20px;
+	padding: 20px;
   text-align: center;
+}
+
+.team a, .team a:link, .team a:active, .team a:visited {
+	text-decoration: none;
+	color: black;
 }
 
 .features {

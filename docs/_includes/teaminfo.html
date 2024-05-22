@@ -3,14 +3,16 @@
   <div class="teams">
     {% for info in site.team_info %} {% if info.name %}
     <div class="team">
-      <div>
-        <img src="{{ info.image | relative_url }}"  alt="{{ info.name }}">
+        <a href="{{ info.github_url | relative_url }}">
+          <div>
+            <img src="{{ info.image | relative_url }}"  alt="{{ info.name }}">
+          </div>
+          <div>
+            <h3>{{ info.name }}</h3>
+            <p>{{ info.description }}</p>
+          </div>
+        </a>
       </div>
-      <div>
-        <h3>{{ info.name }}</h3>
-        <p>{{ info.description }}</p>
-      </div>
-    </div>
     {% endif %} {% endfor %}
   </div>
 </article>
