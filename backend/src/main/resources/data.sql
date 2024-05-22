@@ -38,7 +38,7 @@ VALUES (true, '1234', '국민대 소융 1일 1헬스 챌린지', '건강을 위�
         '하늘과 함께 Ai손증샷을 찍어주세요. 갤러리 사용은 불가능해요. 3초라도 아니.. 10초라도 하늘을 바라보는 시간을 꼭 갖자구요!', false, 1000,
         'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/9.jpg',
         'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/8.png',
-        '진행전', 'HAND_GESTURE', 'EATING', 42),
+        '진행전', 'HAND_GESTURE', 'HOBBY', 42),
 
        (true, '1234', '시작의기술 완독챌린지', '시작의기술 완독을 목표로 하는 이들의 챌린지! 하루 10분 이상 독서하며 그날의 감상을 함께 나누어요. 생각의 깊이가 날이 갈수록 달라질 거예요!', 4,
         CURDATE(), DATE_ADD(CURDATE(), INTERVAL 28 DAY), '매일', 0, 24,
@@ -52,14 +52,14 @@ VALUES (true, '1234', '국민대 소융 1일 1헬스 챌린지', '건강을 위�
         '그 날 나를 행복하게 하는 순간을 담아주세요! 사진의 종류는 상관없습니다~ 커뮤니티에 감사하는 10가지를 함께 적어서 포스팅해주세요. 함께 보고 따뜻한 일상을 나누어 더 행복해집시다~!', true, 20,
         'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/6.jpg',
         'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/5.jpg',
-        '진행중', 'HAND_GESTURE', 'EXERCISE', 21),
+        '진행중', 'HAND_GESTURE', 'HOBBY', 21),
 
        (false, null, '6주동안 다이어트 성공하기!', '같이 다이어트에 성공해봐요! 1주에 한번 자신의 몸무게를 인증해주세요.', 6,
         DATE_SUB(CURDATE(), INTERVAL 43 DAY), DATE_SUB(CURDATE(), INTERVAL 1 DAY), '주 1회', 0, 24,
         '몸무게를 볼 수 있는 사진을 찍어주세요!', false, 100,
         'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/14.jpg',
         'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/14.jpg',
-        '진행완료', 'HAND_GESTURE', 'EXERCISE', 42);
+        '진행완료', 'HAND_GESTURE', 'EATING', 42);
 
 INSERT INTO challenge_challenge_image_paths (challenge_id, challenge_image_paths)
 VALUES (1, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/10.jpg'),
