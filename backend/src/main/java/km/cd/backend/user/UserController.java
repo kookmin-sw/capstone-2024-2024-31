@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,8 +33,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return ResponseEntity.ok(userService.getMyInfo(principalDetails.getUserId()));
+    public ResponseEntity<UserResponse> me(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @RequestParam(name = "fcmToken") String fcmToken
+    ) {
+        return ResponseEntity.ok(
+            userService.getMyInfo(principalDetails.getUserId(), fcmToken)
+            );
     }
     
     @PostMapping("/follow/{targetEmail}")
