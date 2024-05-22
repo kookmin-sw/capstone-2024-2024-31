@@ -97,7 +97,7 @@ LIMIT
 INSERT INTO posts (is_rejected, author_id, challenge_id, created_date, modified_date, title, content, image)
 SELECT
     false,
-    3,
+    1,
     7,
     DATE_SUB(CURDATE(), INTERVAL 43 DAY) + INTERVAL ((RAND() * 6) + 1) * 7 DAY, -- 무작위 생성
     null,
