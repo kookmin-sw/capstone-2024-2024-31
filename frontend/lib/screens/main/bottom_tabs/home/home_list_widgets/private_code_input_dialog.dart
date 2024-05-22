@@ -70,8 +70,9 @@ class _PrivateCodeInputDialogState extends State<PrivateCodeInputDialog> {
         style: textStyle(13.0, FontWeight.bold, Palette.purPle400),
       ),
       content: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? const SizedBox(
+              height: 50,
+              child: Center(child: CircularProgressIndicator()),
             )
           : Column(
               mainAxisSize: MainAxisSize.min,
@@ -122,7 +123,6 @@ class _PrivateCodeInputDialogState extends State<PrivateCodeInputDialog> {
                     });
 
                     showCustomSnackBar(context, '비공개 암호가 일치하지 않습니다');
-
                   }).whenComplete(() {
                     setState(() {
                       _isLoading = false;
