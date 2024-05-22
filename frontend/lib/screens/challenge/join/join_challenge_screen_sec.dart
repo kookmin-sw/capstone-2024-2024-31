@@ -305,7 +305,8 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                 return null;
               },
               onChanged: (value) {
-                setState((){
+
+                setState(() {
                   _receiverNumber = value.toString();
                   isInputList[1] = true;
                   _updateButtonState();

@@ -145,7 +145,7 @@ class ChallengeService {
   }
 
   static Future<void> verifyCode(String number, String code) async {
-    const uri = '/sms/verify';
+    const uri = '/sms/confirm';
 
     try {
       final response = await dio.post(uri,
