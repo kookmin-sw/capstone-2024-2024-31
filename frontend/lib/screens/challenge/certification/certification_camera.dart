@@ -135,7 +135,7 @@ class _CertificationCameraState extends State<CertificationCamera> {
         for (var result in results) {
           String? detectedClass = result.className; // Null 가능성 처리
           if (gesture.checkGesture(
-              certificationGesture['gesture'], detectedClass ?? "")) {
+              certificationGesture['nameText'], detectedClass ?? "")) {
             //제스처가 인증제스처와 같으면, add
             resultHasTarget = true;
             correctDetectionCount++;
