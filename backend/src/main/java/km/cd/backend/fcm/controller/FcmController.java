@@ -20,8 +20,8 @@ public class FcmController {
     
     private final FcmService fcmService;
     @PostMapping("/send")
-    public ResponseEntity pushMessage(@RequestBody @Validated FcmRequest fcmRequest) throws IOException {
+    public ResponseEntity<Integer> pushMessage(@RequestBody @Validated FcmRequest fcmRequest) throws IOException {
         int result = fcmService.sendMessageTo(fcmRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(result);
     }
 }
