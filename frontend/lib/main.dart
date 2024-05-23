@@ -111,10 +111,6 @@ class _MyAppState extends State<MyApp> {
   initState() {
     super.initState();
 
-    FirebaseMessaging.instance.getToken().then((fcmToken) {
-      logger.d('fcmToken: $fcmToken');
-    });
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       logger.d('meesage title: ${message.notification!.title}');
       logger.d('meesage body: ${message.notification!.body}');

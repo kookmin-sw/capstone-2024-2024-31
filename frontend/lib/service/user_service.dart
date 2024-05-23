@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:frontend/model/controller/user_controller.dart';
 import 'package:frontend/model/data/challenge/challenge_category.dart';
 import 'package:frontend/model/data/challenge/challenge_simple.dart';
@@ -15,11 +16,14 @@ class UserService {
 
   static Future<User> fetchUser() async {
     final prefs = await SharedPreferences.getInstance();
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    logger.d("fcmToken: $fcmToken");
     final userController = Get.find<UserController>();
     const String uri = '/users/me';
 
     try {
-      final response = await dio.get(uri);
+      final response =
+          await dio.get(uri, queryParameters: {'fcmToken': fcmToken});
 
       if (response.statusCode == 200) {
         logger.d("유저 조회 성공: ${response.data}");
