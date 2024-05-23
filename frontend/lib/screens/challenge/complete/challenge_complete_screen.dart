@@ -28,11 +28,11 @@ class _ChallengeCompleteScreenState extends State<ChallengeCompleteScreen> {
 
   final Sms _sms = Sms(
     receiverNumber: '010-3473-2346',
-    userName: '혁규',
+    userName: '혜은',
     challengeName: '6주동안 다이어트 성공하기!',
     relationship: '친구',
-    receiverName: '혜은',
-    letter: '나 이번 여름에는 비키니를 입을 테야. 실패하면 치킨 사줄게 ㅋㅋ',
+    receiverName: '혁규',
+    letter: '나 이번 여름에는 꼭 건강한 몸을 갖겠어!. 실패하면 치킨 사줄게 ㅋㅋ',
   );
   final logger = Logger();
   final userController = Get.find<UserController>();

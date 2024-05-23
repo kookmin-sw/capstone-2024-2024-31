@@ -200,7 +200,7 @@ class _CreateChallengeSecState extends State<CreateChallengeSec> {
               height: 140,
               child: TextFormField(
                 maxLines: 5,
-                maxLength: 50,
+                maxLength: 200 ,
                 style: const TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 11,

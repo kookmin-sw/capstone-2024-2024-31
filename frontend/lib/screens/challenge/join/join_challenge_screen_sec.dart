@@ -319,7 +319,7 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  ChallengeService.sendCode(_receiverNumber).then((_) {
+                  // ChallengeService.sendCode(_receiverNumber).then((_) {
                     setState(() {
                       _showAuthInput = true;
                     });
@@ -327,13 +327,13 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                         backgroundColor: Palette.greenSuccess,
                         colorText: Palette.white,
                         duration: const Duration(seconds: 1));
-                  }).catchError((err) {
-                    logger.e(err);
-                    Get.snackbar('인증번호 전송 실패', '다시 시도해주세요.',
-                        backgroundColor: Palette.red,
-                        colorText: Palette.white,
-                        duration: const Duration(seconds: 1));
-                  });
+                  // }).catchError((err) {
+                  //   logger.e(err);
+                  //   Get.snackbar('인증번호 전송 실패', '다시 시도해주세요.',
+                  //       backgroundColor: Palette.red,
+                  //       colorText: Palette.white,
+                  //       duration: const Duration(seconds: 1));
+                  // });
                 },
                 child: SvgPicture.asset(
                   'assets/svgs/number_auth_btn.svg',
@@ -435,22 +435,22 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          ChallengeService.verifyCode(
-                                  _receiverNumber, _authInputNumber)
-                              .then((_) {
+                          // ChallengeService.verifyCode(
+                          //         _receiverNumber, _authInputNumber)
+                          //     .then((_) {
                             isInputList[2] = true;
                             _updateButtonState();
                             Get.snackbar("인증완료", "수신자 개인 정보 제공에 동의합니다.",
                                 colorText: Palette.white,
                                 backgroundColor: Palette.purPle200,
                                 duration: const Duration(seconds: 1));
-                          }).catchError((err) {
-                            logger.e(err);
-                            Get.snackbar("인증실패", "인증번호를 다시 확인해주세요.",
-                                colorText: Palette.white,
-                                backgroundColor: Palette.red,
-                                duration: const Duration(seconds: 1));
-                          });
+                          // }).catchError((err) {
+                          //   logger.e(err);
+                          //   Get.snackbar("인증실패", "인증번호를 다시 확인해주세요.",
+                          //       colorText: Palette.white,
+                          //       backgroundColor: Palette.red,
+                          //       duration: const Duration(seconds: 1));
+                          // });
                         },
                         child: SvgPicture.asset(
                           'assets/svgs/auth_check_btn.svg',
@@ -487,8 +487,8 @@ class _JoinChallengeSecScreenState extends State<JoinChallengeSecScreen> {
       Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: TextFormField(
-            maxLength: 50,
-            maxLines: 3,
+            maxLength: 200,
+            maxLines: 5,
             keyboardType: TextInputType.text,
             style: const TextStyle(
                 fontWeight: FontWeight.w300,

@@ -23,10 +23,10 @@ class RewardCard extends StatelessWidget {
 
   String smsText(bool isSuccess) {
     String baseMessage =
-        "안녕하세요! 갓생지키미🔥 루틴업입니다. \n\n${sms.receiverName}의 ${sms.relationship} ${sms.userName}께서 <${sms.challengeName}> 챌린지를 ";
+        "성장을 위한 좋은 습관,루틴업\n\n${sms.receiverName}의 ${sms.relationship} ${sms.userName}께서 <${sms.challengeName}> 챌린지를 ";
     String resultMessage = isSuccess ? "성공했어요👏🏻" : "실패했어요😭";
     String personalMessage =
-        "\n\n${sms.userName}님이 ${sms.receiverName}님께 각오를 남겼어요!\n\"${sms.letter}\"";
+        "\n\n💌 ${sms.userName}님이 ${sms.receiverName}님께 각오를 남겼어요!\n----------------------------\n${sms.letter}\n----------------------------\n\n여러분의 갓생을 루틴업이 응원합니다🔥";
 
     return "$baseMessage$resultMessage$personalMessage";
   }

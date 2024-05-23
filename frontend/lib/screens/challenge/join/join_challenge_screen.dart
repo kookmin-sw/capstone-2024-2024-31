@@ -1,3 +1,4 @@
+import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/screens/challenge/detail/widgets/build_image_container.dart';
@@ -9,6 +10,8 @@ import 'package:frontend/model/data/challenge/challenge.dart';
 import 'package:frontend/widgets/rtu_button.dart';
 import 'package:get/get.dart';
 import 'package:frontend/widgets/rtu_divider.dart';
+
+import '../../../model/data/sms/sms.dart';
 
 class JoinChallengeScreen extends StatefulWidget {
   final Challenge challenge;
@@ -22,6 +25,26 @@ class JoinChallengeScreen extends StatefulWidget {
 class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
   bool showVerificationInput = false;
   List<bool> isCheckList = [false, false, false];
+
+  String smsText(bool isSuccess) {
+    final Sms sms = Sms(
+      receiverNumber: '010-3473-2346',
+      userName: '@@',
+      challengeName: '주 4회 알고리즘 도전기',
+      relationship: '친구',
+      receiverName: '##',
+      letter:
+          '안녕 혁규야?\n개발자로서 계속 성장하기 위해\n챌린지에 참여한다.\n\n올해 목표는 네이버 취뽀!\n실패하면 내가 치킨 쏠게. 🍗🍗\n성공하면 나 치킨 사줘! ✨',
+    );
+
+    String baseMessage =
+        "성장을 위한 좋은 습관,루틴업\n\n🚨 ${sms.receiverName}의 ${sms.relationship} ${sms.userName}께서 <${sms.challengeName}> 챌린지를 ";
+    String resultMessage = isSuccess ? "성공했어요👏🏻" : "실패했어요.";
+    String personalMessage =
+        "\n\n💌 ${sms.userName}님이 ${sms.receiverName}님께 각오를 남겼어요!\n----------------------------\n${sms.letter}\n----------------------------\n\n여러분의 갓생을 루틴업이 응원합니다🔥";
+
+    return "$baseMessage$resultMessage$personalMessage";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,13 +127,13 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   fontWeight: FontWeight.w500,
                   color: Palette.grey500),
             ),
-            const SizedBox(height: 10),
-            BuildImageContainer(
-              path: 'assets/images/success_msg.jpg',
-              color: Palette.white,
-              isSuccess: true,
-              screenSize: screenSize * 0.7,
-              isJoinScreen: true,
+            const SizedBox(height: 15),
+            BubbleSpecialThree(
+              text: smsText(true),
+              color: const Color(0xFFE8E8EE),
+              tail: true,
+              isSender: false,
+              textStyle: const TextStyle(fontSize: 10, fontFamily: 'Pretender'),
             ),
             const SizedBox(height: 20),
             Row(
@@ -143,12 +166,13 @@ class _JoinChallengeScreenState extends State<JoinChallengeScreen> {
                   color: Palette.grey500),
             ),
             const SizedBox(height: 10),
-            BuildImageContainer(
-                path: 'assets/images/fail_msg.jpg',
-                color: Palette.white,
-                isSuccess: false,
-                screenSize: screenSize * 0.7,
-                isJoinScreen: true),
+            BubbleSpecialThree(
+              text: smsText(false),
+              color: const Color(0xFFE8E8EE),
+              tail: true,
+              isSender: false,
+              textStyle: const TextStyle(fontSize: 10, fontFamily: 'Pretender'),
+            ),
           ],
         ));
   }
