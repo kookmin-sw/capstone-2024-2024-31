@@ -63,7 +63,7 @@ VALUES (true, '1234', '국민대 소융 1일 1헬스 챌린지', '건강을 위�
 
 INSERT INTO challenge_challenge_image_paths (challenge_id, challenge_image_paths)
 VALUES (1, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/10.jpg'),
-       (2, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/13.jpg'),
+       (2, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/13-1.jpg'),
        (3, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/17.jpg'),
        (4, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/7.jpg'),
        (5, 'https://routineup-s3.s3.ap-northeast-2.amazonaws.com/sample/1.png'),
