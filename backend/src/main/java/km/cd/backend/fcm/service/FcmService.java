@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import km.cd.backend.fcm.dto.FcmRequest;
 import km.cd.backend.fcm.dto.FcmResponse;
@@ -53,9 +54,17 @@ public class FcmService {
     private String getAccessToken() throws IOException {
         String firebaseConfigPath = "firebase/routineup-firebase-key.json";
         
-        GoogleCredentials googleCredentials = GoogleCredentials
-            .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-            .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+        ClassPathResource resource = new ClassPathResource(firebaseConfigPath);
+        if (!resource.exists()) {
+            throw new IOException("Firebase config file not found at " + firebaseConfigPath);
+        }
+        
+        GoogleCredentials googleCredentials;
+        try (InputStream inputStream = resource.getInputStream()) {
+            googleCredentials = GoogleCredentials
+                .fromStream(inputStream)
+                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+        }
         
         googleCredentials.refreshIfExpired();
         return googleCredentials.getAccessToken().getTokenValue();
