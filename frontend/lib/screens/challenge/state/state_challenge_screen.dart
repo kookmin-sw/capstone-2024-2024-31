@@ -43,14 +43,6 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
   @override
   void initState() {
     super.initState();
-
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Palette.purPle700,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-
     _initialize();
   }
 
@@ -150,15 +142,5 @@ class _ChallengeStateScreenState extends State<ChallengeStateScreen> {
   }
 
 
-  @override
-  void dispose() {
-    // 화면이 사라질 때 기본 상태바 스타일로 복원
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Palette.mainPurple,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    super.dispose();
-  }
+
 }

@@ -19,7 +19,7 @@ class ChallengeStateScreenWidgets {
   static AppBar buildAppBar(final bool isFromJoinScreen, Challenge challenge) {
     return AppBar(
       toolbarHeight: 56,
-      backgroundColor: Palette.purPle700,
+      backgroundColor: Palette.mainPurple,
       // 불투명도를 50%로 설정
       elevation: 0,
       leading: isFromJoinScreen
