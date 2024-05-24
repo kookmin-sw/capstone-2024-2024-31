@@ -137,3 +137,4 @@ docker compose up -d
 
 [팀 문서](https://kcp2024.atlassian.net/wiki/spaces/K/overview?homepageId=229580) <br />
 [중간 발표 자료](https://drive.google.com/file/d/1BjyOB5nw1K9DP4lKLAnxkNY2IdfBuueJ/view?usp=sharing)
+[수행보고서](https://docs.google.com/document/d/1A8iPU_IeGg1UbqLP8-rlEgL5GW8WuVus/edit)
