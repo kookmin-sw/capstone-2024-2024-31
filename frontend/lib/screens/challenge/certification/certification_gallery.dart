@@ -18,7 +18,7 @@ class CertificationByGallery extends StatefulWidget {
 }
 
 class CertificationByGalleryState extends State<CertificationByGallery> {
-  ClassificationModel? _imageModel;
+
   bool isLoading = false;
   bool isInit = false;
   late ModelObjectDetection _objectModel;
@@ -53,14 +53,10 @@ class CertificationByGalleryState extends State<CertificationByGallery> {
 
   // Load your model
   Future<void> loadModel() async {
-    String pathImageModel = "assets/models/model_classification.pt";
     String pathObjectDetectionModel =
         "assets/ai/model_objectDetection.torchscript";
 
     try {
-      _imageModel = await PytorchLite.loadClassificationModel(
-          pathImageModel, 224, 224, 1000,
-          labelPath: "assets/labels/label_classification_imageNet.txt");
       _objectModel = await PytorchLite.loadObjectDetectionModel(
           pathObjectDetectionModel, 7, 640, 640,
           labelPath: "assets/ai/labels_objectDetection.txt");
