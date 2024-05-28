@@ -31,13 +31,14 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keyProperties['keyAlias']
-            keyPassword keyProperties['keyPassword']
-            storeFile file(keyProperties['storeFile'])
-            storePassword keyProperties['storePassword']
-            storeType 'pkcs12'
+            keyAlias 'upload'
+            keyPassword 'capstone31'
+            storeFile file('C:/Users/82103/Documents/GitHub/clone/capstone-2024-31/capstone-2024-31/frontend/android/upload-keystore.p12')
+            storePassword 'capstone31'
+            storeType 'PKCS12'
         }
     }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -56,16 +57,12 @@ android {
         release {
             // 서명 구성 설정
             signingConfig signingConfigs.release
-
             // 코드 축소 및 난독화 활성화
             minifyEnabled true
-
             // 리소스 축소 활성화
             shrinkResources true
-
             // 기본 ProGuard 규칙 파일 및 추가 규칙 파일 지정
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
         }
     }
 
