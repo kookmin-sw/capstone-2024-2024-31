@@ -35,10 +35,10 @@ class FollowerCard extends StatefulWidget {
   });
 
   @override
-  _FollowerCardState createState() => _FollowerCardState();
+  FollowerCardState createState() => FollowerCardState();
 }
 
-class _FollowerCardState extends State<FollowerCard> {
+class FollowerCardState extends State<FollowerCard> {
   final bool _isFollowing = false;
 
   @override

@@ -24,10 +24,10 @@ class MyRoutineUpCard extends StatefulWidget {
   });
 
   @override
-  _MyRoutineUpCardState createState() => _MyRoutineUpCardState();
+  MyRoutineUpCardState createState() => MyRoutineUpCardState();
 }
 
-class _MyRoutineUpCardState extends State<MyRoutineUpCard> {
+class MyRoutineUpCardState extends State<MyRoutineUpCard> {
   bool isLoading = true;
   late ChallengeStatus challengeStatus;
   final Logger logger = Logger();

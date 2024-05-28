@@ -99,7 +99,9 @@ class _PostBtnWidgetState extends State<PostBtnWidget> {
             isLikeBtn
                 ? SvgPicture.asset(
                     svgPicturePath,
-                    color: isLiked ? Palette.mainPurple : null,
+              colorFilter: isLiked
+                  ? const ColorFilter.mode(Palette.mainPurple, BlendMode.srcIn)
+                  : null,
                   )
                 : SvgPicture.asset(svgPicturePath),
             const SizedBox(width: 7),
