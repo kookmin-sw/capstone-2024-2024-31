@@ -1,0 +1,113 @@
+#page title
+page_title                                : 루틴업 - 캡스톤 31팀                                          # Automatically populates with app name if not set and if iOS app ID is set. Otherwise enter manually.
+
+# App Info
+ios_app_id                                : 1234793120                                # Required. Enter iOS app ID to automatically populate name, price and icons (e.g. 718043190).
+ios_app_country                           : us                                        # Required outside USA. Enter 2 letter country code as in https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+
+appstore_link                             :                                           # Automatically populates if not set and if iOS app ID is set. Otherwise enter manually.
+playstore_link                            :                                           # Enter Google Play Store URL.
+presskit_download_link                    : https://emilbaehr.com                                          # Enter a link to downloadable file or (e.g. public Dropbox link to a .zip file).
+# Or upload your press kit file to assets and set path accordingly (e.g. "assets/your_press_kit.zip").
+
+app_icon                                  : assets/appicon.png                      # Automatically populates if not set and if iOS app ID is set.  Otherwise enter path to icon file manually.
+app_name                                  : 루틴업                                           # Automatically populates if not set and if iOS app ID is set.  Otherwise enter manually.
+app_price                                 : 성장을 위한 좋은 습관                              # Automatically populates if not set and if iOS app ID is set.  Otherwise enter manually.
+app_description                           : 건강한 생활 습관을 만들고 싶다면,<br />도파민에서 멀어지고 싶다면,<br />다른 사람들과 함께 성장하고 싶다면,<br />루틴업을 이용해보세요.                                                      # Automatically populates if not set and if iOS app ID is set.  Otherwise enter manually.
+
+enable_smart_app_banner                   : false                                      # Set to true to show a smart app banner at top of page on mobile devices.
+
+# Feature List                            Edit, add or remove features to be presented.
+features                                  :
+  - title                                 : 챌린지를 통한 습관 형성
+    description                           : 자신만의 챌린지를 만들어 좋은 습관을 만들어 나갈 수 있습니다.
+    fontawesome_icon_name                 : notes-medical 
+  - title                                 : 손가락 모양을 통한 실시간 인증
+    description                           : 실시간 보장을 통해 신뢰도를 높이고, 더욱 효과적인 습관 형성을 도와줍니다.
+    fontawesome_icon_name                 : hand-spock
+  - title                                 : 커뮤니티 기반 공동체 성장
+    description                           : 커뮤니티를 통해 다른 사람들과 함께 성장하고, 서로의 성공을 응원할 수 있습니다.
+    fontawesome_icon_name                 : comments
+  - title                                 : 성공시 포인트 제공
+    description                           : 달콤한 보상을 제공하여, 더욱 효과적인 습관 형성을 도와줍니다.
+    fontawesome_icon_name                 : coins
+  - title                                 : 인증 독려 알림 기능
+    description                           : 인증이 필요한 시간에 알림을 통해, 놓치지 않고 인증을 할 수 있습니다.
+    fontawesome_icon_name                 : bell
+  - title                                 : 설정한 인원에게 실패 메세지 전송
+    description                           : 실패의 대한 책임감을 올려줍니다.
+    fontawesome_icon_name                 : mobile
+
+
+team_info                                 :
+  - name                                  : 이혁규(XXXX1601)
+    description                           : Leader, Backend, Infra
+    image                                 : assets/avatar_hyuk.png
+    github_url                            : https://github.com/ehyeok9
+  - name                                  : 신혜은(XXXX1618)
+    description                           : Design, Frontend
+    image                                 : https://avatars.githubusercontent.com/u/55487431?v=4
+    github_url                            : https://github.com/HyeeunShin
+  - name                                  : 홍석주(XXXX3398)
+    description                           : Fullstack
+    image                                 : https://avatars.githubusercontent.com/u/102505374?v=4
+    github_url                            : https://github.com/sukjuhong
+  - name                                  : 김채환(XXXX1604)
+    description                           : AI
+    image                                 : assets/avatar_chea.png
+    github_url                            : https://github.com/chkim417
+
+
+architecture_image                        : assets/architecture.png
+
+# Theme Settings
+topbar_color                              : "#000000"
+topbar_transparency                       : 0.1
+topbar_title_color                        : "#ffffff"
+
+cover_image                               : assets/headerimage.png                    # Replace with alternative image path or image URL.
+cover_overlay_color                       : "#363b3d"
+cover_overlay_transparency                : 0.4
+
+device_color                              : black                                     # Set to: blue, black, yellow, coral or white.
+
+body_background_color                     : "#ffffff"
+
+link_color                                : "#1d63ea"
+
+app_title_color                           : "#ffffff"
+app_price_color                           : "#ffffff"
+app_description_color                     : "#ffffff"
+
+feature_title_color                       : "#000000"
+feature_text_color                        : "#666666"
+
+feature_icons_foreground_color            : "#5924ED"
+feature_icons_background_color            : "#e6e6e6"
+
+social_icons_foreground_color             : "#666666"
+social_icons_background_color             : "#e6e6e6"
+
+footer_text_color                         : "#666666"
+
+####################################################
+### Jekyll Configuration. No need to touch this. ###
+####################################################
+
+# Set the Sass partials directory, as we're using @imports
+sass:
+  style: :compressed # You might prefer to minify using :compressed
+
+# Exclude these files from your production _site
+exclude:
+  - LICENSE
+  - README.md
+  - CNAME
+
+collections:
+  pages:
+    output: true
+    permalink: /:path/
+
+# Markdown rendering
+markdown: kramdown

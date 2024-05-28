@@ -1,0 +1,38 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_75_5817)">
+<circle cx="47.9999" cy="47.9999" r="48" transform="rotate(-45 47.9999 47.9999)" fill="black" fill-opacity="0.2"/>
+<rect x="-19.8823" y="47.9999" width="49" height="96" transform="rotate(-45 -19.8823 47.9999)" fill="black" fill-opacity="0.2"/>
+<g clip-path="url(#clip1_75_5817)">
+<circle cx="48.0002" cy="48" r="28.8" fill="#FFD0A3"/>
+<g clip-path="url(#clip2_75_5817)">
+<circle cx="28.8" cy="28.8" r="28.8" transform="matrix(-1 0 0 1 76.7998 19.2)" fill="#FFD0A3"/>
+<circle cx="28.8" cy="28.8" r="28.8" transform="matrix(-1 0 0 1 76.7998 19.2)" fill="white" fill-opacity="0.2"/>
+</g>
+<ellipse cx="6" cy="6" rx="6" ry="6" transform="matrix(-1 -8.74228e-08 -8.74228e-08 1 54 25.2)" fill="#FF7E20"/>
+<g clip-path="url(#clip3_75_5817)">
+<ellipse cx="48" cy="31.2" rx="6" ry="6" fill="#FF7E20"/>
+<ellipse cx="48" cy="31.2" rx="6" ry="6" fill="white" fill-opacity="0.1"/>
+</g>
+<ellipse cx="6" cy="6" rx="6" ry="6" transform="matrix(-0.258819 0.965926 0.965926 0.258819 27.5303 36.3033)" fill="#F54848"/>
+<ellipse cx="6" cy="6" rx="6" ry="6" transform="matrix(0.866025 0.5 0.5 -0.866025 30 64.3923)" fill="#608DFF"/>
+<path d="M73.0049 15.3611L80.4453 19.6568L64.8203 46.7202L57.3799 42.4244L73.0049 15.3611Z" fill="#3A4366"/>
+<path d="M58.8115 39.9443L66.252 44.2401L61.9562 51.6805L54.5158 47.3848L58.8115 39.9443Z" fill="#3A4366"/>
+<path d="M58.8115 39.9443L66.252 44.2401L61.9562 51.6805L54.5158 47.3848L58.8115 39.9443Z" fill="black" fill-opacity="0.2"/>
+<path d="M52.7171 47.2774C54.9031 45.1666 58.3454 45.0354 60.711 46.9426C62.834 48.6543 63.5429 51.61 62.3973 54.0847C62.0447 54.8464 61.6 55.5619 61.0732 56.2153L60.0966 57.4267C58.8835 58.9314 57.5093 60.2988 55.9987 61.5045L54.1819 62.9545C53.7302 63.315 53.0595 63.0194 53.0209 62.4428L52.8134 59.345C52.7323 58.1341 52.2974 56.9709 51.5655 56.0027C49.6698 53.4948 49.9396 49.9594 52.2012 47.7756L52.7171 47.2774Z" fill="#FFEAD7"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_75_5817">
+<rect width="96" height="96" rx="48" fill="white"/>
+</clipPath>
+<clipPath id="clip1_75_5817">
+<rect width="72" height="72" fill="white" transform="translate(12 12)"/>
+</clipPath>
+<clipPath id="clip2_75_5817">
+<rect width="28.8" height="57.6" fill="white" transform="matrix(-1 0 0 1 48 19.2)"/>
+</clipPath>
+<clipPath id="clip3_75_5817">
+<rect width="6" height="12" fill="white" transform="matrix(-1 0 0 1 48 25.2)"/>
+</clipPath>
+</defs>
+</svg>
