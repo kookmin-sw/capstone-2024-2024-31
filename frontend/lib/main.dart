@@ -9,7 +9,6 @@ import 'package:frontend/model/controller/user_controller.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:frontend/screens/main/main_screen.dart';
 import 'package:get/get.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -136,11 +135,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Get.put(UserController());
 
-    return ScreenUtilInit(
-        designSize: const Size(375, 844),
-        minTextAdapt: true,
-        builder: (context, child) {
-          return GetMaterialApp(
+    return GetMaterialApp(
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                   scaffoldBackgroundColor: Colors.white,
@@ -154,7 +149,7 @@ class _MyAppState extends State<MyApp> {
                       tabNumber: 0,
                     ),
               });
-        });
+
   }
 }
 

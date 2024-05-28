@@ -36,7 +36,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   get: ^4.6.6
-  flutter_screenutil: ^5.9.0
   flutter_svg: ^2.0.10+1
   flutter_swiper_view: ^1.1.8
   image_picker: ^1.0.7
@@ -112,7 +111,6 @@ flutter:
     - assets/images/login_btn/
     - assets/buttons/
     - assets/svgs/
-    - assets/models/
     - assets/labels/
     - assets/ai/labels_objectDetection.txt
     - assets/ai/model_objectDetection.torchscript
