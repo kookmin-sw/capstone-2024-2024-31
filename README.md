@@ -47,7 +47,7 @@
 
 ## 📱 앱 화면 | app Configuration
 
-YET
+![app_screenshot](assets/app_screenshot.png)
 <br/>
 
 ## 🧑🏻‍💻 팀 소개 | Introduction of team members
