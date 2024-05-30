@@ -107,7 +107,7 @@ exclude:
 collections:
   pages:
     output: true
-    permalink: /:path/
+    permalink: /:collection/:path/
 
 # Markdown rendering
 markdown: kramdown

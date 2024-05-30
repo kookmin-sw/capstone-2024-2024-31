@@ -58,11 +58,14 @@
                 </div> 
                 {% include features.html %}
 
-                {% include teaminfo.html %}
-
-                {% include architecture.html %}
-
-                {% include stack.html %}
+                {% assign sorted_pages = site.pages | sort: 'order' %}
+                {% for page in sorted_pages %}
+                {% if page.include_in_header == false %}
+                    <article class="page markdown-body">
+                        {{ page.content }}
+                    </article>
+                {% endif %}
+                {% endfor %}
 
             </div>
         </div>
