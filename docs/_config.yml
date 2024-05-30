@@ -60,6 +60,10 @@ team_info                                 :
 
 architecture_image                        : assets/architecture.png
 
+final_ppt                                 : assets/files/T31-최종발표자료.pdf
+result_document                           : assets/files/T31-수행결과보고서.pdf
+
+
 # Theme Settings
 topbar_color                              : "#000000"
 topbar_transparency                       : 0.1
