@@ -111,7 +111,6 @@ flutter:
     - assets/images/login_btn/
     - assets/buttons/
     - assets/svgs/
-    - assets/labels/
     - assets/ai/labels_objectDetection.txt
     - assets/ai/model_objectDetection.torchscript
 
